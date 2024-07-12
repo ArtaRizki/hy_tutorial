@@ -412,7 +412,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         contentPadding: EdgeInsets.all(2),
         borderColor: Constant.primaryColor,
         labelText: "Role",
-        //selectedItem: selectedRole,
+        selectedItem: selectedRole,
         hintText: "Role",
         list: [
           DropdownMenuItem(child: Text("Admin"), value: "admin"),

@@ -29,13 +29,49 @@ class _UserDetailViewState extends State<UserDetailView>
 
   @override
   Widget build(BuildContext context) {
+    final userDataP = context.watch<UserManageProvider>().userDetailModel;
     final userP = context.watch<UserManageProvider>().userDetailModel.Data;
+    Widget modalHapus() {
+      return CustomButton.secondaryButton('Hapus', () async {
+        Utils.showYesNoDialogWithWarning(
+            context: context,
+            title: "Konfirmasi Penghapusan",
+            desc: "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
+            yesCallback: () async {
+              // await
+              Navigator.pop(context);
+            },
+            noCallback: () async {
+              Navigator.pop(context);
+            });
+      });
+    }
+
+    Widget modalSimpan() {
+      return CustomButton.secondaryButton(
+        'Simpan',
+        () async {
+          Utils.showYesNoDialog(
+            context: context,
+            title: "Simpan Perubahan",
+            desc: "Apakah anda yakin\ningin menyimpan perubahan?",
+            yesCallback: () async {
+              Navigator.pop(context);
+            },
+            noCallback: () async {
+              Navigator.pop(context);
+            },
+          );
+        },
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar.appBar(context, "Detail User", action: [
         IconButton(
           onPressed: () {
-            CusNav.nPush(context, UserAddView());
+            CusNav.nPush(context, UserAddView(data: userDataP));
           },
           icon: Icon(
             Icons.edit,
@@ -43,7 +79,9 @@ class _UserDetailViewState extends State<UserDetailView>
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            await modalHapus();
+          },
           icon: Icon(
             Icons.delete,
             color: Constant.redColor,
