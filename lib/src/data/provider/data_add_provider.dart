@@ -182,15 +182,15 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   double divideUntilTwoDigits(double val) {
     double num = val.abs(); // Use abs() to work with positive value
-    log("DTWO VAL : $val");
+    // log("DTWO VAL : $val");
     // if (val < 0) num = num * (-1);
-    log("DTWO NUM : $num");
+    // log("DTWO NUM : $num");
     int substract = 1;
     if (num <= 10) substract = 0;
-    log("DTWO SUBSTRACT : $substract");
-    log("DTWO NUM LENGTH : ${num.toInt().toString().length}");
+    // log("DTWO SUBSTRACT : $substract");
+    // log("DTWO NUM LENGTH : ${num.toInt().toString().length}");
     int num2 = 10.pow(num.toInt().toString().length - substract).toInt();
-    log("DTWO NUM2 : $num2");
+    // log("DTWO NUM2 : $num2");
 
     // Dividing the number until it becomes a two-digit number
     // if (num >= 10 && num < 100) return val < 0 ? -(num / 10) : (num / 10);
