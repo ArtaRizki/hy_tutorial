@@ -165,6 +165,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   double bdCrockedLine = 0.0;
   // UPPER
   List<double> upper = [];
+  List<List<double>> listBolts = [];
+  List<double> listTorqueSuggestions = [];
   double upperCrockedLine = 0.0;
 
   // double divideUntilTwoDigits(double val) {
@@ -183,32 +185,17 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   double divideUntilTwoDigits(double val) {
     double num = val.abs(); // Use abs() to work with positive value
     // log("DTWO VAL : $val");
-    // if (val < 0) num = num * (-1);
     // log("DTWO NUM : $num");
     int substract = 1;
-    if (num <= 10) substract = 0;
+    if (num <= 10) substract = 1;
     // log("DTWO SUBSTRACT : $substract");
     // log("DTWO NUM LENGTH : ${num.toInt().toString().length}");
     int num2 = 10.pow(num.toInt().toString().length - substract).toInt();
     // log("DTWO NUM2 : $num2");
-
-    // Dividing the number until it becomes a two-digit number
-    // if (num >= 10 && num < 100) return val < 0 ? -(num / 10) : (num / 10);
-    // if (num >= 100 && num < 1000) return val < 0 ? -(num / 100) : (num / 100);
-    // if (num >= 1000 && num < 10000)
-    //   return val < 0 ? -(num / 1000) : (num / 1000);
-    // if (num >= 10000 && num < 100000)
-    //   return val < 0 ? -(num / 10000) : (num / 10000);
-    // if (num >= 100000 && num < 1000000)
-    //   return val < 0 ? -(num / 100000) : (num / 100000);
-
     if (val < 0) num2 = num2 * (-1);
-    log("DTWO NUM/NUM2 ${num / num2}");
-    log("DTWO ==================");
+    // log("DTWO NUM/NUM2 ${num / num2}");
+    // log("DTWO ==================");
     return num / num2;
-
-    // Return the number itself if it's already within the range of two digits
-    // return val;
   }
 
   num getDivideBiggestAC() {
@@ -235,13 +222,13 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     // if (list0 > 10)
     divider = getDivideBiggestAcRecursive(0, list0);
     // divider = 10.pow(num.parse('${list0.round().toString().length - 1}'));
-    log("BIGGEST AC : $divider");
+    // log("BIGGEST AC : $divider");
     return divider;
   }
 
   num getDivideBiggestAcRecursive(num val, num biggestX) {
     if (val > biggestX) {
-      log("RECURSIVE AC X : $val");
+      // log("RECURSIVE AC X : $val");
       return val;
     }
     return getDivideBiggestAcRecursive(val += 5, biggestX);
@@ -266,7 +253,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     list.sort();
     list = list.reversed.toList();
     double list0 = list[0] < 1 ? list[0] * (-1) : list[0];
-    log("BIGGEST ACX : $list0");
+    // log("BIGGEST ACX : $list0");
     return list0;
   }
 
@@ -294,13 +281,13 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     // if (list0 > 10)
     divider = getDivideBiggestBdRecursive(0, list0);
     // divider = 10.pow(num.parse('${list0.round().toString().length - 1}'));
-    log("BIGGEST BD : $divider");
+    // log("BIGGEST BD : $divider");
     return divider;
   }
 
   num getDivideBiggestBdRecursive(num val, num biggestX) {
     if (val > biggestX) {
-      log("RECURSIVE BD X : $val");
+      // log("RECURSIVE BD X : $val");
       return val;
     }
     return getDivideBiggestBdRecursive(val += 5, biggestX);
@@ -325,7 +312,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     list.sort();
     list = list.reversed.toList();
     double list0 = list[0] < 1 ? list[0] * (-1) : list[0];
-    log("BIGGEST BDX : $list0");
+    // log("BIGGEST BDX : $list0");
     return list0;
   }
 
@@ -339,37 +326,40 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     num biggest = getDivideBiggestACX().round();
     if (biggest < getDivideBiggestBDX().round())
       biggest = getDivideBiggestBDX().round();
-    log("BIGGEST DIVIDER : ${biggest}");
+    // log("BIGGEST DIVIDER : ${biggest}");
     return biggest / (10.pow(biggest.toString().length - 1) * 0.9);
   }
 
   num getDividerBiggest10() {
     num biggest = getDivideBiggestAC();
     if (biggest < getDivideBiggestBD()) biggest = getDivideBiggestBD();
-    log("BIGGEST DIVIDER : $biggest");
+    // log("BIGGEST DIVIDER : $biggest");
     return biggest;
   }
 
   setDataChart() {
     // AC
-    final acData = turbineCreateModel.Data?.Chart?.AC;
-    final acCrockness = turbineCreateModel.Data?.ACCrockedness;
-    final bdData = turbineCreateModel.Data?.Chart?.BD;
-    final bdCrockness = turbineCreateModel.Data?.BDCrockedness;
-    final upperData = turbineCreateModel.Data?.Chart?.Upper;
-    final upperCrockness = turbineCreateModel.Data?.TotalCrockedness;
-    if (acData != null && acData.Upper != null)
-      acUpperTemp = acData.Upper!
+    final acData = turbineCreateModel.data?.chart?.ac;
+    final acCrockness = turbineCreateModel.data?.acCrockedness;
+    final bdData = turbineCreateModel.data?.chart?.bd;
+    final bdCrockness = turbineCreateModel.data?.bdCrockedness;
+    final upperData = turbineCreateModel.data?.chart?.upper;
+    final upperCrockness = turbineCreateModel.data?.totalCrockedness;
+    final boltsData = turbineCreateModel.data?.torqueCalculation?.details;
+    final torqueSuggestionsData =
+        turbineCreateModel.data?.torqueCalculation?.torqueSuggestions;
+    if (acData != null && acData.upper != null)
+      acUpperTemp = acData.upper!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Clutch != null)
-      acClutchTemp = acData.Clutch!
+    if (acData != null && acData.clutch != null)
+      acClutchTemp = acData.clutch!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Turbine != null) {
-      acTurbineTemp = acData.Turbine!
+    if (acData != null && acData.turbine != null) {
+      acTurbineTemp = acData.turbine!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
@@ -390,18 +380,18 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     ];
 
     // BD
-    if (bdData != null && bdData.Upper != null)
-      bdUpperTemp = bdData.Upper!
+    if (bdData != null && bdData.upper != null)
+      bdUpperTemp = bdData.upper!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (bdData != null && bdData.Clutch != null)
-      bdClutchTemp = bdData.Clutch!
+    if (bdData != null && bdData.clutch != null)
+      bdClutchTemp = bdData.clutch!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (bdData != null && bdData.Turbine != null) {
-      bdTurbineTemp = bdData.Turbine!
+    if (bdData != null && bdData.turbine != null) {
+      bdTurbineTemp = bdData.turbine!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
@@ -426,6 +416,28 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           .split('|')
           .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
           .toList();
+
+    if (boltsData != null && boltsData.isNotEmpty) {
+      List<String> listS = [];
+
+      boltsData.forEach((key, value) {
+        listS.add(value);
+      });
+      listBolts = listS
+          .map((e) => e
+              .split('|')
+              .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
+              .toList())
+          .toList();
+    }
+    if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
+      List<double> listS = [];
+      torqueSuggestionsData.forEach((key, value) {
+        listS.add(value);
+      });
+      listTorqueSuggestions =
+          listS.map((e) => divideUntilTwoDigits(e)).toList();
+    }
     acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
     bdCrockedLine = divideUntilTwoDigits(bdCrockness ?? 0);
     upperCrockedLine = divideUntilTwoDigits(upperCrockness ?? 0);
@@ -442,45 +454,51 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     // UPPER
     log("UPPER : $upper");
     log("UPPER CROCKED : $upperCrockedLine");
+    // TORQUE AND BOLTS
+    log("LIST BOLTS : $boltsData");
+    log("LIST TORQUE SUGGESTIONS : $torqueSuggestionsData");
   }
 
   setDataChartDetail() {
     // AC
-    final acData = turbineDetailModel.Data?.Chart?.AC;
-    final acCrockness = turbineDetailModel.Data?.ACCrockedness;
-    final bdData = turbineDetailModel.Data?.Chart?.BD;
-    final bdCrockness = turbineDetailModel.Data?.BDCrockedness;
-    final upperData = turbineDetailModel.Data?.Chart?.Upper;
-    final upperCrockness = turbineDetailModel.Data?.TotalCrockedness;
-    if (acData != null && acData.Upper != null)
-      acUpperTemp = acData.Upper!
+    final acData = turbineDetailModel.data?.chart?.ac;
+    final acCrockness = turbineDetailModel.data?.acCrockedness;
+    final bdData = turbineDetailModel.data?.chart?.bd;
+    final bdCrockness = turbineDetailModel.data?.bdCrockedness;
+    final upperData = turbineDetailModel.data?.chart?.upper;
+    final upperCrockness = turbineDetailModel.data?.totalCrockedness;
+    final boltsData = turbineDetailModel.data?.torqueCalculation?.details;
+    final torqueSuggestionsData =
+        turbineDetailModel.data?.torqueCalculation?.torqueSuggestions;
+    if (acData != null && acData.upper != null)
+      acUpperTemp = acData.upper!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Clutch != null)
-      acClutchTemp = acData.Clutch!
+    if (acData != null && acData.clutch != null)
+      acClutchTemp = acData.clutch!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Turbine != null) {
-      acTurbineTemp = acData.Turbine!
+    if (acData != null && acData.turbine != null) {
+      acTurbineTemp = acData.turbine!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
       acTurbineTemp[1] = -acTurbineTemp[1];
     }
-    if (acData != null && acData.Upper != null)
-      acUpperTemp = acData.Upper!
+    if (acData != null && acData.upper != null)
+      acUpperTemp = acData.upper!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Clutch != null)
-      acClutchTemp = acData.Clutch!
+    if (acData != null && acData.clutch != null)
+      acClutchTemp = acData.clutch!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Turbine != null) {
-      acTurbineTemp = acData.Turbine!
+    if (acData != null && acData.turbine != null) {
+      acTurbineTemp = acData.turbine!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
@@ -500,18 +518,18 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       acTurbineTemp[1],
     ];
     // BD
-    if (bdData != null && bdData.Upper != null)
-      bdUpperTemp = bdData.Upper!
+    if (bdData != null && bdData.upper != null)
+      bdUpperTemp = bdData.upper!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (bdData != null && bdData.Clutch != null)
-      bdClutchTemp = bdData.Clutch!
+    if (bdData != null && bdData.clutch != null)
+      bdClutchTemp = bdData.clutch!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (bdData != null && bdData.Turbine != null) {
-      bdTurbineTemp = bdData.Turbine!
+    if (bdData != null && bdData.turbine != null) {
+      bdTurbineTemp = bdData.turbine!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
@@ -538,6 +556,30 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
           .toList();
 
+    if (boltsData != null && boltsData.isNotEmpty) {
+      List<String> listS = [];
+
+      boltsData.forEach((key, value) {
+        listS.add(value);
+      });
+      log("LIST S : $listS");
+      listBolts = listS
+          .map((e) => e
+              .split('|')
+              .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
+              .toList())
+          .toList();
+    }
+
+    if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
+      List<double> listS = [];
+      torqueSuggestionsData.forEach((key, value) {
+        listS.add(value);
+      });
+      listTorqueSuggestions =
+          listS.map((e) => divideUntilTwoDigits(e)).toList();
+    }
+
     acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
     bdCrockedLine = divideUntilTwoDigits(bdCrockness ?? 0);
     upperCrockedLine = divideUntilTwoDigits(upperCrockness ?? 0);
@@ -554,45 +596,48 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     // UPPER
     log("UPPER : $upper");
     log("UPPER CROCKED : $upperCrockedLine");
+    // TORQUE AND BOLTS
+    log("LIST BOLTS : $boltsData");
+    log("LIST TORQUE SUGGESTIONS : $torqueSuggestionsData");
   }
 
   setDataChartLatest() {
     // AC
-    final acData = turbineLatestModel.Data?.Chart?.AC;
-    final acCrockness = turbineLatestModel.Data?.ACCrockedness;
-    final bdData = turbineLatestModel.Data?.Chart?.BD;
-    final bdCrockness = turbineLatestModel.Data?.BDCrockedness;
-    final upperData = turbineLatestModel.Data?.Chart?.Upper;
-    final upperCrockness = turbineLatestModel.Data?.TotalCrockedness;
-    if (acData != null && acData.Upper != null)
-      acUpperTemp = acData.Upper!
+    final acData = turbineLatestModel.data?.chart?.ac;
+    final acCrockness = turbineLatestModel.data?.acCrockedness;
+    final bdData = turbineLatestModel.data?.chart?.bd;
+    final bdCrockness = turbineLatestModel.data?.bdCrockedness;
+    final upperData = turbineLatestModel.data?.chart?.upper;
+    final upperCrockness = turbineLatestModel.data?.totalCrockedness;
+    if (acData != null && acData.upper != null)
+      acUpperTemp = acData.upper!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Clutch != null)
-      acClutchTemp = acData.Clutch!
+    if (acData != null && acData.clutch != null)
+      acClutchTemp = acData.clutch!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Turbine != null) {
-      acTurbineTemp = acData.Turbine!
+    if (acData != null && acData.turbine != null) {
+      acTurbineTemp = acData.turbine!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
       acTurbineTemp[1] = -acTurbineTemp[1];
     }
-    if (acData != null && acData.Upper != null)
-      acUpperTemp = acData.Upper!
+    if (acData != null && acData.upper != null)
+      acUpperTemp = acData.upper!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Clutch != null)
-      acClutchTemp = acData.Clutch!
+    if (acData != null && acData.clutch != null)
+      acClutchTemp = acData.clutch!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (acData != null && acData.Turbine != null) {
-      acTurbineTemp = acData.Turbine!
+    if (acData != null && acData.turbine != null) {
+      acTurbineTemp = acData.turbine!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
@@ -612,18 +657,18 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       acTurbineTemp[1],
     ];
     // BD
-    if (bdData != null && bdData.Upper != null)
-      bdUpperTemp = bdData.Upper!
+    if (bdData != null && bdData.upper != null)
+      bdUpperTemp = bdData.upper!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (bdData != null && bdData.Clutch != null)
-      bdClutchTemp = bdData.Clutch!
+    if (bdData != null && bdData.clutch != null)
+      bdClutchTemp = bdData.clutch!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
-    if (bdData != null && bdData.Turbine != null) {
-      bdTurbineTemp = bdData.Turbine!
+    if (bdData != null && bdData.turbine != null) {
+      bdTurbineTemp = bdData.turbine!
           .split('|')
           .map((e) => (double.tryParse(e) ?? 0))
           .toList();
@@ -669,82 +714,81 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   }
 
   Future<void> sendCreateTurbines(BuildContext context) async {
-    try {
-      if (await requestPermission(Permission.location)) {
-        if (await Geolocator.isLocationServiceEnabled()) {
-          final geo = await Geolocator.getCurrentPosition(
-                  desiredAccuracy: LocationAccuracy.high)
-              .timeout(
-            Duration(seconds: 5),
-            onTimeout: () async =>
-                Future.value((await Geolocator.getLastKnownPosition())),
-          );
-          if (geo.isMocked) {
-            Utils.showFailed(
-                msg:
-                    'Anda menggunakan fake GPS, harap matikan terlebih dahulu');
-            throw 'Anda menggunakan fake GPS, harap matikan terlebih dahulu';
-          }
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          double? lat = prefs.getDouble(Constant.kSetPrefConfigLat) ?? 0;
-          double? lon = prefs.getDouble(Constant.kSetPrefConfigLon) ?? 0;
-          double? radius = prefs.getDouble(Constant.kSetPrefConfigRadius) ?? 0;
-          bool? configStatus =
-              prefs.getBool(Constant.kSetPrefConfigStatus) ?? false;
-          double distance =
-              Geolocator.distanceBetween(geo.latitude, geo.longitude, lat, lon);
+    // try {
+    if (await requestPermission(Permission.location)) {
+      if (await Geolocator.isLocationServiceEnabled()) {
+        final geo = await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.high)
+            .timeout(
+          Duration(seconds: 5),
+          onTimeout: () async =>
+              Future.value((await Geolocator.getLastKnownPosition())),
+        );
+        if (geo.isMocked) {
+          Utils.showFailed(
+              msg: 'Anda menggunakan fake GPS, harap matikan terlebih dahulu');
+          throw 'Anda menggunakan fake GPS, harap matikan terlebih dahulu';
+        }
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        double? lat = prefs.getDouble(Constant.kSetPrefConfigLat) ?? 0;
+        double? lon = prefs.getDouble(Constant.kSetPrefConfigLon) ?? 0;
+        double? radius = prefs.getDouble(Constant.kSetPrefConfigRadius) ?? 0;
+        bool? configStatus =
+            prefs.getBool(Constant.kSetPrefConfigStatus) ?? false;
+        double distance =
+            Geolocator.distanceBetween(geo.latitude, geo.longitude, lat, lon);
 
-          String? radiusType =
-              prefs.getString(Constant.kSetPrefConfigRadiusType) ?? 'kilometer';
-          if (radiusType == 'meter') {
-            distance = distance;
-          } else if (radiusType == 'kilometer') {
-            distance = distance / 1000;
-          }
-          log("DISTANCE : $distance");
-          log("LAT : ${geo.latitude}");
-          log("LON : ${geo.longitude}");
-          log("LAT API : ${lat}");
-          log("LON API : ${lon}");
-          if (geo.latitude != 0 && lat != 0) {
-            if (distance <= radius || configStatus == true) {
-              final response = await createTurbines();
-              if (response.Success == true) {
-                Utils.showSuccess(msg: response.Message ?? "Sukses");
-                await Future.delayed(Duration(seconds: 2));
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (c) => ShaftView()));
-              } else {
-                Utils.showFailed(msg: response.Message ?? '');
-                throw response.Message ?? '';
-              }
+        String? radiusType =
+            prefs.getString(Constant.kSetPrefConfigRadiusType) ?? 'kilometer';
+        if (radiusType == 'meter') {
+          distance = distance;
+        } else if (radiusType == 'kilometer') {
+          distance = distance / 1000;
+        }
+        log("DISTANCE : $distance");
+        log("LAT : ${geo.latitude}");
+        log("LON : ${geo.longitude}");
+        log("LAT API : ${lat}");
+        log("LON API : ${lon}");
+        if (geo.latitude != 0 && lat != 0) {
+          if (distance <= radius || configStatus == true) {
+            final response = await createTurbines();
+            if (response.success == true) {
+              Utils.showSuccess(msg: response.message ?? "Sukses");
+              await Future.delayed(Duration(seconds: 2));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (c) => ShaftView()));
             } else {
-              Utils.showFailed(
-                  msg:
-                      'Anda berada di luar batas jangkauan ($radius $radiusType)');
-              throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
+              Utils.showFailed(msg: response.message ?? '');
+              throw response.message ?? '';
             }
           } else {
-            Utils.showFailed(msg: 'Gagal mendapatkan lokasi');
-            throw 'Gagal mendapatkan lokasi';
+            Utils.showFailed(
+                msg:
+                    'Anda berada di luar batas jangkauan ($radius $radiusType)');
+            throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
           }
         } else {
-          Utils.showFailed(msg: 'Harap Nyalakan GPS');
-          throw 'Izinkan Nyalakan GPS';
+          Utils.showFailed(msg: 'Gagal mendapatkan lokasi');
+          throw 'Gagal mendapatkan lokasi';
         }
       } else {
-        Utils.showFailed(msg: 'Harap Izinkan Akses Lokasi GPS');
-        throw 'Izinkan Akses Lokasi GPS';
+        Utils.showFailed(msg: 'Harap Nyalakan GPS');
+        throw 'Izinkan Nyalakan GPS';
       }
-    } catch (e) {
-      Utils.showFailed(
-          msg: e.toString().toLowerCase().contains("doctype")
-              ? "Maaf, Terjadi Galat!"
-              : "$e");
-      throw e.toString().toLowerCase().contains("doctype")
-          ? "Maaf, Terjadi Galat!"
-          : "$e";
+    } else {
+      Utils.showFailed(msg: 'Harap Izinkan Akses Lokasi GPS');
+      throw 'Izinkan Akses Lokasi GPS';
     }
+    // } catch (e) {
+    //   Utils.showFailed(
+    //       msg: e.toString().toLowerCase().contains("doctype")
+    //           ? "Maaf, Terjadi Galat!"
+    //           : "$e");
+    //   throw e.toString().toLowerCase().contains("doctype")
+    //       ? "Maaf, Terjadi Galat!"
+    //       : "$e";
+    // }
   }
 
   Future<TurbineCreateModel> createTurbines() async {
@@ -753,6 +797,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         TowerId: selectedTower,
         GenBearingToCoupling: genBearingKoplingC.text,
         CouplingToTurbine: koplingTurbinC.text,
+        TotalBolts: boltQtyC.text,
+        CurrentTorque: currentTorqueC.text,
+        MaxTorque: maxTorqueC.text,
         Data: CreateDataParamData(
             Upper: CreateDataParamDataUpper(A: [], B: [], C: [], D: []),
             Clutch: CreateDataParamDataClutch(A: [], B: [], C: [], D: []),
@@ -927,6 +974,49 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
   }
 
+  onChangedCurrentTorque(String v) {
+    if (v.trim() == '' && maxTorqueC.text.isEmpty) {
+      differenceQtyC.text = '0';
+    } else {
+      if (v.trim() != '') {
+        double value = double.tryParse(v) ?? 0;
+        if (maxTorqueC.text.isEmpty) {
+          differenceQtyC.text = '0';
+        } else {
+          double difference = (double.tryParse(maxTorqueC.text) ?? 0) - value;
+          log("CURRENT TORQUE : $value");
+          log("DIFFERENCE : ${difference}");
+          notifyListeners();
+          differenceQtyC.text = "${difference.toStringAsFixed(2)}";
+        }
+      } else {
+        differenceQtyC.text = '0';
+      }
+    }
+  }
+
+  onChangedMaxTorque(String v) {
+    if (v.trim() == '' && currentTorqueC.text.isEmpty) {
+      differenceQtyC.text = '0';
+    } else {
+      if (v.trim() != '') {
+        double value = double.tryParse(v) ?? 0;
+        if (currentTorqueC.text.isEmpty) {
+          differenceQtyC.text = "$value";
+        } else {
+          double difference =
+              value - (double.tryParse(currentTorqueC.text) ?? 0);
+          log("MAX TORQUE : $value");
+          log("DIFFERENCE : $difference");
+          notifyListeners();
+          differenceQtyC.text = "${difference.toStringAsFixed(2)}";
+        }
+      } else {
+        differenceQtyC.text = '0';
+      }
+    }
+  }
+
   List<Widget> shaftForm() {
     return [
       Text("Shaft", style: Constant.blackBold20),
@@ -998,6 +1088,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Torsi Terkini",
+        onChange: onChangedCurrentTorque,
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
@@ -1009,6 +1100,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Max Torsi",
+        onChange: onChangedMaxTorque,
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(

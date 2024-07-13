@@ -354,11 +354,11 @@ class _RiwayatViewState extends BaseState<RiwayatView> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '${DateFormat('HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item?.CreatedAt ?? '${DateTime.now()}'))}',
+                                      '${DateFormat('HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item.CreatedAt ?? '${DateTime.now()}'))}',
                                       style: Constant.blackRegular12,
                                     ),
                                     Text(
-                                      '${DateFormat('dd MMM yyyy').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item?.CreatedAt ?? '${DateTime.now()}'))}',
+                                      '${DateFormat('dd MMM yyyy').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item.CreatedAt ?? '${DateTime.now()}'))}',
                                       style: Constant.blackRegular12,
                                     ),
                                   ],
@@ -447,7 +447,7 @@ class _RiwayatViewState extends BaseState<RiwayatView> {
                     //                       CrossAxisAlignment.end,
                     //                   children: [
                     //                     Text(
-                    //                       '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item?.CreatedAt ?? '${DateTime.now()}'))}',
+                    //                       '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item?.createdAt ?? '${DateTime.now()}'))}',
                     //                       // style: Constant.gray,
                     //                       textAlign: TextAlign.right,
                     //                     ),
