@@ -165,7 +165,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   double bdCrockedLine = 0.0;
   // UPPER
   List<double> upper = [];
+  List<List<double>> listBoltsKey = [];
   List<List<double>> listBolts = [];
+  List<double> listTorqueSuggestionsKey = [];
   List<double> listTorqueSuggestions = [];
   double upperCrockedLine = 0.0;
 
@@ -419,9 +421,11 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
     if (boltsData != null && boltsData.isNotEmpty) {
       List<String> listS = [];
+      List<String> listSKey = [];
 
       boltsData.forEach((key, value) {
         listS.add(value);
+        listSKey.add(key);
       });
       listBolts = listS
           .map((e) => e
@@ -429,6 +433,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
               .toList())
           .toList();
+      // listBoltsKey = listSKey.ad
     }
     if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
       List<double> listS = [];
