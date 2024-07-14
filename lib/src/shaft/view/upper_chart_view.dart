@@ -26,11 +26,11 @@ class _UpperChartViewState extends State<UpperChartView> {
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
         child: Stack(
           children: [
-            // _ScatterChart(
-            //   baselineX,
-            //   (20 - (baselineY + 10)) - 10,
-            // ),
             _Chart(
+              baselineX,
+              (20 - (baselineY + 10)) - 10,
+            ),
+            _ScatterChart(
               baselineX,
               (20 - (baselineY + 10)) - 10,
             ),
@@ -252,35 +252,49 @@ class _Chart extends StatelessWidget {
             dotData: FlDotData(show: true),
           ),
           LineChartBarData(
-            barWidth: 4,
+            barWidth: 1,
             show: true,
             spots: [
               ...List.generate(
                 listBolts.length,
-                (index) => FlSpot(listBolts[index][0], listBolts[index][1]),
+                (index) {
+                  if (index == 0)
+                    return FlSpot(
+                        listBolts[index][0] * 0.76, listBolts[index][1] * 0.76);
+                  return FlSpot(
+                      listBolts[index][0] * 0.75, listBolts[index][1] * 0.75);
+                },
               ),
-              FlSpot(listBolts[0][0], listBolts[0][1])
+              FlSpot(listBolts[0][0] * 0.75, listBolts[0][1] * 0.75),
+              FlSpot(listBolts[1][0] * 0.75, listBolts[1][1] * 0.75),
+              FlSpot(listBolts[2][0] * 0.75, listBolts[2][1] * 0.75),
             ],
             isCurved: true,
-            belowBarData: BarAreaData(show: false),
-            color: Colors.amber,
-            dotData: FlDotData(show: false),
-          ),
-          LineChartBarData(
-            barWidth: 4,
-            show: false,
-            spots: [
-              ...List.generate(
-                listBolts.length,
-                (index) => FlSpot(listBolts[index][0], listBolts[index][1]),
-              ),
-              FlSpot(listBolts[0][0], listBolts[0][1])
-            ],
-            isCurved: true,
-            belowBarData: BarAreaData(show: false),
-            color: Colors.grey,
+            // curveSmoothness: 0.4,
+            belowBarData: BarAreaData(
+              show: false,
+              spotsLine: BarAreaSpotsLine(show: false),
+              color: Constant.primaryColor,
+            ),
+            color: Constant.primaryColor,
             dotData: FlDotData(show: true),
-          )
+          ),
+          // LineChartBarData(
+          //   barWidth: 4,
+          //   show: true,
+          //   // isStepLineChart: true,
+          //   spots: [
+          //     ...List.generate(
+          //       listBolts.length,
+          //       (index) => FlSpot(listBolts[index][0], listBolts[index][1]),
+          //     ),
+          //     FlSpot(listBolts[0][0], listBolts[0][1])
+          //   ],
+          //   isCurved: true,
+          //   belowBarData: BarAreaData(show: false),
+          //   color: Colors.grey,
+          //   dotData: FlDotData(show: true),
+          // )
           // GANTI PAKE SCATTER
           // ...List.generate(
           //   listBolts.length,
@@ -386,7 +400,7 @@ class _ScatterChart extends StatelessWidget {
     }
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
-      child: Text('B', style: style),
+      child: Text('', style: style),
       // child: Text(meta.formattedValue, style: style),
     );
   }
@@ -407,7 +421,7 @@ class _ScatterChart extends StatelessWidget {
     }
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
-      child: Text('D', style: style),
+      child: Text('', style: style),
       // child: Text(meta.formattedValue, style: style),
     );
   }
@@ -429,7 +443,7 @@ class _ScatterChart extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(right: 0),
-      child: Text('C', style: style),
+      child: Text('', style: style),
       // child: Text(meta.formattedValue, style: style),
     );
   }
@@ -451,7 +465,7 @@ class _ScatterChart extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0),
-      child: Text('A', style: style),
+      child: Text('', style: style),
       // child: Text(meta.formattedValue, style: style),
     );
   }
@@ -460,13 +474,13 @@ class _ScatterChart extends StatelessWidget {
     if ((value - baselineY).abs() <= 0.1) {
       return FlLine(
         color: Color(0xff576778),
-        strokeWidth: 2,
+        strokeWidth: 0,
         // dashArray: [8, 4],
       );
     } else {
       return FlLine(
         color: Color.fromARGB(176, 230, 231, 233),
-        strokeWidth: 1,
+        strokeWidth: 0,
         // dashArray: [8, 4],
       );
     }
@@ -476,13 +490,13 @@ class _ScatterChart extends StatelessWidget {
     if ((value - baselineX).abs() <= 0.1) {
       return FlLine(
         color: Color(0xff576778),
-        strokeWidth: 2,
+        strokeWidth: 0,
         // dashArray: [8, 4],
       );
     } else {
       return FlLine(
         color: Color.fromARGB(176, 230, 231, 233),
-        strokeWidth: 1,
+        strokeWidth: 0,
         // dashArray: [8, 4],
       );
     }
@@ -564,15 +578,18 @@ class _ScatterChart extends StatelessWidget {
             listBolts[index][0],
             listBolts[index][1],
             show: true,
-            radius: 10,
+            radius: 18.7,
             color: Colors.grey,
           ),
         ),
         scatterLabelSettings: ScatterLabelSettings(
           showLabel: true,
           getLabelFunction: (spotIndex, spot) => '${spotIndex + 1}',
-          getLabelTextStyleFunction: (spotIndex, spot) =>
-              TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          getLabelTextStyleFunction: (spotIndex, spot) => TextStyle(
+              height: 2,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: Colors.white),
         ),
         // betweenBarsData: [BetweenBarsData(fromIndex: 0, toIndex: 2)],
         titlesData: FlTitlesData(
