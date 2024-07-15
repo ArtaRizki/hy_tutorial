@@ -31,20 +31,9 @@ class _UserDetailViewState extends State<UserDetailView>
   Widget build(BuildContext context) {
     final userDataP = context.watch<UserManageProvider>().userDetailModel;
     final userP = context.watch<UserManageProvider>().userDetailModel.Data;
+
     Widget modalHapus() {
-      return CustomButton.secondaryButton('Hapus', () async {
-        Utils.showYesNoDialogWithWarning(
-            context: context,
-            title: "Konfirmasi Penghapusan",
-            desc: "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
-            yesCallback: () async {
-              // await
-              Navigator.pop(context);
-            },
-            noCallback: () async {
-              Navigator.pop(context);
-            });
-      });
+      return CustomButton.secondaryButton('Hapus', () async {});
     }
 
     Widget modalSimpan() {
@@ -56,6 +45,7 @@ class _UserDetailViewState extends State<UserDetailView>
             title: "Simpan Perubahan",
             desc: "Apakah anda yakin\ningin menyimpan perubahan?",
             yesCallback: () async {
+              
               Navigator.pop(context);
             },
             noCallback: () async {
@@ -79,8 +69,19 @@ class _UserDetailViewState extends State<UserDetailView>
           ),
         ),
         IconButton(
-          onPressed: () async {
-            await modalHapus();
+          onPressed: () {
+            Utils.showYesNoDialogWithWarning(
+                context: context,
+                title: "Konfirmasi Penghapusan",
+                desc: "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
+                yesCallback: () async {
+                  context.read<UserManageProvider>().deleteUser(id: userP?.Id ?? "0");
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                noCallback: () async {
+                  Navigator.pop(context);
+                });
           },
           icon: Icon(
             Icons.delete,

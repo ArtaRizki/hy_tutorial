@@ -441,4 +441,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       Constant.xSizedBox16,
     ];
   }
+
+  Future<void> deleteUser({required String id}) async {
+    loading(true);
+    final response = await delete(Constant.BASE_API_FULL + '/admin/users/$id');
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      loading(false);
+    } else {
+      final message = jsonDecode(response.body)["message"];
+      loading(false);
+      return message;
+    }
+  }
 }
