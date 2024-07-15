@@ -34,11 +34,11 @@ class _UpperChartViewState extends State<UpperChartView> {
               baselineX,
               (20 - (baselineY + 10)) - 10,
             ),
-            _ScatterChart(
+            _ScatterChartS(
               baselineX,
               (20 - (baselineY + 10)) - 10,
             ),
-            _ScatterChartS(
+            _ScatterChart(
               baselineX,
               (20 - (baselineY + 10)) - 10,
             ),
@@ -843,6 +843,9 @@ class _ScatterChart extends StatelessWidget {
     final upperCrockedLine = d.upperCrockedLine;
     final listBolts = d.listBolts;
     final listTorqueSuggestions = d.listTorqueSuggestions;
+    final listBoltsKey = d.listBoltsKey;
+    final listTorqueSuggestionsKey = d.listTorqueSuggestionsKey;
+    final listTorqueSuggestionsX = d.listTorqueSuggestionsX;
 
     double getBiggestXY() {
       double upper0 = upper[0];
@@ -893,6 +896,36 @@ class _ScatterChart extends StatelessWidget {
           enabled: true,
           touchTooltipData: ScatterTouchTooltipData(
             getTooltipItems: (touchedSpots) {
+              if (listTorqueSuggestionsX.contains(touchedSpots.x)) {
+                final item = listTorqueSuggestionsX
+                    .firstWhere((element) => element == touchedSpots.x);
+                return ScatterTooltipItem(
+                  '$item',
+                  textStyle: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    // shadows: [
+                    //   Shadow(
+                    //       // bottomLeft
+                    //       offset: Offset(-1.5, -1.5),
+                    //       color: Colors.black.withOpacity(0.3)),
+                    //   Shadow(
+                    //       // bottomRight
+                    //       offset: Offset(1.5, -1.5),
+                    //       color: Colors.black.withOpacity(0.3)),
+                    //   Shadow(
+                    //       // topRight
+                    //       offset: Offset(1.5, 1.5),
+                    //       color: Colors.black.withOpacity(0.3)),
+                    //   Shadow(
+                    //       // topLeft
+                    //       offset: Offset(-1.5, 1.5),
+                    //       color: Colors.black.withOpacity(0.3)),
+                    // ],
+                  ),
+                );
+              }
               return ScatterTooltipItem(
                 '${touchedSpots.x.toStringAsFixed(0)},${touchedSpots.y.toStringAsFixed(0)}',
                 textStyle: TextStyle(
@@ -913,7 +946,9 @@ class _ScatterChart extends StatelessWidget {
             show: true,
             radius: 12,
             // radius: 18.7,
-            color: Colors.grey.shade600,
+            color: listTorqueSuggestionsKey.contains(listBoltsKey[index])
+                ? Colors.red
+                : Colors.grey.shade600,
           ),
         ),
         scatterLabelSettings: ScatterLabelSettings(
