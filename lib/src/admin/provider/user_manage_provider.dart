@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hy_tutorial/common/base/base_response.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:powers/powers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,8 +14,10 @@ import '../../../common/base/base_controller.dart';
 import '../../../common/helper/constant.dart';
 import '../../../common/component/custom_dropdown.dart';
 import '../../../common/component/custom_textfield.dart';
+import '../../division/model/divison_model.dart';
 import '../model/user_detail_model.dart';
 import '../model/user_list_model.dart';
+import '../view/user_manage_view.dart';
 
 class UserManageProvider extends BaseController with ChangeNotifier {
   GlobalKey<FormState> userAddKey = GlobalKey<FormState>();
@@ -335,13 +338,23 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     }
   }
 
+  TextEditingController emailC = TextEditingController();
   TextEditingController nameC = TextEditingController();
   TextEditingController nipC = TextEditingController();
-  TextEditingController roleC = TextEditingController();
+  //TextEditingController roleC = TextEditingController();
   TextEditingController usernameC = TextEditingController();
   TextEditingController passwordC = TextEditingController();
+  //TextEditingController statusC = TextEditingController();
 
-  String? selectedRole;
+  Future<void> clearForm() async {
+    emailC.clear();
+    usernameC.clear();
+    nameC.clear();
+    nipC.clear();
+    //roleC.clear();
+    usernameC.clear();
+    selectedDivision = null;
+  }
 
   bool _obscurePass = true;
 
@@ -352,12 +365,35 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     notifyListeners();
   }
 
-  onChangedRole(String? v) {
-    String? selected = v;
-    if (selected != null) {
-      selectedRole = v;
-      roleC.text = selected;
-    }
+  String? _selectedDivision;
+  String? get selectedDivision => this._selectedDivision;
+
+  set selectedDivision(value) {
+    this._selectedDivision = value;
+    notifyListeners();
+  }
+
+  String? _selectedRole;
+  String? get selectedRole => this._selectedRole;
+
+  set selectedRole(value) {
+    this._selectedRole = value;
+    notifyListeners();
+  }
+
+  String? _selectedStatus;
+  String? get selectedStatus => this._selectedStatus;
+
+  set selectedStatus(value) {
+    this._selectedStatus = value;
+    notifyListeners();
+  }
+
+  bool _updateV = false;
+  bool get updateV => this._updateV;
+  set updateV(value) {
+    this._updateV = value;
+    notifyListeners();
   }
 
   UserDetailModel _userDetailModel = UserDetailModel();
@@ -380,7 +416,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  List<Widget> userForm() {
+  List<Widget> userForm(List<DivisionModelData?>? Data) {
     return [
       Text("Input Data User", style: Constant.blackBold20),
       Constant.xSizedBox8,
@@ -394,31 +430,36 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         ],
         labelText: "Nama",
       ),
-      Constant.xSizedBox16,
-      CustomTextField.borderTextField(
-        controller: nipC,
-        required: false,
-        textInputType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-          FilteringTextInputFormatter.digitsOnly,
-        ],
-        labelText: "NIP",
-      ),
+      // Constant.xSizedBox16,
+      // CustomTextField.borderTextField(
+      //   controller: nipC,
+      //   required: false,
+      //   textInputType: TextInputType.number,
+      //   inputFormatters: [
+      //     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+      //     FilteringTextInputFormatter.digitsOnly,
+      //   ],
+      //   labelText: "NIP",
+      // ),
       Constant.xSizedBox16,
       CustomDropdown.normalDropdown(
-        controller: roleC,
+        //controller: roleC,
         iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
         contentPadding: EdgeInsets.all(2),
         borderColor: Constant.primaryColor,
-        labelText: "Role",
-        selectedItem: selectedRole,
-        hintText: "Role",
-        list: [
-          DropdownMenuItem(child: Text("Admin"), value: "admin"),
-          DropdownMenuItem(child: Text("User"), value: "user")
-        ],
-        onChanged: onChangedRole,
+        labelText: "Divisi",
+        //selectedItem: selectedRole,
+        selectedItem: selectedDivision,
+        hintText: "Divisi",
+        list: List.generate(
+          Data?.length ?? 0,
+          (index) => DropdownMenuItem(
+              child: Text(Data?[index]?.Name ?? ""),
+              value: Data?[index]?.Id ?? ""),
+        ),
+        onChanged: (val) {
+          selectedDivision = val;
+        },
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
@@ -427,19 +468,148 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
-        controller: passwordC,
-        labelText: "Password",
-        obscureText: obscurePass,
-        suffixIcon: InkWell(
-          onTap: () => toggleObscurePass(),
-          child: Icon(
-            obscurePass ? Icons.visibility_off_outlined : Icons.visibility,
-            color: Constant.primaryColor,
-          ),
+        controller: emailC,
+        labelText: "Email",
+      ),
+      Constant.xSizedBox16,
+      Visibility(
+        visible: updateV,
+        child: CustomDropdown.normalDropdown(
+          //controller: roleC,
+          iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+          contentPadding: EdgeInsets.all(2),
+          borderColor: Constant.primaryColor,
+          labelText: "Role",
+          selectedItem: selectedRole,
+          //selectedItem: selectedDivision,
+          hintText: "Role",
+          list: [
+            DropdownMenuItem(
+              child: Text("Admin"),
+              value: "2",
+            ),
+            DropdownMenuItem(
+              child: Text("User"),
+              value: "3",
+            ),
+          ],
+          onChanged: (val) {
+            selectedRole = val;
+          },
         ),
       ),
       Constant.xSizedBox16,
+      Visibility(
+        visible: updateV,
+        child: CustomDropdown.normalDropdown(
+          //controller: roleC,
+          iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+          contentPadding: EdgeInsets.all(2),
+          borderColor: Constant.primaryColor,
+          labelText: "Status",
+          selectedItem: selectedStatus,
+          //selectedItem: selectedDivision,
+          hintText: "Status",
+          list: [
+            DropdownMenuItem(
+              child: Text("Inactive"),
+              value: "0",
+            ),
+            DropdownMenuItem(
+              child: Text("Active"),
+              value: "1",
+            ),
+            DropdownMenuItem(
+              child: Text("Blocked By Admin"),
+              value: "2",
+            ),
+          ],
+          onChanged: (val) {
+            selectedStatus = val;
+          },
+        ),
+      ),
+      Constant.xSizedBox16,
+      // CustomTextField.borderTextField(
+      //   controller: passwordC,
+      //   labelText: "Password",
+      //   obscureText: obscurePass,
+      //   suffixIcon: InkWell(
+      //     onTap: () => toggleObscurePass(),
+      //     child: Icon(
+      //       obscurePass ? Icons.visibility_off_outlined : Icons.visibility,
+      //       color: Constant.primaryColor,
+      //     ),
+      //   ),
+      // ),
+      // Constant.xSizedBox16,
     ];
+  }
+
+  Future<void> addUser(BuildContext context) async {
+    loading(true);
+
+    if (selectedDivision == null) throw 'Pilih Divisi Terlebih Dahulu';
+    FocusManager.instance.primaryFocus?.unfocus();
+    Map<String, String> param = {
+      'Name': nameC.text,
+      'Username': usernameC.text,
+      'Email': emailC.text,
+      'DivisionId': selectedDivision ?? '',
+    };
+    final response =
+        await post(Constant.BASE_API_FULL + '/admin/users', body: param);
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      final model = BaseResponse.from(response);
+      nameC.clear();
+      emailC.clear();
+      usernameC.clear();
+      selectedDivision = null;
+
+      loading(false);
+      await Utils.showSuccess(msg: model.message ?? "Sukses");
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => UserManageView())));
+    } else {
+      final message = jsonDecode(response.body)["message"];
+      loading(false);
+      throw Exception(message);
+    }
+  }
+
+  Future<void> updateUser(BuildContext context, {required String id}) async {
+    loading(true);
+    FocusManager.instance.primaryFocus?.unfocus();
+    Map<String, String> param = {
+      // 'Name': nameC.text,
+      // 'Username': usernameC.text,
+      // 'Email': emailC.text,
+      'Role' : selectedRole ?? '',
+      'DivisionId': selectedDivision ?? '',
+      'Status' : selectedStatus ?? '',
+    };
+    final response =
+        await put(Constant.BASE_API_FULL + '/admin/users/$id', body: param);
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      final model = BaseResponse.from(response);
+      nameC.clear();
+      emailC.clear();
+      usernameC.clear();
+      selectedDivision = null;
+
+      loading(false);
+      await Utils.showSuccess(msg: model.message ?? "Sukses");
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => UserManageView())));
+    } else {
+      final message = jsonDecode(response.body)["message"];
+      loading(false);
+      throw Exception(message);
+    }
   }
 
   Future<void> deleteUser({required String id}) async {

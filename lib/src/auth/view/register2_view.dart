@@ -105,7 +105,7 @@ class _Register2ViewState extends State<Register2View> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text("NIP",
+                  Text("Divisi",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Colors.grey,

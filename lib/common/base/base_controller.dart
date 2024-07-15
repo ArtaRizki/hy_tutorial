@@ -149,7 +149,7 @@ class BaseController<S extends BaseState> {
     return response;
   }
 
-  Future post(String url,
+  Future<http.Response> post(String url,
       {Map<String, String>? headers,
       Map<String, dynamic>? body,
       List<http.MultipartFile>? files}) async {
@@ -231,7 +231,7 @@ class BaseController<S extends BaseState> {
               .toString()
               .toLowerCase()
               .contains("Internal Server Error")) {
-        return response.body;
+        return response;
       }
       return response;
     } else {
@@ -307,7 +307,7 @@ class BaseController<S extends BaseState> {
               .toString()
               .toLowerCase()
               .contains("Internal Server Error")) {
-        return response.body;
+        return response;
       }
       return response;
     }

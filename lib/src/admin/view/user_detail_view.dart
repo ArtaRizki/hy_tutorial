@@ -201,7 +201,7 @@ class _UserDetailViewState extends State<UserDetailView>
                         Expanded(
                           flex: 5,
                           child: Text(
-                            'Password',
+                            'Status',
                             style: TextStyle(color: Constant.textColorBlack),
                           ),
                         ),
