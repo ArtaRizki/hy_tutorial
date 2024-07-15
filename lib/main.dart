@@ -1,6 +1,7 @@
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login2_view.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
+import 'package:hy_tutorial/src/division/provider/division_provider.dart';
 import 'package:hy_tutorial/src/tower/provider/tower_provider.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -222,6 +223,8 @@ class MyApp extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return MultiProvider(
           providers: [
+            ChangeNotifierProvider<DivisionProvider>(
+                create: (context) => DivisionProvider()),
             ChangeNotifierProvider<DataAddProvider>(
                 create: (context) => DataAddProvider()),
             ChangeNotifierProvider<UserManageProvider>(

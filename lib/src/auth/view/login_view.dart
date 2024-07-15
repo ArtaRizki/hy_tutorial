@@ -20,6 +20,7 @@ class _LoginViewState extends BaseState<LoginView> {
   @override
   void initState() {
     context.read<AuthProvider>().loginKey = GlobalKey<FormState>();
+    context.read<AuthProvider>().clearLoginForm();
     super.initState();
   }
 
