@@ -42,6 +42,16 @@ class _UserAddViewState extends BaseState<UserAddView> {
       p.emailC.text = data?.Data?.Email ?? '';
       p.passwordC.text = '';
       p.updateV = true;
+      if (data?.Data?.Role == "admin")
+        p.selectedRole = "2";
+      else
+        p.selectedRole = "3";
+      if (data?.Data?.Status == "inactive")
+        p.selectedStatus = "0";
+      else if (data?.Data?.Status == "active")
+        p.selectedStatus = "1";
+      else
+        p.selectedStatus = "2";
       setState(() {});
     } else {
       final p = context.read<UserManageProvider>();
@@ -96,8 +106,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
                               desc: "Apakah Data Anda Sudah Benar?",
                               yesCallback: () => handleTap(() async {
                                     Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    dataP.updateUser(context, id: p.userDetailModel.Data?.Id ?? "");
+                                    // Navigator.pop(context);
+                                    // Navigator.pop(context);
+                                    dataP.updateUser(context,
+                                        id: p.userDetailModel.Data?.Id ?? "");
                                   }),
                               noCallback: () => Navigator.pop(context));
                           // Navigator.push(
@@ -128,7 +140,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
                               desc: "Apakah Data Anda Sudah Benar?",
                               yesCallback: () => handleTap(() async {
                                     Navigator.pop(context);
-                                    Navigator.pop(context);
+                                    
                                     dataP.addUser(context);
                                   }),
                               noCallback: () => Navigator.pop(context));

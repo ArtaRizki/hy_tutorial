@@ -562,16 +562,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
-      nameC.clear();
-      emailC.clear();
-      usernameC.clear();
-      selectedDivision = null;
 
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
+      Navigator.pop(context);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: ((context) => UserManageView())));
+      nameC.clear();
+      emailC.clear();
+      usernameC.clear();
+      selectedDivision = null;
     } else {
       final message = jsonDecode(response.body)["message"];
       loading(false);
@@ -586,25 +587,27 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       // 'Name': nameC.text,
       // 'Username': usernameC.text,
       // 'Email': emailC.text,
-      'Role' : selectedRole ?? '',
+      'Role': selectedRole ?? '',
       'DivisionId': selectedDivision ?? '',
-      'Status' : selectedStatus ?? '',
+      'Status': selectedStatus ?? '',
     };
     final response =
         await put(Constant.BASE_API_FULL + '/admin/users/$id', body: param);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
-      nameC.clear();
-      emailC.clear();
-      usernameC.clear();
-      selectedDivision = null;
 
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
+      Navigator.pop(context);
+      Navigator.pop(context);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: ((context) => UserManageView())));
+      nameC.clear();
+      emailC.clear();
+      usernameC.clear();
+      selectedDivision = null;
     } else {
       final message = jsonDecode(response.body)["message"];
       loading(false);
@@ -612,12 +615,20 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  Future<void> deleteUser({required String id}) async {
+  Future<void> deleteUser(BuildContext context, {required String id}) async {
     loading(true);
     final response = await delete(Constant.BASE_API_FULL + '/admin/users/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
+      final model = BaseResponse.from(response);
       loading(false);
+      await Utils.showSuccess(msg: model.message ?? "Sukses");
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pop(context);
+      // Navigator.pop(context);
+      // Navigator.pop(context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => UserManageView())));
     } else {
       final message = jsonDecode(response.body)["message"];
       loading(false);

@@ -330,7 +330,7 @@ class BaseController<S extends BaseState> {
       log("URL : $url");
       log("BODY : $body");
       Response response = await http
-          .post(Uri.parse(url),
+          .put(Uri.parse(url),
               headers: h, body: body, encoding: Encoding.getByName("utf-8"))
           .timeout(Duration(seconds: 30),
               onTimeout: () => http.Response("Timeout", 504));
@@ -488,7 +488,7 @@ class BaseController<S extends BaseState> {
     log("==== PARAMETERS ====");
     log("URL : $url");
     log("BODY : $bodyUri");
-    Response response = await http.delete(bodyUri, headers: h).timeout(
+    Response response = await http.delete(Uri.parse(url), headers: h).timeout(
         Duration(seconds: 30),
         onTimeout: () => http.Response("Timeout", 504));
     log("RESPONSE DELETE $url : ${response.body}");
