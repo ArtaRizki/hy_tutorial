@@ -896,8 +896,8 @@ class _ScatterChart extends StatelessWidget {
           enabled: true,
           touchTooltipData: ScatterTouchTooltipData(
             getTooltipItems: (touchedSpots) {
-              log("TOUCHED SPOTS X : ${touchedSpots.x}");
-              log("TOUCHED SPOTS X CONTAIN : ${listTorqueSuggestionsY.contains(touchedSpots.y)}");
+              // log("TOUCHED SPOTS X : ${touchedSpots.x}");
+              // log("TOUCHED SPOTS X CONTAIN : ${listTorqueSuggestionsY.contains(touchedSpots.y)}");
               if (listTorqueSuggestionsY.contains(touchedSpots.y)) {
                 final item = listTorqueSuggestionsY
                     .firstWhere((element) => element == touchedSpots.y);
