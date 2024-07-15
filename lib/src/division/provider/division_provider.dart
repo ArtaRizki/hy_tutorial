@@ -9,14 +9,17 @@ class DivisionProvider extends BaseController with ChangeNotifier {
   DivisionModel get divisionModel => this._divisionModel;
   set divisionModel(DivisionModel value) => this._divisionModel = value;
 
-  Future<DivisionModel> fetchDivision() async {
-    loading(true);
+  Future<void> fetchDivision({bool withLoading = false}) async {
+    if (withLoading) loading(true);
+
     final response = await get(Constant.BASE_API_FULL + '/divisions/master');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = DivisionModel.fromJson(jsonDecode(response.body));
-      loading(false);
-      return model;
+      divisionModel = model;
+      notifyListeners();
+      if (withLoading) loading(false);
+      //return model;
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
