@@ -845,7 +845,7 @@ class _ScatterChart extends StatelessWidget {
     final listTorqueSuggestions = d.listTorqueSuggestions;
     final listBoltsKey = d.listBoltsKey;
     final listTorqueSuggestionsKey = d.listTorqueSuggestionsKey;
-    final listTorqueSuggestionsX = d.listTorqueSuggestionsX;
+    final listTorqueSuggestionsY = d.listTorqueSuggestionsY;
 
     double getBiggestXY() {
       double upper0 = upper[0];
@@ -896,33 +896,17 @@ class _ScatterChart extends StatelessWidget {
           enabled: true,
           touchTooltipData: ScatterTouchTooltipData(
             getTooltipItems: (touchedSpots) {
-              if (listTorqueSuggestionsX.contains(touchedSpots.x)) {
-                final item = listTorqueSuggestionsX
-                    .firstWhere((element) => element == touchedSpots.x);
+              log("TOUCHED SPOTS X : ${touchedSpots.x}");
+              log("TOUCHED SPOTS X CONTAIN : ${listTorqueSuggestionsY.contains(touchedSpots.y)}");
+              if (listTorqueSuggestionsY.contains(touchedSpots.y)) {
+                final item = listTorqueSuggestionsY
+                    .firstWhere((element) => element == touchedSpots.y);
                 return ScatterTooltipItem(
                   '$item',
                   textStyle: TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
-                    // shadows: [
-                    //   Shadow(
-                    //       // bottomLeft
-                    //       offset: Offset(-1.5, -1.5),
-                    //       color: Colors.black.withOpacity(0.3)),
-                    //   Shadow(
-                    //       // bottomRight
-                    //       offset: Offset(1.5, -1.5),
-                    //       color: Colors.black.withOpacity(0.3)),
-                    //   Shadow(
-                    //       // topRight
-                    //       offset: Offset(1.5, 1.5),
-                    //       color: Colors.black.withOpacity(0.3)),
-                    //   Shadow(
-                    //       // topLeft
-                    //       offset: Offset(-1.5, 1.5),
-                    //       color: Colors.black.withOpacity(0.3)),
-                    // ],
                   ),
                 );
               }

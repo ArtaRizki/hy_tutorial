@@ -169,7 +169,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   List<List<double>> listBolts = [];
   List<String> listTorqueSuggestionsKey = [];
   List<double> listTorqueSuggestions = [];
-  List<double> listTorqueSuggestionsX = [];
+  List<double> listTorqueSuggestionsY = [];
   double upperCrockedLine = 0.0;
 
   // double divideUntilTwoDigits(double val) {
@@ -448,7 +448,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
 
     if (listBoltsKey.isNotEmpty && boltsData != null) {
-      listTorqueSuggestionsX.clear();
+      listTorqueSuggestionsY.clear();
       List<String> listSKey = [];
       boltsData.forEach((key, value) {
         listSKey.add(key);
@@ -457,12 +457,12 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
         for (int j = 0; j < listSKey.length; j++) {
           if (listSKey[j] == listTorqueSuggestionsKey[i]) {
-            listTorqueSuggestionsX.add(listBolts[j][0]);
+            listTorqueSuggestionsY.add(listBolts[j][1]);
             break;
           }
         }
       }
-      log("LIST TORQUE SUGGESTION X : $listTorqueSuggestionsX");
+      log("LIST TORQUE SUGGESTION Y : $listTorqueSuggestionsY");
     }
 
     acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
@@ -612,7 +612,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
 
     if (listBoltsKey.isNotEmpty && boltsData != null) {
-      listTorqueSuggestionsX.clear();
+      listTorqueSuggestionsY.clear();
       List<String> listSKey = [];
       boltsData.forEach((key, value) {
         listSKey.add(key);
@@ -621,12 +621,12 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
         for (int j = 0; j < listSKey.length; j++) {
           if (listSKey[j] == listTorqueSuggestionsKey[i]) {
-            listTorqueSuggestionsX.add(listBolts[j][0]);
+            listTorqueSuggestionsY.add(listBolts[j][1]);
             break;
           }
         }
       }
-      log("LIST TORQUE SUGGESTION X : $listTorqueSuggestionsX");
+      log("LIST TORQUE SUGGESTION Y : $listTorqueSuggestionsY");
     }
 
     acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
@@ -777,7 +777,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
 
     if (listBoltsKey.isNotEmpty && boltsData != null) {
-      listTorqueSuggestionsX.clear();
+      listTorqueSuggestionsY.clear();
       List<String> listSKey = [];
       boltsData.forEach((key, value) {
         listSKey.add(key);
@@ -786,12 +786,12 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
         for (int j = 0; j < listSKey.length; j++) {
           if (listSKey[j] == listTorqueSuggestionsKey[i]) {
-            listTorqueSuggestionsX.add(listBolts[j][0]);
+            listTorqueSuggestionsY.add(listBolts[j][1]);
             break;
           }
         }
       }
-      log("LIST TORQUE SUGGESTION X : $listTorqueSuggestionsX");
+      log("LIST TORQUE SUGGESTION Y : $listTorqueSuggestionsY");
     }
 
     acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
