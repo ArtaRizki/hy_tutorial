@@ -190,101 +190,120 @@ class _UserManageViewState extends BaseState<UserManageView>
             userManageP.pagingController.refresh();
           }
         },
-        child: PagedListView.separated(
-          pagingController: pagingC,
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-          shrinkWrap: true,
-          physics: ScrollPhysics(),
-          separatorBuilder: (context, index) {
-            return SizedBox();
-          },
-          builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
-            firstPageProgressIndicatorBuilder: (_) => Container(
-              color: Colors.white,
-              padding: EdgeInsets.only(top: 32),
-              child: CustomLoadingIndicator.buildIndicator(),
-            ),
-            newPageProgressIndicatorBuilder: (_) => Container(
-              color: Colors.white,
-              child: CustomLoadingIndicator.buildIndicator(),
-            ),
-            noItemsFoundIndicatorBuilder: (_) => Padding(
-              padding: const EdgeInsets.only(top: 56),
-              child: Center(child: Text("Tidak ada data")),
-            ),
-            itemBuilder: (context, item, index) {
-              if (item.Status != 'active') return SizedBox();
-              return InkWell(
-                onTap: () async {
-                  await CusNav.nPush(
-                      context, UserDetailView(id: item.Id ?? ''));
-                  pagingC.refresh();
+        child: Column(
+          children: [
+            Expanded(
+              child: PagedListView.separated(
+                pagingController: pagingC,
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                separatorBuilder: (context, index) {
+                  return SizedBox();
                 },
-                child: Column(
-                  children: [
-                    CustomContainer.mainCard(
-                      isShadow: false,
-                      child: Row(
+                builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
+                  firstPageProgressIndicatorBuilder: (_) => Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.only(top: 32),
+                    child: CustomLoadingIndicator.buildIndicator(),
+                  ),
+                  firstPageErrorIndicatorBuilder: (_) => Padding(
+                    padding: const EdgeInsets.only(top: 56),
+                    child: Center(child: Text("Gagal mendapatkan data")),
+                  ),
+                  newPageProgressIndicatorBuilder: (_) => Container(
+                    color: Colors.white,
+                    child: CustomLoadingIndicator.buildIndicator(),
+                  ),
+                  newPageErrorIndicatorBuilder: (_) => Padding(
+                    padding: const EdgeInsets.only(top: 56),
+                    child: Center(child: Text("Gagal mendapatkan data")),
+                  ),
+                  noItemsFoundIndicatorBuilder: (_) => Padding(
+                    padding: const EdgeInsets.only(top: 56),
+                    child: Center(child: Text("Tidak ada data")),
+                  ),
+                  itemBuilder: (context, item, index) {
+                    if (item.Status != 'active') return SizedBox();
+                    return InkWell(
+                      onTap: () async {
+                        await CusNav.nPush(
+                            context, UserDetailView(id: item.Id ?? ''));
+                        pagingC.refresh();
+                      },
+                      child: Column(
                         children: [
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40),
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    'assets/icons/ic-user-black.png',
-                                  ),
-                                  scale: 3,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            flex: 8,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          CustomContainer.mainCard(
+                            isShadow: false,
+                            child: Row(
                               children: [
-                                Text(
-                                  item.Name ?? 'Nama -',
-                                  style: Constant.iPrimaryMedium8.copyWith(
-                                      fontSize: 16, color: Colors.black),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: Colors.white,
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                          'assets/icons/ic-user-black.png',
+                                        ),
+                                        scale: 3,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                Text(
-                                  item.Status ?? 'Status -',
-                                  style: Constant.iPrimaryMedium8.copyWith(
-                                      fontSize: 14, color: Colors.black),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  flex: 8,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.Name ?? 'Nama -',
+                                        style: Constant.iPrimaryMedium8
+                                            .copyWith(
+                                                fontSize: 16,
+                                                color: Colors.black),
+                                      ),
+                                      Text(
+                                        item.Status ?? 'Status -',
+                                        style: Constant.iPrimaryMedium8
+                                            .copyWith(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                      ),
+                                      Text(
+                                        item.Division ?? 'Divisi -',
+                                        style: TextStyle(
+                                            color: Constant.textHintColor2),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  item.Division ?? 'Divisi -',
-                                  style:
-                                      TextStyle(color: Constant.textHintColor2),
-                                ),
+                                Expanded(
+                                    flex: 1,
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.grey,
+                                      size: 20,
+                                    ))
                               ],
                             ),
                           ),
-                          Expanded(
-                              flex: 1,
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.grey,
-                                size: 20,
-                              ))
+                          SizedBox(
+                            height: 20,
+                          ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -300,100 +319,111 @@ class _UserManageViewState extends BaseState<UserManageView>
             userManageP.pagingController2.refresh();
           }
         },
-        child: PagedListView.separated(
-          pagingController: pagingC2,
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-          shrinkWrap: true,
-          physics: ScrollPhysics(),
-          separatorBuilder: (context, index) {
-            return SizedBox();
-          },
-          builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
-            firstPageProgressIndicatorBuilder: (_) => Container(
-              color: Colors.white,
-              padding: EdgeInsets.only(top: 32),
-              child: CustomLoadingIndicator.buildIndicator(),
-            ),
-            newPageProgressIndicatorBuilder: (_) => Container(
-              color: Colors.white,
-              child: CustomLoadingIndicator.buildIndicator(),
-            ),
-            noItemsFoundIndicatorBuilder: (_) => Padding(
-              padding: const EdgeInsets.only(top: 56),
-              child: Center(child: Text("Tidak ada data")),
-            ),
-            itemBuilder: (context, item, index) {
-              return InkWell(
-                onTap: () async {
-                  await CusNav.nPush(
-                      context, UserDetailView(id: item.Id ?? ''));
-                  pagingC2.refresh();
+        child: Column(
+          children: [
+            Expanded(
+              child: PagedListView.separated(
+                pagingController: pagingC2,
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                separatorBuilder: (context, index) {
+                  return SizedBox();
                 },
-                child: Column(
-                  children: [
-                    CustomContainer.mainCard(
-                      isShadow: false,
-                      child: Row(
+                builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
+                  firstPageProgressIndicatorBuilder: (_) => Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.only(top: 32),
+                    child: CustomLoadingIndicator.buildIndicator(),
+                  ),
+                  newPageProgressIndicatorBuilder: (_) => Container(
+                    color: Colors.white,
+                    child: CustomLoadingIndicator.buildIndicator(),
+                  ),
+                  noItemsFoundIndicatorBuilder: (_) => Padding(
+                    padding: const EdgeInsets.only(top: 56),
+                    child: Center(child: Text("Tidak ada data")),
+                  ),
+                  itemBuilder: (context, item, index) {
+                    return InkWell(
+                      onTap: () async {
+                        await CusNav.nPush(
+                            context, UserDetailView(id: item.Id ?? ''));
+                        pagingC2.refresh();
+                      },
+                      child: Column(
                         children: [
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40),
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    'assets/icons/ic-user-black.png',
-                                  ),
-                                  scale: 3,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            flex: 8,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          CustomContainer.mainCard(
+                            isShadow: false,
+                            child: Row(
                               children: [
-                                Text(
-                                  item.Name ?? 'Nama -',
-                                  style: Constant.iPrimaryMedium8.copyWith(
-                                      fontSize: 16, color: Colors.black),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: Colors.white,
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                          'assets/icons/ic-user-black.png',
+                                        ),
+                                        scale: 3,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                Text(
-                                  item.Status ?? 'Status -',
-                                  style: Constant.iPrimaryMedium8.copyWith(
-                                      fontSize: 14, color: Colors.black),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  flex: 8,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.Name ?? 'Nama -',
+                                        style: Constant.iPrimaryMedium8
+                                            .copyWith(
+                                                fontSize: 16,
+                                                color: Colors.black),
+                                      ),
+                                      Text(
+                                        item.Status ?? 'Status -',
+                                        style: Constant.iPrimaryMedium8
+                                            .copyWith(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                      ),
+                                      Text(
+                                        item.Division ?? 'Divisi -',
+                                        style: TextStyle(
+                                            color: Constant.textHintColor2),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  item.Division ?? 'Divisi -',
-                                  style:
-                                      TextStyle(color: Constant.textHintColor2),
-                                ),
+                                Expanded(
+                                    flex: 1,
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.grey,
+                                      size: 20,
+                                    ))
                               ],
                             ),
                           ),
-                          Expanded(
-                              flex: 1,
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.grey,
-                                size: 20,
-                              ))
+                          SizedBox(
+                            height: 20,
+                          ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -413,6 +443,7 @@ class _UserManageViewState extends BaseState<UserManageView>
             SizedBox(height: 8),
             Expanded(
               child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
                 controller: tabController,
                 children: [bodyKontenActive(), bodyKontenRequest()],
               ),
