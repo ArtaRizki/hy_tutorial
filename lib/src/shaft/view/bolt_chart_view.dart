@@ -892,10 +892,10 @@ class _ScatterChart extends StatelessWidget {
 
     return ScatterChart(
       ScatterChartData(
-        showingTooltipIndicators:
-            listTorqueSuggestions.map((e) => e.toInt()).toList(),
+        // showingTooltipIndicators:
+        //     listTorqueSuggestions.map((e) => e.toInt()).toList(),
         scatterTouchData: ScatterTouchData(
-          enabled: true,
+          enabled: false,
           // handleBuiltInTouches: false,
           // touchCallback: (FlTouchEvent event, ScatterTouchResponse? response) {
           //   if (response == null || response.touchedSpot == null) {
