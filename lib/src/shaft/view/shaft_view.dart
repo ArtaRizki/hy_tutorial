@@ -46,6 +46,7 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final d = context.watch<DataAddProvider>();
+    final data = context.watch<DataAddProvider>().turbineDetailModel.data;
     final shaft =
         context.watch<DataAddProvider>().turbineCreateModel.data?.shaft;
     final status =
@@ -145,6 +146,98 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
 
     Widget acBdActive() => Column(
           children: [
+            Container(
+              color: Color(0xffEFEFEF),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                      'Total Baut',
+                      style: TextStyle(color: Constant.textColorBlack),
+                    ),
+                  ),
+                  Constant.xSizedBox8,
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                      '${data?.totalBolts ?? 0}',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                      'Torsi Saat Ini',
+                      style: TextStyle(color: Constant.textColorBlack),
+                    ),
+                  ),
+                  Constant.xSizedBox8,
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                      '${data?.currentTorque ?? 0}',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              color: Color(0xffEFEFEF),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                      'Max Torsi',
+                      style: TextStyle(color: Constant.textColorBlack),
+                    ),
+                  ),
+                  Constant.xSizedBox8,
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                      '${data?.maxTorque ?? 0}',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                      'Selisih Torsi',
+                      style: TextStyle(color: Constant.textColorBlack),
+                    ),
+                  ),
+                  Constant.xSizedBox8,
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                      '${data?.torqueGap ?? 0}',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Container(
               color: Color(0xffEFEFEF),
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
