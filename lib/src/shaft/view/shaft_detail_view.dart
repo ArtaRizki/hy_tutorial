@@ -9,6 +9,7 @@ import 'sample_chart_view.dart';
 import "package:provider/provider.dart";
 import '../../../common/component/custom_textfield.dart';
 import '../../data/provider/data_add_provider.dart';
+import 'bolt_chart_view.dart';
 import 'upper_chart_view.dart';
 
 class ShaftDetailView extends StatefulWidget {
@@ -31,7 +32,7 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
 
   getData() async {
     final p = context.read<DataAddProvider>();
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
     tabController1 = TabController(length: 3, vsync: this);
     tabController.addListener(() {
       log("INDEX ACTIVE : ${tabController.index}");
@@ -93,7 +94,12 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
             labelColor: Constant.primaryColor,
             unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
             indicatorColor: Constant.primaryColor,
-            tabs: [_buildTab("A-C"), _buildTab("B-D"), _buildTab("Resultan")],
+            tabs: [
+              _buildTab("A-C"),
+              _buildTab("B-D"),
+              _buildTab("Resultan"),
+              _buildTab("Bolt")
+            ],
           ),
         ),
       );
@@ -590,8 +596,11 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
             Container(
                 child: tabController.index == 2
                     ? UpperChartView()
-                    : SampleChartView(
-                        activeIndex: tabController.index, typePage: 'detail')),
+                    : tabController.index == 3
+                        ? BoltChartView()
+                        : SampleChartView(
+                            activeIndex: tabController.index,
+                            typePage: 'detail')),
             Constant.xSizedBox16,
             Text('Detail Data', style: Constant.iBlackMedium16),
             Constant.xSizedBox8,
