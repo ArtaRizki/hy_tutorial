@@ -892,8 +892,28 @@ class _ScatterChart extends StatelessWidget {
 
     return ScatterChart(
       ScatterChartData(
+        showingTooltipIndicators:
+            listTorqueSuggestions.map((e) => e.toInt()).toList(),
         scatterTouchData: ScatterTouchData(
           enabled: true,
+          // handleBuiltInTouches: false,
+          // touchCallback: (FlTouchEvent event, ScatterTouchResponse? response) {
+          //   if (response == null || response.touchedSpot == null) {
+          //     return;
+          //   }
+          //   // if (event is FlTapUpEvent) {
+          //   //   final spotIndex = response.touchedSpot?.spotIndex;
+          //   //   var listDouble =
+          //   //       listTorqueSuggestions.map((e) => e.toInt()).toList();
+          //   //   // setState(() {
+          //   //   //   if (listDouble.contains(spotIndex)) {
+          //   //   //     listDouble.remove(spotIndex);
+          //   //   //   } else {
+          //   //   //     listDouble.add(spotIndex);
+          //   //   //   }
+          //   //   // });
+          //   // }
+          // },
           touchTooltipData: ScatterTouchTooltipData(
             getTooltipItems: (touchedSpots) {
               // log("TOUCHED SPOTS X : ${touchedSpots.x}");
@@ -936,13 +956,36 @@ class _ScatterChart extends StatelessWidget {
           ),
         ),
         scatterLabelSettings: ScatterLabelSettings(
-          showLabel: false,
-          getLabelFunction: (spotIndex, spot) => '${spotIndex + 1}',
+          showLabel: true,
+          getLabelFunction: (spotIndex, spot) {
+            if (listTorqueSuggestionsKey.contains(listBoltsKey[spotIndex]))
+              return '          ${spot.y}';
+            return '';
+          },
           getLabelTextStyleFunction: (spotIndex, spot) => TextStyle(
-              height: 2,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              color: Colors.white),
+            height: 1.2,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            color: Colors.red,
+            shadows: [
+              Shadow(
+                  // bottomLeft
+                  offset: Offset(-1.5, -1.5),
+                  color: Colors.white),
+              Shadow(
+                  // bottomRight
+                  offset: Offset(1.5, -1.5),
+                  color: Colors.white),
+              Shadow(
+                  // topRight
+                  offset: Offset(1.5, 1.5),
+                  color: Colors.white),
+              Shadow(
+                  // topLeft
+                  offset: Offset(-1.5, 1.5),
+                  color: Colors.white),
+            ],
+          ),
         ),
         // betweenBarsData: [BetweenBarsData(fromIndex: 0, toIndex: 2)],
         titlesData: FlTitlesData(
@@ -1213,7 +1256,25 @@ class _ScatterChartS extends StatelessWidget {
               height: 1.3,
               fontWeight: FontWeight.bold,
               fontSize: 14,
-              color: Colors.white),
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                    // bottomLeft
+                    offset: Offset(-1.5, -1.5),
+                    color: Constant.primaryColor),
+                Shadow(
+                    // bottomRight
+                    offset: Offset(1.5, -1.5),
+                    color: Constant.primaryColor),
+                Shadow(
+                    // topRight
+                    offset: Offset(1.5, 1.5),
+                    color: Constant.primaryColor),
+                Shadow(
+                    // topLeft
+                    offset: Offset(-1.5, 1.5),
+                    color: Constant.primaryColor),
+              ]),
         ),
         // betweenBarsData: [BetweenBarsData(fromIndex: 0, toIndex: 2)],
         titlesData: FlTitlesData(
