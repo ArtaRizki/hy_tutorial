@@ -457,7 +457,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
         for (int j = 0; j < listSKey.length; j++) {
           if (listSKey[j] == listTorqueSuggestionsKey[i]) {
-            listTorqueSuggestionsY.add(listBolts[j][1]);
+            listTorqueSuggestionsY.add(listTorqueSuggestions[j]);
             break;
           }
         }
@@ -621,7 +621,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
         for (int j = 0; j < listSKey.length; j++) {
           if (listSKey[j] == listTorqueSuggestionsKey[i]) {
-            listTorqueSuggestionsY.add(listBolts[j][1]);
+            listTorqueSuggestionsY.add(listTorqueSuggestions[j]);
             break;
           }
         }
@@ -786,7 +786,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
         for (int j = 0; j < listSKey.length; j++) {
           if (listSKey[j] == listTorqueSuggestionsKey[i]) {
-            listTorqueSuggestionsY.add(listBolts[j][1]);
+            listTorqueSuggestionsY.add(listTorqueSuggestions[j]);
             break;
           }
         }
