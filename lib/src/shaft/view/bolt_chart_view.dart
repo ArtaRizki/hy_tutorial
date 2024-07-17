@@ -958,8 +958,12 @@ class _ScatterChart extends StatelessWidget {
         scatterLabelSettings: ScatterLabelSettings(
           showLabel: true,
           getLabelFunction: (spotIndex, spot) {
-            if (listTorqueSuggestionsKey.contains(listBoltsKey[spotIndex]))
-              return '          ${spot.y}';
+            if (listTorqueSuggestionsKey.contains(listBoltsKey[spotIndex])) {
+              final index =
+                  listTorqueSuggestionsKey.indexOf(listBoltsKey[spotIndex]);
+              if (listBoltsKey[spotIndex] == listTorqueSuggestionsKey[index])
+                return '          ${listTorqueSuggestionsY[index]}';
+            }
             return '';
           },
           getLabelTextStyleFunction: (spotIndex, spot) => TextStyle(

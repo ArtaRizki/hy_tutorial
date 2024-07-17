@@ -442,8 +442,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       torqueSuggestionsData.forEach((key, value) {
         listS.add(value);
       });
-      listTorqueSuggestions =
-          listS.map((e) => divideUntilTwoDigits(e)).toList();
+      listTorqueSuggestions = listS.map((e) => e).toList();
       listTorqueSuggestionsKey = listSKey.map((e) => e).toList();
     }
 
@@ -456,8 +455,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       log("LIST S KEY : $listSKey");
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
         for (int j = 0; j < listSKey.length; j++) {
-          if (listSKey[j] == listTorqueSuggestionsKey[i]) {
-            listTorqueSuggestionsY.add(listTorqueSuggestions[j]);
+          if (listSKey[j] == listTorqueSuggestionsKey[j]) {
+            listTorqueSuggestionsY.add(listTorqueSuggestions[i]);
             break;
           }
         }
@@ -606,10 +605,11 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         listS.add(value);
         listSKey.add(key);
       });
-      listTorqueSuggestions =
-          listS.map((e) => divideUntilTwoDigits(e)).toList();
+      listTorqueSuggestions = listS.map((e) => e).toList();
       listTorqueSuggestionsKey = listSKey.map((e) => e).toList();
     }
+    log("LIST KEY TORQUE SUGGESTION : $listTorqueSuggestionsKey");
+    log("LIST KEY BOLTS : $listBoltsKey");
 
     if (listBoltsKey.isNotEmpty && boltsData != null) {
       listTorqueSuggestionsY.clear();
@@ -619,12 +619,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       });
       log("LIST S KEY : $listSKey");
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
-        for (int j = 0; j < listSKey.length; j++) {
-          if (listSKey[j] == listTorqueSuggestionsKey[i]) {
-            listTorqueSuggestionsY.add(listTorqueSuggestions[j]);
-            break;
-          }
-        }
+        listTorqueSuggestionsY.add(listTorqueSuggestions[i]);
       }
       log("LIST TORQUE SUGGESTION Y : $listTorqueSuggestionsY");
     }
@@ -771,8 +766,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       torqueSuggestionsData.forEach((key, value) {
         listS.add(value);
       });
-      listTorqueSuggestions =
-          listS.map((e) => divideUntilTwoDigits(e)).toList();
+      listTorqueSuggestions = listS.map((e) => e).toList();
       listTorqueSuggestionsKey = listSKey.map((e) => e).toList();
     }
 
@@ -785,8 +779,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       log("LIST S KEY : $listSKey");
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
         for (int j = 0; j < listSKey.length; j++) {
-          if (listSKey[j] == listTorqueSuggestionsKey[i]) {
-            listTorqueSuggestionsY.add(listTorqueSuggestions[j]);
+          if (listSKey[j] == listTorqueSuggestionsKey[j]) {
+            listTorqueSuggestionsY.add(listTorqueSuggestions[i]);
             break;
           }
         }
