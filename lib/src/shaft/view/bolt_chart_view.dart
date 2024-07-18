@@ -203,10 +203,11 @@ class _Chart extends StatelessWidget {
       if (value < 1) {
         val = val * (-1);
       }
-      if (val > 0 && val <= 5) val = val;
+      if (val > 0 && val <= 10)
+        val = val;
 
-      if (val > 5 && val <= 10)
-        val = val * 10;
+      // if (val > 5 && val <= 10)
+      //   val = val * 10;
       else if (val > 10 /*&& val <= 100*/)
         val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
       // val = val * 50;
@@ -374,10 +375,10 @@ class _Chart extends StatelessWidget {
         // maxY: getBiggestScale(getBiggestXY()) + 0.5,
         // minX: -getBiggestScale(getBiggestXY()) - 0.5,
         // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -getBiggestScale(getBiggestXY()) * 1.4,
-        maxY: getBiggestScale(getBiggestXY()) * 1.4,
-        minX: -getBiggestScale(getBiggestXY()) * 1.4,
-        maxX: getBiggestScale(getBiggestXY()) * 1.4,
+        minY: -getBiggestScale(getBiggestXY()) * 1.7,
+        maxY: getBiggestScale(getBiggestXY()) * 1.7,
+        minX: -getBiggestScale(getBiggestXY()) * 1.7,
+        maxX: getBiggestScale(getBiggestXY()) * 1.7,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
@@ -540,10 +541,11 @@ class _ChartBG extends StatelessWidget {
       if (value < 1) {
         val = val * (-1);
       }
-      if (val > 0 && val <= 5) val = val;
+      if (val > 0 && val <= 10)
+        val = val;
 
-      if (val > 5 && val <= 10)
-        val = val * 10;
+      // if (val > 5 && val <= 10)
+      //   val = val * 10;
       else if (val > 10 /*&& val <= 100*/)
         val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
       // val = val * 50;
@@ -699,10 +701,10 @@ class _ChartBG extends StatelessWidget {
         // maxY: getBiggestScale(getBiggestXY()) + 0.5,
         // minX: -getBiggestScale(getBiggestXY()) - 0.5,
         // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -getBiggestScale(getBiggestXY()) * 0.9,
-        maxY: getBiggestScale(getBiggestXY()) * 0.9,
-        minX: -getBiggestScale(getBiggestXY()) * 0.9,
-        maxX: getBiggestScale(getBiggestXY()) * 0.9,
+        minY: -getBiggestScale(getBiggestXY()) * 1.2,
+        maxY: getBiggestScale(getBiggestXY()) * 1.2,
+        minX: -getBiggestScale(getBiggestXY()) * 1.2,
+        maxX: getBiggestScale(getBiggestXY()) * 1.2,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
@@ -868,10 +870,10 @@ class _ScatterChart extends StatelessWidget {
       if (value < 1) {
         val = val * (-1);
       }
-      if (val > 0 && val <= 5)
+      if (val > 0 && val <= 10)
         val = val;
-      else if (val > 5 && val <= 10)
-        val = val * 10;
+      // else if (val > 5 && val <= 10)
+      // val = val * 10;
       else if (val > 10 /*&& val <= 100*/)
         val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
       // val = val * 50;
@@ -887,8 +889,8 @@ class _ScatterChart extends StatelessWidget {
       return val + 0.8;
     }
 
-    // log("GET BIGGEST XY ${getBiggestXY()}");
-    // log("GET BIGGEST SCALE ${getBiggestScale(getBiggestXY())}");
+    log("GET BIGGEST XY ${getBiggestXY()}");
+    log("GET BIGGEST SCALE ${getBiggestScale(getBiggestXY())}");
 
     return ScatterChart(
       ScatterChartData(
@@ -1037,10 +1039,10 @@ class _ScatterChart extends StatelessWidget {
         // maxY: getBiggestScale(getBiggestXY()) + 0.5,
         // minX: -getBiggestScale(getBiggestXY()) - 0.5,
         // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -getBiggestScale(getBiggestXY()) * 1.2,
-        maxY: getBiggestScale(getBiggestXY()) * 1.2,
-        minX: -getBiggestScale(getBiggestXY()) * 1.2,
-        maxX: getBiggestScale(getBiggestXY()) * 1.2,
+        minY: -getBiggestScale(getBiggestXY()) * 1.5,
+        maxY: getBiggestScale(getBiggestXY()) * 1.5,
+        minX: -getBiggestScale(getBiggestXY()) * 1.5,
+        maxX: getBiggestScale(getBiggestXY()) * 1.5,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
@@ -1203,10 +1205,10 @@ class _ScatterChartS extends StatelessWidget {
       if (value < 1) {
         val = val * (-1);
       }
-      if (val > 0 && val <= 5)
+      if (val > 0 && val <= 10)
         val = val;
-      else if (val > 5 && val <= 10)
-        val = val * 10;
+      // else if (val > 5 && val <= 10)
+      //   val = val * 10;
       else if (val > 10 /*&& val <= 100*/)
         val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
       // val = val * 50;
@@ -1326,10 +1328,10 @@ class _ScatterChartS extends StatelessWidget {
         // maxY: getBiggestScale(getBiggestXY()) + 0.5,
         // minX: -getBiggestScale(getBiggestXY()) - 0.5,
         // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -getBiggestScale(getBiggestXY()) * 2,
-        maxY: getBiggestScale(getBiggestXY()) * 2,
-        minX: -getBiggestScale(getBiggestXY()) * 2,
-        maxX: getBiggestScale(getBiggestXY()) * 2,
+        minY: -getBiggestScale(getBiggestXY()) * 2.3,
+        maxY: getBiggestScale(getBiggestXY()) * 2.3,
+        minX: -getBiggestScale(getBiggestXY()) * 2.3,
+        maxX: getBiggestScale(getBiggestXY()) * 2.3,
         baselineX: baselineX,
         baselineY: baselineY,
       ),

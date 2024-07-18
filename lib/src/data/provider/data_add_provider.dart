@@ -187,14 +187,16 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   double divideUntilTwoDigits(double val) {
     double num = val.abs(); // Use abs() to work with positive value
-    // log("DTWO VAL : $val");
-    // log("DTWO NUM : $num");
+    log("DTWO VAL : $val");
+    log("DTWO NUM : $num");
     int substract = 1;
-    if (num <= 10) substract = 1;
+    if (num < 11 && num % 10 != 0) substract = 1;
+    if ((num.floor() % 10 == 0) && num < (num + 1))
+      substract = num.floor().toString().length;
     // log("DTWO SUBSTRACT : $substract");
     // log("DTWO NUM LENGTH : ${num.toInt().toString().length}");
     int num2 = 10.pow(num.toInt().toString().length - substract).toInt();
-    // log("DTWO NUM2 : $num2");
+    log("DTWO NUM2 : $num2");
     if (val < 0) num2 = num2 * (-1);
     // log("DTWO NUM/NUM2 ${num / num2}");
     // log("DTWO ==================");
@@ -590,12 +592,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         listS.add(value);
         listSKey.add(key);
       });
+      log("LIST S : $listS");
       listBolts = listS
           .map((e) => e
               .split('|')
               .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
               .toList())
           .toList();
+      log("LIST S BOLTS : $listBolts");
       listBoltsKey = listSKey.map((e) => e).toList();
     }
     if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
@@ -643,6 +647,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     // TORQUE AND BOLTS
     log("LIST BOLTS KEY : $listBoltsKey");
     log("LIST BOLTS : $boltsData");
+    log("LIST BOLTS DATA : $listBolts");
     log("LIST TORQUE SUGGESTIONS KEY : $listTorqueSuggestionsKey");
     log("LIST TORQUE SUGGESTIONS : $torqueSuggestionsData");
   }
