@@ -32,7 +32,7 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
 
   getData() async {
     final p = context.read<DataAddProvider>();
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 4, vsync: this, initialIndex: 3);
     tabController1 = TabController(length: 3, vsync: this);
     tabController.addListener(() {
       log("INDEX ACTIVE : ${tabController.index}");

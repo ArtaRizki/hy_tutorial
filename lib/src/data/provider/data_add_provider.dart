@@ -350,8 +350,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdCrockness = turbineCreateModel.data?.bdCrockedness;
     final upperData = turbineCreateModel.data?.chart?.upper;
     final upperCrockness = turbineCreateModel.data?.totalCrockedness;
-    final boltsData = turbineCreateModel.data?.torqueCalculation?.details;
-    final torqueSuggestionsData =
+    var boltsData = turbineCreateModel.data?.torqueCalculation?.details;
+    var torqueSuggestionsData =
         turbineCreateModel.data?.torqueCalculation?.torqueSuggestions;
     if (acData != null && acData.upper != null)
       acUpperTemp = acData.upper!
@@ -425,7 +425,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (boltsData != null && boltsData.isNotEmpty) {
       List<String> listS = [];
       List<String> listSKey = [];
-
+      boltsData = Map.fromEntries(boltsData.entries.toList()
+        ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
       boltsData.forEach((key, value) {
         listS.add(value);
         listSKey.add(key);
@@ -441,6 +442,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
       List<double> listS = [];
       List<String> listSKey = [];
+
+      torqueSuggestionsData = Map.fromEntries(
+          torqueSuggestionsData.entries.toList()
+            ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
       torqueSuggestionsData.forEach((key, value) {
         listS.add(value);
       });
@@ -495,8 +500,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdCrockness = turbineDetailModel.data?.bdCrockedness;
     final upperData = turbineDetailModel.data?.chart?.upper;
     final upperCrockness = turbineDetailModel.data?.totalCrockedness;
-    final boltsData = turbineDetailModel.data?.torqueCalculation?.details;
-    final torqueSuggestionsData =
+    var boltsData = turbineDetailModel.data?.torqueCalculation?.details;
+    var torqueSuggestionsData =
         turbineDetailModel.data?.torqueCalculation?.torqueSuggestions;
     if (acData != null && acData.upper != null)
       acUpperTemp = acData.upper!
@@ -587,7 +592,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (boltsData != null && boltsData.isNotEmpty) {
       List<String> listS = [];
       List<String> listSKey = [];
-
+      boltsData = Map.fromEntries(boltsData.entries.toList()
+        ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
       boltsData.forEach((key, value) {
         listS.add(value);
         listSKey.add(key);
@@ -605,6 +611,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
       List<double> listS = [];
       List<String> listSKey = [];
+
+      torqueSuggestionsData = Map.fromEntries(
+          torqueSuggestionsData.entries.toList()
+            ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
       torqueSuggestionsData.forEach((key, value) {
         listS.add(value);
         listSKey.add(key);
@@ -660,8 +670,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdCrockness = turbineLatestModel.data?.bdCrockedness;
     final upperData = turbineLatestModel.data?.chart?.upper;
     final upperCrockness = turbineLatestModel.data?.totalCrockedness;
-    final boltsData = turbineCreateModel.data?.torqueCalculation?.details;
-    final torqueSuggestionsData =
+    var boltsData = turbineCreateModel.data?.torqueCalculation?.details;
+    var torqueSuggestionsData =
         turbineCreateModel.data?.torqueCalculation?.torqueSuggestions;
     if (acData != null && acData.upper != null)
       acUpperTemp = acData.upper!
@@ -752,7 +762,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (boltsData != null && boltsData.isNotEmpty) {
       List<String> listS = [];
       List<String> listSKey = [];
-
+      boltsData = Map.fromEntries(boltsData.entries.toList()
+        ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
       boltsData.forEach((key, value) {
         listS.add(value);
         listSKey.add(key);
@@ -768,6 +779,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
       List<double> listS = [];
       List<String> listSKey = [];
+
+      torqueSuggestionsData = Map.fromEntries(
+          torqueSuggestionsData.entries.toList()
+            ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
       torqueSuggestionsData.forEach((key, value) {
         listS.add(value);
       });

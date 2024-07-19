@@ -7,6 +7,27 @@ import 'package:provider/provider.dart';
 import 'package:powers/powers.dart';
 import '../../data/provider/data_add_provider.dart';
 
+double divideUntilTwoDigits(double val) {
+  double num = val.abs(); // Use abs() to work with positive value
+  log("DTWO VAL : $val");
+  log("DTWO NUM : $num");
+  int substract = 1;
+  if (num < 11 && num % 10 != 0) substract = 1;
+  var floor = num.floor();
+  var divide1 = floor / 10;
+  var mod1 = divide1 % 10;
+  if ((num.floor() % 10 == 0) && num < (num + 1) && mod1 == 0)
+    substract = num.floor().toString().length;
+  // log("DTWO SUBSTRACT : $substract");
+  // log("DTWO NUM LENGTH : ${num.toInt().toString().length}");
+  int num2 = 10.pow(num.toInt().toString().length - substract).toInt();
+  log("DTWO NUM2 : $num2");
+  if (val < 0) num2 = num2 * (-1);
+  log("DTWO NUM/NUM2 ${num / num2}");
+  // log("DTWO ==================");
+  return num / num2;
+}
+
 class BoltChartView extends StatefulWidget {
   BoltChartView({super.key});
 
@@ -177,7 +198,7 @@ class _Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     final d = context.watch<DataAddProvider>();
     // UPPER
-    final upper = d.upper;
+    final upper = d.upper.map((e) => divideUntilTwoDigits(e)).toList();
     final upperCrockedLine = d.upperCrockedLine;
     final listBolts = d.listBolts;
     final listTorqueSuggestions = d.listTorqueSuggestions;
@@ -185,16 +206,18 @@ class _Chart extends StatelessWidget {
     double getBiggestXY() {
       double upper0 = upper[0];
       double upper1 = upper[1];
-      // log("UPPER 0 : $upper0");
-      // log("UPPER 1 : $upper1");
+      // // log("UPPER 0 : $upper0");
+      // // log("UPPER 1 : $upper1");
       double result = 0;
-      if (upper0 < 0) upper0 * (-1);
-      if (upper1 < 0) upper1 * (-1);
+      upper0 = upper0.abs();
+      upper1 = upper1.abs();
       if (upper0 <= upper1)
         result = upper1;
       else
         result = upper0;
-      // log("BIGGEST XY : $result");
+      // // log("BIGGEST UPPER : $result");
+      result = divideUntilTwoDigits(result);
+      // // log("BIGGEST UPPER 2 : $result");
       return result;
     }
 
@@ -205,26 +228,38 @@ class _Chart extends StatelessWidget {
       }
       if (val > 0 && val <= 10)
         val = val;
-
-      // if (val > 5 && val <= 10)
-      //   val = val * 10;
-      else if (val > 10 /*&& val <= 100*/)
+      else if (val > 10)
         val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
-      // val = val * 50;
-      // else if (val > 100 && val <= 1000)
-      //   val = val * 500;
-      // else if (val > 1000 && val <= 10000)
-      //   val = val * 5000;
-      // else if (val > 10000 && val <= 100000)
-      //   val = val * 50000;
-      // else if (val > 100000 && val <= 1000000)
-      //   val = val * 500000;
-      // else if (val > 1000000 && val <= 10000000) val = val * 5000000;
-      return val + 1;
+      val = val + 0.8;
+      if (val >= 6)
+        val = val + 3;
+      else {
+        if (val > 2) val = val - 2;
+      }
+
+      if (val > 10) val = 10;
+      if (val >= 1 && val < 2) val = 1.8;
+      if (val < 2) val = 2;
+      log("GET BIGGEST SCALE BLUE : $val");
+      return val;
     }
 
     // log("GET BIGGEST XY ${getBiggestXY()}");
     // log("GET BIGGEST SCALE ${getBiggestScale(getBiggestXY())}");
+
+    double curveSmoothness() {
+      log("PANJANG BAUT : ${listBolts.length}");
+      // bolts 2 = 0.7
+      // bolts 4 = 0.55
+      // bolts 8 = 0.4
+      // bolts 10 = 0.25
+      // bolts 12 = 0.1
+      // bolts 14 = 0;
+      if (listBolts.length > 12) return 0;
+      double val = 0.7;
+      double p = val - (0.15 * (listBolts.length / 4));
+      return p;
+    }
 
     return LineChart(
       LineChartData(
@@ -264,10 +299,11 @@ class _Chart extends StatelessWidget {
                   return FlSpot(listBolts[index][0], listBolts[index][1]);
                 },
               ),
-              FlSpot(listBolts[0][0], listBolts[0][1]),
+              if (listBolts.isNotEmpty)
+                FlSpot(listBolts[0][0], listBolts[0][1]),
             ],
             isCurved: true,
-            curveSmoothness: 0.4,
+            curveSmoothness: curveSmoothness(),
             belowBarData: BarAreaData(
               show: true,
               spotsLine: BarAreaSpotsLine(show: false),
@@ -375,10 +411,10 @@ class _Chart extends StatelessWidget {
         // maxY: getBiggestScale(getBiggestXY()) + 0.5,
         // minX: -getBiggestScale(getBiggestXY()) - 0.5,
         // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -getBiggestScale(getBiggestXY()) * 1.7,
-        maxY: getBiggestScale(getBiggestXY()) * 1.7,
-        minX: -getBiggestScale(getBiggestXY()) * 1.7,
-        maxX: getBiggestScale(getBiggestXY()) * 1.7,
+        minY: -(getBiggestScale(getBiggestXY()) * 1.7) - 3,
+        maxY: (getBiggestScale(getBiggestXY()) * 1.7) + 3,
+        minX: -(getBiggestScale(getBiggestXY()) * 1.7) - 3,
+        maxX: (getBiggestScale(getBiggestXY()) * 1.7) + 3,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
@@ -515,7 +551,7 @@ class _ChartBG extends StatelessWidget {
   Widget build(BuildContext context) {
     final d = context.watch<DataAddProvider>();
     // UPPER
-    final upper = d.upper;
+    final upper = d.upper.map((e) => divideUntilTwoDigits(e)).toList();
     final upperCrockedLine = d.upperCrockedLine;
     final listBolts = d.listBolts;
     final listTorqueSuggestions = d.listTorqueSuggestions;
@@ -523,16 +559,18 @@ class _ChartBG extends StatelessWidget {
     double getBiggestXY() {
       double upper0 = upper[0];
       double upper1 = upper[1];
-      // log("UPPER 0 : $upper0");
-      // log("UPPER 1 : $upper1");
+      // // log("UPPER 0 : $upper0");
+      // // log("UPPER 1 : $upper1");
       double result = 0;
-      if (upper0 < 0) upper0 * (-1);
-      if (upper1 < 0) upper1 * (-1);
+      upper0 = upper0.abs();
+      upper1 = upper1.abs();
       if (upper0 <= upper1)
         result = upper1;
       else
         result = upper0;
-      // log("BIGGEST XY : $result");
+      // // log("BIGGEST UPPER : $result");
+      result = divideUntilTwoDigits(result);
+      // // log("BIGGEST UPPER 2 : $result");
       return result;
     }
 
@@ -543,26 +581,37 @@ class _ChartBG extends StatelessWidget {
       }
       if (val > 0 && val <= 10)
         val = val;
-
-      // if (val > 5 && val <= 10)
-      //   val = val * 10;
-      else if (val > 10 /*&& val <= 100*/)
+      else if (val > 10)
         val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
-      // val = val * 50;
-      // else if (val > 100 && val <= 1000)
-      //   val = val * 500;
-      // else if (val > 1000 && val <= 10000)
-      //   val = val * 5000;
-      // else if (val > 10000 && val <= 100000)
-      //   val = val * 50000;
-      // else if (val > 100000 && val <= 1000000)
-      //   val = val * 500000;
-      // else if (val > 1000000 && val <= 10000000) val = val * 5000000;
-      return val + 1;
+      val = val + 0.8;
+      if (val >= 6)
+        val = val + 3;
+      else {
+        if (val > 2) val = val - 2;
+      }
+
+      if (val > 10) val = 10;
+      if (val >= 1 && val < 2) val = 1.8;
+      if (val < 2) val = 1.3;
+      log("GET BIGGEST SCALE BG : $val");
+      return val;
     }
 
     // log("GET BIGGEST XY ${getBiggestXY()}");
     // log("GET BIGGEST SCALE ${getBiggestScale(getBiggestXY())}");
+
+    double curveSmoothness() {
+      // bolts 2 = 0.7
+      // bolts 4 = 0.55
+      // bolts 8 = 0.4
+      // bolts 10 = 0.25
+      // bolts 12 = 0.1
+      // bolts 14 = 0;
+      if (listBolts.length > 12) return 0.35;
+      double val = 0.7;
+      double p = val - (0.15 * (listBolts.length / 4));
+      return p;
+    }
 
     return LineChart(
       LineChartData(
@@ -602,10 +651,11 @@ class _ChartBG extends StatelessWidget {
                   return FlSpot(listBolts[index][0], listBolts[index][1]);
                 },
               ),
-              FlSpot(listBolts[0][0], listBolts[0][1]),
+              if (listBolts.isNotEmpty)
+                FlSpot(listBolts[0][0], listBolts[0][1]),
             ],
             isCurved: true,
-            // curveSmoothness: 0.4,
+            curveSmoothness: curveSmoothness(),
             belowBarData: BarAreaData(
               show: true,
               spotsLine: BarAreaSpotsLine(show: false),
@@ -701,10 +751,10 @@ class _ChartBG extends StatelessWidget {
         // maxY: getBiggestScale(getBiggestXY()) + 0.5,
         // minX: -getBiggestScale(getBiggestXY()) - 0.5,
         // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -getBiggestScale(getBiggestXY()) * 1.2,
-        maxY: getBiggestScale(getBiggestXY()) * 1.2,
-        minX: -getBiggestScale(getBiggestXY()) * 1.2,
-        maxX: getBiggestScale(getBiggestXY()) * 1.2,
+        minY: -(getBiggestScale(getBiggestXY()) * 0.9) - 3,
+        maxY: (getBiggestScale(getBiggestXY()) * 0.9) + 3,
+        minX: -(getBiggestScale(getBiggestXY()) * 0.9) - 3,
+        maxX: (getBiggestScale(getBiggestXY()) * 0.9) + 3,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
@@ -841,7 +891,7 @@ class _ScatterChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final d = context.watch<DataAddProvider>();
     // UPPER
-    final upper = d.upper;
+    final upper = d.upper.map((e) => divideUntilTwoDigits(e)).toList();
     final upperCrockedLine = d.upperCrockedLine;
     final listBolts = d.listBolts;
     final listTorqueSuggestions = d.listTorqueSuggestions;
@@ -855,13 +905,15 @@ class _ScatterChart extends StatelessWidget {
       // log("UPPER 0 : $upper0");
       // log("UPPER 1 : $upper1");
       double result = 0;
-      if (upper0 < 0) upper0 * (-1);
-      if (upper1 < 0) upper1 * (-1);
+      upper0 = upper0.abs();
+      upper1 = upper1.abs();
       if (upper0 <= upper1)
         result = upper1;
       else
         result = upper0;
-      // log("BIGGEST XY : $result");
+      // log("BIGGEST UPPER : $result");
+      result = divideUntilTwoDigits(result);
+      log("BIGGEST UPPER 2 : $result");
       return result;
     }
 
@@ -870,27 +922,27 @@ class _ScatterChart extends StatelessWidget {
       if (value < 1) {
         val = val * (-1);
       }
+      log("BIGG VAL : ${val.toInt()}");
       if (val > 0 && val <= 10)
         val = val;
-      // else if (val > 5 && val <= 10)
-      // val = val * 10;
-      else if (val > 10 /*&& val <= 100*/)
+      else if (val > 10)
         val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
-      // val = val * 50;
-      // else if (val > 100 && val <= 1000)
-      //   val = val * 500;
-      // else if (val > 1000 && val <= 10000)
-      //   val = val * 5000;
-      // else if (val > 10000 && val <= 100000)
-      //   val = val * 50000;
-      // else if (val > 100000 && val <= 1000000)
-      //   val = val * 500000;
-      // else if (val > 1000000 && val <= 10000000) val = val * 5000000;
-      return val + 0.8;
+      val = val + 0.8;
+      if (val >= 6)
+        val = val + 3;
+      else {
+        if (val > 2) val = val - 2;
+      }
+
+      if (val > 10) val = 10;
+      if (val >= 1 && val < 2) val = 1.8;
+      if (val < 1) val = 0.8;
+      log("GET BIGGEST SCALE SCATTER BOLT : $val");
+      return val;
     }
 
-    log("GET BIGGEST XY ${getBiggestXY()}");
-    log("GET BIGGEST SCALE ${getBiggestScale(getBiggestXY())}");
+    // log("GET BIGGEST XY ${getBiggestXY()}");
+    // log("GET BIGGEST SCALE ${getBiggestScale(getBiggestXY())}");
 
     return ScatterChart(
       ScatterChartData(
@@ -951,6 +1003,7 @@ class _ScatterChart extends StatelessWidget {
             listBolts[index][1],
             show: true,
             radius: 12,
+            // radius: 10 - (getBiggestScale(getBiggestXY())).abs() - 3,
             // radius: 18.7,
             color: listTorqueSuggestionsKey.contains(listBoltsKey[index])
                 ? Colors.red
@@ -1039,10 +1092,10 @@ class _ScatterChart extends StatelessWidget {
         // maxY: getBiggestScale(getBiggestXY()) + 0.5,
         // minX: -getBiggestScale(getBiggestXY()) - 0.5,
         // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -getBiggestScale(getBiggestXY()) * 1.5,
-        maxY: getBiggestScale(getBiggestXY()) * 1.5,
-        minX: -getBiggestScale(getBiggestXY()) * 1.5,
-        maxX: getBiggestScale(getBiggestXY()) * 1.5,
+        minY: -(getBiggestScale(getBiggestXY()) * 1.2) - 3,
+        maxY: (getBiggestScale(getBiggestXY()) * 1.2) + 3,
+        minX: -(getBiggestScale(getBiggestXY()) * 1.2) - 3,
+        maxX: (getBiggestScale(getBiggestXY()) * 1.2) + 3,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
@@ -1179,7 +1232,7 @@ class _ScatterChartS extends StatelessWidget {
   Widget build(BuildContext context) {
     final d = context.watch<DataAddProvider>();
     // UPPER
-    final upper = d.upper;
+    final upper = d.upper.map((e) => divideUntilTwoDigits(e)).toList();
     final upperCrockedLine = d.upperCrockedLine;
     final listBolts = d.listBolts;
     final listTorqueSuggestions = d.listTorqueSuggestions;
@@ -1187,16 +1240,18 @@ class _ScatterChartS extends StatelessWidget {
     double getBiggestXY() {
       double upper0 = upper[0];
       double upper1 = upper[1];
-      // log("UPPER 0 : $upper0");
-      // log("UPPER 1 : $upper1");
+      // // log("UPPER 0 : $upper0");
+      // // log("UPPER 1 : $upper1");
       double result = 0;
-      if (upper0 < 0) upper0 * (-1);
-      if (upper1 < 0) upper1 * (-1);
+      upper0 = upper0.abs();
+      upper1 = upper1.abs();
       if (upper0 <= upper1)
         result = upper1;
       else
         result = upper0;
-      // log("BIGGEST XY : $result");
+      // // log("BIGGEST UPPER : $result");
+      result = divideUntilTwoDigits(result);
+      // // log("BIGGEST UPPER 2 : $result");
       return result;
     }
 
@@ -1207,21 +1262,20 @@ class _ScatterChartS extends StatelessWidget {
       }
       if (val > 0 && val <= 10)
         val = val;
-      // else if (val > 5 && val <= 10)
-      //   val = val * 10;
-      else if (val > 10 /*&& val <= 100*/)
+      else if (val > 10)
         val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
-      // val = val * 50;
-      // else if (val > 100 && val <= 1000)
-      //   val = val * 500;
-      // else if (val > 1000 && val <= 10000)
-      //   val = val * 5000;
-      // else if (val > 10000 && val <= 100000)
-      //   val = val * 50000;
-      // else if (val > 100000 && val <= 1000000)
-      //   val = val * 500000;
-      // else if (val > 1000000 && val <= 10000000) val = val * 5000000;
-      return val + 0.8;
+      val = val + 0.8;
+      if (val >= 6)
+        val = val + 3;
+      else {
+        if (val > 2) val = val - 2;
+      }
+
+      if (val > 10) val = 10;
+      if (val >= 1 && val < 2) val = 1.8;
+      if (val < 2) val = 2.2;
+      log("GET BIGGEST SCALE SCATTER NUMBER : $val");
+      return val;
     }
 
     // log("GET BIGGEST XY ${getBiggestXY()}");
@@ -1328,10 +1382,10 @@ class _ScatterChartS extends StatelessWidget {
         // maxY: getBiggestScale(getBiggestXY()) + 0.5,
         // minX: -getBiggestScale(getBiggestXY()) - 0.5,
         // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -getBiggestScale(getBiggestXY()) * 2.3,
-        maxY: getBiggestScale(getBiggestXY()) * 2.3,
-        minX: -getBiggestScale(getBiggestXY()) * 2.3,
-        maxX: getBiggestScale(getBiggestXY()) * 2.3,
+        minY: -(getBiggestScale(getBiggestXY()) * 2) - 3,
+        maxY: (getBiggestScale(getBiggestXY()) * 2) + 3,
+        minX: -(getBiggestScale(getBiggestXY()) * 2) - 3,
+        maxX: (getBiggestScale(getBiggestXY()) * 2) + 3,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
