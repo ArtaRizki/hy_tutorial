@@ -591,8 +591,11 @@ class _ChartBG extends StatelessWidget {
       }
 
       if (val > 10) val = 10;
-      if (val >= 1 && val < 2) val = 1.8;
-      if (val < 2) val = 1.3;
+      if (val >= 1 && val < 2)
+        val = 1.8;
+      else if (val > 0 && val < 1)
+        val = 0;
+      else if (val < 2) val = 1.3;
       log("GET BIGGEST SCALE BG : $val");
       return val;
     }
@@ -935,7 +938,9 @@ class _ScatterChart extends StatelessWidget {
       }
 
       if (val > 10) val = 10;
-      if (val >= 1 && val < 2) val = 1.8;
+      if (val >= 1 && val < 2)
+        val = 1.8;
+      else if (val > 0 && val < 1) val = 0;
       if (val < 1) val = 0.8;
       log("GET BIGGEST SCALE SCATTER BOLT : $val");
       return val;
@@ -1002,7 +1007,11 @@ class _ScatterChart extends StatelessWidget {
             listBolts[index][0],
             listBolts[index][1],
             show: true,
-            radius: 12,
+            radius: listBolts.length > 12
+                // || getBiggestScale(getBiggestXY()) < 2.5
+                ? 6
+                : 12,
+            // radius: 12,
             // radius: 10 - (getBiggestScale(getBiggestXY())).abs() - 3,
             // radius: 18.7,
             color: listTorqueSuggestionsKey.contains(listBoltsKey[index])
@@ -1024,7 +1033,10 @@ class _ScatterChart extends StatelessWidget {
           getLabelTextStyleFunction: (spotIndex, spot) => TextStyle(
             height: 1.2,
             fontWeight: FontWeight.bold,
-            fontSize: 14,
+            fontSize:
+                listBolts.length >= 12 || getBiggestScale(getBiggestXY()) < 2.5
+                    ? 8
+                    : 12,
             color: Colors.red,
             shadows: [
               Shadow(
@@ -1273,7 +1285,8 @@ class _ScatterChartS extends StatelessWidget {
 
       if (val > 10) val = 10;
       if (val >= 1 && val < 2) val = 1.8;
-      if (val < 2) val = 2.2;
+      // else if (val > 0 && val < 1) val = 0;
+      if (val < 2) val = 2.4;
       log("GET BIGGEST SCALE SCATTER NUMBER : $val");
       return val;
     }
@@ -1315,7 +1328,10 @@ class _ScatterChartS extends StatelessWidget {
           getLabelTextStyleFunction: (spotIndex, spot) => TextStyle(
               height: 1.3,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize:
+                  listBolts.length > 12 || getBiggestScale(getBiggestXY()) < 2.5
+                      ? 10
+                      : 14,
               color: Colors.white,
               shadows: [
                 Shadow(
