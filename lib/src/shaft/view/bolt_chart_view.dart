@@ -9,8 +9,8 @@ import '../../data/provider/data_add_provider.dart';
 
 double divideUntilTwoDigits(double val) {
   double num = val.abs(); // Use abs() to work with positive value
-  log("DTWO VAL : $val");
-  log("DTWO NUM : $num");
+  // log("DTWO VAL : $val");
+  // log("DTWO NUM : $num");
   int substract = 1;
   if (num < 11 && num % 10 != 0) substract = 1;
   var floor = num.floor();
@@ -21,11 +21,39 @@ double divideUntilTwoDigits(double val) {
   // log("DTWO SUBSTRACT : $substract");
   // log("DTWO NUM LENGTH : ${num.toInt().toString().length}");
   int num2 = 10.pow(num.toInt().toString().length - substract).toInt();
-  log("DTWO NUM2 : $num2");
+  // log("DTWO NUM2 : $num2");
   if (val < 0) num2 = num2 * (-1);
-  log("DTWO NUM/NUM2 ${num / num2}");
+  // log("DTWO NUM/NUM2 ${num / num2}");
   // log("DTWO ==================");
   return num / num2;
+}
+
+double getBiggestScaleMain(double value) {
+  double val = value;
+  if (value < 1) {
+    val = val * (-1);
+  }
+  log("BIGG VAL : ${val.toInt()}");
+  if (val > 0 && val <= 10)
+    val = val;
+  // dibagi sampai interval 1-10
+  else if (val > 10)
+    val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
+  log("BIGG VAL : ${val.toInt()}");
+  val = val + 0.8;
+  // adjust biar pas abu2
+  if (val >= 6)
+    val = val + 3;
+  else if (val > 2) val = val - 2;
+
+  log("GET BIGGEST SCALE BOLT VAL : $val");
+  if (val > 10)
+    val = 10;
+  else if (val > 0 && val < 1)
+    val = 1;
+  else if (val >= 1 && val < 2) val = 1.5;
+  log("GET BIGGEST SCALE BOLT : $val");
+  return val;
 }
 
 class BoltChartView extends StatefulWidget {
@@ -240,7 +268,7 @@ class _Chart extends StatelessWidget {
       if (val > 10) val = 10;
       if (val >= 1 && val < 2) val = 1.8;
       if (val < 2) val = 2;
-      log("GET BIGGEST SCALE BLUE : $val");
+      log("GET BIGGEST SCALE BOLT BLUE : $val");
       return val;
     }
 
@@ -403,18 +431,10 @@ class _Chart extends StatelessWidget {
           getDrawingHorizontalLine: getHorizontalVerticalLine,
           getDrawingVerticalLine: getVerticalVerticalLine,
         ),
-        // minY: -10,
-        // maxY: 10,
-        // minX: -10,
-        // maxX: 10,
-        // minY: -getBiggestScale(getBiggestXY()) - 0.5,
-        // maxY: getBiggestScale(getBiggestXY()) + 0.5,
-        // minX: -getBiggestScale(getBiggestXY()) - 0.5,
-        // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -(getBiggestScale(getBiggestXY()) * 1.7) - 3,
-        maxY: (getBiggestScale(getBiggestXY()) * 1.7) + 3,
-        minX: -(getBiggestScale(getBiggestXY()) * 1.7) - 3,
-        maxX: (getBiggestScale(getBiggestXY()) * 1.7) + 3,
+        minY: -(getBiggestScaleMain(getBiggestXY()) * 2) - 3,
+        maxY: (getBiggestScaleMain(getBiggestXY()) * 2) + 3,
+        minX: -(getBiggestScaleMain(getBiggestXY()) * 2) - 3,
+        maxX: (getBiggestScaleMain(getBiggestXY()) * 2) + 3,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
@@ -596,7 +616,7 @@ class _ChartBG extends StatelessWidget {
       else if (val > 0 && val < 1)
         val = 0;
       else if (val < 2) val = 1.3;
-      log("GET BIGGEST SCALE BG : $val");
+      log("GET BIGGEST SCALE BOLT BG : $val");
       return val;
     }
 
@@ -746,18 +766,10 @@ class _ChartBG extends StatelessWidget {
           getDrawingHorizontalLine: getHorizontalVerticalLine,
           getDrawingVerticalLine: getVerticalVerticalLine,
         ),
-        // minY: -10,
-        // maxY: 10,
-        // minX: -10,
-        // maxX: 10,
-        // minY: -getBiggestScale(getBiggestXY()) - 0.5,
-        // maxY: getBiggestScale(getBiggestXY()) + 0.5,
-        // minX: -getBiggestScale(getBiggestXY()) - 0.5,
-        // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -(getBiggestScale(getBiggestXY()) * 0.9) - 3,
-        maxY: (getBiggestScale(getBiggestXY()) * 0.9) + 3,
-        minX: -(getBiggestScale(getBiggestXY()) * 0.9) - 3,
-        maxX: (getBiggestScale(getBiggestXY()) * 0.9) + 3,
+        minY: -(getBiggestScaleMain(getBiggestXY())) - 3,
+        maxY: (getBiggestScaleMain(getBiggestXY())) + 3,
+        minX: -(getBiggestScaleMain(getBiggestXY())) - 3,
+        maxX: (getBiggestScaleMain(getBiggestXY())) + 3,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
@@ -916,7 +928,7 @@ class _ScatterChart extends StatelessWidget {
         result = upper0;
       // log("BIGGEST UPPER : $result");
       result = divideUntilTwoDigits(result);
-      log("BIGGEST UPPER 2 : $result");
+      // log("BIGGEST UPPER 2 : $result");
       return result;
     }
 
@@ -928,92 +940,59 @@ class _ScatterChart extends StatelessWidget {
       log("BIGG VAL : ${val.toInt()}");
       if (val > 0 && val <= 10)
         val = val;
+      // dibagi sampai interval 1-10
       else if (val > 10)
         val = val * (50 * (10.pow(val.toInt().toString().length - 2).toInt()));
+      log("BIGG VAL : ${val.toInt()}");
       val = val + 0.8;
+      // adjust biar pas abu2
       if (val >= 6)
         val = val + 3;
-      else {
-        if (val > 2) val = val - 2;
-      }
+      else if (val > 2) val = val - 2;
 
-      if (val > 10) val = 10;
-      if (val >= 1 && val < 2)
-        val = 1.8;
-      else if (val > 0 && val < 1) val = 0;
-      if (val < 1) val = 0.8;
-      log("GET BIGGEST SCALE SCATTER BOLT : $val");
+      log("GET BIGGEST SCALE BOLT VAL : $val");
+      if (val > 10)
+        val = 10;
+      else if (val < 1)
+        val = 1;
+      else if (val > 0 && val < 1)
+        val = 0;
+      else if (val >= 1 && val < 2) val = 2;
+      log("GET BIGGEST SCALE BOLT : $val");
       return val;
     }
 
-    // log("GET BIGGEST XY ${getBiggestXY()}");
-    // log("GET BIGGEST SCALE ${getBiggestScale(getBiggestXY())}");
+    double getBoltRadius() {
+      if (listBolts.length >= 16) return 6;
+      if (listBolts.length >= 14) return 8;
+      if (listBolts.length >= 12) return 10;
+      var number = getBiggestScaleMain(getBiggestXY());
+      if (number < 1) return 6;
+      if (number <= 2.1) return 8;
+      return 12;
+    }
+
+    double getFontSize() {
+      if (listBolts.length >= 12) return 9;
+      var number = getBiggestScaleMain(getBiggestXY());
+      if (number < 1) return 8;
+      if (number <= 2.1) return 10;
+      return 14;
+    }
 
     return ScatterChart(
       ScatterChartData(
-        // showingTooltipIndicators:
-        //     listTorqueSuggestions.map((e) => e.toInt()).toList(),
-        scatterTouchData: ScatterTouchData(
-          enabled: false,
-          // handleBuiltInTouches: false,
-          // touchCallback: (FlTouchEvent event, ScatterTouchResponse? response) {
-          //   if (response == null || response.touchedSpot == null) {
-          //     return;
-          //   }
-          //   // if (event is FlTapUpEvent) {
-          //   //   final spotIndex = response.touchedSpot?.spotIndex;
-          //   //   var listDouble =
-          //   //       listTorqueSuggestions.map((e) => e.toInt()).toList();
-          //   //   // setState(() {
-          //   //   //   if (listDouble.contains(spotIndex)) {
-          //   //   //     listDouble.remove(spotIndex);
-          //   //   //   } else {
-          //   //   //     listDouble.add(spotIndex);
-          //   //   //   }
-          //   //   // });
-          //   // }
-          // },
-          touchTooltipData: ScatterTouchTooltipData(
-            getTooltipItems: (touchedSpots) {
-              // log("TOUCHED SPOTS X : ${touchedSpots.x}");
-              // log("TOUCHED SPOTS X CONTAIN : ${listTorqueSuggestionsY.contains(touchedSpots.y)}");
-              if (listTorqueSuggestionsY.contains(touchedSpots.y)) {
-                final item = listTorqueSuggestionsY
-                    .firstWhere((element) => element == touchedSpots.y);
-                return ScatterTooltipItem(
-                  '$item',
-                  textStyle: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                );
-              }
-              return ScatterTooltipItem(
-                '${touchedSpots.x.toStringAsFixed(0)},${touchedSpots.y.toStringAsFixed(0)}',
-                textStyle: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              );
-            },
-            tooltipBgColor: Constant.textHintColor2,
-          ),
-        ),
         scatterSpots: List.generate(
           listBolts.length,
           (index) => ScatterSpot(
             listBolts[index][0],
             listBolts[index][1],
             show: true,
-            radius: listBolts.length > 12
-                // || getBiggestScale(getBiggestXY()) < 2.5
-                ? 6
-                : 12,
-            // radius: 12,
-            // radius: 10 - (getBiggestScale(getBiggestXY())).abs() - 3,
-            // radius: 18.7,
+            radius: getBoltRadius(),
+            // radius:
+            //     listBolts.length > 12 || getBiggestScaleMain(getBiggestXY()) < 2
+            //         ? 6
+            //         : 12,
             color: listTorqueSuggestionsKey.contains(listBoltsKey[index])
                 ? Colors.red
                 : Colors.grey.shade600,
@@ -1026,17 +1005,14 @@ class _ScatterChart extends StatelessWidget {
               final index =
                   listTorqueSuggestionsKey.indexOf(listBoltsKey[spotIndex]);
               if (listBoltsKey[spotIndex] == listTorqueSuggestionsKey[index])
-                return '          ${listTorqueSuggestionsY[index]}';
+                return '\t\t\t\t\t\t\t\t${listTorqueSuggestionsY[index]}';
             }
             return '';
           },
           getLabelTextStyleFunction: (spotIndex, spot) => TextStyle(
-            height: 1.2,
+            height: 1,
             fontWeight: FontWeight.bold,
-            fontSize:
-                listBolts.length >= 12 || getBiggestScale(getBiggestXY()) < 2.5
-                    ? 8
-                    : 12,
+            fontSize: getFontSize(),
             color: Colors.red,
             shadows: [
               Shadow(
@@ -1096,18 +1072,10 @@ class _ScatterChart extends StatelessWidget {
           getDrawingHorizontalLine: getHorizontalVerticalLine,
           getDrawingVerticalLine: getVerticalVerticalLine,
         ),
-        // minY: -10,
-        // maxY: 10,
-        // minX: -10,
-        // maxX: 10,
-        // minY: -getBiggestScale(getBiggestXY()) - 0.5,
-        // maxY: getBiggestScale(getBiggestXY()) + 0.5,
-        // minX: -getBiggestScale(getBiggestXY()) - 0.5,
-        // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -(getBiggestScale(getBiggestXY()) * 1.2) - 3,
-        maxY: (getBiggestScale(getBiggestXY()) * 1.2) + 3,
-        minX: -(getBiggestScale(getBiggestXY()) * 1.2) - 3,
-        maxX: (getBiggestScale(getBiggestXY()) * 1.2) + 3,
+        minY: -(getBiggestScaleMain(getBiggestXY()) * 1.4) - 3,
+        maxY: (getBiggestScaleMain(getBiggestXY()) * 1.4) + 3,
+        minX: -(getBiggestScaleMain(getBiggestXY()) * 1.4) - 3,
+        maxX: (getBiggestScaleMain(getBiggestXY()) * 1.4) + 3,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
@@ -1291,8 +1259,13 @@ class _ScatterChartS extends StatelessWidget {
       return val;
     }
 
-    // log("GET BIGGEST XY ${getBiggestXY()}");
-    // log("GET BIGGEST SCALE ${getBiggestScale(getBiggestXY())}");
+    double getFontSize() {
+      if (listBolts.length >= 12) return 10;
+      var number = getBiggestScaleMain(getBiggestXY());
+      if (number < 1) return 8;
+      if (number <= 2.1) return 10;
+      return 14;
+    }
 
     return ScatterChart(
       ScatterChartData(
@@ -1328,10 +1301,11 @@ class _ScatterChartS extends StatelessWidget {
           getLabelTextStyleFunction: (spotIndex, spot) => TextStyle(
               height: 1.3,
               fontWeight: FontWeight.bold,
-              fontSize:
-                  listBolts.length > 12 || getBiggestScale(getBiggestXY()) < 2.5
-                      ? 10
-                      : 14,
+              fontSize: getFontSize(),
+              // fontSize: listBolts.length > 12 ||
+              //         getBiggestScaleMain(getBiggestXY()) < 2
+              //     ? 10
+              //     : 14,
               color: Colors.white,
               shadows: [
                 Shadow(
@@ -1390,22 +1364,13 @@ class _ScatterChartS extends StatelessWidget {
           getDrawingHorizontalLine: getHorizontalVerticalLine,
           getDrawingVerticalLine: getVerticalVerticalLine,
         ),
-        // minY: -10,
-        // maxY: 10,
-        // minX: -10,
-        // maxX: 10,
-        // minY: -getBiggestScale(getBiggestXY()) - 0.5,
-        // maxY: getBiggestScale(getBiggestXY()) + 0.5,
-        // minX: -getBiggestScale(getBiggestXY()) - 0.5,
-        // maxX: getBiggestScale(getBiggestXY()) + 0.5,
-        minY: -(getBiggestScale(getBiggestXY()) * 2) - 3,
-        maxY: (getBiggestScale(getBiggestXY()) * 2) + 3,
-        minX: -(getBiggestScale(getBiggestXY()) * 2) - 3,
-        maxX: (getBiggestScale(getBiggestXY()) * 2) + 3,
+        minY: -(getBiggestScaleMain(getBiggestXY()) * 2.5) - 3,
+        maxY: (getBiggestScaleMain(getBiggestXY()) * 2.5) + 3,
+        minX: -(getBiggestScaleMain(getBiggestXY()) * 2.5) - 3,
+        maxX: (getBiggestScaleMain(getBiggestXY()) * 2.5) + 3,
         baselineX: baselineX,
         baselineY: baselineY,
       ),
-      // duration: Duration.zero,
     );
   }
 }
