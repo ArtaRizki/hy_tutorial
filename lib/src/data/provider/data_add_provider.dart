@@ -168,8 +168,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   List<String> listBoltsKey = [];
   List<List<double>> listBolts = [];
   List<String> listTorqueSuggestionsKey = [];
-  List<double> listTorqueSuggestions = [];
-  List<double> listTorqueSuggestionsY = [];
+  List<int> listTorqueSuggestions = [];
+  List<int> listTorqueSuggestionsY = [];
   double upperCrockedLine = 0.0;
 
   // double divideUntilTwoDigits(double val) {
@@ -370,6 +370,23 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           .toList();
       acTurbineTemp[1] = -acTurbineTemp[1];
     }
+    if (acData != null && acData.upper != null)
+      acUpperTemp = acData.upper!
+          .split('|')
+          .map((e) => (double.tryParse(e) ?? 0))
+          .toList();
+    if (acData != null && acData.clutch != null)
+      acClutchTemp = acData.clutch!
+          .split('|')
+          .map((e) => (double.tryParse(e) ?? 0))
+          .toList();
+    if (acData != null && acData.turbine != null) {
+      acTurbineTemp = acData.turbine!
+          .split('|')
+          .map((e) => (double.tryParse(e) ?? 0))
+          .toList();
+      acTurbineTemp[1] = -acTurbineTemp[1];
+    }
     // log("AC UPPER TEMP : $acUpperTemp");
     acUpper = [
       acUpperTemp[0] /*/getDivideBiggestAC()*/,
@@ -383,7 +400,6 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       acTurbineTemp[0] /*/getDivideBiggestAC()*/,
       acTurbineTemp[1],
     ];
-
     // BD
     if (bdData != null && bdData.upper != null)
       bdUpperTemp = bdData.upper!
@@ -416,6 +432,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       bdTurbineTemp[0] /*/getDivideBiggestBD()*/,
       bdTurbineTemp[1],
     ];
+
     if (upperData != null)
       upper = upperData
           .split('|')
@@ -431,16 +448,18 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         listS.add(value);
         listSKey.add(key);
       });
+      log("LIST S : $listS");
       listBolts = listS
           .map((e) => e
               .split('|')
               .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
               .toList())
           .toList();
+      log("LIST S BOLTS : $listBolts");
       listBoltsKey = listSKey.map((e) => e).toList();
     }
     if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
-      List<double> listS = [];
+      List<int> listS = [];
       List<String> listSKey = [];
 
       torqueSuggestionsData = Map.fromEntries(
@@ -448,10 +467,13 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
       torqueSuggestionsData.forEach((key, value) {
         listS.add(value);
+        listSKey.add(key);
       });
       listTorqueSuggestions = listS.map((e) => e).toList();
       listTorqueSuggestionsKey = listSKey.map((e) => e).toList();
     }
+    log("LIST KEY TORQUE SUGGESTION : $listTorqueSuggestionsKey");
+    log("LIST KEY BOLTS : $listBoltsKey");
 
     if (listBoltsKey.isNotEmpty && boltsData != null) {
       listTorqueSuggestionsY.clear();
@@ -461,12 +483,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       });
       log("LIST S KEY : $listSKey");
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
-        for (int j = 0; j < listSKey.length; j++) {
-          if (listSKey[j] == listTorqueSuggestionsKey[j]) {
-            listTorqueSuggestionsY.add(listTorqueSuggestions[i]);
-            break;
-          }
-        }
+        listTorqueSuggestionsY.add(listTorqueSuggestions[i]);
       }
       log("LIST TORQUE SUGGESTION Y : $listTorqueSuggestionsY");
     }
@@ -488,7 +505,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     log("UPPER : $upper");
     log("UPPER CROCKED : $upperCrockedLine");
     // TORQUE AND BOLTS
+    log("LIST BOLTS KEY : $listBoltsKey");
     log("LIST BOLTS : $boltsData");
+    log("LIST BOLTS DATA : $listBolts");
+    log("LIST TORQUE SUGGESTIONS KEY : $listTorqueSuggestionsKey");
     log("LIST TORQUE SUGGESTIONS : $torqueSuggestionsData");
   }
 
@@ -609,7 +629,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       listBoltsKey = listSKey.map((e) => e).toList();
     }
     if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
-      List<double> listS = [];
+      List<int> listS = [];
       List<String> listSKey = [];
 
       torqueSuggestionsData = Map.fromEntries(
@@ -670,9 +690,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdCrockness = turbineLatestModel.data?.bdCrockedness;
     final upperData = turbineLatestModel.data?.chart?.upper;
     final upperCrockness = turbineLatestModel.data?.totalCrockedness;
-    var boltsData = turbineCreateModel.data?.torqueCalculation?.details;
+    var boltsData = turbineLatestModel.data?.torqueCalculation?.details;
     var torqueSuggestionsData =
-        turbineCreateModel.data?.torqueCalculation?.torqueSuggestions;
+        turbineLatestModel.data?.torqueCalculation?.torqueSuggestions;
     if (acData != null && acData.upper != null)
       acUpperTemp = acData.upper!
           .split('|')
@@ -768,16 +788,18 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         listS.add(value);
         listSKey.add(key);
       });
+      log("LIST S : $listS");
       listBolts = listS
           .map((e) => e
               .split('|')
               .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
               .toList())
           .toList();
+      log("LIST S BOLTS : $listBolts");
       listBoltsKey = listSKey.map((e) => e).toList();
     }
     if (torqueSuggestionsData != null && torqueSuggestionsData.isNotEmpty) {
-      List<double> listS = [];
+      List<int> listS = [];
       List<String> listSKey = [];
 
       torqueSuggestionsData = Map.fromEntries(
@@ -785,10 +807,13 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
       torqueSuggestionsData.forEach((key, value) {
         listS.add(value);
+        listSKey.add(key);
       });
       listTorqueSuggestions = listS.map((e) => e).toList();
       listTorqueSuggestionsKey = listSKey.map((e) => e).toList();
     }
+    log("LIST KEY TORQUE SUGGESTION : $listTorqueSuggestionsKey");
+    log("LIST KEY BOLTS : $listBoltsKey");
 
     if (listBoltsKey.isNotEmpty && boltsData != null) {
       listTorqueSuggestionsY.clear();
@@ -798,12 +823,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       });
       log("LIST S KEY : $listSKey");
       for (int i = 0; i < listTorqueSuggestionsKey.length; i++) {
-        for (int j = 0; j < listSKey.length; j++) {
-          if (listSKey[j] == listTorqueSuggestionsKey[j]) {
-            listTorqueSuggestionsY.add(listTorqueSuggestions[i]);
-            break;
-          }
-        }
+        listTorqueSuggestionsY.add(listTorqueSuggestions[i]);
       }
       log("LIST TORQUE SUGGESTION Y : $listTorqueSuggestionsY");
     }
@@ -825,7 +845,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     log("UPPER : $upper");
     log("UPPER CROCKED : $upperCrockedLine");
     // TORQUE AND BOLTS
+    log("LIST BOLTS KEY : $listBoltsKey");
     log("LIST BOLTS : $boltsData");
+    log("LIST BOLTS DATA : $listBolts");
+    log("LIST TORQUE SUGGESTIONS KEY : $listTorqueSuggestionsKey");
     log("LIST TORQUE SUGGESTIONS : $torqueSuggestionsData");
   }
 

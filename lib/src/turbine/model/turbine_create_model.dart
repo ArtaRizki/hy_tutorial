@@ -250,7 +250,7 @@ class Shaft {
 
 class TorqueCalculation {
   Map<String, String>? details;
-  Map<String, double>? torqueSuggestions;
+  Map<String, int>? torqueSuggestions;
 
   TorqueCalculation({
     this.details,
@@ -262,7 +262,7 @@ class TorqueCalculation {
         details: Map.from(json["Details"])
             .map((k, v) => MapEntry<String, String>(k, v)),
         torqueSuggestions: Map.from(json["TorqueSuggestions"])
-            .map((k, v) => MapEntry<String, double>(k, v?.toDouble())),
+            .map((k, v) => MapEntry<String, int>(k, v?.toInt())),
       );
 
   Map<String, dynamic> toJson() => {

@@ -232,8 +232,8 @@ class _Chart extends StatelessWidget {
     final listTorqueSuggestions = d.listTorqueSuggestions;
 
     double getBiggestXY() {
-      double upper0 = upper[0];
-      double upper1 = upper[1];
+      double upper0 = upper.isEmpty ? 0 : upper[0];
+      double upper1 = upper.isEmpty ? 0 : upper[1];
       // // log("UPPER 0 : $upper0");
       // // log("UPPER 1 : $upper1");
       double result = 0;
@@ -277,16 +277,21 @@ class _Chart extends StatelessWidget {
 
     double curveSmoothness() {
       log("PANJANG BAUT : ${listBolts.length}");
+      int length = listBolts.length;
       // bolts 2 = 0.7
       // bolts 4 = 0.55
       // bolts 8 = 0.4
       // bolts 10 = 0.25
       // bolts 12 = 0.1
       // bolts 14 = 0;
-      if (listBolts.length > 12) return 0;
-      double val = 0.7;
-      double p = val - (0.15 * (listBolts.length / 4));
-      return p;
+      if (listBolts.length > 12) return 0.4;
+      if (listBolts.length < 12) return 0.4;
+      return 0.4;
+      // double val = 0.7;
+
+      // double p = val - (0.15 * (listBolts.length / (5)));
+      // log("PANJANG BAUT P : ${p}");
+      // return p;
     }
 
     return LineChart(
@@ -343,57 +348,18 @@ class _Chart extends StatelessWidget {
           LineChartBarData(
             barWidth: 4,
             show: true,
-            spots: [
-              FlSpot(upper[0], upper[1]),
-              FlSpot(0, 0),
-            ],
+            spots: upper.isEmpty
+                ? []
+                : [
+                    FlSpot(upper[0], upper[1]),
+                    FlSpot(0, 0),
+                  ],
             isCurved: true,
             belowBarData: BarAreaData(show: false),
             color: Colors.amber,
             dotData: FlDotData(show: true),
           ),
-          // LineChartBarData(
-          //   barWidth: 4,
-          //   show: true,
-          //   // isStepLineChart: true,
-          //   spots: [
-          //     ...List.generate(
-          //       listBolts.length,
-          //       (index) => FlSpot(listBolts[index][0], listBolts[index][1]),
-          //     ),
-          //     FlSpot(listBolts[0][0], listBolts[0][1])
-          //   ],
-          //   isCurved: true,
-          //   belowBarData: BarAreaData(show: false),
-          //   color: Colors.grey,
-          //   dotData: FlDotData(show: true),
-          // )
-          // GANTI PAKE SCATTER
-          // ...List.generate(
-          //   listBolts.length,
-          //   (index) => LineChartBarData(
-          //     barWidth: 4,
-          //     show: true,
-          //     isCurved: true,
-          //     spots: [FlSpot(listBolts[index][0], listBolts[index][1])],
-          //     belowBarData: BarAreaData(show: false),
-          //     color: Colors.grey,
-          //     dotData: FlDotData(show: true),
-          //   ),
-          // ),
-          // LineChartBarData(
-          //   barWidth: 2,
-          //   show: true,
-          //   spots: [
-          //     FlSpot(upperCrockedLine, 0),
-          //     // FlSpot(0, 0),
-          //   ],
-          //   belowBarData: BarAreaData(show: false),
-          //   color: Colors.red,
-          //   dotData: FlDotData(show: true),
-          // ),
         ],
-        // betweenBarsData: [BetweenBarsData(fromIndex: 0, toIndex: 2)],
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
@@ -577,8 +543,8 @@ class _ChartBG extends StatelessWidget {
     final listTorqueSuggestions = d.listTorqueSuggestions;
 
     double getBiggestXY() {
-      double upper0 = upper[0];
-      double upper1 = upper[1];
+      double upper0 = upper.isEmpty ? 0 : upper[0];
+      double upper1 = upper.isEmpty ? 0 : upper[1];
       // // log("UPPER 0 : $upper0");
       // // log("UPPER 1 : $upper1");
       double result = 0;
@@ -624,16 +590,22 @@ class _ChartBG extends StatelessWidget {
     // log("GET BIGGEST SCALE ${getBiggestScale(getBiggestXY())}");
 
     double curveSmoothness() {
+      log("PANJANG BAUT : ${listBolts.length}");
+      int length = listBolts.length;
       // bolts 2 = 0.7
       // bolts 4 = 0.55
       // bolts 8 = 0.4
       // bolts 10 = 0.25
       // bolts 12 = 0.1
       // bolts 14 = 0;
-      if (listBolts.length > 12) return 0.35;
-      double val = 0.7;
-      double p = val - (0.15 * (listBolts.length / 4));
-      return p;
+      if (listBolts.length > 12) return 0.4;
+      if (listBolts.length < 12) return 0.4;
+      return 0.4;
+      // double val = 0.7;
+
+      // double p = val - (0.15 * (listBolts.length / (5)));
+      // log("PANJANG BAUT P : ${p}");
+      // return p;
     }
 
     return LineChart(
@@ -687,48 +659,7 @@ class _ChartBG extends StatelessWidget {
             color: Colors.grey.shade400,
             dotData: FlDotData(show: false),
           ),
-          // LineChartBarData(
-          //   barWidth: 4,
-          //   show: true,
-          //   // isStepLineChart: true,
-          //   spots: [
-          //     ...List.generate(
-          //       listBolts.length,
-          //       (index) => FlSpot(listBolts[index][0], listBolts[index][1]),
-          //     ),
-          //     FlSpot(listBolts[0][0], listBolts[0][1])
-          //   ],
-          //   isCurved: true,
-          //   belowBarData: BarAreaData(show: false),
-          //   color: Colors.grey,
-          //   dotData: FlDotData(show: true),
-          // )
-          // GANTI PAKE SCATTER
-          // ...List.generate(
-          //   listBolts.length,
-          //   (index) => LineChartBarData(
-          //     barWidth: 4,
-          //     show: true,
-          //     isCurved: true,
-          //     spots: [FlSpot(listBolts[index][0], listBolts[index][1])],
-          //     belowBarData: BarAreaData(show: false),
-          //     color: Colors.grey,
-          //     dotData: FlDotData(show: true),
-          //   ),
-          // ),
-          // LineChartBarData(
-          //   barWidth: 2,
-          //   show: true,
-          //   spots: [
-          //     FlSpot(upperCrockedLine, 0),
-          //     // FlSpot(0, 0),
-          //   ],
-          //   belowBarData: BarAreaData(show: false),
-          //   color: Colors.red,
-          //   dotData: FlDotData(show: true),
-          // ),
         ],
-        // betweenBarsData: [BetweenBarsData(fromIndex: 0, toIndex: 2)],
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
@@ -915,8 +846,8 @@ class _ScatterChart extends StatelessWidget {
     final listTorqueSuggestionsY = d.listTorqueSuggestionsY;
 
     double getBiggestXY() {
-      double upper0 = upper[0];
-      double upper1 = upper[1];
+      double upper0 = upper.isEmpty ? 0 : upper[0];
+      double upper1 = upper.isEmpty ? 0 : upper[1];
       // log("UPPER 0 : $upper0");
       // log("UPPER 1 : $upper1");
       double result = 0;
@@ -1218,8 +1149,8 @@ class _ScatterChartS extends StatelessWidget {
     final listTorqueSuggestions = d.listTorqueSuggestions;
 
     double getBiggestXY() {
-      double upper0 = upper[0];
-      double upper1 = upper[1];
+      double upper0 = upper.isEmpty ? 0 : upper[0];
+      double upper1 = upper.isEmpty ? 0 : upper[1];
       // // log("UPPER 0 : $upper0");
       // // log("UPPER 1 : $upper1");
       double result = 0;
