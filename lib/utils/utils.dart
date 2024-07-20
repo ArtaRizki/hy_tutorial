@@ -665,7 +665,7 @@ class Utils {
           Icon(
             Icons.error_outlined,
             color: Colors.red,
-            size: 24,
+            size: 48,
           ),
           Constant.xSizedBox8,
           Center(

@@ -268,22 +268,22 @@ class _Chart extends StatelessWidget {
 
     int getScale() {
       if (typePage == 'create') {
-        final shaftData = d.turbineCreateModel.Data?.Shaft;
-        int? biggest = shaftData?.GenBearingToCoupling;
-        if ((biggest ?? 0) < (shaftData?.CouplingToTurbine ?? 0))
-          biggest = shaftData?.CouplingToTurbine ?? 0;
+        final shaftData = d.turbineCreateModel.data?.shaft;
+        int? biggest = shaftData?.genBearingToCoupling;
+        if ((biggest ?? 0) < (shaftData?.couplingToTurbine ?? 0))
+          biggest = shaftData?.couplingToTurbine ?? 0;
         return biggest ?? 0;
       } else if (typePage == 'detail') {
-        final shaftData = d.turbineDetailModel.Data?.Shaft;
-        int? biggest = shaftData?.GenBearingToCoupling;
-        if ((biggest ?? 0) < (shaftData?.CouplingToTurbine ?? 0))
-          biggest = shaftData?.CouplingToTurbine ?? 0;
+        final shaftData = d.turbineDetailModel.data?.shaft;
+        int? biggest = shaftData?.genBearingToCoupling;
+        if ((biggest ?? 0) < (shaftData?.couplingToTurbine ?? 0))
+          biggest = shaftData?.couplingToTurbine ?? 0;
         return biggest ?? 0;
       } else if (typePage == 'latest') {
-        final shaftData = d.turbineLatestModel.Data?.Shaft;
-        int? biggest = shaftData?.GenBearingToCoupling;
-        if ((biggest ?? 0) < (shaftData?.CouplingToTurbine ?? 0))
-          biggest = shaftData?.CouplingToTurbine ?? 0;
+        final shaftData = d.turbineLatestModel.data?.shaft;
+        int? biggest = shaftData?.genBearingToCoupling;
+        if ((biggest ?? 0) < (shaftData?.couplingToTurbine ?? 0))
+          biggest = shaftData?.couplingToTurbine ?? 0;
         return biggest ?? 0;
       }
       return 0;

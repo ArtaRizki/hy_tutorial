@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:hy_tutorial/common/helper/firebase_and_notif.dart';
 import 'package:hy_tutorial/src/auth/model/firebase_token_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,19 +21,22 @@ class AuthProvider extends BaseController with ChangeNotifier {
   TextEditingController passC = TextEditingController();
   TextEditingController passConfirmationC = TextEditingController();
   TextEditingController namaLengkap = TextEditingController();
-  TextEditingController selectedDevisionC = TextEditingController();
+  TextEditingController selectedDivisionC = TextEditingController();
 
-  String? _selectedDevisionV;
+  String? _selectedDivisionV;
 
-  String? get selectedDevisionV => this._selectedDevisionV;
+  String? get selectedDivisionV => this._selectedDivisionV;
 
   GlobalKey<FormState> loginKey = GlobalKey<FormState>();
 
-  DivisionModelData? _selectedDivision;
-  DivisionModelData? get selectedDivision => this._selectedDivision;
+  String? _selectedDivision;
+  String? get selectedDivision => this._selectedDivision;
 
-  set selectedDivision(DivisionModelData? value) =>
-      this._selectedDivision = value;
+  set selectedDivision(value) {
+    this._selectedDivision = value;
+    notifyListeners();
+  }
+      
 
   //forgot
   TextEditingController emailForgotC = TextEditingController();
@@ -56,12 +60,37 @@ class AuthProvider extends BaseController with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _obscurePass1 = true;
+
+  bool get obscurePass1 => this._obscurePass1;
+
+  toggleObscurePass1() {
+    this._obscurePass1 = !obscurePass1;
+    notifyListeners();
+  }
+
   FirebaseTokenModel _firebaseTokenModel = FirebaseTokenModel();
   get firebaseTokenModel => this._firebaseTokenModel;
 
   set firebaseTokenModel(value) {
     this._firebaseTokenModel = value;
     notifyListeners();
+  }
+
+  Future<void> clearLoginForm () async {
+    emailC.clear();
+    passC.clear();
+    //notifyListeners();
+  }
+
+  Future<void> clearRegisterForm () async {
+    nameC.clear();
+    usernameC.clear();
+    emailC.clear();
+    passC.clear();
+    passConfirmationC.clear();
+    selectedDivision = null;
+    //notifyListeners();
   }
 
   Future<LoginModel> login() async {
@@ -156,7 +185,8 @@ class AuthProvider extends BaseController with ChangeNotifier {
       // 'password': "123456",
       'Name': nameC.text,
       'Username': usernameC.text,
-      'DivisionId': selectedDivision?.Id ?? '', //Engineer
+      'Email': emailC.text,
+      'DivisionId': selectedDivision ?? '', //Engineer
       'Password': passC.text,
       'PasswordConfirmation': passConfirmationC.text,
       // 'device_id': fcmId ?? '-1',

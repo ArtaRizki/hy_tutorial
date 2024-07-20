@@ -6,7 +6,9 @@ import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../common/component/custom_navigator.dart';
 import '../../../utils/utils.dart';
+import '../../admin/view/user_manage_view.dart';
 import '../../auth/provider/auth_provider.dart';
 
 class ProfileView extends StatefulWidget {
@@ -260,10 +262,11 @@ class _ProfileViewState extends BaseState<ProfileView> {
                         flex: 6,
                         child: InkWell(
                           onTap: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => UserAddView())));
+                            CusNav.nPush(context, UserManageView());
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: ((context) => UserAddView())));
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,7 +328,6 @@ class _ProfileViewState extends BaseState<ProfileView> {
                   }),
                   noCallback: () => Navigator.pop(context),
                 );
-                // CusNav.nPush(context, UserManageView());
               },
               child: Container(
                 // height: 50,

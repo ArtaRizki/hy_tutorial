@@ -5,6 +5,7 @@ import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login2_view.dart';
+import 'package:hy_tutorial/src/division/provider/division_provider.dart';
 import 'package:hy_tutorial/src/home/view/home1_view.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:hy_tutorial/src/splash_view.dart';
@@ -21,7 +22,20 @@ class Register2View extends StatefulWidget {
 
 class _Register2ViewState extends State<Register2View> {
   @override
+  void initState() {
+    super.initState();
+    context.read<DivisionProvider>().fetchDivision();
+    context.read<AuthProvider>().clearRegisterForm();
+    //getData();
+  }
+
+  getData() async {
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final division = context.watch<DivisionProvider>();
     final authP = context.watch<AuthProvider>();
     return Scaffold(
       body: SingleChildScrollView(
@@ -31,7 +45,10 @@ class _Register2ViewState extends State<Register2View> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/icons/ic-register.png', scale: 4,),
+              Image.asset(
+                'assets/icons/ic-register.png',
+                scale: 4,
+              ),
               // CircleAvatar(
               //   backgroundColor: Colors.grey.shade300,
               //   radius: 50,
@@ -88,7 +105,7 @@ class _Register2ViewState extends State<Register2View> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text("NIP",
+                  Text("Divisi",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Colors.grey,
@@ -100,42 +117,44 @@ class _Register2ViewState extends State<Register2View> {
                   CustomDropdown.normalDropdown(
                     // readOnly: !woAgreementP.isCreate,
                     required: true,
-                    // enabled: woAgreementP.isCreate,
-                    controller: authP.selectedDevisionC,
-                    // labelText: "Work Type",
-                    selectedItem: authP.selectedDevisionV,
-                    hintText: authP.selectedDivision?.Name ?? "Select",
-                    list: [
-                      DropdownMenuItem(value: "EG", child: Text("Enginer")),
-                      DropdownMenuItem(
-                          value: "PM", child: Text("Predictive Maintenance")),
-                      DropdownMenuItem(value: "BD", child: Text("Breakdown")),
-                      DropdownMenuItem(value: "AC", child: Text("Accident")),
-                    ],
+                    list: List.generate(
+                      division.divisionModel.Data?.length ?? 0,
+                      (index) => DropdownMenuItem(
+                          child: Text(division.divisionModel.Data?[index]?.Name ?? ""),
+                          value: division.divisionModel.Data?[index]?.Id ?? ""),
+                    ),
                     onChanged: (val) {
-                      // if (val == "BD" || val == "SD") {
-                      //   woAgreementP.isDowntime = true;
-                      // }
-                      // woAgreementP.workTypeV = val;
-                      // woAgreementP.workTypeShortC.text = val ?? "";
-                      // if (val == "CM") {
-                      //   woAgreementP.workTypeC.text = "Corrective Maintenance";
-                      // }
-                      // if (val == "PDM") {
-                      //   woAgreementP.workTypeC.text = "Predictive Maintenance";
-                      // }
-                      // if (val == "BD") {
-                      //   woAgreementP.workTypeC.text = "Breakdown";
-                      // }
-                      // if (val == "AC") {
-                      //   woAgreementP.workTypeC.text = "Accident";
-                      // }
-                      // if (val == "SD") {
-                      //   woAgreementP.workTypeC.text = "Shutdown";
-                      // }
-                      setState(() {});
-                      // woAgreementP.workTypeV = val;
+                      context.read<AuthProvider>().selectedDivision = val;
                     },
+                    // enabled: woAgreementP.isCreate,
+                    //controller: authP.selectedDivisionC,
+                    // labelText: "Work Type",
+                    //selectedItem: authP.selectedDivisionV,
+                    //hintText: authP.selectedDivision?.Name ?? "Select",
+
+                    // if (val == "BD" || val == "SD") {
+                    //   woAgreementP.isDowntime = true;
+                    // }
+                    // woAgreementP.workTypeV = val;
+                    // woAgreementP.workTypeShortC.text = val ?? "";
+                    // if (val == "CM") {
+                    //   woAgreementP.workTypeC.text = "Corrective Maintenance";
+                    // }
+                    // if (val == "PDM") {
+                    //   woAgreementP.workTypeC.text = "Predictive Maintenance";
+                    // }
+                    // if (val == "BD") {
+                    //   woAgreementP.workTypeC.text = "Breakdown";
+                    // }
+                    // if (val == "AC") {
+                    //   woAgreementP.workTypeC.text = "Accident";
+                    // }
+                    // if (val == "SD") {
+                    //   woAgreementP.workTypeC.text = "Shutdown";
+                    // }
+                    //setState(() {});
+                    // woAgreementP.workTypeV = val;
+                    // },
                   ),
                   // CustomTextField.borderTextField(
                   //   borderRadius: BorderRadius.circular(5),
@@ -166,6 +185,53 @@ class _Register2ViewState extends State<Register2View> {
                     fillColor: Colors.white,
                     hintColor: Constant.quarteryColor,
                     hintText: "Username",
+                    labelFontSize: 20,
+                    labelFontWeight: FontWeight.bold,
+                    labelColor: Constant.primaryColor,
+                    borderColor: Constant.primaryColor.withOpacity(0.5),
+                    // obscureText: authP.obscurePass,
+                    // onEditingComplete: () async {
+                    //   try {
+                    //     final result = await context.read<AuthProvider>().login();
+                    //     if (result.Success == true) {
+                    //       Navigator.pushReplacementNamed(context, '/home',
+                    //           arguments: "");
+                    //     } else {
+                    //       Utils.showFailed(msg: result.Message ?? "Error");
+                    //     }
+                    //   } catch (e) {
+                    //     Utils.showFailed(
+                    //         msg: e.toString().toLowerCase().contains("doctype")
+                    //             ? "Maaf, Terjadi Galat!"
+                    //             : "$e");
+                    //   }
+                    // },
+                    // suffixIcon: InkWell(
+                    //   onTap: () => authP.toggleObscurePass(),
+                    //   child: Icon(
+                    //     authP.obscurePass ? Icons.visibility_off_outlined : Icons.visibility,
+                    //     color: Constant.primaryColor,
+                    //   ),
+                    // ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Email",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                      )),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextField.borderTextField(
+                    borderRadius: BorderRadius.circular(5),
+                    controller: authP.emailC,
+                    fillColor: Colors.white,
+                    hintColor: Constant.quarteryColor,
+                    hintText: "Email",
                     labelFontSize: 20,
                     labelFontWeight: FontWeight.bold,
                     labelColor: Constant.primaryColor,
@@ -245,25 +311,75 @@ class _Register2ViewState extends State<Register2View> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Konfirmasi Password",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                      )),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextField.borderTextField(
+                    borderRadius: BorderRadius.circular(5),
+                    controller: authP.passConfirmationC,
+                    fillColor: Colors.white,
+                    hintColor: Constant.quarteryColor,
+                    hintText: "Password",
+                    labelFontSize: 20,
+                    labelFontWeight: FontWeight.bold,
+                    labelColor: Constant.primaryColor,
+                    borderColor: Constant.primaryColor.withOpacity(0.5),
+                    obscureText: authP.obscurePass1,
+                    onEditingComplete: () async {
+                      try {
+                        final result =
+                            await context.read<AuthProvider>().login();
+                        if (result.Success == true) {
+                          Navigator.pushReplacementNamed(context, '/home',
+                              arguments: "");
+                        } else {
+                          Utils.showFailed(msg: result.Message ?? "Error");
+                        }
+                      } catch (e) {
+                        Utils.showFailed(
+                            msg: e.toString().toLowerCase().contains("doctype")
+                                ? "Maaf, Terjadi Galat!"
+                                : "$e");
+                      }
+                    },
+                    suffixIcon: InkWell(
+                      onTap: () => authP.toggleObscurePass1(),
+                      child: Icon(
+                        authP.obscurePass1
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility,
+                        color: Constant.primaryColor,
+                      ),
+                    ),
+                  ),
                 ],
               ),
 
               SizedBox(height: 30),
               CustomButton.mainButton("Daftar", () async {
-                // try {
-                //   final result = await context.read<AuthProvider>().register();
-                //   if (result.Success == true) {
-                //     Navigator.pushReplacementNamed(context, '/home',
-                //         arguments: "");
-                //   } else {
-                //     Utils.showFailed(msg: result.Message ?? "Error");
-                //   }
-                // } catch (e) {
-                //   Utils.showFailed(
-                //       msg: e.toString().toLowerCase().contains("doctype")
-                //           ? "Maaf, Terjadi Galat!"
-                //           : "$e");
-                // }
+                try {
+                  final result = await context.read<AuthProvider>().register();
+                  if (result.success == true) {
+                    Navigator.pushReplacementNamed(context, '/home',
+                        arguments: "");
+                  } else {
+                    Utils.showFailed(msg: result.message ?? "Error");
+                  }
+                } catch (e) {
+                  Utils.showFailed(
+                      msg: e.toString().toLowerCase().contains("doctype")
+                          ? "Maaf, Terjadi Galat!"
+                          : "$e");
+                }
               },
                   borderRadius: BorderRadius.circular(10),
                   contentPadding: EdgeInsets.symmetric(vertical: 8),

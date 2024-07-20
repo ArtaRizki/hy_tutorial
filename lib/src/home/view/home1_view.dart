@@ -96,7 +96,6 @@ class _Home1ViewState extends BaseState<Home1View> {
                 InkWell(
                     onTap: () async {
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeAdminView()));
-
                     },
                     child: Image.asset('assets/icons/ic-user.png',
                         scale: 4)),
