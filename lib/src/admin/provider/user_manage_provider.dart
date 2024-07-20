@@ -10,7 +10,7 @@ import '../../../common/base/base_controller.dart';
 import '../../../common/helper/constant.dart';
 import '../../../common/component/custom_dropdown.dart';
 import '../../../common/component/custom_textfield.dart';
-import '../model/user_detail_model.dart';
+import '../model/detail_user_model.dart';
 
 class UserManageProvider extends BaseController with ChangeNotifier {
   GlobalKey<FormState> userAddKey = GlobalKey<FormState>();
