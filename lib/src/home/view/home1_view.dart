@@ -2,7 +2,7 @@ import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
-import 'package:hy_tutorial/src/admin/view/home_admin_view.dart';
+import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';

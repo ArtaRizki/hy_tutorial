@@ -16,7 +16,6 @@ import '../../../common/component/custom_dropdown.dart';
 import '../../../common/component/custom_textfield.dart';
 import '../model/detail_user_model.dart';
 import '../../division/model/divison_model.dart';
-import '../model/user_detail_model.dart';
 import '../model/user_list_model.dart';
 import '../view/user_manage_view.dart';
 

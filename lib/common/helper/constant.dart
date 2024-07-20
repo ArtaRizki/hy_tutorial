@@ -101,6 +101,12 @@ class Constant {
     fontSize: 14,
     fontWeight: medium,
   );
+  static TextStyle iPrimaryMedium12 = TextStyle(
+    fontFamily: 'SF-Pro-Display',
+    color: primaryColor,
+    fontSize: 12,
+    fontWeight: medium,
+  );
 
   static TextStyle iBlackMedium8 = TextStyle(
     fontFamily: 'SF-Pro-Display',
@@ -369,6 +375,18 @@ class Constant {
     color: redColor,
     fontSize: 12,
     fontWeight: bold,
+  );
+  static TextStyle redRegular12 = TextStyle(
+    fontFamily: 'SF-Pro-Display',
+    color: redColor,
+    fontSize: 12,
+    fontWeight: regular,
+  );
+  static TextStyle redMedium12 = TextStyle(
+    fontFamily: 'SF-Pro-Display',
+    color: redColor,
+    fontSize: 12,
+    fontWeight: medium,
   );
 
   static FontWeight light = FontWeight.w300;

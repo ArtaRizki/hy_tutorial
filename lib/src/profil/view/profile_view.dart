@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_appbar.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
+import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -130,27 +131,32 @@ class _ProfileViewState extends BaseState<ProfileView> {
                       ),
                       Expanded(
                         flex: 6,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Ubah informasi akun",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Ganti nama, password, dan lainnya",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w300),
-                            ),
-                          ],
+                        child: InkWell(
+                          onTap: () async {
+                            // CusNav.nPush(context, AdminHomeView());
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Ubah informasi akun",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Ganti nama, password, dan lainnya",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Container(
@@ -201,27 +207,32 @@ class _ProfileViewState extends BaseState<ProfileView> {
                       ),
                       Expanded(
                         flex: 6,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Kebijakan Privasi",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Pelajari kebijakan privasi pengguna aplikasi",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w300),
-                            ),
-                          ],
+                        child: InkWell(
+                          onTap: () async {
+                            CusNav.nPush(context, HomeAdminView());
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Kebijakan Privasi",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Pelajari kebijakan privasi pengguna aplikasi",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
