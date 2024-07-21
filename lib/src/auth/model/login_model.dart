@@ -6,25 +6,29 @@ class LoginModelData {
 {
   "Name": "aditya fullname",
   "Division": "Engineer",
-  "Token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJFeHAiOjE3MTg0OTUxOTIsIklkIjoiMDFKMDZEU0c4WlRWWlRCVzVOWjg3WFJWTVgifQ.vook50_afNFiP55zB8nDgL-H9ityc9tWYAh55uGmK20SuTF4sMHNjKoF1uhnioyMSC6u49EVpgr4GJh3Hknouhalr_--xPY1KcSypnRtaSq-iiVccWm8GqPnNm4Na2YNhDZxZvXi4C_JSS2GJq6zBFOwWjAf9kMnYU6BTVCuTho",
-  "RefreshToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJFeHAiOjE3MTg1MzExOTIsIklkIjoiMDFKMDZEU0c4WlRWWlRCVzVOWjg3WFJWTVgifQ.SEoXJHVvUGQPVs2p-tL8m3wpGbNmyyS4qHN7pgTSHcdR8qZOCigdhUolBX9rJIqMh5_rNBKRf79w0WL9uxJnYL19gII6Yjdkshnm2NH5iu4tGAcZeKk9ge1qJ4oBBfTFBrgH7n0UqNmqeZ004I3kWUFVwhH_LMT70wEJjv2Zs6U"
-} 
+  "IsAdmin": true,
+  "Token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJFeHAiOjE3MjE2NDI0MDIsIklkIjoiMDFKMDZEU0c4WlRWWlRCVzVOWjg3WFJWTVgifQ.RK8kzzJlKeCMX_h2sBpn1EE103svfk6va6UYFZ19epG-2uVs5Lt2SjIaED0Lid4VkAlFiZvJpJRuHnoWzjqgiuUJNTYexNzCA83CiP6-1oy36gCIhcZo44Tzhc74-hm9eAHlvUMSjiF7IS-ZbbbkPx566TCCGMa-ZG15k62JU8Q",
+  "RefreshToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJFeHAiOjE3MjE1NTY2MDIsIklkIjoiMDFKMDZEU0c4WlRWWlRCVzVOWjg3WFJWTVgifQ.SkKmI2Yu5AT2nG3H_TP-P_4jn1tg7uju_Vm1og79zeO1R9kNPBWVfYwy4gh40IxJyFYlhfqOcCHuLK6vZkNN_A5KgM8iINIX0YllWV0n5BTN0HonIclcoAwE49seqE1nhnQfQudEFcE7yWeM2Y5UqYOd0wC1m6VbaUaOJkt142A"
+}
 */
 
   String? Name;
   String? Division;
+  bool? IsAdmin;
   String? Token;
   String? RefreshToken;
 
   LoginModelData({
     this.Name,
     this.Division,
+    this.IsAdmin,
     this.Token,
     this.RefreshToken,
   });
   LoginModelData.fromJson(Map<String, dynamic> json) {
     Name = json['Name']?.toString();
     Division = json['Division']?.toString();
+    IsAdmin = json['IsAdmin'];
     Token = json['Token']?.toString();
     RefreshToken = json['RefreshToken']?.toString();
   }
@@ -32,6 +36,7 @@ class LoginModelData {
     final data = <String, dynamic>{};
     data['Name'] = Name;
     data['Division'] = Division;
+    data['IsAdmin'] = IsAdmin;
     data['Token'] = Token;
     data['RefreshToken'] = RefreshToken;
     return data;
@@ -47,10 +52,11 @@ class LoginModel {
   "Data": {
     "Name": "aditya fullname",
     "Division": "Engineer",
-    "Token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJFeHAiOjE3MTg0OTUxOTIsIklkIjoiMDFKMDZEU0c4WlRWWlRCVzVOWjg3WFJWTVgifQ.vook50_afNFiP55zB8nDgL-H9ityc9tWYAh55uGmK20SuTF4sMHNjKoF1uhnioyMSC6u49EVpgr4GJh3Hknouhalr_--xPY1KcSypnRtaSq-iiVccWm8GqPnNm4Na2YNhDZxZvXi4C_JSS2GJq6zBFOwWjAf9kMnYU6BTVCuTho",
-    "RefreshToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJFeHAiOjE3MTg1MzExOTIsIklkIjoiMDFKMDZEU0c4WlRWWlRCVzVOWjg3WFJWTVgifQ.SEoXJHVvUGQPVs2p-tL8m3wpGbNmyyS4qHN7pgTSHcdR8qZOCigdhUolBX9rJIqMh5_rNBKRf79w0WL9uxJnYL19gII6Yjdkshnm2NH5iu4tGAcZeKk9ge1qJ4oBBfTFBrgH7n0UqNmqeZ004I3kWUFVwhH_LMT70wEJjv2Zs6U"
+    "IsAdmin": true,
+    "Token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJFeHAiOjE3MjE2NDI0MDIsIklkIjoiMDFKMDZEU0c4WlRWWlRCVzVOWjg3WFJWTVgifQ.RK8kzzJlKeCMX_h2sBpn1EE103svfk6va6UYFZ19epG-2uVs5Lt2SjIaED0Lid4VkAlFiZvJpJRuHnoWzjqgiuUJNTYexNzCA83CiP6-1oy36gCIhcZo44Tzhc74-hm9eAHlvUMSjiF7IS-ZbbbkPx566TCCGMa-ZG15k62JU8Q",
+    "RefreshToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJFeHAiOjE3MjE1NTY2MDIsIklkIjoiMDFKMDZEU0c4WlRWWlRCVzVOWjg3WFJWTVgifQ.SkKmI2Yu5AT2nG3H_TP-P_4jn1tg7uju_Vm1og79zeO1R9kNPBWVfYwy4gh40IxJyFYlhfqOcCHuLK6vZkNN_A5KgM8iINIX0YllWV0n5BTN0HonIclcoAwE49seqE1nhnQfQudEFcE7yWeM2Y5UqYOd0wC1m6VbaUaOJkt142A"
   }
-} 
+}
 */
 
   bool? Success;
@@ -68,8 +74,7 @@ class LoginModel {
     Success = json['Success'];
     StatusCode = json['StatusCode']?.toInt();
     Message = json['Message']?.toString();
-    Data =
-        (json['Data'] != null) ? LoginModelData.fromJson(json['Data']) : null;
+    Data = (json['Data'] != null) ? LoginModelData.fromJson(json['Data']) : null;
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
