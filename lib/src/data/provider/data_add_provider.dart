@@ -165,6 +165,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   double bdCrockedLine = 0.0;
   // UPPER
   List<double> upper = [];
+  List<double> upperBolt = [];
   List<String> listBoltsKey = [];
   List<List<double>> listBolts = [];
   List<String> listTorqueSuggestionsKey = [];
@@ -172,34 +173,27 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   List<int> listTorqueSuggestionsY = [];
   double upperCrockedLine = 0.0;
 
-  // double divideUntilTwoDigits(double val) {
-  //   double num = val;
-  //   double realVal = val;
-  //   if (val < 1) num = val * (-1);
-  //   if (num > 10 && num < 100) return num / 10;
-  //   if (num > 100 && num < 1000) return num / 100;
-  //   if (num > 1000 && num < 10000) return num / 1000;
-  //   if (num > 10000 && num < 100000) return num / 10000;
-  //   if (num > 100000 && num < 1000000) return num / 100000;
-  //   if (realVal < 1) return -num;
-  //   return num;
-  // }
-
   double divideUntilTwoDigits(double val) {
     double num = val.abs(); // Use abs() to work with positive value
     // log("DTWO VAL : $val");
     // log("DTWO NUM : $num");
-    int substract = 1;
-    if (num < 11 && num % 10 != 0) substract = 1;
-    if ((num.floor() % 10 == 0) && num < (num + 1))
-      substract = num.floor().toString().length;
-    // log("DTWO SUBSTRACT : $substract");
+    int substract = 0;
+    var floor = num.floor();
+    if (num < 10 && num % 10 != 0) substract = 1;
+    log("DTWO SUBSTRACT 1 : $substract");
+    var divide1 = floor / 10;
+    var mod1 = divide1 % 10;
+    if ((num.floor() % 10 == 0) && num < (num + 1) && mod1 == 0 && num >= 11)
+      substract = num.floor().toString().length - 1;
+    if (num >= 10 && num < 11) substract = 2;
+    log("DTWO SUBSTRACT 2 : $substract");
     // log("DTWO NUM LENGTH : ${num.toInt().toString().length}");
     int num2 = 10.pow(num.toInt().toString().length - substract).toInt();
     // log("DTWO NUM2 : $num2");
     if (val < 0) num2 = num2 * (-1);
     // log("DTWO NUM/NUM2 ${num / num2}");
     // log("DTWO ==================");
+    // if (num >= 10 && num < 11) return (num / num2) - 1;
     return num / num2;
   }
 
@@ -433,11 +427,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       bdTurbineTemp[1],
     ];
 
-    if (upperData != null)
+    if (upperData != null) {
       upper = upperData
           .split('|')
           .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
           .toList();
+      upperBolt =
+          upperData.split('|').map((e) => double.tryParse(e) ?? 0).toList();
+    }
 
     if (boltsData != null && boltsData.isNotEmpty) {
       List<String> listS = [];
@@ -452,7 +449,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       listBolts = listS
           .map((e) => e
               .split('|')
-              .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
+              .map((e) => double.tryParse(e) ?? 0)
+              // .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
               .toList())
           .toList();
       log("LIST S BOLTS : $listBolts");
@@ -603,17 +601,21 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       bdTurbineTemp[1],
     ];
 
-    if (upperData != null)
+    if (upperData != null) {
       upper = upperData
           .split('|')
           .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
           .toList();
+      upperBolt =
+          upperData.split('|').map((e) => double.tryParse(e) ?? 0).toList();
+    }
 
     if (boltsData != null && boltsData.isNotEmpty) {
       List<String> listS = [];
       List<String> listSKey = [];
       boltsData = Map.fromEntries(boltsData.entries.toList()
         ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
+      log("LIST BOLTS DATA DETAIL : $boltsData");
       boltsData.forEach((key, value) {
         listS.add(value);
         listSKey.add(key);
@@ -622,7 +624,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       listBolts = listS
           .map((e) => e
               .split('|')
-              .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
+              .map((e) => double.tryParse(e) ?? 0)
+              // .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
               .toList())
           .toList();
       log("LIST S BOLTS : $listBolts");
@@ -773,11 +776,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       bdTurbineTemp[1],
     ];
 
-    if (upperData != null)
+    if (upperData != null) {
       upper = upperData
           .split('|')
           .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
           .toList();
+      upperBolt =
+          upperData.split('|').map((e) => double.tryParse(e) ?? 0).toList();
+    }
 
     if (boltsData != null && boltsData.isNotEmpty) {
       List<String> listS = [];
@@ -792,7 +798,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       listBolts = listS
           .map((e) => e
               .split('|')
-              .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
+              .map((e) => double.tryParse(e) ?? 0)
+              // .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
               .toList())
           .toList();
       log("LIST S BOLTS : $listBolts");
