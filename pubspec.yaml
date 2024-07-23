@@ -188,6 +188,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icons/admin/
     - assets/translations/
     - assets/lottie/
 

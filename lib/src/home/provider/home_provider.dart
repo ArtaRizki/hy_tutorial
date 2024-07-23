@@ -3,12 +3,13 @@ import 'dart:developer';
 
 import 'package:hy_tutorial/common/base/base_controller.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
+import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeProvider extends BaseController with ChangeNotifier {
-  String isSubAgent = "agen";
+  String isSubAgent = "admin";
   String get getIsSubAgent => this.isSubAgent;
   HomeModel homeModel = HomeModel();
 
@@ -34,4 +35,24 @@ class HomeProvider extends BaseController with ChangeNotifier {
       throw Exception(message);
     }
   }
+  UserListModel _userListModel = UserListModel();
+  UserListModel get userListModel => this._userListModel;
+  set userListModel(UserListModel value) => this._userListModel = value;
+
+  Future<void> fetchUserList() async {
+    loading(true);
+    final response = await get(Constant.BASE_API_FULL + '/admin/users/');
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      final model = UserListModel.fromJson(jsonDecode(response.body));
+      userListModel = model;
+      notifyListeners();
+      loading(false);
+    } else {
+      final message = jsonDecode(response.body)["Message"];
+      loading(false);
+      return message;
+    }
+  }
+
 }
