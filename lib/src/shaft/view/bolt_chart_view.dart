@@ -288,7 +288,8 @@ class _Chart extends StatelessWidget {
       // bolts 12 = 0.1
       // bolts 14 = 0;
       if (listBolts.length > 12) return 0.4;
-      if (listBolts.length < 12) return 0.4;
+      if (listBolts.length < 6) return 0.55;
+      if (listBolts.length >= 6 && listBolts.length < 12) return 0.4;
       return 0.4;
       // double val = 0.7;
 
@@ -607,7 +608,8 @@ class _ChartBG extends StatelessWidget {
       // bolts 12 = 0.1
       // bolts 14 = 0;
       if (listBolts.length > 12) return 0.4;
-      if (listBolts.length < 12) return 0.4;
+      if (listBolts.length < 6) return 0.55;
+      if (listBolts.length >= 6 && listBolts.length < 12) return 0.4;
       return 0.4;
       // double val = 0.7;
 

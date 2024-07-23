@@ -72,6 +72,34 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     selectedTower = null;
   }
 
+  clearDetailData() {
+    // AC
+    acClutchTemp.clear();
+    acTurbineTemp.clear();
+    acUpperTemp.clear();
+    acClutch.clear();
+    acTurbine.clear();
+    acUpper.clear();
+    acCrockedLine = 0;
+    // BD
+    bdClutchTemp.clear();
+    bdTurbineTemp.clear();
+    bdUpperTemp.clear();
+    bdClutch.clear();
+    bdTurbine.clear();
+    bdUpper.clear();
+    bdCrockedLine = 0.0;
+    // UPPER
+    upper.clear();
+    upperBolt.clear();
+    listBoltsKey.clear();
+    listBolts.clear();
+    listTorqueSuggestionsKey.clear();
+    listTorqueSuggestions.clear();
+    listTorqueSuggestionsY.clear();
+    upperCrockedLine = 0.0;
+  }
+
   Future<TowerModel> fetchTower(BuildContext context) async {
     loading(true);
     towerModel = TowerModel();
@@ -97,6 +125,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   Future<TurbineCreateModel> fetchTurbineDetail(String id) async {
     loading(true);
+    turbineDetailModel = TurbineCreateModel();
+    clearDetailData();
     final response = await get(Constant.BASE_API_FULL + '/turbines/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
@@ -121,6 +151,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   Future<TurbineCreateModel> fetchTurbineLatest() async {
     loading(true);
+    turbineLatestModel = TurbineCreateModel();
+    clearDetailData();
     final response = await get(Constant.BASE_API_FULL + '/turbines/latest');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
@@ -991,6 +1023,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         body: jsonDecode(param));
 
     if (response.statusCode == 201 || response.statusCode == 200) {
+      turbineCreateModel = TurbineCreateModel();
+      clearDetailData();
       prefs.remove(Constant.kSetPrefParamCreateTurbine);
       createDataParam = CreateDataParam();
       final model = TurbineCreateModel.fromJson(jsonDecode(response.body));
