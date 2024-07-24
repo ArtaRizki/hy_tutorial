@@ -205,8 +205,8 @@ class _Chart extends StatelessWidget {
     final upperCrockedLine = d.upperCrockedLine;
 
     double getBiggestXY() {
-      double upper0 = upper[0];
-      double upper1 = upper[1];
+      double upper0 = upper.isEmpty ? 0 : upper[0];
+      double upper1 = upper.isEmpty ? 0 : upper[1];
       double result = 0;
       if (upper0 < 0) upper0 * (-1);
       if (upper1 < 0) upper1 * (-1);
@@ -267,10 +267,12 @@ class _Chart extends StatelessWidget {
           LineChartBarData(
             barWidth: 4,
             show: true,
-            spots: [
-              FlSpot(upper[0], upper[1]),
-              FlSpot(0, 0),
-            ],
+            spots: upper.isEmpty
+                ? []
+                : [
+                    FlSpot(upper[0], upper[1]),
+                    FlSpot(0, 0),
+                  ],
             belowBarData: BarAreaData(show: false),
             color: Colors.green,
             dotData: FlDotData(show: true),

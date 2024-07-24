@@ -475,11 +475,11 @@ class Constant {
   static const String kSetPrefFcmToken = "fcmToken";
   static const String kSetPrefName = "name";
   static const String kSetPrefCompany = "company";
-  static const String kSetPrefRoles = "roles";
+  static const String kSetPrefIsAdmin = "is_admin";
   static const String kSetPrefEmail = "email";
   static const String kSetPrefPhone = "phone";
   static const String kSetPrefVerified = "verified";
-  static const String kSetPrefRole = "role";
+  static const String kSetPrefDivision = "division";
   static const String kSetPrefCanAssess = "can_assess";
   static const String kIsBreakPresence = "is_break_presence";
   static const String kSetPrefParamCreateTurbine = "param_create_turbine";

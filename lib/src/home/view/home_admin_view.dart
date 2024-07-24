@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
@@ -7,6 +9,7 @@ import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/admin/view/user_detail_view.dart';
+import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
@@ -54,30 +57,33 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
   @override
   void initState() {
     getData();
-    final userManageP = context.read<UserManageProvider>();
-    if ((userManageP.pagingController.itemList ?? []).isEmpty) {
-      userManageP.getUserList();
-    } else {
-      userManageP.pagingController.dispose();
-      userManageP.next = null;
-      userManageP.getUserList();
-    }
+    // final userManageP = context.read<UserManageProvider>();
+    // if ((userManageP.pagingController.itemList ?? []).isEmpty) {
+    //   userManageP.getUserList();
+    // } else {
+    //   userManageP.pagingController.dispose();
+    //   userManageP.next = null;
+    //   userManageP.getUserList();
+    // }
     super.initState();
   }
 
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    name = prefs.getString(Constant.kSetPrefName);
-    division = prefs.getString(Constant.kSetPrefRoles);
-    setState(() {});
+    setState(() {
+      name = prefs.getString(Constant.kSetPrefName);
+      log("NAME : $name");
+      division = prefs.getString(Constant.kSetPrefDivision);
+    });
     await context.read<AuthProvider>().getConfig();
     await context.read<HomeProvider>().fetchUserList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final userManageP = context.watch<UserManageProvider>();
-    final pagingC = context.watch<UserManageProvider>().pagingController;
+    final homeP = context.watch<HomeProvider>();
+    // final userManageP = context.watch<UserManageProvider>();
+    // final pagingC = context.watch<UserManageProvider>().pagingController;
 
     Widget headKonten() {
       return Container(
@@ -94,7 +100,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name ?? "Alifano Reinanda",
+                      name ?? "",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -102,7 +108,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                     ),
                     Constant.xSizedBox8,
                     Text(
-                      division ?? "Turbine Engineer",
+                      division ?? "",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -239,54 +245,35 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
     Widget bodyKontenActive() {
       return RefreshIndicator(
         onRefresh: () async {
-          userManageP.next = null;
-          if ((userManageP.pagingController.itemList ?? []).isEmpty) {
-            userManageP.pagingController.refresh();
-          } else {
-            userManageP.next = null;
-            userManageP.pagingController.refresh();
-          }
+          await homeP.fetchUserList();
+          // userManageP.next = null;
+          // if ((userManageP.pagingController.itemList ?? []).isEmpty) {
+          //   userManageP.pagingController.refresh();
+          // } else {
+          //   userManageP.next = null;
+          //   userManageP.pagingController.refresh();
+          // }
         },
         child: Column(
           children: [
             Expanded(
-              child: PagedListView.separated(
-                pagingController: pagingC,
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return SizedBox();
-                },
-                builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
-                  firstPageProgressIndicatorBuilder: (_) => Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.only(top: 32),
-                    child: CustomLoadingIndicator.buildIndicator(),
-                  ),
-                  firstPageErrorIndicatorBuilder: (_) => Padding(
-                    padding: const EdgeInsets.only(top: 56),
-                    child: Center(child: Text("Gagal mendapatkan data")),
-                  ),
-                  newPageProgressIndicatorBuilder: (_) => Container(
-                    color: Colors.white,
-                    child: CustomLoadingIndicator.buildIndicator(),
-                  ),
-                  newPageErrorIndicatorBuilder: (_) => Padding(
-                    padding: const EdgeInsets.only(top: 56),
-                    child: Center(child: Text("Gagal mendapatkan data")),
-                  ),
-                  noItemsFoundIndicatorBuilder: (_) => Padding(
-                    padding: const EdgeInsets.only(top: 56),
-                    child: Center(child: Text("Tidak ada data")),
-                  ),
-                  itemBuilder: (context, item, index) {
-                    if (item.Status != 'active') return SizedBox();
+              child: ListView.separated(
+                  itemCount: (homeP.userListModel.Data ?? []).length,
+                  // pagingController: pagingC,
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                  shrinkWrap: true,
+                  physics: ScrollPhysics(),
+                  separatorBuilder: (context, index) {
+                    return SizedBox();
+                  },
+                  itemBuilder: (context, index) {
+                    final item = homeP.userListModel.Data?[index];
                     return InkWell(
                       onTap: () async {
                         await CusNav.nPush(
-                            context, UserDetailView(id: item.Id ?? ''));
-                        pagingC.refresh();
+                            context, UserDetailView(id: item?.Id ?? ''));
+                        await context.read<HomeProvider>().fetchUserList();
+                        // pagingC.refresh();
                       },
                       child: Column(
                         children: [
@@ -316,14 +303,14 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                                   flex: 5,
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        item.Name ?? 'Nama -',
+                                        item?.Name ?? 'Nama -',
                                         style: Constant.iPrimaryMedium8
                                             .copyWith(
-                                            fontSize: 16,
-                                            color: Colors.black),
+                                                fontSize: 16,
+                                                color: Colors.black),
                                       ),
                                       // Text(
                                       //   item.Status ?? 'Status -',
@@ -333,7 +320,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                                       //       color: Colors.black),
                                       // ),
                                       Text(
-                                        item.Division ?? 'Divisi -',
+                                        item?.Division ?? 'Divisi -',
                                         style: TextStyle(
                                             color: Constant.textHintColor2),
                                       ),
@@ -348,11 +335,15 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                                         padding: EdgeInsets.all(7),
                                         decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: Constant.redColor
-                                          ),
-                                          borderRadius: BorderRadius.circular(5),
+                                              color: Constant.redColor),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
-                                        child: Center(child: Text("Tolak", style: Constant.redMedium12,)),
+                                        child: Center(
+                                            child: Text(
+                                          "Tolak",
+                                          style: Constant.redMedium12,
+                                        )),
                                       ),
                                     )),
                                 SizedBox(width: 10),
@@ -361,14 +352,19 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                                     child: InkWell(
                                       onTap: () async {},
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(vertical: 7),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 7),
                                         decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: Constant.primaryColor
-                                          ),
-                                          borderRadius: BorderRadius.circular(5),
+                                              color: Constant.primaryColor),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
-                                        child: Center(child: Text("Terima", style: Constant.iBlackMedium12,)),
+                                        child: Center(
+                                            child: Text(
+                                          "Terima",
+                                          style: Constant.iBlackMedium12,
+                                        )),
                                       ),
                                     )),
                               ],
@@ -380,9 +376,141 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                         ],
                       ),
                     );
-                  },
-                ),
-              ),
+                  }
+                  // builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
+                  //   firstPageProgressIndicatorBuilder: (_) => Container(
+                  //     color: Colors.white,
+                  //     padding: EdgeInsets.only(top: 32),
+                  //     child: CustomLoadingIndicator.buildIndicator(),
+                  //   ),
+                  //   firstPageErrorIndicatorBuilder: (_) => Padding(
+                  //     padding: const EdgeInsets.only(top: 56),
+                  //     child: Center(child: Text("Gagal mendapatkan data")),
+                  //   ),
+                  //   newPageProgressIndicatorBuilder: (_) => Container(
+                  //     color: Colors.white,
+                  //     child: CustomLoadingIndicator.buildIndicator(),
+                  //   ),
+                  //   newPageErrorIndicatorBuilder: (_) => Padding(
+                  //     padding: const EdgeInsets.only(top: 56),
+                  //     child: Center(child: Text("Gagal mendapatkan data")),
+                  //   ),
+                  //   noItemsFoundIndicatorBuilder: (_) => Padding(
+                  //     padding: const EdgeInsets.only(top: 56),
+                  //     child: Center(child: Text("Tidak ada data")),
+                  //   ),
+                  //   itemBuilder: (context, item, index) {
+                  //     if (item.Status != 'active') return SizedBox();
+                  //     return InkWell(
+                  //       onTap: () async {
+                  //         await CusNav.nPush(
+                  //             context, UserDetailView(id: item.Id ?? ''));
+                  //         pagingC.refresh();
+                  //       },
+                  //       child: Column(
+                  //         children: [
+                  //           CustomContainer.mainCard(
+                  //             isShadow: false,
+                  //             child: Row(
+                  //               children: [
+                  //                 Expanded(
+                  //                   flex: 2,
+                  //                   child: Container(
+                  //                     height: 50,
+                  //                     width: 50,
+                  //                     decoration: BoxDecoration(
+                  //                       borderRadius: BorderRadius.circular(40),
+                  //                       color: Colors.white,
+                  //                       image: DecorationImage(
+                  //                         image: AssetImage(
+                  //                           'assets/icons/ic-user-black.png',
+                  //                         ),
+                  //                         scale: 3,
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 SizedBox(width: 10),
+                  //                 Expanded(
+                  //                   flex: 5,
+                  //                   child: Column(
+                  //                     crossAxisAlignment:
+                  //                         CrossAxisAlignment.start,
+                  //                     children: [
+                  //                       Text(
+                  //                         item.Name ?? 'Nama -',
+                  //                         style: Constant.iPrimaryMedium8
+                  //                             .copyWith(
+                  //                                 fontSize: 16,
+                  //                                 color: Colors.black),
+                  //                       ),
+                  //                       // Text(
+                  //                       //   item.Status ?? 'Status -',
+                  //                       //   style: Constant.iPrimaryMedium8
+                  //                       //       .copyWith(
+                  //                       //       fontSize: 14,
+                  //                       //       color: Colors.black),
+                  //                       // ),
+                  //                       Text(
+                  //                         item.Division ?? 'Divisi -',
+                  //                         style: TextStyle(
+                  //                             color: Constant.textHintColor2),
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //                 Expanded(
+                  //                     flex: 2,
+                  //                     child: InkWell(
+                  //                       onTap: () async {},
+                  //                       child: Container(
+                  //                         padding: EdgeInsets.all(7),
+                  //                         decoration: BoxDecoration(
+                  //                           border: Border.all(
+                  //                               color: Constant.redColor),
+                  //                           borderRadius:
+                  //                               BorderRadius.circular(5),
+                  //                         ),
+                  //                         child: Center(
+                  //                             child: Text(
+                  //                           "Tolak",
+                  //                           style: Constant.redMedium12,
+                  //                         )),
+                  //                       ),
+                  //                     )),
+                  //                 SizedBox(width: 10),
+                  //                 Expanded(
+                  //                     flex: 2,
+                  //                     child: InkWell(
+                  //                       onTap: () async {},
+                  //                       child: Container(
+                  //                         padding:
+                  //                             EdgeInsets.symmetric(vertical: 7),
+                  //                         decoration: BoxDecoration(
+                  //                           border: Border.all(
+                  //                               color: Constant.primaryColor),
+                  //                           borderRadius:
+                  //                               BorderRadius.circular(5),
+                  //                         ),
+                  //                         child: Center(
+                  //                             child: Text(
+                  //                           "Terima",
+                  //                           style: Constant.iBlackMedium12,
+                  //                         )),
+                  //                       ),
+                  //                     )),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //           SizedBox(
+                  //             height: 20,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  ),
             ),
           ],
         ),
@@ -415,7 +543,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List.generate(
                         staticArray.length,
-                            (indexx) => InkWell(
+                        (indexx) => InkWell(
                           onTap: () {
                             CusNav.nPush(
                                 context,
@@ -423,8 +551,8 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                                     index: indexx == 1
                                         ? 2
                                         : indexx == 3
-                                        ? 1
-                                        : 0));
+                                            ? 1
+                                            : 0));
                           },
                           child: Column(
                             children: [
@@ -514,12 +642,16 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                     return SizedBox();
                   },
                   itemCount: 1),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               Divider(
                 thickness: 0.5,
                 color: Colors.grey.withOpacity(0.5),
               ),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -530,34 +662,37 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                         fontSize: 16,
                         fontWeight: FontWeight.w500),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "Selengkapnya",
-                        style: TextStyle(
-                            color: Constant.primaryColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      Icon(Icons.arrow_forward, color: Constant.primaryColor,)
-                    ],
+                  InkWell(
+                    onTap: () => CusNav.nPush(context, UserManageView()),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Selengkapnya",
+                          style: TextStyle(
+                              color: Constant.primaryColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        Icon(
+                          Icons.arrow_forward,
+                          color: Constant.primaryColor,
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 15,),
-              Container(
-                  height: 300,
-                  child: bodyKontenActive()),
+              SizedBox(
+                height: 15,
+              ),
+              Container(height: 300, child: bodyKontenActive()),
             ],
           ));
     }
 
-
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () async {
-          await context.read<AuthProvider>().getConfig();
-        },
+        onRefresh: () => getData(),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

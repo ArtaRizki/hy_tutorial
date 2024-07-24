@@ -35,17 +35,23 @@ class HomeProvider extends BaseController with ChangeNotifier {
       throw Exception(message);
     }
   }
+
   UserListModel _userListModel = UserListModel();
   UserListModel get userListModel => this._userListModel;
   set userListModel(UserListModel value) => this._userListModel = value;
 
   Future<void> fetchUserList() async {
     loading(true);
-    final response = await get(Constant.BASE_API_FULL + '/admin/users/');
+    userListModel = UserListModel();
+    final response = await get(Constant.BASE_API_FULL + '/admin/users');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = UserListModel.fromJson(jsonDecode(response.body));
-      userListModel = model;
+      UserListModel model = UserListModel.fromJson(jsonDecode(response.body));
+      List<UserListModelData?> newItems = (model.Data ?? [])
+          .where((element) => element?.Status != 'active')
+          .toList();
+
+      userListModel = model.copyWith(Data: newItems);
       notifyListeners();
       loading(false);
     } else {
@@ -54,5 +60,4 @@ class HomeProvider extends BaseController with ChangeNotifier {
       return message;
     }
   }
-
 }

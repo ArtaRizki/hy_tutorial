@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
-import 'package:hy_tutorial/src/home/view/home1_view.dart';
+import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/helper/constant.dart';

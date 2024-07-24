@@ -17,12 +17,12 @@ import '../../shaft/view/shaft_detail_view.dart';
 import '../model/turbine_model.dart';
 import '../provider/turbine_provider.dart';
 
-class RiwayatView extends StatefulWidget {
+class TurbineView extends StatefulWidget {
   @override
-  State<RiwayatView> createState() => _RiwayatViewState();
+  State<TurbineView> createState() => _TurbineViewState();
 }
 
-class _RiwayatViewState extends BaseState<RiwayatView> {
+class _TurbineViewState extends BaseState<TurbineView> {
   @override
   void initState() {
     final turbineP = context.read<TurbineProvider>();

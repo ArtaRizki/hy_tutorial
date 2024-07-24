@@ -25,13 +25,13 @@ class _SplashViewState extends State<SplashView> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final isLoggedIn =
         prefs.getString(Constant.kSetPrefToken)?.isNotEmpty ?? false;
-    final roles = prefs.getString(Constant.kSetPrefRoles);
+    final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin);
 
     Timer(
         Duration(seconds: 3),
         () => Navigator.of(context).pushReplacementNamed(
             isLoggedIn ? '/home' : '/login',
-            arguments: roles));
+            arguments: isAdmin ?? false));
   }
 
   @override

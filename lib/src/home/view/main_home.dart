@@ -1,7 +1,9 @@
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
-import 'package:hy_tutorial/src/home/view/home1_view.dart';
+import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
+import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/src/profil/view/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/helper/constant.dart';
 import '../../turbine/provider/turbine_provider.dart';
-import '../../turbine/view/riwayat_view.dart';
+import '../../turbine/view/turbine_view.dart';
 
 class MainHome extends StatefulWidget {
   final int? index;
@@ -23,7 +25,7 @@ class MainHome extends StatefulWidget {
 class _MainHomeState extends State<MainHome> {
   int currentIndex = 0;
   late HomeModel homeModel;
-  String? roles;
+  bool? isAdmin;
 
   @override
   void initState() {
@@ -34,7 +36,7 @@ class _MainHomeState extends State<MainHome> {
 
   @override
   void didChangeDependencies() {
-    roles = ModalRoute.of(context)?.settings.arguments as String?;
+    isAdmin = ModalRoute.of(context)?.settings.arguments as bool?;
     // getData();
     super.didChangeDependencies();
   }
@@ -42,41 +44,13 @@ class _MainHomeState extends State<MainHome> {
   getData() async {
     setIndex();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // roles = prefs.getString(Constant.kSetPrefRoles);
-    // await Utils.showLoading();
-    // await context.read<HomeProvider>().fetchHome();
-    // await context.read<ProfileProvider>().fetchProfile(context: context);
-    // await context.read<JamaahProvider>().fetchJamaah();
-    // if (roles == "agen") await context.read<SubAgenProvider>().fetchSubAgen();
-    // await context.read<ProfileProvider>().fetchSosmed();
-    // await context.read<NotifikasiProvider>().fetchNotif();
-    // await Utils.dismissLoading();
+    isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin);
     setState(() {});
   }
 
   setIndex() {
     setState(() {
-      if (widget.index != null) {
-        currentIndex = widget.index ?? 0;
-      }
-    });
-  }
-
-  void jumpToJamaah() {
-    setState(() {
-      currentIndex = 1;
-    });
-  }
-
-  void jumpToRiwayat() {
-    setState(() {
-      currentIndex = 2;
-    });
-  }
-
-  void jumpToProfile() {
-    setState(() {
-      currentIndex = 3;
+      if (widget.index != null) currentIndex = widget.index ?? 0;
     });
   }
 
@@ -108,7 +82,10 @@ class _MainHomeState extends State<MainHome> {
             // context.read<PaketProvider>().clearFilter();
             if (index == 1) {
               currentIndex = index;
-              await CusNav.nPush(context, DataAddView());
+              if (isAdmin == true)
+                await CusNav.nPush(context, UserManageView());
+              else
+                await CusNav.nPush(context, DataAddView());
               setState(() {
                 currentIndex = 0;
               });
@@ -153,7 +130,7 @@ class _MainHomeState extends State<MainHome> {
                   ),
                 ),
               ),
-              label: 'Form',
+              label: isAdmin == true ? 'Manage Users' : 'Form',
             ),
             BottomNavigationBarItem(
               icon: Container(
@@ -214,9 +191,9 @@ class _MainHomeState extends State<MainHome> {
           return true;
         },
         child: [
-          Home1View(),
-          DataAddView(),
-          RiwayatView(),
+          isAdmin == true ? HomeAdminView() : HomeView(),
+          isAdmin == true ? UserManageView() : DataAddView(),
+          TurbineView(),
           ProfileView(),
           // ProfileView(jumpToJamaah, jumpToSubAgen)
         ][currentIndex],

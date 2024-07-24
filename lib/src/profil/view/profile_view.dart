@@ -32,7 +32,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     name = prefs.getString(Constant.kSetPrefName);
-    division = prefs.getString(Constant.kSetPrefRoles);
+    division = prefs.getString(Constant.kSetPrefDivision);
     setState(() {});
   }
 
@@ -41,7 +41,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
     return Scaffold(
       appBar: CustomAppBar.appBar(context, "Profile",
           leading: SizedBox(),
-          titleSpacing: 24,
+          titleSpacing: 20,
           isLeading: false,
           textStyle: TextStyle(color: Colors.white),
           color: Constant.primaryColor,
@@ -50,8 +50,8 @@ class _ProfileViewState extends BaseState<ProfileView> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-              height: 110,
+              padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
+              height: 100,
               color: Constant.primaryColor,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,14 +73,14 @@ class _ProfileViewState extends BaseState<ProfileView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          name ?? "Andre Taulany",
+                          name ?? "",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          division ?? "Turbine Engineer",
+                          division ?? "",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -207,32 +207,27 @@ class _ProfileViewState extends BaseState<ProfileView> {
                       ),
                       Expanded(
                         flex: 6,
-                        child: InkWell(
-                          onTap: () async {
-                            CusNav.nPush(context, HomeAdminView());
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Kebijakan Privasi",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Pelajari kebijakan privasi pengguna aplikasi",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ],
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Kebijakan Privasi",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "Pelajari kebijakan privasi pengguna aplikasi",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w300),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -271,36 +266,27 @@ class _ProfileViewState extends BaseState<ProfileView> {
                       ),
                       Expanded(
                         flex: 6,
-                        child: InkWell(
-                          onTap: () async {
-                            CusNav.nPush(context, UserManageView());
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: ((context) => UserAddView())));
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Tentang Aplikasi",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Versi 1.0",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ],
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Tentang Aplikasi",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "Versi 1.0",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w300),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -390,13 +376,12 @@ class _ProfileViewState extends BaseState<ProfileView> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
+                    SizedBox(height: 8),
                   ],
                 ),
               ),
             ),
+            SizedBox(height: 32),
           ],
         ),
       ),

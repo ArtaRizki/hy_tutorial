@@ -36,7 +36,6 @@ class AuthProvider extends BaseController with ChangeNotifier {
     this._selectedDivision = value;
     notifyListeners();
   }
-      
 
   //forgot
   TextEditingController emailForgotC = TextEditingController();
@@ -77,13 +76,13 @@ class AuthProvider extends BaseController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> clearLoginForm () async {
+  Future<void> clearLoginForm() async {
     emailC.clear();
     passC.clear();
     //notifyListeners();
   }
 
-  Future<void> clearRegisterForm () async {
+  Future<void> clearRegisterForm() async {
     nameC.clear();
     usernameC.clear();
     emailC.clear();
@@ -121,9 +120,12 @@ class AuthProvider extends BaseController with ChangeNotifier {
       // await prefs.setString(Constant.kSetPrefId, "${model.Data?.Id ?? 0}");
       await prefs.setString(Constant.kSetPrefToken, model.Data?.Token ?? '');
       await prefs.setString(
+          Constant.kSetPrefDivision, model.Data?.Division ?? '');
+      await prefs.setString(
           Constant.kSetPrefRefreshToken, model.Data?.RefreshToken ?? '');
       await prefs.setString(Constant.kSetPrefName, model.Data?.Name ?? '');
-      await prefs.setString(Constant.kSetPrefRoles, model.Data!.Division!);
+      await prefs.setBool(
+          Constant.kSetPrefIsAdmin, model.Data!.IsAdmin ?? false);
       // await prefs.setString(Constant.kSetPrefCompany, model.Data!.companyName!);
       usernameC.clear();
       passC.clear();
@@ -268,7 +270,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
     await prefs.remove(Constant.kSetPrefToken);
     await prefs.remove(Constant.kSetPrefId);
     await prefs.remove(Constant.kSetPrefName);
-    await prefs.remove(Constant.kSetPrefRoles);
+    await prefs.remove(Constant.kSetPrefIsAdmin);
     await prefs.clear();
 
     loading(false);

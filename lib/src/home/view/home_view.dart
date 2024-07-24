@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
@@ -13,14 +15,14 @@ import '../../../utils/utils.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../../shaft/view/shaft_latest_view.dart';
 
-class Home1View extends StatefulWidget {
-  const Home1View({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<Home1View> createState() => _Home1ViewState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _Home1ViewState extends BaseState<Home1View> {
+class _HomeViewState extends BaseState<HomeView> {
   String? name;
   String? division;
   static const List<String> staticArray = [
@@ -54,9 +56,11 @@ class _Home1ViewState extends BaseState<Home1View> {
 
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    name = prefs.getString(Constant.kSetPrefName);
-    division = prefs.getString(Constant.kSetPrefRoles);
-    setState(() {});
+    setState(() {
+      name = prefs.getString(Constant.kSetPrefName);
+      log("NAME : $name");
+      division = prefs.getString(Constant.kSetPrefDivision);
+    });
     await context.read<AuthProvider>().getConfig();
   }
 
@@ -77,7 +81,7 @@ class _Home1ViewState extends BaseState<Home1View> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name ?? "Alifano Reinanda",
+                      name ?? "",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -85,7 +89,7 @@ class _Home1ViewState extends BaseState<Home1View> {
                     ),
                     Constant.xSizedBox8,
                     Text(
-                      division ?? "Turbine Engineer",
+                      division ?? "",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -95,10 +99,12 @@ class _Home1ViewState extends BaseState<Home1View> {
                 ),
                 InkWell(
                     onTap: () async {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeAdminView()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeAdminView()));
                     },
-                    child: Image.asset('assets/icons/ic-user.png',
-                        scale: 4)),
+                    child: Image.asset('assets/icons/ic-user.png', scale: 4)),
               ],
             ),
             SizedBox(
@@ -322,7 +328,6 @@ class _Home1ViewState extends BaseState<Home1View> {
                     return SizedBox();
                   },
                   itemCount: 1),
-
             ],
           ));
     }

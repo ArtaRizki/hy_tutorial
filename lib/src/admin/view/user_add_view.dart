@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/src/admin/model/detail_user_model.dart';
+import 'package:hy_tutorial/src/admin/model/user_detail_model.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -140,7 +140,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
                               desc: "Apakah Data Anda Sudah Benar?",
                               yesCallback: () => handleTap(() async {
                                     Navigator.pop(context);
-                                    
+
                                     dataP.addUser(context);
                                   }),
                               noCallback: () => Navigator.pop(context));

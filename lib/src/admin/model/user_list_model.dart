@@ -99,6 +99,22 @@ class UserListModel {
     this.Data,
     this.Meta,
   });
+
+  UserListModel copyWith({
+    bool? Success,
+    int? StatusCode,
+    String? Message,
+    List<UserListModelData?>? Data,
+    UserListModelMeta? Meta,
+  }) =>
+      UserListModel(
+        Success: Success ?? this.Success,
+        StatusCode: StatusCode ?? this.StatusCode,
+        Message: Message ?? this.Message,
+        Data: Data ?? this.Data,
+        Meta: Meta ?? this.Meta,
+      );
+
   UserListModel.fromJson(Map<String, dynamic> json) {
     Success = json['Success'];
     StatusCode = json['StatusCode']?.toInt();

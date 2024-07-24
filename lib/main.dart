@@ -1,5 +1,5 @@
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
-import 'package:hy_tutorial/src/auth/view/login2_view.dart';
+import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
 import 'package:hy_tutorial/src/tower/provider/tower_provider.dart';
@@ -32,8 +32,6 @@ import 'dart:io';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'common/library/firebase_manager.dart';
-import 'src/auth/view/confirmation_view.dart';
-import 'src/auth/view/token_view.dart';
 import 'utils/nav_observer.dart';
 import 'utils/utils.dart';
 import 'firebase_options.dart';
