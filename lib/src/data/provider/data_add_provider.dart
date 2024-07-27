@@ -20,6 +20,7 @@ import '../../../common/component/custom_textfield.dart';
 class DataAddProvider extends BaseController with ChangeNotifier {
   GlobalKey<FormState> dataAddKey = GlobalKey<FormState>();
 
+  TextEditingController titleC = TextEditingController();
   TextEditingController pltaC = TextEditingController();
   TextEditingController genBearingKoplingC = TextEditingController();
   TextEditingController koplingTurbinC = TextEditingController();
@@ -972,6 +973,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   Future<TurbineCreateModel> createTurbines() async {
     loading(true);
     createDataParam = CreateDataParam(
+        Title: titleC.text,
         TowerId: selectedTower,
         GenBearingToCoupling: genBearingKoplingC.text,
         CouplingToTurbine: koplingTurbinC.text,
@@ -1055,6 +1057,13 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       Text("Detail Unit", style: Constant.blackBold20),
       Constant.xSizedBox8,
       Text("Masukan data unit", style: Constant.grayMedium),
+      Constant.xSizedBox16,
+      CustomTextField.borderTextField(
+        required: false,
+        controller: titleC,
+        textInputType: TextInputType.name,
+        labelText: "Nama File",
+      ),
       Constant.xSizedBox16,
       CustomDropdown.normalDropdown(
         controller: pltaC,
@@ -1212,6 +1221,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ],
         labelText: "Gen. Bearing-Kopling",
         onChange: onChangedBearingToCoupling,
+        suffixIcon: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+          child: Text(
+            'mm',
+            textAlign: TextAlign.right,
+            style: TextStyle(color: Constant.redColor),
+          ),
+        ),
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
@@ -1223,6 +1240,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ],
         labelText: "Kopling - Turbin",
         onChange: onChangedKoplingToTurbine,
+        suffixIcon: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+          child: Text(
+            'mm',
+            textAlign: TextAlign.right,
+            style: TextStyle(color: Constant.redColor),
+          ),
+        ),
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
@@ -1230,6 +1255,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         readOnly: true,
         controller: totalC,
         labelText: "Total",
+        suffixIcon: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+          child: Text(
+            'mm',
+            textAlign: TextAlign.right,
+            style: TextStyle(color: Constant.redColor),
+          ),
+        ),
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
@@ -1257,6 +1290,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Jumlah Baut",
+        suffixIcon: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+          child: Text(
+            'Bolt',
+            textAlign: TextAlign.right,
+            style: TextStyle(color: Constant.redColor),
+          ),
+        ),
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
@@ -1269,6 +1310,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ],
         labelText: "Torsi Terkini",
         onChange: onChangedCurrentTorque,
+        suffixIcon: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+          child: Text(
+            'BAR/Psi/Nm',
+            textAlign: TextAlign.right,
+            style: TextStyle(color: Constant.redColor),
+          ),
+        ),
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
@@ -1281,6 +1330,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ],
         labelText: "Max Torsi",
         onChange: onChangedMaxTorque,
+        suffixIcon: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+          child: Text(
+            'BAR/Psi/Nm',
+            textAlign: TextAlign.right,
+            style: TextStyle(color: Constant.redColor),
+          ),
+        ),
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
@@ -1292,6 +1349,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Jumlah Selisih",
+        suffixIcon: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+          child: Text(
+            'BAR/Psi/Nm',
+            textAlign: TextAlign.right,
+            style: TextStyle(color: Constant.redColor),
+          ),
+        ),
       ),
       Constant.xSizedBox16,
     ];

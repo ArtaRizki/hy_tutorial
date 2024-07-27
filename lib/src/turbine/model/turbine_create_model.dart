@@ -41,6 +41,7 @@ class TurbineCreateModel {
 
 class Data {
   String? id;
+  String? title;
   String? towerName;
   Shaft? shaft;
   Chart? chart;
@@ -59,6 +60,7 @@ class Data {
 
   Data({
     this.id,
+    this.title,
     this.towerName,
     this.shaft,
     this.chart,
@@ -78,6 +80,7 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         id: json["Id"],
+        title: json["Title"],
         towerName: json["TowerName"],
         shaft: Shaft.fromJson(json["Shaft"]),
         chart: Chart.fromJson(json["Chart"]),
@@ -98,6 +101,7 @@ class Data {
 
   Map<String, dynamic> toJson() => {
         "Id": id,
+        "Title": title,
         "TowerName": towerName,
         "Shaft": shaft?.toJson(),
         "Chart": chart?.toJson(),

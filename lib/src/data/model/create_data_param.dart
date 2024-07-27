@@ -445,6 +445,7 @@ class CreateDataParam {
 } 
 */
 
+  String? Title;
   String? TowerId;
   String? GenBearingToCoupling;
   String? CouplingToTurbine;
@@ -454,6 +455,7 @@ class CreateDataParam {
   CreateDataParamData? Data;
 
   CreateDataParam({
+    this.Title,
     this.TowerId,
     this.GenBearingToCoupling,
     this.CouplingToTurbine,
@@ -463,6 +465,7 @@ class CreateDataParam {
     this.Data,
   });
   CreateDataParam.fromJson(Map<String, dynamic> json) {
+    Title = json['Title']?.toString();
     TowerId = json['TowerId']?.toString();
     GenBearingToCoupling = json['GenBearingToCoupling'];
     CouplingToTurbine = json['CouplingToTurbine'];
@@ -475,6 +478,7 @@ class CreateDataParam {
   }
   Map<String, dynamic> toJson() {
     final data = <String, String>{};
+    data['Title'] = Title ?? '';
     data['TowerId'] = TowerId ?? '';
     data['GenBearingToCoupling'] = GenBearingToCoupling ?? '';
     data['CouplingToTurbine'] = CouplingToTurbine ?? '';

@@ -627,15 +627,16 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
               tabController.index == 2 ? 'Grafik Resultan' : 'Grafik Shaft',
               style: Constant.iBlackMedium16,
             ),
-            Constant.xSizedBox8,
+            Constant.xSizedBox4,
             Row(
               children: [
                 Expanded(
                     child: Text(
-                  tabController.index == 2
-                      ? 'Tampilan grafik dari data upper'
-                      : 'Tampilan grafik dari data shaft',
-                  style: TextStyle(fontSize: 12, color: Constant.grayColor),
+                  data?.title ?? '',
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Constant.grayColor,
+                      fontWeight: FontWeight.w600),
                 )),
                 Constant.xSizedBox4,
                 Text(
@@ -669,13 +670,48 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
                         ),
                         Constant.xSizedBox16,
                         Expanded(
-                          child: Text(
-                            'Total Run Out : ${totalCrockedness ?? 0}',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Total Run Out : ',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Constant.xSizedBox4,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 8,
+                                    child: Text(
+                                      '${totalCrockedness ?? 0}',
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Constant.xSizedBox4,
+                                  Expanded(
+                                    flex: 4,
+                                    child: Text(
+                                      'X 0,01 mm',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Constant.redColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
