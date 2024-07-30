@@ -19,7 +19,6 @@ class ProfileEditView extends StatefulWidget {
 class _ProfileEditViewState extends BaseState<ProfileEditView> {
   @override
   void initState() {
-    context.read<DivisionProvider>().fetchDivision();
     setData();
     super.initState();
   }

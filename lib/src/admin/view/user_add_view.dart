@@ -22,12 +22,12 @@ class UserAddView extends StatefulWidget {
 class _UserAddViewState extends BaseState<UserAddView> {
   @override
   void initState() {
-    context.read<DivisionProvider>().fetchDivision();
     setData();
     super.initState();
   }
 
-  setData() {
+  setData() async {
+    await context.read<DivisionProvider>().fetchDivision(withLoading: true);
     if (widget.data != null) {
       final data = widget.data;
       final p = context.read<UserManageProvider>();

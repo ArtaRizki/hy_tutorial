@@ -62,9 +62,12 @@ class _ProfileViewState extends BaseState<ProfileView> {
                   SizedBox(
                     width: 10,
                   ),
-                  Image.asset(
-                    'assets/icons/ic-user.png',
-                    scale: 4,
+                  InkWell(
+                    onTap: () => throw Exception(),
+                    child: Image.asset(
+                      'assets/icons/ic-user.png',
+                      scale: 4,
+                    ),
                   ),
                   SizedBox(
                     width: 10,
