@@ -950,7 +950,18 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         log("LAT API : ${lat}");
         log("LON API : ${lon}");
         if (geo.latitude != 0 && lat != 0) {
-          if (distance <= radius && configStatus == true) {
+          if (configStatus == false) {
+            final response = await createTurbines();
+            if (response.success == true) {
+              Utils.showSuccess(msg: response.message ?? "Sukses");
+              await Future.delayed(Duration(seconds: 2));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (c) => ShaftView()));
+            } else {
+              Utils.showFailed(msg: response.message ?? '');
+              throw response.message ?? '';
+            }
+          } else if (distance <= radius && configStatus == true) {
             final response = await createTurbines();
             if (response.success == true) {
               Utils.showSuccess(msg: response.message ?? "Sukses");
