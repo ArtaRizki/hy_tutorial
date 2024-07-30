@@ -19,8 +19,8 @@ class DefaultFirebaseOptions {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
-      case TargetPlatform.iOS:
-        return ios;
+      // case TargetPlatform.iOS:
+      //   return ios;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -39,19 +39,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAEIXxNaPEKulXxhnCbal1OLNwkPiPAVng',
-    appId: '1:976630463046:android:018151a58a335644872847',
-    messagingSenderId: '976630463046',
-    projectId: 'bimops-d54b5',
-    storageBucket: 'bimops-d54b5.appspot.com',
+    apiKey: 'AIzaSyB5j1vaJOcFBxWrSGW-NV4DDBvLC41bOAo',
+    appId: '1:762846750172:android:7492f860eb1703568e5b19',
+    messagingSenderId: '762846750172',
+    projectId: 'turbine-mata',
+    storageBucket: 'turbine-mata.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB3G-6Lb-qjgwpJekyQj1C9tnPALWDNxkA',
-    appId: '1:439575310085:ios:d8ec1f2e53cc282692d16c',
-    messagingSenderId: '439575310085',
-    projectId: 'bimops-d54b5',
-    storageBucket: 'bimops-d54b5.appspot.com',
-    iosBundleId: 'com.bimops',
-  );
+  // static const FirebaseOptions ios = FirebaseOptions(
+  //   apiKey: 'AIzaSyB3G-6Lb-qjgwpJekyQj1C9tnPALWDNxkA',
+  //   appId: '1:439575310085:ios:d8ec1f2e53cc282692d16c',
+  //   messagingSenderId: '439575310085',
+  //   projectId: 'bimops-d54b5',
+  //   storageBucket: 'bimops-d54b5.appspot.com',
+  //   iosBundleId: 'com.bimops',
+  // );
 }

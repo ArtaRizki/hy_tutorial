@@ -27,7 +27,7 @@ class FirebaseManager {
   Function(Map)? listener;
 
   NotificationDetails notifDetail = NotificationDetails(
-    android: AndroidNotificationDetails("bimops Travel", "bimops Travel",
+    android: AndroidNotificationDetails("HY TUTORIAL", "HY TUTORIAL",
         priority: Priority.max,
         playSound: true,
         importance: Importance.max,
