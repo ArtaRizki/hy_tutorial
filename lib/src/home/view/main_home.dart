@@ -4,7 +4,7 @@ import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
 import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
 import 'package:hy_tutorial/src/home/view/home_view.dart';
-import 'package:hy_tutorial/src/profil/view/profile_view.dart';
+import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -172,7 +172,9 @@ class _MainHomeState extends State<MainHome> {
       primary: true,
       bottomNavigationBar: customBottomNav(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          CusNav.nPush(context, DataAddView());
+        },
         child: CircleAvatar(
           radius: 60,
           backgroundColor: Constant.primaryColor,

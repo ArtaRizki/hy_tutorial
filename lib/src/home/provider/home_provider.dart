@@ -43,7 +43,12 @@ class HomeProvider extends BaseController with ChangeNotifier {
   Future<void> fetchUserList() async {
     loading(true);
     userListModel = UserListModel();
-    final response = await get(Constant.BASE_API_FULL + '/admin/users');
+    Map<String, String> param = {
+      'Filter': 'Status',
+      'FilterValue': '0',
+    };
+    final response =
+        await get(Constant.BASE_API_FULL + '/admin/users', body: param);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       UserListModel model = UserListModel.fromJson(jsonDecode(response.body));

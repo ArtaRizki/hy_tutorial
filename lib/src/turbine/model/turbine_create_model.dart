@@ -124,23 +124,27 @@ class Chart {
   Ac? ac;
   Ac? bd;
   String? upper;
+  double? upperScale;
 
   Chart({
     this.ac,
     this.bd,
     this.upper,
+    this.upperScale,
   });
 
   factory Chart.fromJson(Map<String, dynamic> json) => Chart(
         ac: Ac.fromJson(json["AC"]),
         bd: Ac.fromJson(json["BD"]),
         upper: json["Upper"],
+        upperScale: json["UpperScale"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
         "AC": ac?.toJson(),
         "BD": bd?.toJson(),
         "Upper": upper,
+        "UpperScale": upperScale,
       };
 }
 
@@ -254,10 +258,12 @@ class Shaft {
 
 class TorqueCalculation {
   Map<String, String>? details;
+  double? scale;
   Map<String, int>? torqueSuggestions;
 
   TorqueCalculation({
     this.details,
+    this.scale,
     this.torqueSuggestions,
   });
 
@@ -265,6 +271,7 @@ class TorqueCalculation {
       TorqueCalculation(
         details: Map.from(json["Details"])
             .map((k, v) => MapEntry<String, String>(k, v)),
+        scale: json["Scale"].toDouble(),
         torqueSuggestions: Map.from(json["TorqueSuggestions"])
             .map((k, v) => MapEntry<String, int>(k, v?.toInt())),
       );
@@ -272,6 +279,7 @@ class TorqueCalculation {
   Map<String, dynamic> toJson() => {
         "Details": Map.from(details ?? {})
             .map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "Scale": scale,
         "TorqueSuggestions": Map.from(torqueSuggestions ?? {})
             .map((k, v) => MapEntry<String, dynamic>(k, v)),
       };

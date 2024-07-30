@@ -380,10 +380,15 @@ class _TurbineViewState extends BaseState<TurbineView> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(item?.TowerName ?? "-",
-                                            style: Constant.blackBold),
+                                        Text(
+                                          // item.Title == '' || item.Title == null
+                                          //     ? "-"
+                                          //     :
+                                          item.Title ?? '',
+                                          style: Constant.blackBold15,
+                                        ),
                                         SizedBox(height: 5),
-                                        Text(item?.TowerName ?? "-",
+                                        Text(item.TowerName ?? "-",
                                             style: Constant.grayRegular13),
                                       ],
                                     ),

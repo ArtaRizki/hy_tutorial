@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/utils.dart';
 import '../../auth/provider/auth_provider.dart';
+import '../../profile/provider/profile_provider.dart';
 import '../../shaft/view/shaft_latest_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -55,12 +56,14 @@ class _HomeViewState extends BaseState<HomeView> {
   }
 
   getData() async {
+    await context.read<ProfileProvider>().fetchProfile();
+    final data = context.read<ProfileProvider>().profileModel.Data;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      name = prefs.getString(Constant.kSetPrefName);
-      log("NAME : $name");
-      division = prefs.getString(Constant.kSetPrefDivision);
-    });
+    final name2 = prefs.getString(Constant.kSetPrefName);
+    final division2 = prefs.getString(Constant.kSetPrefDivision);
+    name = data?.Name ?? name2;
+    division = data?.Division ?? division2;
+    setState(() {});
     await context.read<AuthProvider>().getConfig();
   }
 
@@ -69,7 +72,7 @@ class _HomeViewState extends BaseState<HomeView> {
     Widget headKonten() {
       return Container(
         color: Constant.primaryColor,
-        height: 300,
+        height: 180,
         width: double.infinity,
         padding: EdgeInsets.fromLTRB(20, 60, 20, 15),
         child: Column(
@@ -114,115 +117,6 @@ class _HomeViewState extends BaseState<HomeView> {
                 dashColor: Colors.white.withOpacity(0.7),
                 lineThickness: 1,
                 dashLength: 2),
-            SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(bottom: 10),
-                padding: EdgeInsets.fromLTRB(15, 15, 15, 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Constant.secondaryColor),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 6,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Overall Turbine Status",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "8/10",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: InkWell(
-                            onTap: () => CusNav.nPush(context, DataAddView()),
-                            child: Container(
-                                padding: EdgeInsets.all(7),
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  color: Constant.thirdColor,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Add Data",
-                                      style: TextStyle(
-                                          color: Constant.primaryColor,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Image.asset(
-                                      'assets/icons/ic-inbox.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Pencapaian",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                        Text(
-                          "80%",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    LinearProgressIndicator(
-                      value: 0.8,
-                      color: Colors.lightBlueAccent,
-                      backgroundColor: Colors.grey.shade400,
-                    ),
-                  ],
-                ),
-              ),
-            )
           ],
         ),
       );

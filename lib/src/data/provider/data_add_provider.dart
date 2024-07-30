@@ -126,22 +126,28 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   Future<TurbineCreateModel> fetchTurbineDetail(String id) async {
     loading(true);
-    turbineDetailModel = TurbineCreateModel();
-    clearDetailData();
-    final response = await get(Constant.BASE_API_FULL + '/turbines/$id');
+    try {
+      turbineDetailModel = TurbineCreateModel();
+      clearDetailData();
+      final response = await get(Constant.BASE_API_FULL + '/turbines/$id');
 
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = TurbineCreateModel.fromJson(jsonDecode(response.body));
-      turbineDetailModel = model;
-      notifyListeners();
-      setDataChartDetail();
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        final model = TurbineCreateModel.fromJson(jsonDecode(response.body));
+        turbineDetailModel = model;
+        notifyListeners();
+        setDataChartDetail();
+        loading(false);
+        return model;
+      } else {
+        final message = jsonDecode(response.body)["Message"];
+        loading(false);
+        return TurbineCreateModel();
+        // throw Exception(message);
+      }
+    } catch (e) {
       loading(false);
-      return model;
-    } else {
-      final message = jsonDecode(response.body)["Message"];
-      loading(false);
+      Utils.showFailed(msg: "Gagal Mendapatkan Data Turbine");
       return TurbineCreateModel();
-      // throw Exception(message);
     }
   }
 
@@ -205,6 +211,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   List<int> listTorqueSuggestions = [];
   List<int> listTorqueSuggestionsY = [];
   double upperCrockedLine = 0.0;
+  double? upperScale = 0;
+  double? boltScale = 0;
 
   double divideUntilTwoDigits(double val) {
     double num = val.abs(); // Use abs() to work with positive value
@@ -376,7 +384,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdData = turbineCreateModel.data?.chart?.bd;
     final bdCrockness = turbineCreateModel.data?.bdCrockedness;
     final upperData = turbineCreateModel.data?.chart?.upper;
+    upperScale = turbineCreateModel.data?.chart?.upperScale;
     final upperCrockness = turbineCreateModel.data?.totalCrockedness;
+    boltScale = turbineCreateModel.data?.torqueCalculation?.scale;
     var boltsData = turbineCreateModel.data?.torqueCalculation?.details;
     var torqueSuggestionsData =
         turbineCreateModel.data?.torqueCalculation?.torqueSuggestions;
@@ -550,7 +560,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdData = turbineDetailModel.data?.chart?.bd;
     final bdCrockness = turbineDetailModel.data?.bdCrockedness;
     final upperData = turbineDetailModel.data?.chart?.upper;
+    upperScale = turbineDetailModel.data?.chart?.upperScale;
     final upperCrockness = turbineDetailModel.data?.totalCrockedness;
+    boltScale = turbineDetailModel.data?.torqueCalculation?.scale;
     var boltsData = turbineDetailModel.data?.torqueCalculation?.details;
     var torqueSuggestionsData =
         turbineDetailModel.data?.torqueCalculation?.torqueSuggestions;
@@ -637,7 +649,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (upperData != null) {
       upper = upperData
           .split('|')
-          .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
+          .map((e) => double.tryParse(e) ?? 0)
+          // .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
           .toList();
       upperBolt =
           upperData.split('|').map((e) => double.tryParse(e) ?? 0).toList();
@@ -694,9 +707,12 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       log("LIST TORQUE SUGGESTION Y : $listTorqueSuggestionsY");
     }
 
-    acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
-    bdCrockedLine = divideUntilTwoDigits(bdCrockness ?? 0);
-    upperCrockedLine = divideUntilTwoDigits(upperCrockness ?? 0);
+    acCrockedLine = (acCrockness ?? 0);
+    bdCrockedLine = (bdCrockness ?? 0);
+    upperCrockedLine = (upperCrockness ?? 0);
+    // acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
+    // bdCrockedLine = divideUntilTwoDigits(bdCrockness ?? 0);
+    // upperCrockedLine = divideUntilTwoDigits(upperCrockness ?? 0);
     log("AC UPPER : $acUpper");
     log("AC CLUTCH : $acClutch");
     log("AC TURBINE : $acTurbine");
@@ -725,7 +741,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdData = turbineLatestModel.data?.chart?.bd;
     final bdCrockness = turbineLatestModel.data?.bdCrockedness;
     final upperData = turbineLatestModel.data?.chart?.upper;
+    upperScale = turbineLatestModel.data?.chart?.upperScale;
     final upperCrockness = turbineLatestModel.data?.totalCrockedness;
+    boltScale = turbineLatestModel.data?.torqueCalculation?.scale;
     var boltsData = turbineLatestModel.data?.torqueCalculation?.details;
     var torqueSuggestionsData =
         turbineLatestModel.data?.torqueCalculation?.torqueSuggestions;
@@ -924,13 +942,15 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         } else if (radiusType == 'kilometer') {
           distance = distance / 1000;
         }
+        log("RADIUS TYPE : $radiusType");
         log("DISTANCE : $distance");
+        log("RADIUS : $radius");
         log("LAT : ${geo.latitude}");
         log("LON : ${geo.longitude}");
         log("LAT API : ${lat}");
         log("LON API : ${lon}");
         if (geo.latitude != 0 && lat != 0) {
-          if (distance <= radius || configStatus == true) {
+          if (distance <= radius && configStatus == true) {
             final response = await createTurbines();
             if (response.success == true) {
               Utils.showSuccess(msg: response.message ?? "Sukses");

@@ -32,6 +32,7 @@ import 'dart:io';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'common/library/firebase_manager.dart';
+import 'src/profile/provider/profile_provider.dart';
 import 'utils/nav_observer.dart';
 import 'utils/utils.dart';
 import 'firebase_options.dart';
@@ -77,6 +78,10 @@ void main() async {
   // initialize crashlytics
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   FirebaseManager().initNotification();
 
   FirebaseMessaging.instance.getToken().then((value) async {
@@ -227,6 +232,8 @@ class MyApp extends StatelessWidget {
                 create: (context) => DataAddProvider()),
             ChangeNotifierProvider<UserManageProvider>(
                 create: (context) => UserManageProvider()),
+            ChangeNotifierProvider<ProfileProvider>(
+                create: (context) => ProfileProvider()),
             ChangeNotifierProvider<TowerProvider>(
                 create: (context) => TowerProvider()),
             ChangeNotifierProvider<TurbineProvider>(

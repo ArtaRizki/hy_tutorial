@@ -176,7 +176,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         isFetching = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
-        Map<String, String> param = {};
+        Map<String, String> param = {
+          'Filter': 'Status',
+          'FilterValue': '1',
+        };
         if (userSearchC.text.isNotEmpty)
           param.addAll({'Search': userSearchC.text});
         if (ascending) {
@@ -195,6 +198,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           param.remove('SortBy');
           param.addAll({'SortBy': 'CreatedAt'});
         }
+
         if (next != null && next != '') param.addAll({'Next': next ?? ''});
         log("PANGGIL");
         if (_pagingController.itemList?.length != 0) {
@@ -209,8 +213,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           final model = UserListModel.fromJson(jsonDecode(response.body));
           final items = model.Data ?? [];
           List<UserListModelData?> newItems;
-          newItems =
-              items.where((element) => element?.Status == 'active').toList();
+          newItems = items;
+          // items.where((element) => element?.Status == 'active').toList();
 
           // userModel = model;
           // notifyListeners();
@@ -262,7 +266,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         isFetching2 = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
-        Map<String, String> param = {};
+        Map<String, String> param = {
+          'Filter': 'Status',
+          'FilterValue': '0',
+        };
         if (userSearchC2.text.isNotEmpty)
           param.addAll({'Search': userSearchC2.text});
         if (ascending2) {
@@ -295,8 +302,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           final model = UserListModel.fromJson(jsonDecode(response.body));
           final items = model.Data ?? [];
           List<UserListModelData?> newItems;
-          newItems =
-              items.where((element) => element?.Status != 'active').toList();
+          newItems = items;
+          // items.where((element) => element?.Status != 'active').toList();
 
           // userModel = model;
           // notifyListeners();
@@ -368,32 +375,32 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   String? _selectedDivision;
   String? get selectedDivision => this._selectedDivision;
 
-  set selectedDivision(value) {
+  set selectedDivision(String? value) {
     this._selectedDivision = value;
-    notifyListeners();
+    // notifyListeners();
   }
 
   String? _selectedRole;
   String? get selectedRole => this._selectedRole;
 
-  set selectedRole(value) {
+  set selectedRole(String? value) {
     this._selectedRole = value;
-    notifyListeners();
+    // notifyListeners();
   }
 
   String? _selectedStatus;
   String? get selectedStatus => this._selectedStatus;
 
-  set selectedStatus(value) {
+  set selectedStatus(String? value) {
     this._selectedStatus = value;
-    notifyListeners();
+    // notifyListeners();
   }
 
   bool _updateV = false;
   bool get updateV => this._updateV;
   set updateV(value) {
     this._updateV = value;
-    notifyListeners();
+    // notifyListeners();
   }
 
   UserDetailModel _userDetailModel = UserDetailModel();
@@ -580,17 +587,20 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  Future<void> updateUser(BuildContext context, {required String id}) async {
+  Future<void> updateUser(BuildContext context,
+      {required String id, bool fromHome = false}) async {
     loading(true);
     FocusManager.instance.primaryFocus?.unfocus();
     Map<String, String> param = {
       // 'Name': nameC.text,
       // 'Username': usernameC.text,
       // 'Email': emailC.text,
-      'Role': selectedRole ?? '',
-      'DivisionId': selectedDivision ?? '',
-      'Status': selectedStatus ?? '',
     };
+    if (selectedRole != null) param.addAll({'Role': selectedRole ?? ''});
+    if (selectedDivision != null)
+      param.addAll({'DivisionId': selectedDivision ?? ''});
+    if (selectedStatus != null) param.addAll({'Status': selectedStatus ?? ''});
+
     final response =
         await put(Constant.BASE_API_FULL + '/admin/users/$id', body: param);
 
@@ -600,10 +610,12 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
-      Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: ((context) => UserManageView())));
+      if (!fromHome) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: ((context) => UserManageView())));
+      }
       nameC.clear();
       emailC.clear();
       usernameC.clear();

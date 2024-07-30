@@ -38,22 +38,26 @@ class TurbineModelData {
 */
 
   String? Id;
+  String? Title;
   String? TowerName;
   String? CreatedAt;
 
   TurbineModelData({
     this.Id,
+    this.Title,
     this.TowerName,
     this.CreatedAt,
   });
   TurbineModelData.fromJson(Map<String, dynamic> json) {
     Id = json['Id']?.toString();
+    Title = json['Title']?.toString();
     TowerName = json['TowerName']?.toString();
     CreatedAt = json['CreatedAt']?.toString();
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['Id'] = Id;
+    data['Title'] = Title;
     data['TowerName'] = TowerName;
     data['CreatedAt'] = CreatedAt;
     return data;

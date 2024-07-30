@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_appbar.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
-import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
-import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
+import 'package:hy_tutorial/src/profile/view/profile_edit_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../common/component/custom_navigator.dart';
 import '../../../utils/utils.dart';
-import '../../admin/view/user_manage_view.dart';
 import '../../auth/provider/auth_provider.dart';
+import '../provider/profile_provider.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -30,9 +29,13 @@ class _ProfileViewState extends BaseState<ProfileView> {
   }
 
   getData() async {
+    await context.read<ProfileProvider>().fetchProfile();
+    final data = context.read<ProfileProvider>().profileModel.Data;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    name = prefs.getString(Constant.kSetPrefName);
-    division = prefs.getString(Constant.kSetPrefDivision);
+    final name2 = prefs.getString(Constant.kSetPrefName);
+    final division2 = prefs.getString(Constant.kSetPrefDivision);
+    name = data?.Name ?? name2;
+    division = data?.Division ?? division2;
     setState(() {});
   }
 
@@ -89,9 +92,14 @@ class _ProfileViewState extends BaseState<ProfileView> {
                       ],
                     ),
                   ),
-                  Image.asset(
-                    'assets/icons/ic-edit-prof.png',
-                    scale: 4,
+                  InkWell(
+                    onTap: () async {
+                      await CusNav.nPush(context, ProfileEditView());
+                    },
+                    child: Image.asset(
+                      'assets/icons/ic-edit-prof.png',
+                      scale: 4,
+                    ),
                   ),
                 ],
               ),
@@ -133,7 +141,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
                         flex: 6,
                         child: InkWell(
                           onTap: () async {
-                            // CusNav.nPush(context, AdminHomeView());
+                            CusNav.nPush(context, ProfileEditView());
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +157,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
                                 height: 5,
                               ),
                               Text(
-                                "Ganti nama, password, dan lainnya",
+                                "Ganti nama, username, dan email",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 12,
@@ -182,65 +190,65 @@ class _ProfileViewState extends BaseState<ProfileView> {
             SizedBox(
               height: 10,
             ),
-            Container(
-              // height: 50,
-              width: double.infinity,
-              color: Colors.white,
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Image.asset(
-                        'assets/icons/ic-shield.png',
-                        scale: 3.5,
-                      ),
-                      SizedBox(
-                        width: 13,
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Kebijakan Privasi",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Pelajari kebijakan privasi pengguna aplikasi",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w300),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
+            // Container(
+            //   // height: 50,
+            //   width: double.infinity,
+            //   color: Colors.white,
+            //   padding: EdgeInsets.all(10),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       SizedBox(
+            //         height: 10,
+            //       ),
+            //       Row(
+            //         children: [
+            //           SizedBox(
+            //             width: 5,
+            //           ),
+            //           Image.asset(
+            //             'assets/icons/ic-shield.png',
+            //             scale: 3.5,
+            //           ),
+            //           SizedBox(
+            //             width: 13,
+            //           ),
+            //           Expanded(
+            //             flex: 6,
+            //             child: Column(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               children: [
+            //                 Text(
+            //                   "Kebijakan Privasi",
+            //                   style: TextStyle(
+            //                       color: Colors.black,
+            //                       fontSize: 14,
+            //                       fontWeight: FontWeight.w500),
+            //                 ),
+            //                 SizedBox(
+            //                   height: 5,
+            //                 ),
+            //                 Text(
+            //                   "Pelajari kebijakan privasi pengguna aplikasi",
+            //                   style: TextStyle(
+            //                       color: Colors.black,
+            //                       fontSize: 12,
+            //                       fontWeight: FontWeight.w300),
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //       SizedBox(
+            //         height: 8,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 10,
+            // ),
             Container(
               // height: 50,
               width: double.infinity,

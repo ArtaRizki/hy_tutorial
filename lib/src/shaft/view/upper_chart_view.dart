@@ -202,6 +202,7 @@ class _Chart extends StatelessWidget {
     final d = context.watch<DataAddProvider>();
     // UPPER
     final upper = d.upper;
+    final upperScale = d.upperScale;
     final upperCrockedLine = d.upperCrockedLine;
 
     double getBiggestXY() {
@@ -331,10 +332,14 @@ class _Chart extends StatelessWidget {
         // maxY: 10,
         // minX: -10,
         // maxX: 10,
-        minY: -getBiggestScale(getBiggestXY()) - 0.5,
-        maxY: getBiggestScale(getBiggestXY()) + 0.5,
-        minX: -getBiggestScale(getBiggestXY()) - 0.5,
-        maxX: getBiggestScale(getBiggestXY()) + 0.5,
+        minY: -(upperScale ?? 0) - 0.5,
+        maxY: (upperScale ?? 0) + 0.5,
+        minX: -(upperScale ?? 0) - 0.5,
+        maxX: (upperScale ?? 0) + 0.5,
+        // minY: -getBiggestScale(getBiggestXY()) - 0.5,
+        // maxY: getBiggestScale(getBiggestXY()) + 0.5,
+        // minX: -getBiggestScale(getBiggestXY()) - 0.5,
+        // maxX: getBiggestScale(getBiggestXY()) + 0.5,
         baselineX: baselineX,
         baselineY: baselineY,
       ),

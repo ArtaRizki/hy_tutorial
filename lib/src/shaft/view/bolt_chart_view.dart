@@ -7,28 +7,28 @@ import 'package:provider/provider.dart';
 import 'package:powers/powers.dart';
 import '../../data/provider/data_add_provider.dart';
 
-double divideUntilTwoDigits(double val) {
-  double num = val.abs(); // Use abs() to work with positive value
-  log("DTWO VAL : $val");
-  log("DTWO NUM : $num");
-  int substract = 0;
-  var floor = num.floor();
-  if (num < 10 && num % 10 != 0) substract = 1;
-  log("DTWO SUBSTRACT 1 : $substract");
-  var divide1 = floor / 10;
-  var mod1 = divide1 % 10;
-  if ((num.floor() % 10 == 0) && num < (num + 1) && mod1 == 0 && num >= 11)
-    substract = num.floor().toString().length - 1;
-  if (num >= 10 && num < 11) substract = 2;
-  log("DTWO SUBSTRACT 2 : $substract");
-  // log("DTWO NUM LENGTH : ${num.toInt().toString().length}");
-  int num2 = 10.pow(num.toInt().toString().length - substract).toInt();
-  // log("DTWO NUM2 : $num2");
-  if (val < 0) num2 = num2 * (-1);
-  // log("DTWO NUM/NUM2 ${num / num2}");
-  // log("DTWO ==================");
-  return num / num2;
-}
+// double divideUntilTwoDigits(double val) {
+//   double num = val.abs(); // Use abs() to work with positive value
+//   log("DTWO VAL : $val");
+//   log("DTWO NUM : $num");
+//   int substract = 0;
+//   var floor = num.floor();
+//   if (num < 10 && num % 10 != 0) substract = 1;
+//   log("DTWO SUBSTRACT 1 : $substract");
+//   var divide1 = floor / 10;
+//   var mod1 = divide1 % 10;
+//   if ((num.floor() % 10 == 0) && num < (num + 1) && mod1 == 0 && num >= 11)
+//     substract = num.floor().toString().length - 1;
+//   if (num >= 10 && num < 11) substract = 2;
+//   log("DTWO SUBSTRACT 2 : $substract");
+//   // log("DTWO NUM LENGTH : ${num.toInt().toString().length}");
+//   int num2 = 10.pow(num.toInt().toString().length - substract).toInt();
+//   // log("DTWO NUM2 : $num2");
+//   if (val < 0) num2 = num2 * (-1);
+//   // log("DTWO NUM/NUM2 ${num / num2}");
+//   // log("DTWO ==================");
+//   return num / num2;
+// }
 
 double getBiggestScaleMain(double value) {
   double val = value;
@@ -233,6 +233,8 @@ class _Chart extends StatelessWidget {
     final upperCrockedLine = d.upperCrockedLine;
     final listBolts = d.listBolts;
     final listTorqueSuggestions = d.listTorqueSuggestions;
+    final upperScale = d.upperScale;
+    final boltScale = d.boltScale;
 
     double getBiggestXY() {
       double upper0 = upper.isEmpty ? 0 : upper[0];
@@ -288,8 +290,8 @@ class _Chart extends StatelessWidget {
       // bolts 12 = 0.1
       // bolts 14 = 0;
       if (listBolts.length > 12) return 0.4;
-      if (listBolts.length < 6) return 0.55;
       if (listBolts.length >= 6 && listBolts.length < 12) return 0.4;
+      if (listBolts.length < 6) return 0.55;
       return 0.4;
       // double val = 0.7;
 
@@ -401,10 +403,10 @@ class _Chart extends StatelessWidget {
           getDrawingHorizontalLine: getHorizontalVerticalLine,
           getDrawingVerticalLine: getVerticalVerticalLine,
         ),
-        minY: -getBiggestXY() * 2.4,
-        maxY: getBiggestXY() * 2.4,
-        minX: -getBiggestXY() * 2.4,
-        maxX: getBiggestXY() * 2.4,
+        minY: -(boltScale ?? 0) * 1.5,
+        maxY: (boltScale ?? 0) * 1.5,
+        minX: -(boltScale ?? 0) * 1.5,
+        maxX: (boltScale ?? 0) * 1.5,
         // minY: -(getBiggestScaleMain(getBiggestXY()) * 2) - 3,
         // maxY: (getBiggestScaleMain(getBiggestXY()) * 2) + 3,
         // minX: -(getBiggestScaleMain(getBiggestXY()) * 2) - 3,
@@ -550,6 +552,8 @@ class _ChartBG extends StatelessWidget {
     final upperCrockedLine = d.upperCrockedLine;
     final listBolts = d.listBolts;
     final listTorqueSuggestions = d.listTorqueSuggestions;
+    final upperScale = d.upperScale;
+    final boltScale = d.boltScale;
 
     double getBiggestXY() {
       double upper0 = upper.isEmpty ? 0 : upper[0];
@@ -608,8 +612,8 @@ class _ChartBG extends StatelessWidget {
       // bolts 12 = 0.1
       // bolts 14 = 0;
       if (listBolts.length > 12) return 0.4;
-      if (listBolts.length < 6) return 0.55;
       if (listBolts.length >= 6 && listBolts.length < 12) return 0.4;
+      if (listBolts.length < 6) return 0.55;
       return 0.4;
       // double val = 0.7;
 
@@ -707,10 +711,10 @@ class _ChartBG extends StatelessWidget {
           getDrawingHorizontalLine: getHorizontalVerticalLine,
           getDrawingVerticalLine: getVerticalVerticalLine,
         ),
-        minY: -getBiggestXY() * 1.7,
-        maxY: getBiggestXY() * 1.7,
-        minX: -getBiggestXY() * 1.7,
-        maxX: getBiggestXY() * 1.7,
+        minY: -(boltScale ?? 0) * 1,
+        maxY: (boltScale ?? 0) * 1,
+        minX: -(boltScale ?? 0) * 1,
+        maxX: (boltScale ?? 0) * 1,
         // minY: -(getBiggestScaleMain(getBiggestXY())) - 3,
         // maxY: (getBiggestScaleMain(getBiggestXY())) + 3,
         // minX: -(getBiggestScaleMain(getBiggestXY())) - 3,
@@ -858,6 +862,9 @@ class _ScatterChart extends StatelessWidget {
     final listBoltsKey = d.listBoltsKey;
     final listTorqueSuggestionsKey = d.listTorqueSuggestionsKey;
     final listTorqueSuggestionsY = d.listTorqueSuggestionsY;
+    final upperScale = d.upperScale;
+    final boltScale = d.boltScale;
+    log("BOLT SCALE : $boltScale");
 
     double getBiggestXY() {
       double upper0 = upper.isEmpty ? 0 : upper[0];
@@ -911,17 +918,21 @@ class _ScatterChart extends StatelessWidget {
       if (listBolts.length >= 16) return 6;
       if (listBolts.length >= 14) return 8;
       if (listBolts.length >= 12) return 10;
-      var number = getBiggestScaleMain(getBiggestXY());
+      var number = getBiggestScaleMain(boltScale ?? 0);
+      // var number = getBiggestScaleMain(getBiggestXY());
       if (number < 1) return 6;
       if (number <= 2.1) return 8;
+      // return 8;
       return 12;
     }
 
     double getFontSize() {
-      if (listBolts.length >= 12) return 9;
-      var number = getBiggestScaleMain(getBiggestXY());
+      if (listBolts.length >= 12) return 12;
+      var number = getBiggestScaleMain(boltScale ?? 0);
+      // var number = getBiggestScaleMain(getBiggestXY());
       if (number < 1) return 8;
       if (number <= 2.1) return 10;
+      // return 10;
       return 14;
     }
 
@@ -1017,10 +1028,10 @@ class _ScatterChart extends StatelessWidget {
           getDrawingHorizontalLine: getHorizontalVerticalLine,
           getDrawingVerticalLine: getVerticalVerticalLine,
         ),
-        minY: -getBiggestXY() * 2,
-        maxY: getBiggestXY() * 2,
-        minX: -getBiggestXY() * 2,
-        maxX: getBiggestXY() * 2,
+        minY: -(boltScale ?? 0) * 1.2,
+        maxY: (boltScale ?? 0) * 1.2,
+        minX: -(boltScale ?? 0) * 1.2,
+        maxX: (boltScale ?? 0) * 1.2,
         // minY: -(getBiggestScaleMain(getBiggestXY()) * 1.4) - 3,
         // maxY: (getBiggestScaleMain(getBiggestXY()) * 1.4) + 3,
         // minX: -(getBiggestScaleMain(getBiggestXY()) * 1.4) - 3,
@@ -1166,6 +1177,8 @@ class _ScatterChartS extends StatelessWidget {
     final upperCrockedLine = d.upperCrockedLine;
     final listBolts = d.listBolts;
     final listTorqueSuggestions = d.listTorqueSuggestions;
+    final upperScale = d.upperScale;
+    final boltScale = d.boltScale;
 
     double getBiggestXY() {
       double upper0 = upper.isEmpty ? 0 : upper[0];
@@ -1210,10 +1223,12 @@ class _ScatterChartS extends StatelessWidget {
     }
 
     double getFontSize() {
-      if (listBolts.length >= 12) return 10;
-      var number = getBiggestScaleMain(getBiggestXY());
+      if (listBolts.length >= 12) return 12;
+      var number = getBiggestScaleMain(boltScale ?? 0);
+      // var number = getBiggestScaleMain(getBiggestXY());
       if (number < 1) return 8;
       if (number <= 2.1) return 10;
+      // return 10;
       return 14;
     }
 
@@ -1314,10 +1329,10 @@ class _ScatterChartS extends StatelessWidget {
           getDrawingHorizontalLine: getHorizontalVerticalLine,
           getDrawingVerticalLine: getVerticalVerticalLine,
         ),
-        minY: -getBiggestXY() * 2.7,
-        maxY: getBiggestXY() * 2.7,
-        minX: -getBiggestXY() * 2.7,
-        maxX: getBiggestXY() * 2.7,
+        minY: -(boltScale ?? 0) * 1.8,
+        maxY: (boltScale ?? 0) * 1.8,
+        minX: -(boltScale ?? 0) * 1.8,
+        maxX: (boltScale ?? 0) * 1.8,
         // minY: -(getBiggestScaleMain(getBiggestXY()) * 2.5) - 3,
         // maxY: (getBiggestScaleMain(getBiggestXY()) * 2.5) + 3,
         // minX: -(getBiggestScaleMain(getBiggestXY()) * 2.5) - 3,

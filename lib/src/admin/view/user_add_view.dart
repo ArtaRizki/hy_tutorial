@@ -35,9 +35,8 @@ class _UserAddViewState extends BaseState<UserAddView> {
       p.nipC.text = '';
       final division = context.read<DivisionProvider>().divisionModel.Data;
       p.selectedDivision = division
-              ?.firstWhere((element) => element?.Name == data?.Data?.Division)
-              ?.Id ??
-          "";
+          ?.firstWhere((element) => element?.Name == data?.Data?.Division)
+          ?.Id;
       p.usernameC.text = data?.Data?.Username ?? '';
       p.emailC.text = data?.Data?.Email ?? '';
       p.passwordC.text = '';
@@ -102,7 +101,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
                         } else {
                           await Utils.showYesNoDialog(
                               context: context,
-                              title: "Konfiramsi",
+                              title: "Konfirmasi",
                               desc: "Apakah Data Anda Sudah Benar?",
                               yesCallback: () => handleTap(() async {
                                     Navigator.pop(context);
@@ -136,11 +135,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
                         } else {
                           await Utils.showYesNoDialog(
                               context: context,
-                              title: "Konfiramsi",
+                              title: "Konfirmasi",
                               desc: "Apakah Data Anda Sudah Benar?",
                               yesCallback: () => handleTap(() async {
                                     Navigator.pop(context);
-
                                     dataP.addUser(context);
                                   }),
                               noCallback: () => Navigator.pop(context));
