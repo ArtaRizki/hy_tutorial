@@ -15,6 +15,7 @@ import '../../../utils/utils.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../../profile/provider/profile_provider.dart';
 import '../../shaft/view/shaft_latest_view.dart';
+import '../provider/home_provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -56,7 +57,8 @@ class _HomeViewState extends BaseState<HomeView> {
   }
 
   getData() async {
-    await context.read<ProfileProvider>().fetchProfile();
+    Utils.showLoading();
+    await context.read<ProfileProvider>().fetchProfile(withLoading: false);
     final data = context.read<ProfileProvider>().profileModel.Data;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final name2 = prefs.getString(Constant.kSetPrefName);
@@ -64,7 +66,9 @@ class _HomeViewState extends BaseState<HomeView> {
     name = data?.Name ?? name2;
     division = data?.Division ?? division2;
     setState(() {});
-    await context.read<AuthProvider>().getConfig();
+    await context.read<AuthProvider>().getConfig(withLoading: false);
+    await context.read<HomeProvider>().fetchUserList(withLoading: true);
+    Utils.dismissLoading();
   }
 
   @override

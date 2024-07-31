@@ -324,13 +324,13 @@ class _TurbineViewState extends BaseState<TurbineView> {
                             final f = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ShaftDetailView(
-                                          id: '01J30MN6BRT962T3E8JPMK157H',
-                                          // id: item.Id ?? ''
-                                          // id: '01J1YT2GYVWPNJX777WM9S76DC',
-                                          // id: '01J06H7N5A16M6FGP600A6MH0F',
-                                          // id: '01J20BBZFRKTRDS9JJYDD6GK5P',
-                                        )));
+                                    builder: (context) =>
+                                        ShaftDetailView(id: item.Id ?? ''
+                                            // id: '01J30MN6BRT962T3E8JPMK157H',
+                                            // id: '01J1YT2GYVWPNJX777WM9S76DC',
+                                            // id: '01J06H7N5A16M6FGP600A6MH0F',
+                                            // id: '01J20BBZFRKTRDS9JJYDD6GK5P',
+                                            )));
                             if (f != null) {
                               turbineP.next = null;
                               pagingC.refresh();

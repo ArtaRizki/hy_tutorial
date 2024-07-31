@@ -71,7 +71,8 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
   }
 
   getData() async {
-    await context.read<ProfileProvider>().fetchProfile();
+    Utils.showLoading();
+    await context.read<ProfileProvider>().fetchProfile(withLoading: false);
     final data = context.read<ProfileProvider>().profileModel.Data;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final name2 = prefs.getString(Constant.kSetPrefName);
@@ -79,8 +80,9 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
     name = data?.Name ?? name2;
     division = data?.Division ?? division2;
     setState(() {});
-    await context.read<AuthProvider>().getConfig();
-    await context.read<HomeProvider>().fetchUserList();
+    await context.read<AuthProvider>().getConfig(withLoading: false);
+    await context.read<HomeProvider>().fetchUserList(withLoading: true);
+    Utils.dismissLoading();
   }
 
   @override
@@ -140,7 +142,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
     Widget bodyKontenActive() {
       return RefreshIndicator(
         onRefresh: () async {
-          await homeP.fetchUserList();
+          await getData();
           // userManageP.next = null;
           // if ((userManageP.pagingController.itemList ?? []).isEmpty) {
           //   userManageP.pagingController.refresh();

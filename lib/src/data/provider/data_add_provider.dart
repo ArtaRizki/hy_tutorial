@@ -384,7 +384,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdData = turbineCreateModel.data?.chart?.bd;
     final bdCrockness = turbineCreateModel.data?.bdCrockedness;
     final upperData = turbineCreateModel.data?.chart?.upper;
-    upperScale = turbineCreateModel.data?.chart?.upperScale;
+    upperScale = turbineCreateModel.data?.chart?.upperScale?.abs();
     final upperCrockness = turbineCreateModel.data?.totalCrockedness;
     boltScale = turbineCreateModel.data?.torqueCalculation?.scale;
     var boltsData = turbineCreateModel.data?.torqueCalculation?.details;
@@ -560,7 +560,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdData = turbineDetailModel.data?.chart?.bd;
     final bdCrockness = turbineDetailModel.data?.bdCrockedness;
     final upperData = turbineDetailModel.data?.chart?.upper;
-    upperScale = turbineDetailModel.data?.chart?.upperScale;
+    upperScale = turbineDetailModel.data?.chart?.upperScale?.abs();
     final upperCrockness = turbineDetailModel.data?.totalCrockedness;
     boltScale = turbineDetailModel.data?.torqueCalculation?.scale;
     var boltsData = turbineDetailModel.data?.torqueCalculation?.details;
@@ -741,7 +741,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     final bdData = turbineLatestModel.data?.chart?.bd;
     final bdCrockness = turbineLatestModel.data?.bdCrockedness;
     final upperData = turbineLatestModel.data?.chart?.upper;
-    upperScale = turbineLatestModel.data?.chart?.upperScale;
+    upperScale = turbineLatestModel.data?.chart?.upperScale?.abs();
     final upperCrockness = turbineLatestModel.data?.totalCrockedness;
     boltScale = turbineLatestModel.data?.torqueCalculation?.scale;
     var boltsData = turbineLatestModel.data?.torqueCalculation?.details;

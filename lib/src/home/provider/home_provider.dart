@@ -40,8 +40,8 @@ class HomeProvider extends BaseController with ChangeNotifier {
   UserListModel get userListModel => this._userListModel;
   set userListModel(UserListModel value) => this._userListModel = value;
 
-  Future<void> fetchUserList() async {
-    loading(true);
+  Future<void> fetchUserList({bool withLoading = false}) async {
+    if (withLoading) loading(true);
     userListModel = UserListModel();
     Map<String, String> param = {
       'Filter': 'Status',
@@ -58,7 +58,7 @@ class HomeProvider extends BaseController with ChangeNotifier {
 
       userListModel = model.copyWith(Data: newItems);
       notifyListeners();
-      loading(false);
+      if (withLoading) loading(false);
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);

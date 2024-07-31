@@ -144,8 +144,8 @@ class AuthProvider extends BaseController with ChangeNotifier {
     // }
   }
 
-  Future<void> getConfig() async {
-    loading(true);
+  Future<void> getConfig({bool withLoading = false}) async {
+    if (withLoading) loading(true);
     final response =
         await get(Constant.BASE_API_FULL + '/configs/root-location');
 
@@ -163,7 +163,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
       await prefs.setBool(
           Constant.kSetPrefConfigStatus, model.Data?.Status ?? false);
 
-      loading(false);
+      if (withLoading) loading(false);
       // return model;
     } else {
       final message = jsonDecode(response.body)["Message"];
@@ -198,7 +198,6 @@ class AuthProvider extends BaseController with ChangeNotifier {
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
-      
 
       loading(false);
       return model;
