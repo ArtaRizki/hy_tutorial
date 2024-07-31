@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:easy_localization/easy_localization.dart';
+// import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' as Material;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -672,7 +672,8 @@ class Utils {
             child: Text(
               title,
               textAlign: TextAlign.center,
-              style: Constant.primaryTextStyle.copyWith(fontWeight: Constant.bold),
+              style:
+                  Constant.primaryTextStyle.copyWith(fontWeight: Constant.bold),
             ),
           ),
         ],
@@ -687,7 +688,9 @@ class Utils {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Expanded(child: CustomButton.secondaryButton(noText, noCallback)),
               SizedBox(width: 10),
-              Expanded(child: CustomButton.mainButton(yesText, yesCallback, color: Colors.red)),
+              Expanded(
+                  child: CustomButton.mainButton(yesText, yesCallback,
+                      color: Colors.red)),
             ]),
           ],
     );

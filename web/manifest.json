@@ -1,6 +1,6 @@
 {
-    "name": "bimops",
-    "short_name": "bimops",
+    "name": "hy_tutorial",
+    "short_name": "hy_tutorial",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

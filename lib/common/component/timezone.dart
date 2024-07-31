@@ -1,11 +1,11 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
+// import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 
 String selectedTimezone = 'default';
 
-String getTimezone(){
+String getTimezone() {
   final timezoneName = DateTime.now().timeZoneName;
-  switch(timezoneName){
+  switch (timezoneName) {
     case 'WIB':
       return 'Asia/Jakarta';
     case 'WITA':
@@ -16,8 +16,8 @@ String getTimezone(){
   return 'Asia/Jakarta';
 }
 
-String convertGmtToTimezoneName(String gmt){
-  switch(gmt){
+String convertGmtToTimezoneName(String gmt) {
+  switch (gmt) {
     case "+07:00":
       return "WIB";
     case "+08:00":
@@ -29,32 +29,30 @@ String convertGmtToTimezoneName(String gmt){
   }
 }
 
+// String getTimezoneByLocation(double lat, double lng) {
+//   if (selectedTimezone == 'default') {
+//     return tzmap.latLngToTimezoneString(lat, lng);
+//   } else {
+//     return convertGmtToTimezoneName(selectedTimezone);
+//   }
+// }
 
+// Future<String> getTimezoneFromLastKnownLocation() async {
+//   final permission = await Geolocator.checkPermission();
+//   if (permission == LocationPermission.denied ||
+//       permission == LocationPermission.deniedForever) {
+//     return getTimezone();
+//   }
+//   final position = await Geolocator.getLastKnownPosition();
+//   if (position == null) {
+//     return getTimezone();
+//   } else if (selectedTimezone == 'default') {
+//     return tzmap.latLngToTimezoneString(position.latitude, position.longitude);
+//   } else {
+//     return selectedTimezone;
+//   }
+// }
 
-String getTimezoneByLocation(double lat, double lng){
-  if(selectedTimezone == 'default'){
-    return tzmap.latLngToTimezoneString(lat, lng);
-  } else {
-    return convertGmtToTimezoneName(selectedTimezone);
-  }
-}
-
-Future<String> getTimezoneFromLastKnownLocation() async {
-  final permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever){
-    return getTimezone();
-  }
-  final position = await Geolocator.getLastKnownPosition();
-  if(position == null){
-    return getTimezone();
-  } else if(selectedTimezone == 'default'){
-    return tzmap.latLngToTimezoneString(position.latitude, position.longitude);
-  } else {
-    return selectedTimezone;
-  }
-}
-
-String convertToGmt(String nativeTimezone){
+String convertToGmt(String nativeTimezone) {
   return nativeTimezone;
-
 }

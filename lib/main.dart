@@ -6,7 +6,7 @@ import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
 import 'package:hy_tutorial/src/tower/provider/tower_provider.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
-import 'package:easy_localization/easy_localization.dart';
+// import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 
@@ -22,17 +22,17 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+// import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:timeago/timeago.dart' as TIMEAGO;
+// import 'package:timeago/timeago.dart' as TIMEAGO;
 import 'common/component/timezone.dart';
-import 'package:easy_localization/easy_localization.dart';
+// import 'package:easy_localization/easy_localization.dart';
 // import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'dart:io';
-import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
-import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+// import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+// import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'common/library/firebase_manager.dart';
 import 'src/profile/provider/profile_provider.dart';
 import 'utils/nav_observer.dart';
@@ -50,32 +50,32 @@ void main() {
     await WidgetsFlutterBinding.ensureInitialized();
 
     await requestPermission(Permission.location);
-    await requestPermission(Permission.storage);
-    await requestPermission(Permission.accessMediaLocation);
-    await requestPermission(Permission.manageExternalStorage);
-    await requestPermission(Permission.photos);
+    // await requestPermission(Permission.storage);
+    // await requestPermission(Permission.accessMediaLocation);
+    // await requestPermission(Permission.manageExternalStorage);
+    // await requestPermission(Permission.photos);
 
     /// [START] initialize Firebase
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
 
     /// [START] Google maps config for reduce crash event while using Google Maps SDK
-    final GoogleMapsFlutterPlatform mapsImplementation =
-        GoogleMapsFlutterPlatform.instance;
-    if (mapsImplementation is GoogleMapsFlutterAndroid) {
-      mapsImplementation.useAndroidViewSurface = true;
-    }
+    // final GoogleMapsFlutterPlatform mapsImplementation =
+    //     GoogleMapsFlutterPlatform.instance;
+    // if (mapsImplementation is GoogleMapsFlutterAndroid) {
+    //   mapsImplementation.useAndroidViewSurface = true;
+    // }
 
     /// [END]
 
     /// [START] initialize locale
     // init lib easy localization
-    await EasyLocalization.ensureInitialized();
+    // await EasyLocalization.ensureInitialized();
     // localized indonesian time ago
-    TIMEAGO.setLocaleMessages("id", TIMEAGO.IdMessages());
-    if (kDebugMode) {
-      log(getTimezone());
-    }
+    // TIMEAGO.setLocaleMessages("id", TIMEAGO.IdMessages());
+    // if (kDebugMode) {
+    //   log(getTimezone());
+    // }
 
     /// [END] initialize locale
 
@@ -141,9 +141,9 @@ void main() {
     // }
 
     // initialize flutter downloader
-    await FlutterDownloader.initialize(
-      debug: false, // optional: set false to disable loging logs to console
-    );
+    // await FlutterDownloader.initialize(
+    // debug: false, // optional: set false to disable loging logs to console
+    // );
     // FlutterAppBadger.removeBadge();
 
     /// [START] Cache directory system management for storing Face Recognition Tflite Model & maintain lost image from state restoration
@@ -193,22 +193,21 @@ void main() {
     log("INITIAL ROUTE : $initialRoute");
 
     /// [END] initialRoute definition
-    runApp(
-      //   MyApp(
-      //   initialRoute: initialRoute,
-      // )
-      EasyLocalization(
-        supportedLocales: [
-          Locale('id', 'ID'),
-          Locale('en'),
-        ],
-        path: 'assets/translations',
-        // <-- change the path of the translation files
-        fallbackLocale: Locale('id', 'ID'),
-        child: MyApp(/*initialRoute: initialRoute*/),
-      ),
-      // MyApp())
-    );
+    runApp(MyApp(
+            //   initialRoute: initialRoute,
+            )
+        // EasyLocalization(
+        //   supportedLocales: [
+        //     Locale('id', 'ID'),
+        //     Locale('en'),
+        //   ],
+        //   path: 'assets/translations',
+        //   // <-- change the path of the translation files
+        //   fallbackLocale: Locale('id', 'ID'),
+        //   child: MyApp(/*initialRoute: initialRoute*/),
+        // ),
+        // MyApp())
+        );
   }, (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   });
@@ -228,7 +227,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    checkLang(context);
+    // checkLang(context);
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MultiProvider(
@@ -253,9 +252,9 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             title: 'HY TUTORIAL',
             restorationScopeId: 'root',
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
+            // localizationsDelegates: context.localizationDelegates,
+            // supportedLocales: context.supportedLocales,
+            // locale: context.locale,
             navigatorObservers: [XNObsever()],
             navigatorKey: NavigationService.navigatorKey,
             theme: Constant.mainThemeData,
@@ -279,12 +278,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Future checkLang(BuildContext context) async {
-  try {
-    final lang = Localizations.localeOf(context).languageCode;
-    Intl.defaultLocale = lang;
-  } catch (exception, stack) {}
-}
+// Future checkLang(BuildContext context) async {
+//   try {
+//     final lang = Localizations.localeOf(context).languageCode;
+//     Intl.defaultLocale = lang;
+//   } catch (exception, stack) {}
+// }
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "bimops" "\0"
+            VALUE "FileDescription", "hy_tutorial" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "bimops" "\0"
+            VALUE "InternalName", "hy_tutorial" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "bimops.exe" "\0"
-            VALUE "ProductName", "bimops" "\0"
+            VALUE "OriginalFilename", "hy_tutorial.exe" "\0"
+            VALUE "ProductName", "hy_tutorial" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

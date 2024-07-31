@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:easy_localization/easy_localization.dart';
+// import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
@@ -45,7 +45,6 @@ class _UserDetailViewState extends State<UserDetailView>
             title: "Simpan Perubahan",
             desc: "Apakah anda yakin\ningin menyimpan perubahan?",
             yesCallback: () async {
-            
               Navigator.pop(context);
             },
             noCallback: () async {
@@ -76,7 +75,9 @@ class _UserDetailViewState extends State<UserDetailView>
                 desc: "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
                 yesCallback: () async {
                   Navigator.pop(context);
-                  await context.read<UserManageProvider>().deleteUser(context,id: userP?.Id ?? "0");
+                  await context
+                      .read<UserManageProvider>()
+                      .deleteUser(context, id: userP?.Id ?? "0");
                 },
                 noCallback: () async {
                   Navigator.pop(context);
