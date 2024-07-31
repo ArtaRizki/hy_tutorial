@@ -318,7 +318,9 @@ class _Chart extends StatelessWidget {
                 );
               }).toList();
             },
-            tooltipBgColor: Constant.primaryColor,
+            getTooltipColor: (touchedSpots) {
+              return Constant.primaryColor;
+            },
           ),
         ),
         lineBarsData: [
@@ -640,7 +642,9 @@ class _ChartBG extends StatelessWidget {
                 );
               }).toList();
             },
-            tooltipBgColor: Constant.primaryColor,
+            getTooltipColor: (touchedSpots) {
+              return Constant.primaryColor;
+            },
           ),
         ),
         lineBarsData: [
@@ -944,14 +948,17 @@ class _ScatterChart extends StatelessWidget {
             listBolts[index][0],
             listBolts[index][1],
             show: true,
-            radius: getBoltRadius(),
+            dotPainter: FlDotCirclePainter(
+              radius: getBoltRadius(),
+              color: listTorqueSuggestionsKey.contains(listBoltsKey[index])
+                  ? Colors.red
+                  : Colors.grey.shade600,
+            ),
+
             // radius:
             //     listBolts.length > 12 || getBiggestScaleMain(getBiggestXY()) < 2
             //         ? 6
             //         : 12,
-            color: listTorqueSuggestionsKey.contains(listBoltsKey[index])
-                ? Colors.red
-                : Colors.grey.shade600,
           ),
         ),
         scatterLabelSettings: ScatterLabelSettings(
@@ -1247,7 +1254,9 @@ class _ScatterChartS extends StatelessWidget {
                 ),
               );
             },
-            tooltipBgColor: Constant.textHintColor2,
+            getTooltipColor: (touchedSpots) {
+              return Constant.primaryColor;
+            },
           ),
         ),
         scatterSpots: List.generate(
@@ -1256,8 +1265,10 @@ class _ScatterChartS extends StatelessWidget {
             listBolts[index][0],
             listBolts[index][1],
             show: true,
-            radius: 18.7,
-            color: Colors.transparent,
+            dotPainter: FlDotCirclePainter(
+              radius: 18.7,
+              color: Colors.transparent,
+            ),
           ),
         ),
         scatterLabelSettings: ScatterLabelSettings(

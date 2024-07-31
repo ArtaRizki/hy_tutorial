@@ -32,6 +32,7 @@ class CustomButton {
                 TextStyle(
                   fontWeight: Constant.medium,
                   fontSize: fontSize ?? 16,
+                  color: Colors.white,
                 ),
             textAlign: TextAlign.center,
           ),

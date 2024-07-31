@@ -197,10 +197,8 @@ class AuthProvider extends BaseController with ChangeNotifier {
         await post(Constant.BASE_API_FULL + '/auth/register', body: param);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = BaseResponse.from(jsonDecode(response.body));
-      nameC.clear();
-      usernameC.clear();
-      passC.clear();
+      final model = BaseResponse.from(response);
+      
 
       loading(false);
       return model;

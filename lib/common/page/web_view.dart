@@ -1,23 +1,39 @@
-import 'package:hy_tutorial/common/component/custom_appbar.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../utils/utils.dart';
 import '../helper/constant.dart';
 
-class WebViewPage extends StatelessWidget {
+
+class WebViewPage extends StatefulWidget {
   final String title;
   final String url;
 
   WebViewPage(this.title, this.url);
 
   @override
+  State<WebViewPage> createState() => _WebViewPageState();
+}
+
+class _WebViewPageState extends State<WebViewPage> {
+  late WebViewController controller;
+  @override
+  void initState() {
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(widget.url));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(context, title,
-          isCenter: true, isLeading: true, color: Colors.black),
-      // appBar: (title != "Panduan Pengguna") ? Utils.appBar(title) : null,
+      // appBar: CustomAppBar.appBar(context, widget.title,
+      //     isCenter: true, isLeading: true, color: Colors.black),
+      appBar: (widget.title != "Panduan Pengguna")
+          ? Utils.appBar(widget.title)
+          : null,
       body: InkWell(
         onDoubleTap: () {
           ////
@@ -25,21 +41,15 @@ class WebViewPage extends StatelessWidget {
         onLongPress: () {
           /////
         },
-        child: (title != "Panduan Pengguna")
-            ? WebView(
-                initialUrl: url,
-                javascriptMode: JavascriptMode.unrestricted,
-              )
+        child: (widget.title != "Panduan Pengguna")
+            ? WebViewWidget(controller: controller)
             : Container(
                 color: Constant.primaryColor,
                 child: SafeArea(
                   left: false,
                   right: false,
                   bottom: false,
-                  child: WebView(
-                    initialUrl: url,
-                    javascriptMode: JavascriptMode.unrestricted,
-                  ),
+                  child: WebViewWidget(controller: controller),
                 ),
               ),
       ),

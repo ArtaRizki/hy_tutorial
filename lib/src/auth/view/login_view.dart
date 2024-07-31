@@ -178,7 +178,7 @@ class _LoginViewState extends State<LoginView> {
                   borderRadius: BorderRadius.circular(10),
                   contentPadding: EdgeInsets.symmetric(vertical: 8),
                   textStyle:
-                      TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                      TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.white)),
               SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

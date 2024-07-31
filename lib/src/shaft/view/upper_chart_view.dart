@@ -261,7 +261,9 @@ class _Chart extends StatelessWidget {
                 );
               }).toList();
             },
-            tooltipBgColor: Constant.primaryColor,
+            getTooltipColor: (touchedSpots) {
+              return Constant.primaryColor;
+            },
           ),
         ),
         lineBarsData: [

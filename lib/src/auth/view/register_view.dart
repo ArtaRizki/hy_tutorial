@@ -368,8 +368,13 @@ class _RegisterViewState extends State<RegisterView> {
                 try {
                   final result = await context.read<AuthProvider>().register();
                   if (result.success == true) {
-                    Navigator.pushReplacementNamed(context, '/home',
+                    await Utils.showSuccess(msg: result.message ?? "Sukses");
+                    await Future.delayed(Duration(seconds: 2));
+                    Navigator.pushReplacementNamed(context, '/login',
                         arguments: false);
+                    context.read<AuthProvider>().nameC.clear();
+                    context.read<AuthProvider>().usernameC.clear();
+                    context.read<AuthProvider>().passC.clear();
                   } else {
                     Utils.showFailed(msg: result.message ?? "Error");
                   }
@@ -382,8 +387,10 @@ class _RegisterViewState extends State<RegisterView> {
               },
                   borderRadius: BorderRadius.circular(10),
                   contentPadding: EdgeInsets.symmetric(vertical: 8),
-                  textStyle:
-                      TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: Colors.white)),
               SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

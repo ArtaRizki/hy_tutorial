@@ -8,7 +8,7 @@ import '../library/firebase_manager.dart';
 import 'base_controller.dart';
 
 abstract class BaseState<T extends StatefulWidget> extends State<T> {
-  FirebaseManager firebaseManager = FirebaseManager();
+  //FirebaseManager firebaseManager = FirebaseManager();
   BaseController? baseC;
   StreamSubscription? firebaseSubs;
 

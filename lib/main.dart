@@ -86,7 +86,7 @@ void main() {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
     };
-    FirebaseManager().initNotification();
+    //FirebaseManager().initNotification();
 
     FirebaseMessaging.instance.getToken().then((value) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
