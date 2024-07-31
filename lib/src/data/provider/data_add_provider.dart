@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -1083,7 +1084,21 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  List<Widget> detailUnit() {
+  onChangedPLTA2(TowerModelData? v) {
+    if (v != null) {
+      selectedTower = v.Id ?? '0';
+      pltaC.text = v.Name ?? '';
+    }
+  }
+
+  List<TowerModelData?> searchPlta(String pattern) {
+    return (towerList ?? [])
+        .where(
+            (element) => (element?.Name ?? '').toLowerCase().contains(pattern))
+        .toList();
+  }
+
+  List<Widget> detailUnit(VoidCallback refresh) {
     return [
       Text("Detail Unit", style: Constant.blackBold20),
       Constant.xSizedBox8,
@@ -1094,21 +1109,103 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         controller: titleC,
         textInputType: TextInputType.name,
         labelText: "Nama File",
+        hintText: "Nama File",
       ),
       Constant.xSizedBox16,
-      CustomDropdown.searchDropdown(
-        controller: pltaC,
-        iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-        contentPadding: EdgeInsets.all(2),
-        padding: EdgeInsets.zero,
-        borderColor: Constant.primaryColor,
-        labelText: 'Nama PLTA',
-        selectedItem: selectedTower,
-        hintText: "Pilih PLTA",
-        list: (towerList ?? []).map((e) => e?.Name ?? '').toList(),
-        onChanged: onChangedPLTA,
+      Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          children: [
+            Text(
+              "Nama PLTA",
+              style: Constant.primaryTextStyle
+                  .copyWith(fontSize: 14, fontWeight: Constant.medium),
+            ),
+            // Text(
+            //   '*',
+            //   style: Constant.primaryTextStyle
+            //       .copyWith(fontWeight: Constant.medium, color: Colors.red),
+            // )
+          ],
+        ),
+      ),
+      DropDownSearchField<TowerModelData?>(
+        displayAllSuggestionWhenTap: true,
+        textFieldConfiguration: TextFieldConfiguration(
+          controller: pltaC,
+          autofocus: false,
+          // style: DefaultTextStyle.of(context).style.copyWith(
+          //   fontStyle: FontStyle.italic
+          // ),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.zero,
+            hintText: "Pilih PLTA",
+            isDense: false,
+            hintStyle: TextStyle(color: Constant.textHintColor2),
+            filled: true,
+            enabled: true,
+            fillColor: Colors.white,
+            suffixIconColor: Constant.primaryColor,
+            suffix: InkWell(
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                pltaC.clear();
+                selectedTower = null;
+                refresh;
+              },
+              child: Icon(
+                Icons.close,
+                size: 24,
+              ),
+            ),
+            hoverColor: Constant.primaryColor,
+            focusColor: Constant.primaryColor,
+            prefix: SizedBox(width: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                width: 0.5,
+                color: Constant.borderSearchColor,
+                style: BorderStyle.solid,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                width: 0.5,
+                color: Constant.borderSearchColor,
+                style: BorderStyle.solid,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                width: 1,
+                color: Constant.primaryColor,
+                style: BorderStyle.solid,
+              ),
+            ),
+          ),
+        ),
+        onSuggestionSelected: onChangedPLTA2,
+        suggestionsCallback: (pattern) async => await searchPlta(pattern),
+        itemBuilder: (context, suggestion) =>
+            ListTile(title: Text(suggestion?.Name ?? '')),
       ),
       Constant.xSizedBox16,
+      // CustomDropdown.searchDropdown(
+      //   controller: pltaC,
+      //   iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+      //   contentPadding: EdgeInsets.all(2),
+      //   padding: EdgeInsets.zero,
+      //   borderColor: Constant.primaryColor,
+      //   labelText: 'Nama PLTA',
+      //   selectedItem: selectedTower,
+      //   hintText: "Pilih PLTA",
+      //   list: (towerList ?? []).map((e) => e?.Name ?? '').toList(),
+      //   onChanged: onChangedPLTA,
+      // ),
+      // Constant.xSizedBox16,
     ];
   }
 
@@ -1249,6 +1346,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Gen. Bearing-Kopling",
+        hintText: "Gen. Bearing-Kopling",
         onChange: onChangedBearingToCoupling,
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
@@ -1268,6 +1366,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Kopling - Turbin",
+        hintText: "Kopling - Turbin",
         onChange: onChangedKoplingToTurbine,
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
@@ -1319,6 +1418,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Jumlah Baut",
+        hintText: "Jumlah Baut",
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
           child: Text(
@@ -1338,6 +1438,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Torsi Terkini",
+        hintText: "Torsi Terkini",
         onChange: onChangedCurrentTorque,
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
@@ -1358,6 +1459,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Max Torsi",
+        hintText: "Max Torsi",
         onChange: onChangedMaxTorque,
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
@@ -1378,6 +1480,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           FilteringTextInputFormatter.digitsOnly
         ],
         labelText: "Jumlah Selisih",
+        hintText: "Jumlah Selisih",
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
           child: Text(
