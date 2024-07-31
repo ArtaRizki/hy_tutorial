@@ -37,7 +37,7 @@ class _DataAddViewState extends State<DataAddView> {
             Expanded(
               child: ListView(
                 children: [
-                  ...p.detailUnit(),
+                  ...p.detailUnit(() => setState(() {})),
                   ...p.boltDetailForm(),
                   ...p.shaftForm(),
                 ],

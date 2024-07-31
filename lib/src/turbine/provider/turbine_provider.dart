@@ -152,7 +152,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
   Future<void> getTurbine() async {
     pagingController = PagingController(firstPageKey: 1)
       ..addPageRequestListener((pageKey) async {
-        log("GET TURBINE");
+        // log("GET TURBINE");
         await fetchTurbine(page: pageKey).onError((error, stackTrace) {
           if (error.toString().contains('expired token')) {
             log("ERROR EXPIRED TOKEN");
@@ -206,7 +206,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
           param.addAll({'SortBy': 'CreatedAt'});
         }
         if (next != null) param.addAll({'Next': next ?? ''});
-        log("PANGGIL");
+        // log("PANGGIL");
         if (_pagingController.itemList?.length != 0) {
           await Future.delayed(Duration(seconds: 1));
         }
@@ -258,9 +258,16 @@ class TurbineProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  clearDate() {
+  clearData() {
     startDateC.clear();
     endDateC.clear();
+    setStartDate(null);
+    setEndDate(null);
+    ascending = false;
+    descending = false;
+    towerName = false;
+    createdAt = false;
+    notifyListeners();
   }
 
   Future<TurbineCreateModel> fetchTurbineDetail(int id) async {

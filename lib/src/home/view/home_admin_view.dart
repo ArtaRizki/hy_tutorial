@@ -21,10 +21,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/utils.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../../profile/provider/profile_provider.dart';
+import '../../profile/view/profile_view.dart';
 import '../../shaft/view/shaft_latest_view.dart';
 
 class HomeAdminView extends StatefulWidget {
-  const HomeAdminView({super.key});
+  final VoidCallback jumpToProfile;
+  const HomeAdminView({super.key, required this.jumpToProfile});
 
   @override
   State<HomeAdminView> createState() => _HomeAdminViewState();
@@ -71,7 +73,8 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
   }
 
   getData() async {
-    await context.read<ProfileProvider>().fetchProfile();
+    Utils.showLoading();
+    await context.read<ProfileProvider>().fetchProfile(withLoading: false);
     final data = context.read<ProfileProvider>().profileModel.Data;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final name2 = prefs.getString(Constant.kSetPrefName);
@@ -79,8 +82,9 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
     name = data?.Name ?? name2;
     division = data?.Division ?? division2;
     setState(() {});
-    await context.read<AuthProvider>().getConfig();
-    await context.read<HomeProvider>().fetchUserList();
+    await context.read<AuthProvider>().getConfig(withLoading: false);
+    await context.read<HomeProvider>().fetchUserList(withLoading: true);
+    Utils.dismissLoading();
   }
 
   @override
@@ -121,7 +125,9 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                   ],
                 ),
                 InkWell(
-                    onTap: () async {},
+                    onTap: () async {
+                      widget.jumpToProfile;
+                    },
                     child: Image.asset('assets/icons/ic-user.png', scale: 4)),
               ],
             ),
@@ -140,7 +146,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
     Widget bodyKontenActive() {
       return RefreshIndicator(
         onRefresh: () async {
-          await homeP.fetchUserList();
+          await getData();
           // userManageP.next = null;
           // if ((userManageP.pagingController.itemList ?? []).isEmpty) {
           //   userManageP.pagingController.refresh();

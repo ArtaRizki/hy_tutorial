@@ -161,6 +161,7 @@ class CustomButton {
       bool stretched = true,
       EdgeInsetsGeometry? contentPadding,
       TextStyle? textStyle,
+      double? fontSize,
       BorderRadiusGeometry? borderRadius}) {
     return Padding(
       padding: margin ?? EdgeInsets.all(0),
@@ -177,16 +178,17 @@ class CustomButton {
         ),
         onPressed: onClick,
         child: Container(
-          padding: contentPadding ?? EdgeInsets.fromLTRB(14, 16, 16, 14),
+          padding: contentPadding ??
+              EdgeInsets.symmetric(vertical: 16, horizontal: 14),
           alignment: stretched ? Alignment.center : null,
           child: Center(
             child: Text(
               text,
               style: textStyle ??
                   TextStyle(
-                    color: Constant.primaryColor,
                     fontWeight: Constant.medium,
-                    fontSize: 16,
+                    fontSize: fontSize ?? 16,
+                    color: Constant.primaryColor,
                   ),
               textAlign: TextAlign.center,
             ),

@@ -14,10 +14,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/utils.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../../profile/provider/profile_provider.dart';
+import '../../profile/view/profile_view.dart';
 import '../../shaft/view/shaft_latest_view.dart';
+import '../provider/home_provider.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final VoidCallback jumpToProfile;
+  const HomeView({super.key, required this.jumpToProfile});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -56,7 +59,8 @@ class _HomeViewState extends BaseState<HomeView> {
   }
 
   getData() async {
-    await context.read<ProfileProvider>().fetchProfile();
+    Utils.showLoading();
+    await context.read<ProfileProvider>().fetchProfile(withLoading: false);
     final data = context.read<ProfileProvider>().profileModel.Data;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final name2 = prefs.getString(Constant.kSetPrefName);
@@ -64,7 +68,9 @@ class _HomeViewState extends BaseState<HomeView> {
     name = data?.Name ?? name2;
     division = data?.Division ?? division2;
     setState(() {});
-    await context.read<AuthProvider>().getConfig();
+    await context.read<AuthProvider>().getConfig(withLoading: false);
+    await context.read<HomeProvider>().fetchUserList(withLoading: true);
+    Utils.dismissLoading();
   }
 
   @override
@@ -102,10 +108,7 @@ class _HomeViewState extends BaseState<HomeView> {
                 ),
                 InkWell(
                     onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeAdminView()));
+                      widget.jumpToProfile;
                     },
                     child: Image.asset('assets/icons/ic-user.png', scale: 4)),
               ],

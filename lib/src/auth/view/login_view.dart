@@ -31,24 +31,9 @@ class _LoginViewState extends State<LoginView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                height: 25,
-                width: 150,
-                decoration: BoxDecoration(
-                  color: Constant.primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Container(
-                height: 25,
-                width: 150,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFABA01),
-                  borderRadius: BorderRadius.circular(10),
-                ),
+              Image.asset(
+                'assets/icons/ic-register.png',
+                scale: 4,
               ),
               // CircleAvatar(
               //   backgroundColor: Colors.grey.shade300,
@@ -177,8 +162,10 @@ class _LoginViewState extends State<LoginView> {
               },
                   borderRadius: BorderRadius.circular(10),
                   contentPadding: EdgeInsets.symmetric(vertical: 8),
-                  textStyle:
-                      TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.white)),
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: Colors.white)),
               SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

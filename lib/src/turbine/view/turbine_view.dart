@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_date_picker.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_textfield.dart';
@@ -61,167 +63,185 @@ class _TurbineViewState extends BaseState<TurbineView> {
             if (turbineP.searchOnStoppedTyping != null) {
               turbineP.searchOnStoppedTyping!.cancel();
             }
-            // turbineP.searchOnStoppedTyping = Timer(turbineP.duration, () async {
-            //   await context
-            //       .read<TurbineProvider>()
-            //       .fetchTurbine(withLoading: true);
-            turbineP.next = null;
-            pagingC.refresh();
-            // });
+            turbineP.searchOnStoppedTyping = Timer(turbineP.duration, () async {
+              turbineP.next = null;
+              pagingC.refresh();
+            });
           },
         );
 
     Widget filterAllWidget() => StatefulBuilder(
-            builder: (BuildContext context, StateSetter sheetState) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Filter',
-                  style: Constant.iPrimaryMedium14
-                      .copyWith(fontSize: 18, fontWeight: FontWeight.w500)),
-              SizedBox(height: 24),
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          builder: (BuildContext context, StateSetter sheetState) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
+                    Text('Filter',
+                        style: Constant.iPrimaryMedium14.copyWith(
+                            fontSize: 18, fontWeight: FontWeight.w500)),
+                    InkWell(
+                      onTap: () async {
+                        await context.read<TurbineProvider>().clearData();
+                        sheetState(() {});
+                        setState(() {});
+                      },
+                      child: Text(
+                        "Reset",
+                        style: Constant.primaryBold15,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 24),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                              flex: 5,
+                              child: CustomTextField.borderTextField(
+                                controller: turbineP.startDateC,
+                                labelText: "Start Date",
+                                hintText: "Start Date",
+                                required: false,
+                                readOnly: true,
+                                onTap: () async {
+                                  await turbineP.setStartDate(
+                                      await CustomDatePicker.pickDate(
+                                          context, DateTime.now()));
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                },
+                                suffixIcon: Icon(Icons.calendar_month),
+                                suffixIconColor: Constant.textHintColor,
+                              )),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
                             flex: 5,
                             child: CustomTextField.borderTextField(
-                              controller: turbineP.startDateC,
-                              labelText: "Start Date",
-                              hintText: "Start Date",
-                              required: true,
+                              controller: turbineP.endDateC,
+                              labelText: "End Date",
+                              hintText: "End Date",
+                              required: false,
                               readOnly: true,
                               onTap: () async {
-                                await turbineP.setStartDate(
+                                await turbineP.setEndDate(
                                     await CustomDatePicker.pickDate(
                                         context, DateTime.now()));
                                 FocusManager.instance.primaryFocus?.unfocus();
                               },
                               suffixIcon: Icon(Icons.calendar_month),
                               suffixIconColor: Constant.textHintColor,
-                            )),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: CustomTextField.borderTextField(
-                            controller: turbineP.endDateC,
-                            labelText: "End Date",
-                            hintText: "End Date",
-                            required: true,
-                            readOnly: true,
-                            onTap: () async {
-                              await turbineP.setEndDate(
-                                  await CustomDatePicker.pickDate(
-                                      context, DateTime.now()));
-                              FocusManager.instance.primaryFocus?.unfocus();
-                            },
-                            suffixIcon: Icon(Icons.calendar_month),
-                            suffixIconColor: Constant.textHintColor,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Constant.xSizedBox16,
-                    Text('Sort Order'),
-                    Wrap(
-                      children: [
-                        FilterChip(
-                          selectedColor: Constant.primaryColor,
-                          backgroundColor: Colors.white,
-                          showCheckmark: false,
-                          labelStyle: TextStyle(
-                              color: turbineP.ascending
-                                  ? Colors.white
-                                  : Constant.primaryColor),
-                          side: BorderSide(color: Constant.primaryColor),
-                          label: Text('Ascending'),
-                          selected: turbineP.ascending,
-                          onSelected: (value) {
-                            context.read<TurbineProvider>().ascending = true;
-                            context.read<TurbineProvider>().descending = false;
-                            sheetState(() {});
-                          },
-                        ),
-                        Constant.xSizedBox16,
-                        FilterChip(
-                          selectedColor: Constant.primaryColor,
-                          backgroundColor: Colors.white,
-                          showCheckmark: false,
-                          labelStyle: TextStyle(
-                              color: turbineP.descending
-                                  ? Colors.white
-                                  : Constant.primaryColor),
-                          side: BorderSide(color: Constant.primaryColor),
-                          label: Text('Descending'),
-                          selected: turbineP.descending,
-                          onSelected: (value) {
-                            context.read<TurbineProvider>().descending = true;
-                            context.read<TurbineProvider>().ascending = false;
-                            sheetState(() {});
-                          },
-                        ),
-                      ],
-                    ),
-                    Constant.xSizedBox16,
-                    Text('Sort By'),
-                    Wrap(
-                      children: [
-                        FilterChip(
-                          selectedColor: Constant.primaryColor,
-                          backgroundColor: Colors.white,
-                          showCheckmark: false,
-                          labelStyle: TextStyle(
-                              color: turbineP.towerName
-                                  ? Colors.white
-                                  : Constant.primaryColor),
-                          side: BorderSide(color: Constant.primaryColor),
-                          label: Text('Tower Name'),
-                          selected: turbineP.towerName,
-                          onSelected: (value) {
-                            context.read<TurbineProvider>().towerName = true;
-                            context.read<TurbineProvider>().createdAt = false;
-                            sheetState(() {});
-                          },
-                        ),
-                        Constant.xSizedBox16,
-                        FilterChip(
-                          selectedColor: Constant.primaryColor,
-                          backgroundColor: Colors.white,
-                          showCheckmark: false,
-                          labelStyle: TextStyle(
-                              color: turbineP.createdAt
-                                  ? Colors.white
-                                  : Constant.primaryColor),
-                          side: BorderSide(color: Constant.primaryColor),
-                          label: Text('Created At'),
-                          selected: turbineP.createdAt,
-                          onSelected: (value) {
-                            context.read<TurbineProvider>().createdAt = true;
-                            context.read<TurbineProvider>().towerName = false;
-                            sheetState(() {});
-                          },
-                        ),
-                      ],
-                    ),
-                    Constant.xSizedBox16,
-                  ],
+                        ],
+                      ),
+                      Constant.xSizedBox16,
+                      // Text('Sort Order'),
+                      // Wrap(
+                      //   children: [
+                      //     FilterChip(
+                      //       selectedColor: Constant.primaryColor,
+                      //       backgroundColor: Colors.white,
+                      //       showCheckmark: false,
+                      //       labelStyle: TextStyle(
+                      //           color: turbineP.ascending
+                      //               ? Colors.white
+                      //               : Constant.primaryColor),
+                      //       side: BorderSide(color: Constant.primaryColor),
+                      //       label: Text('Ascending'),
+                      //       selected: turbineP.ascending,
+                      //       onSelected: (value) {
+                      //         context.read<TurbineProvider>().ascending = true;
+                      //         context.read<TurbineProvider>().descending = false;
+                      //         sheetState(() {});
+                      //       },
+                      //     ),
+                      //     Constant.xSizedBox16,
+                      //     FilterChip(
+                      //       selectedColor: Constant.primaryColor,
+                      //       backgroundColor: Colors.white,
+                      //       showCheckmark: false,
+                      //       labelStyle: TextStyle(
+                      //           color: turbineP.descending
+                      //               ? Colors.white
+                      //               : Constant.primaryColor),
+                      //       side: BorderSide(color: Constant.primaryColor),
+                      //       label: Text('Descending'),
+                      //       selected: turbineP.descending,
+                      //       onSelected: (value) {
+                      //         context.read<TurbineProvider>().descending = true;
+                      //         context.read<TurbineProvider>().ascending = false;
+                      //         sheetState(() {});
+                      //       },
+                      //     ),
+                      // ],
+                      // ),
+                      // Constant.xSizedBox16,
+                      // Text('Sort By'),
+                      // Wrap(
+                      //   children: [
+                      //     FilterChip(
+                      //       selectedColor: Constant.primaryColor,
+                      //       backgroundColor: Colors.white,
+                      //       showCheckmark: false,
+                      //       labelStyle: TextStyle(
+                      //           color: turbineP.towerName
+                      //               ? Colors.white
+                      //               : Constant.primaryColor),
+                      //       side: BorderSide(color: Constant.primaryColor),
+                      //       label: Text('Tower Name'),
+                      //       selected: turbineP.towerName,
+                      //       onSelected: (value) {
+                      //         context.read<TurbineProvider>().towerName = true;
+                      //         context.read<TurbineProvider>().createdAt = false;
+                      //         sheetState(() {});
+                      //       },
+                      //     ),
+                      //     Constant.xSizedBox16,
+                      //     FilterChip(
+                      //       selectedColor: Constant.primaryColor,
+                      //       backgroundColor: Colors.white,
+                      //       showCheckmark: false,
+                      //       labelStyle: TextStyle(
+                      //           color: turbineP.createdAt
+                      //               ? Colors.white
+                      //               : Constant.primaryColor),
+                      //       side: BorderSide(color: Constant.primaryColor),
+                      //       label: Text('Created At'),
+                      //       selected: turbineP.createdAt,
+                      //       onSelected: (value) {
+                      //         context.read<TurbineProvider>().createdAt = true;
+                      //         context.read<TurbineProvider>().towerName = false;
+                      //         sheetState(() {});
+                      //       },
+                      //     ),
+                      //   ],
+                      // ),
+                      // Constant.xSizedBox16,
+                    ],
+                  ),
                 ),
-              ),
-              CustomButton.mainButton("View Result", () {
-                Navigator.pop(context);
-                turbineP.next = null;
-                pagingC.refresh();
-                turbineP.clearDate();
-              }),
-            ],
-          );
-        });
+                Constant.xSizedBox16,
+                CustomButton.mainButton(
+                  "View Result",
+                  () {
+                    Navigator.pop(context);
+                    turbineP.next = null;
+                    pagingC.refresh();
+                    // turbineP.clearDate();
+                  },
+                ),
+              ],
+            );
+          },
+        );
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar.appBar(
@@ -267,7 +287,9 @@ class _TurbineViewState extends BaseState<TurbineView> {
                       InkWell(
                         onTap: () async {
                           CustomContainer.showModalBottomScroll(
-                              context: context, child: filterAllWidget());
+                              initialChildSize: 0.45,
+                              context: context,
+                              child: filterAllWidget());
                         },
                         child: Container(
                           height: 30,
@@ -326,6 +348,7 @@ class _TurbineViewState extends BaseState<TurbineView> {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         ShaftDetailView(id: item.Id ?? ''
+                                            // id: '01J30MN6BRT962T3E8JPMK157H',
                                             // id: '01J1YT2GYVWPNJX777WM9S76DC',
                                             // id: '01J06H7N5A16M6FGP600A6MH0F',
                                             // id: '01J20BBZFRKTRDS9JJYDD6GK5P',
