@@ -1,0 +1,68 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:hy_tutorial/common/base/base_controller.dart';
+import 'package:hy_tutorial/common/helper/constant.dart';
+import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
+import 'package:hy_tutorial/src/home/model/home_model.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class HomeProvider extends BaseController with ChangeNotifier {
+  String isSubAgent = "admin";
+  String get getIsSubAgent => this.isSubAgent;
+  HomeModel homeModel = HomeModel();
+
+  HomeModel get getHomeModel => this.homeModel;
+
+  set setHomeModel(HomeModel homeModel) => this.homeModel = homeModel;
+  set setIsSubAgent(String isSubAgent) => this.isSubAgent = isSubAgent;
+
+  Future<void> fetchHome({bool withLoading = false}) async {
+    if (withLoading) loading(true);
+
+    final response =
+        await post(Constant.BASE_API_FULL + '/dashboard/dashboard/get');
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      setHomeModel = HomeModel.fromJson(jsonDecode(response.body));
+      notifyListeners();
+
+      if (withLoading) loading(false);
+    } else {
+      final message = jsonDecode(response.body)["Message"];
+      loading(false);
+      throw Exception(message);
+    }
+  }
+
+  UserListModel _userListModel = UserListModel();
+  UserListModel get userListModel => this._userListModel;
+  set userListModel(UserListModel value) => this._userListModel = value;
+
+  Future<void> fetchUserList() async {
+    loading(true);
+    userListModel = UserListModel();
+    Map<String, String> param = {
+      'Filter': 'Status',
+      'FilterValue': '0',
+    };
+    final response =
+        await get(Constant.BASE_API_FULL + '/admin/users', body: param);
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      UserListModel model = UserListModel.fromJson(jsonDecode(response.body));
+      List<UserListModelData?> newItems = (model.Data ?? [])
+          .where((element) => element?.Status != 'active')
+          .toList();
+
+      userListModel = model.copyWith(Data: newItems);
+      notifyListeners();
+      loading(false);
+    } else {
+      final message = jsonDecode(response.body)["Message"];
+      loading(false);
+      return message;
+    }
+  }
+}
