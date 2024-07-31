@@ -1076,9 +1076,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   onChangedPLTA(String? v) {
     String? selected =
-        (towerList ?? []).firstWhere((element) => element?.Id == v)?.Name;
+        (towerList ?? []).firstWhere((element) => element?.Name == v)?.Id;
     if (selected != null) {
-      selectedTower = v;
+      selectedTower = selected;
       pltaC.text = selected;
     }
   }
@@ -1096,18 +1096,16 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         labelText: "Nama File",
       ),
       Constant.xSizedBox16,
-      CustomDropdown.normalDropdown(
+      CustomDropdown.searchDropdown(
         controller: pltaC,
         iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
         contentPadding: EdgeInsets.all(2),
+        padding: EdgeInsets.zero,
         borderColor: Constant.primaryColor,
         labelText: 'Nama PLTA',
         selectedItem: selectedTower,
         hintText: "Pilih PLTA",
-        list: (towerList ?? [])
-            .map((e) => DropdownMenuItem(
-                child: Text(e?.Name ?? ''), value: e?.Id ?? ''))
-            .toList(),
+        list: (towerList ?? []).map((e) => e?.Name ?? '').toList(),
         onChanged: onChangedPLTA,
       ),
       Constant.xSizedBox16,

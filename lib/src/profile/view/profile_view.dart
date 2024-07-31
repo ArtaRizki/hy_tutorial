@@ -95,21 +95,19 @@ class _ProfileViewState extends BaseState<ProfileView> {
                       ],
                     ),
                   ),
-                  InkWell(
-                    onTap: () async {
-                      await CusNav.nPush(context, ProfileEditView());
-                    },
-                    child: Image.asset(
-                      'assets/icons/ic-edit-prof.png',
-                      scale: 4,
-                    ),
-                  ),
+                  // InkWell(
+                  //   onTap: () async {
+                  //     await CusNav.nPush(context, ProfileEditView());
+                  //   },
+                  //   child: Image.asset(
+                  //     'assets/icons/ic-edit-prof.png',
+                  //     scale: 4,
+                  //   ),
+                  // ),
                 ],
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Container(
               // height: 50,
               width: double.infinity,
@@ -170,18 +168,18 @@ class _ProfileViewState extends BaseState<ProfileView> {
                           ),
                         ),
                       ),
-                      Container(
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.grey.withOpacity(0.5),
-                              )),
-                          child: Image.asset(
-                            'assets/icons/ic-edit.png',
-                            scale: 4,
-                          )),
+                      // Container(
+                      //     padding: EdgeInsets.all(3),
+                      //     decoration: BoxDecoration(
+                      //         borderRadius: BorderRadius.circular(5),
+                      //         border: Border.all(
+                      //           width: 1,
+                      //           color: Colors.grey.withOpacity(0.5),
+                      //         )),
+                      //     child: Image.asset(
+                      //       'assets/icons/ic-edit.png',
+                      //       scale: 4,
+                      //     )),
                     ],
                   ),
                   SizedBox(

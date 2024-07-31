@@ -200,7 +200,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         }
 
         if (next != null && next != '') param.addAll({'Next': next ?? ''});
-        log("PANGGIL");
+        // log("PANGGIL");
         if (_pagingController.itemList?.length != 0) {
           await Future.delayed(Duration(seconds: 1));
         }
@@ -289,7 +289,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           param.addAll({'SortBy': 'CreatedAt'});
         }
         if (next2 != null && next2 != '') param.addAll({'Next': next2 ?? ''});
-        log("PANGGIL");
+        // log("PANGGIL");
         if (_pagingController2.itemList?.length != 0) {
           await Future.delayed(Duration(seconds: 1));
         }

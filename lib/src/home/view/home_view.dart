@@ -14,11 +14,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/utils.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../../profile/provider/profile_provider.dart';
+import '../../profile/view/profile_view.dart';
 import '../../shaft/view/shaft_latest_view.dart';
 import '../provider/home_provider.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final VoidCallback jumpToProfile;
+  const HomeView({super.key, required this.jumpToProfile});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -106,10 +108,7 @@ class _HomeViewState extends BaseState<HomeView> {
                 ),
                 InkWell(
                     onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeAdminView()));
+                      widget.jumpToProfile;
                     },
                     child: Image.asset('assets/icons/ic-user.png', scale: 4)),
               ],

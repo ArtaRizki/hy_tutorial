@@ -21,10 +21,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/utils.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../../profile/provider/profile_provider.dart';
+import '../../profile/view/profile_view.dart';
 import '../../shaft/view/shaft_latest_view.dart';
 
 class HomeAdminView extends StatefulWidget {
-  const HomeAdminView({super.key});
+  final VoidCallback jumpToProfile;
+  const HomeAdminView({super.key, required this.jumpToProfile});
 
   @override
   State<HomeAdminView> createState() => _HomeAdminViewState();
@@ -123,7 +125,9 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                   ],
                 ),
                 InkWell(
-                    onTap: () async {},
+                    onTap: () async {
+                      widget.jumpToProfile;
+                    },
                     child: Image.asset('assets/icons/ic-user.png', scale: 4)),
               ],
             ),

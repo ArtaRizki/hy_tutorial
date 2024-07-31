@@ -193,11 +193,13 @@ class _MainHomeState extends State<MainHome> {
           return true;
         },
         child: [
-          isAdmin == true ? HomeAdminView() : HomeView(),
+          isAdmin == true
+              ? HomeAdminView(
+                  jumpToProfile: () => setState(() => currentIndex = 3))
+              : HomeView(jumpToProfile: () => setState(() => currentIndex = 3)),
           isAdmin == true ? UserManageView() : DataAddView(),
           TurbineView(),
           ProfileView(),
-          // ProfileView(jumpToJamaah, jumpToSubAgen)
         ][currentIndex],
       ),
     );

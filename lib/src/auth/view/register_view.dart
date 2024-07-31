@@ -112,18 +112,22 @@ class _RegisterViewState extends State<RegisterView> {
                   SizedBox(
                     height: 10,
                   ),
-                  CustomDropdown.normalDropdown(
+                  CustomDropdown.searchDropdown(
                     // readOnly: !woAgreementP.isCreate,
                     required: true,
                     list: List.generate(
-                      division.divisionModel.Data?.length ?? 0,
-                      (index) => DropdownMenuItem(
-                          child: Text(
-                              division.divisionModel.Data?[index]?.Name ?? ""),
-                          value: division.divisionModel.Data?[index]?.Id ?? ""),
-                    ),
+                        division.divisionModel.Data?.length ?? 0,
+                        (index) =>
+                            division.divisionModel.Data?[index]?.Name ?? ""),
                     onChanged: (val) {
-                      context.read<AuthProvider>().selectedDivision = val;
+                      final p = context.read<AuthProvider>();
+                      String? selected = (division.divisionModel.Data ?? [])
+                          .firstWhere((element) => element?.Name == val)
+                          ?.Id;
+                      if (selected != null && val != null) {
+                        p.selectedDivision = selected;
+                        p.selectedDivisionC.text = val ?? '';
+                      }
                     },
                     // enabled: woAgreementP.isCreate,
                     //controller: authP.selectedDivisionC,

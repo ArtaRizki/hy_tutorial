@@ -36,21 +36,6 @@ class _UserManageViewState extends BaseState<UserManageView>
   @override
   void initState() {
     getData();
-    final userManageP = context.read<UserManageProvider>();
-    if ((userManageP.pagingController.itemList ?? []).isEmpty) {
-      userManageP.getUserList();
-    } else {
-      userManageP.pagingController.dispose();
-      userManageP.next = null;
-      userManageP.getUserList();
-    }
-    if ((userManageP.pagingController2.itemList ?? []).isEmpty) {
-      userManageP.getUserList2();
-    } else {
-      userManageP.pagingController2.dispose();
-      userManageP.next2 = null;
-      userManageP.getUserList2();
-    }
     super.initState();
   }
 
@@ -60,6 +45,22 @@ class _UserManageViewState extends BaseState<UserManageView>
       log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
     });
+
+    final userManageP = context.read<UserManageProvider>();
+    if ((userManageP.pagingController.itemList ?? []).isEmpty) {
+      userManageP.getUserList();
+    } else {
+      userManageP.pagingController.dispose();
+      userManageP.next = null;
+      await userManageP.getUserList();
+    }
+    if ((userManageP.pagingController2.itemList ?? []).isEmpty) {
+      userManageP.getUserList2();
+    } else {
+      userManageP.pagingController2.dispose();
+      userManageP.next2 = null;
+      await userManageP.getUserList2();
+    }
     setState(() {});
   }
 
@@ -71,7 +72,7 @@ class _UserManageViewState extends BaseState<UserManageView>
     Widget headKonten() {
       return Container(
         color: Constant.primaryColor,
-        height: 100,
+        height: 110,
         width: double.infinity,
         padding: EdgeInsets.fromLTRB(20, 10, 20, 15),
         child: Column(
