@@ -172,6 +172,7 @@ class _MainHomeState extends State<MainHome> {
       primary: true,
       bottomNavigationBar: customBottomNav(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.transparent,
         onPressed: () {
           CusNav.nPush(context, DataAddView());
         },

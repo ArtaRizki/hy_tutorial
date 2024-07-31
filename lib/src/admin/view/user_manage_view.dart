@@ -52,14 +52,16 @@ class _UserManageViewState extends BaseState<UserManageView>
     } else {
       userManageP.pagingController.dispose();
       userManageP.next = null;
-      await userManageP.getUserList();
+      userManageP.getUserList();
+      setState(() {});
     }
     if ((userManageP.pagingController2.itemList ?? []).isEmpty) {
       userManageP.getUserList2();
     } else {
       userManageP.pagingController2.dispose();
       userManageP.next2 = null;
-      await userManageP.getUserList2();
+      userManageP.getUserList2();
+      setState(() {});
     }
     setState(() {});
   }

@@ -237,7 +237,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
                 newItems as List<UserListModelData>, nextPageKey);
           }
 
-          // notifyListeners();
+          notifyListeners();
           if (withLoading) loading(false);
           isFetching = false;
         } else {
@@ -326,7 +326,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
                 newItems as List<UserListModelData>, nextPageKey);
           }
 
-          // notifyListeners();
+          notifyListeners();
           if (withLoading) loading(false);
           isFetching2 = false;
         } else {
