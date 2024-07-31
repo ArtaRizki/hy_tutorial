@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
@@ -27,7 +29,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:timeago/timeago.dart' as TIMEAGO;
 import 'common/component/timezone.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
+// import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'dart:io';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
@@ -43,168 +45,173 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 part 'common/routes.dart';
 
-void main() async {
-  await WidgetsFlutterBinding.ensureInitialized();
+void main() {
+  runZonedGuarded(() async {
+    await WidgetsFlutterBinding.ensureInitialized();
 
-  await requestPermission(Permission.location);
-  await requestPermission(Permission.storage);
-  await requestPermission(Permission.accessMediaLocation);
-  await requestPermission(Permission.manageExternalStorage);
-  await requestPermission(Permission.photos);
+    await requestPermission(Permission.location);
+    await requestPermission(Permission.storage);
+    await requestPermission(Permission.accessMediaLocation);
+    await requestPermission(Permission.manageExternalStorage);
+    await requestPermission(Permission.photos);
 
-  /// [START] initialize Firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    /// [START] initialize Firebase
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
 
-  /// [START] Google maps config for reduce crash event while using Google Maps SDK
-  final GoogleMapsFlutterPlatform mapsImplementation =
-      GoogleMapsFlutterPlatform.instance;
-  if (mapsImplementation is GoogleMapsFlutterAndroid) {
-    mapsImplementation.useAndroidViewSurface = true;
-  }
+    /// [START] Google maps config for reduce crash event while using Google Maps SDK
+    final GoogleMapsFlutterPlatform mapsImplementation =
+        GoogleMapsFlutterPlatform.instance;
+    if (mapsImplementation is GoogleMapsFlutterAndroid) {
+      mapsImplementation.useAndroidViewSurface = true;
+    }
 
-  /// [END]
+    /// [END]
 
-  /// [START] initialize locale
-  // init lib easy localization
-  await EasyLocalization.ensureInitialized();
-  // localized indonesian time ago
-  TIMEAGO.setLocaleMessages("id", TIMEAGO.IdMessages());
-  if (kDebugMode) {
-    log(getTimezone());
-  }
+    /// [START] initialize locale
+    // init lib easy localization
+    await EasyLocalization.ensureInitialized();
+    // localized indonesian time ago
+    TIMEAGO.setLocaleMessages("id", TIMEAGO.IdMessages());
+    if (kDebugMode) {
+      log(getTimezone());
+    }
 
-  /// [END] initialize locale
+    /// [END] initialize locale
 
-  // initialize crashlytics
-  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
-  FirebaseManager().initNotification();
+    // initialize crashlytics
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+    FirebaseManager().initNotification();
 
-  FirebaseMessaging.instance.getToken().then((value) async {
+    FirebaseMessaging.instance.getToken().then((value) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString(Constant.kSetPrefFcmToken, "${value ?? ""}");
+      log("FCM token : $value");
+    });
+
+    await FirebaseMessaging.instance.setAutoInitEnabled(true);
+
+    /// [END] initialize Firebase
+
+    // check current device is emulator
+    // if (Platform.isAndroid) {
+    //   // if (await MethodChannel(Constant.APP_NAME).invokeMethod('is_emulator')) {
+    //   final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    //   final data = {
+    //     "board": deviceInfo.board,
+    //     "brand": deviceInfo.brand,
+    //     "product": deviceInfo.product,
+    //     "full": deviceInfo.toString(),
+    //     "timestamp": DateTime.now().millisecond
+    //   };
+
+    //   // await FirebaseCrashlytics.instance
+    //   //     .log("Emulated user, data: ${jsonEncode(data)}");
+    //   // await FirebaseCrashlytics.instance
+    //   //     .recordError(Exception("Emulated Device Detected"), StackTrace.current);
+
+    //   runApp(
+    //     EasyLocalization(
+    //       supportedLocales: [
+    //         Locale('id', 'ID'),
+    //         Locale('en'),
+    //       ],
+    //       path: 'assets/translations',
+    //       // <-- change the path of the translation files
+    //       fallbackLocale: Locale('id', 'ID'),
+    //       child: Builder(
+    //         builder: (context) {
+    //           return MaterialApp(
+    //             localizationsDelegates: context.localizationDelegates,
+    //             supportedLocales: context.supportedLocales,
+    //             locale: context.locale,
+    //             transaction: EmulatorDetectedView(),
+    //           );
+    //         },
+    //       ),
+    //     ),
+    //   );
+    //   return;
+    //   // }
+    // }
+
+    // initialize flutter downloader
+    await FlutterDownloader.initialize(
+      debug: false, // optional: set false to disable loging logs to console
+    );
+    // FlutterAppBadger.removeBadge();
+
+    /// [START] Cache directory system management for storing Face Recognition Tflite Model & maintain lost image from state restoration
+    /// Bersihkan directory cache
+    getTemporaryDirectory().then((value) {
+      Directory dir = Directory(value.path + '/download');
+      if (dir.existsSync()) {
+        dir.listSync().forEach((file) {
+          file.deleteSync(recursive: true);
+        });
+      }
+    });
+
+    /// Buat temp directory untuk open only
+    getTemporaryDirectory().then((value) {
+      Directory dir = Directory(value.path + '/download');
+      if (!dir.existsSync()) {
+        dir.createSync(recursive: true);
+      }
+    });
+
+    /// [END] Handle state restoration
+
+    /// [START] initialRoute definition
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(Constant.kSetPrefFcmToken, "${value ?? ""}");
-    log("FCM token : $value");
-  });
+    String initialRoute;
 
-  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+    if (kDebugMode) {
+      log("[Bearer Token]");
+      log(prefs.getString(Constant.kSetPrefToken) ?? "");
+      log("[/Bearer Token]");
 
-  /// [END] initialize Firebase
-
-  // check current device is emulator
-  // if (Platform.isAndroid) {
-  //   // if (await MethodChannel(Constant.APP_NAME).invokeMethod('is_emulator')) {
-  //   final deviceInfo = await DeviceInfoPlugin().androidInfo;
-  //   final data = {
-  //     "board": deviceInfo.board,
-  //     "brand": deviceInfo.brand,
-  //     "product": deviceInfo.product,
-  //     "full": deviceInfo.toString(),
-  //     "timestamp": DateTime.now().millisecond
-  //   };
-
-  //   // await FirebaseCrashlytics.instance
-  //   //     .log("Emulated user, data: ${jsonEncode(data)}");
-  //   // await FirebaseCrashlytics.instance
-  //   //     .recordError(Exception("Emulated Device Detected"), StackTrace.current);
-
-  //   runApp(
-  //     EasyLocalization(
-  //       supportedLocales: [
-  //         Locale('id', 'ID'),
-  //         Locale('en'),
-  //       ],
-  //       path: 'assets/translations',
-  //       // <-- change the path of the translation files
-  //       fallbackLocale: Locale('id', 'ID'),
-  //       child: Builder(
-  //         builder: (context) {
-  //           return MaterialApp(
-  //             localizationsDelegates: context.localizationDelegates,
-  //             supportedLocales: context.supportedLocales,
-  //             locale: context.locale,
-  //             transaction: EmulatorDetectedView(),
-  //           );
-  //         },
-  //       ),
-  //     ),
-  //   );
-  //   return;
-  //   // }
-  // }
-
-  // initialize flutter downloader
-  await FlutterDownloader.initialize(
-    debug: false, // optional: set false to disable loging logs to console
-  );
-  FlutterAppBadger.removeBadge();
-
-  /// [START] Cache directory system management for storing Face Recognition Tflite Model & maintain lost image from state restoration
-  /// Bersihkan directory cache
-  getTemporaryDirectory().then((value) {
-    Directory dir = Directory(value.path + '/download');
-    if (dir.existsSync()) {
-      dir.listSync().forEach((file) {
-        file.deleteSync(recursive: true);
-      });
+      log("[FCM Registration Token]");
+      log(await FirebaseMessaging.instance.getToken() ?? "");
+      log("[/FCM Registration Token]");
     }
-  });
 
-  /// Buat temp directory untuk open only
-  getTemporaryDirectory().then((value) {
-    Directory dir = Directory(value.path + '/download');
-    if (!dir.existsSync()) {
-      dir.createSync(recursive: true);
+    if (prefs.getString(Constant.kSetPrefToken) == null) {
+      //not signed in
+      initialRoute = '/';
+      // initialRoute = '/splash';
+    } else {
+      //signed in
+      initialRoute = '/';
     }
+
+    log("INITIAL ROUTE : $initialRoute");
+
+    /// [END] initialRoute definition
+    runApp(
+      //   MyApp(
+      //   initialRoute: initialRoute,
+      // )
+      EasyLocalization(
+        supportedLocales: [
+          Locale('id', 'ID'),
+          Locale('en'),
+        ],
+        path: 'assets/translations',
+        // <-- change the path of the translation files
+        fallbackLocale: Locale('id', 'ID'),
+        child: MyApp(/*initialRoute: initialRoute*/),
+      ),
+      // MyApp())
+    );
+  }, (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   });
-
-  /// [END] Handle state restoration
-
-  /// [START] initialRoute definition
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String initialRoute;
-
-  if (kDebugMode) {
-    log("[Bearer Token]");
-    log(prefs.getString(Constant.kSetPrefToken) ?? "");
-    log("[/Bearer Token]");
-
-    log("[FCM Registration Token]");
-    log(await FirebaseMessaging.instance.getToken() ?? "");
-    log("[/FCM Registration Token]");
-  }
-
-  if (prefs.getString(Constant.kSetPrefToken) == null) {
-    //not signed in
-    initialRoute = '/';
-    // initialRoute = '/splash';
-  } else {
-    //signed in
-    initialRoute = '/';
-  }
-
-  log("INITIAL ROUTE : $initialRoute");
-
-  /// [END] initialRoute definition
-  runApp(
-    //   MyApp(
-    //   initialRoute: initialRoute,
-    // )
-    EasyLocalization(
-      supportedLocales: [
-        Locale('id', 'ID'),
-        Locale('en'),
-      ],
-      path: 'assets/translations',
-      // <-- change the path of the translation files
-      fallbackLocale: Locale('id', 'ID'),
-      child: MyApp(/*initialRoute: initialRoute*/),
-    ),
-    // MyApp())
-  );
 }
 
 class NavigationService {

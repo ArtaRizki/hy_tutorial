@@ -13,7 +13,7 @@ import 'dart:async';
 
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:flutter_app_badger/flutter_app_badger.dart';
+// import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 import '../../main.dart';
 import '../helper/constant.dart';
@@ -32,7 +32,7 @@ class FirebaseManager {
         playSound: true,
         importance: Importance.max,
         icon: '@drawable/notif_icon'),
-    iOS: IOSNotificationDetails(
+    iOS: DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
@@ -43,8 +43,8 @@ class FirebaseManager {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/notif_icon');
 
-    IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
+    DarwinInitializationSettings initializationSettingsDarwin =
+        DarwinInitializationSettings(
       defaultPresentAlert: true,
       defaultPresentBadge: true,
       defaultPresentSound: true,
@@ -53,9 +53,9 @@ class FirebaseManager {
     flutterLocalNotificationsPlugin.initialize(
       InitializationSettings(
         android: initializationSettingsAndroid,
-        iOS: initializationSettingsIOS,
+        iOS: initializationSettingsDarwin,
       ),
-      onSelectNotification: selectNotification,
+      onDidReceiveNotificationResponse: selectNotification,
     );
 
     // ios configuration
@@ -67,7 +67,7 @@ class FirebaseManager {
 
     stream = FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       Map message = event.data;
-      FlutterAppBadger.updateBadgeCount(1);
+      // FlutterAppBadger.updateBadgeCount(1);
       print("payload =>" + jsonEncode(message));
       try {
         flutterLocalNotificationsPlugin.show(
@@ -84,7 +84,7 @@ class FirebaseManager {
 
     stream = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
       Map message = event.data;
-      FlutterAppBadger.removeBadge();
+      // FlutterAppBadger.removeBadge();
       log("MESSAGE FIREBASE" + message.toString());
       print("payload =>" + jsonEncode(message));
       setRoute(jsonEncode(message));
@@ -207,7 +207,7 @@ class FirebaseManager {
           priority: Priority.max,
           playSound: true,
         ),
-        iOS: IOSNotificationDetails(
+        iOS: DarwinNotificationDetails(
           // sound: 'a_long_cold_sting.wav',
           presentAlert: true,
           presentBadge: true,
@@ -225,20 +225,20 @@ class FirebaseManager {
     if (stream != null) stream!.cancel();
   }
 
-  void selectNotification(String? payload) async {
+  void selectNotification(NotificationResponse? payload) async {
     if (payload != null) {
       String? token = (await SharedPreferences.getInstance())
           .getString(Constant.kSetPrefToken);
 
       if (token == null) return;
-      if (listener != null) listener!(jsonDecode(payload));
+      if (listener != null) listener!(jsonDecode(payload.payload ?? ''));
 
       /// payload example
       /// {id: 33, type: warningletter}
 
-      log("payload =>" + payload);
+      log("payload =>" + (payload.payload ?? ''));
 
-      setRoute(payload);
+      setRoute(payload.payload ?? '');
     }
   }
 

@@ -8,7 +8,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'dart:io';
 
-
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 AndroidFlutterLocalNotificationsPlugin? androidFlutterLocalNotificationsPlugin;
@@ -72,7 +71,7 @@ listenForegroundNotificationPayload(BuildContext context) async {
   }
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (payload) async {
+      onDidReceiveNotificationResponse: (payload) async {
     _consumePayload(
         jsonEncode(jsonDecode(payload ?? '{}')['data'] ?? '{}'), false);
   });
@@ -163,7 +162,7 @@ initLocalNotification(BuildContext context) async {
       ?.initialize(initializationSettingsAndroid);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (payload) async {
+      onDidReceiveNotificationResponse: (payload) async {
     _consumePayload(
         jsonEncode(jsonDecode(payload ?? '{}')['data'] ?? '{}'), false);
   });

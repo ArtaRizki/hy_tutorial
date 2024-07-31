@@ -12,12 +12,13 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
+    init();
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    init();
+    // init();
     super.didChangeDependencies();
   }
 
@@ -29,8 +30,8 @@ class _SplashViewState extends State<SplashView> {
 
     Timer(
         Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacementNamed(
-            isLoggedIn ? '/home' : '/login',
+        () => Navigator.pushReplacementNamed(
+            context, isLoggedIn ? '/home' : '/login',
             arguments: isAdmin ?? false));
   }
 

@@ -40,13 +40,14 @@ downloadFile(BuildContext context, String link,
         if (openAfterDownload) {
           await flutterLocalNotificationsPlugin.initialize(
               initializationSettings,
-              onSelectNotification: (String? payload) {});
+              onDidReceiveNotificationResponse: (String? payload) {});
           await flutterLocalNotificationsPlugin.show(0, filename,
               "Download berhasil disimpan di ${f.path}", notificationDetails);
           await OpenFile.open(f.path);
         } else {
-          await flutterLocalNotificationsPlugin.initialize(
-              initializationSettings, onSelectNotification: (String? payload) {
+          await flutterLocalNotificationsPlugin
+              .initialize(initializationSettings,
+                  onDidReceiveNotificationResponse: (String? payload) {
             if (payload != null) OpenFile.open(f.path);
           });
           await flutterLocalNotificationsPlugin.show(0, filename,
@@ -66,13 +67,14 @@ downloadFile(BuildContext context, String link,
         if (openAfterDownload) {
           await flutterLocalNotificationsPlugin.initialize(
               initializationSettings,
-              onSelectNotification: (String? payload) {});
+              onDidReceiveNotificationResponse: (String? payload) {});
           await flutterLocalNotificationsPlugin.show(
               0, filename, "Download berhasil", notificationDetails);
           await OpenFile.open(f.path);
         } else {
-          await flutterLocalNotificationsPlugin.initialize(
-              initializationSettings, onSelectNotification: (String? payload) {
+          await flutterLocalNotificationsPlugin
+              .initialize(initializationSettings,
+                  onDidReceiveNotificationResponse: (String? payload) {
             if (payload != null) OpenFile.open(f.path);
           });
           await flutterLocalNotificationsPlugin.show(0, filename,
