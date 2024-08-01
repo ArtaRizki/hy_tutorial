@@ -12,7 +12,6 @@ import 'dart:developer';
 
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
-import 'package:hy_tutorial/src/auth/provider/change_password_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/home/provider/home_provider.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
@@ -27,13 +26,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 // import 'package:timeago/timeago.dart' as TIMEAGO;
-import 'common/component/timezone.dart';
 // import 'package:easy_localization/easy_localization.dart';
 // import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'dart:io';
 // import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 // import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
-import 'common/library/firebase_manager.dart';
 import 'src/profile/provider/profile_provider.dart';
 import 'utils/nav_observer.dart';
 import 'utils/utils.dart';
@@ -49,7 +46,6 @@ void main() {
   runZonedGuarded(() async {
     await WidgetsFlutterBinding.ensureInitialized();
 
-    await requestPermission(Permission.location);
     // await requestPermission(Permission.storage);
     // await requestPermission(Permission.accessMediaLocation);
     // await requestPermission(Permission.manageExternalStorage);

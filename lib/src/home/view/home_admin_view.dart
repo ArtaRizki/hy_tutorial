@@ -26,7 +26,12 @@ import '../../shaft/view/shaft_latest_view.dart';
 
 class HomeAdminView extends StatefulWidget {
   final VoidCallback jumpToProfile;
-  const HomeAdminView({super.key, required this.jumpToProfile});
+  final VoidCallback jumpToManageUsers;
+  const HomeAdminView({
+    super.key,
+    required this.jumpToProfile,
+    required this.jumpToManageUsers,
+  });
 
   @override
   State<HomeAdminView> createState() => _HomeAdminViewState();
@@ -254,13 +259,14 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                                                         UserManageProvider>();
                                                     handleTap(() async {
                                                       p.selectedStatus = '2';
-                                                      await p
-                                                          .updateUser(context,
-                                                              id: item?.Id ??
-                                                                  '')
-                                                          .whenComplete(() =>
-                                                              p.selectedStatus =
-                                                                  null);
+                                                      await p.updateUser(
+                                                        context,
+                                                        id: item?.Id ?? '',
+                                                        fromHome: true,
+                                                      );
+
+                                                      p.selectedStatus = null;
+                                                      getData();
                                                     });
                                                   },
                                                   noCallback: () =>
@@ -297,13 +303,13 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                                                         UserManageProvider>();
                                                     handleTap(() async {
                                                       p.selectedStatus = '1';
-                                                      await p
-                                                          .updateUser(context,
-                                                              id: item?.Id ??
-                                                                  '')
-                                                          .whenComplete(() =>
-                                                              p.selectedStatus =
-                                                                  null);
+                                                      await p.updateUser(
+                                                        context,
+                                                        id: item?.Id ?? '',
+                                                        fromHome: true,
+                                                      );
+                                                      p.selectedStatus = null;
+                                                      getData();
                                                     });
                                                   },
                                                   noCallback: () =>
@@ -502,14 +508,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                       staticArray.length,
                       (indexx) => InkWell(
                         onTap: () {
-                          CusNav.nPush(
-                              context,
-                              ShaftLatestView(
-                                  index: indexx == 1
-                                      ? 2
-                                      : indexx == 3
-                                          ? 1
-                                          : 0));
+                          CusNav.nPush(context, ShaftLatestView());
                         },
                         child: Column(
                           children: [
@@ -564,7 +563,9 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                         fontWeight: FontWeight.w500),
                   ),
                   InkWell(
-                    onTap: () => CusNav.nPush(context, UserManageView()),
+                    onTap: () async {
+                      widget.jumpToManageUsers();
+                    },
                     child: Row(
                       children: [
                         Text(

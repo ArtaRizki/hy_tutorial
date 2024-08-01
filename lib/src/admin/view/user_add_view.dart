@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/src/admin/model/user_detail_model.dart';
-import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
 import '../../../common/base/base_state.dart';
-import '../../../common/helper/constant.dart';
 import '../../division/provider/division_provider.dart';
 import '../provider/user_manage_provider.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
-import 'user_detail_view.dart';
 
 class UserAddView extends StatefulWidget {
   UserAddView({super.key, this.data});
@@ -107,8 +104,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
                                     Navigator.pop(context);
                                     // Navigator.pop(context);
                                     // Navigator.pop(context);
-                                    dataP.updateUser(context,
-                                        id: p.userDetailModel.Data?.Id ?? "");
+                                    dataP.updateUser(
+                                      context,
+                                      id: p.userDetailModel.Data?.Id ?? "",
+                                    );
                                   }),
                               noCallback: () => Navigator.pop(context));
                           // Navigator.push(

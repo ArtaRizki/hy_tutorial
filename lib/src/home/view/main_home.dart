@@ -196,7 +196,16 @@ class _MainHomeState extends State<MainHome> {
         child: [
           isAdmin == true
               ? HomeAdminView(
-                  jumpToProfile: () => setState(() => currentIndex = 3))
+                  jumpToProfile: () => setState(() => currentIndex = 3),
+                  jumpToManageUsers: () async {
+                    currentIndex = 1;
+                    await CusNav.nPush(context, UserManageView());
+                    setState(() {
+                      currentIndex = 0;
+                    });
+                    await getData();
+                  },
+                )
               : HomeView(jumpToProfile: () => setState(() => currentIndex = 3)),
           isAdmin == true ? UserManageView() : DataAddView(),
           TurbineView(),

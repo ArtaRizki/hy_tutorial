@@ -2,11 +2,10 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/common/component/custom_container.dart';
-import 'package:hy_tutorial/src/home/view/home_view.dart';
-import 'package:hy_tutorial/src/home/view/main_home.dart';
 import '../../../common/component/custom_appbar.dart';
+import '../../../common/component/custom_container.dart';
 import '../../../common/helper/constant.dart';
+import '../../home/view/main_home.dart';
 import 'sample_chart_view.dart';
 import "package:provider/provider.dart";
 import '../../../common/component/custom_textfield.dart';
@@ -15,8 +14,7 @@ import 'bolt_chart_view.dart';
 import 'upper_chart_view.dart';
 
 class ShaftView extends StatefulWidget {
-  const ShaftView({super.key});
-
+  ShaftView({super.key});
   @override
   State<ShaftView> createState() => _ShaftViewState();
 }
@@ -27,26 +25,28 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
   late TabController tabController1;
   @override
   void initState() {
-    final p = context.read<DataAddProvider>();
-    tabController = TabController(length: 4, vsync: this);
+    getData();
+    super.initState();
+  }
 
+  getData() async {
+    final p = context.read<DataAddProvider>();
+    tabController = TabController(length: 4, vsync: this, initialIndex: 3);
     tabController1 = TabController(length: 3, vsync: this);
     tabController.addListener(() {
       log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
     });
-
     tabController1.addListener(() {
       log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
     });
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final d = context.watch<DataAddProvider>();
-    final data = context.watch<DataAddProvider>().turbineDetailModel.data;
+    final data = context.watch<DataAddProvider>().turbineCreateModel.data;
     final shaft =
         context.watch<DataAddProvider>().turbineCreateModel.data?.shaft;
     final status =
@@ -74,6 +74,7 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
         .data
         ?.detailData
         ?.turbine;
+
     Widget _buildTab(String tag) {
       return Tab(child: Text(tag, style: TextStyle(fontSize: 18)));
     }
@@ -91,30 +92,13 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
             unselectedLabelColor: Constant.grayColor,
             labelColor: Constant.primaryColor,
             unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
-
             indicatorColor: Constant.primaryColor,
-            // width: 91, // width in percent
-            // borderRadius: 30,
-            // height: 50,
-            // selectedIndex: currentIndex,
-            // selectedBackgroundColors: [Constant.primaryColor],
-            // unSelectedBackgroundColors: [Color(0xffffffff)],
-            // selectedTextStyle:
-            //     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            // unSelectedTextStyle: TextStyle(color: Colors.black87),
             tabs: [
               _buildTab("A-C"),
               _buildTab("B-D"),
               _buildTab("Resultan"),
               _buildTab("Bolt")
             ],
-            // selectedLabelIndex: (index) {
-            //   setState(() {
-            //     currentIndex = index;
-            //     tabController.index = index;
-            //   });
-            // },
-            // isScroll: false,
           ),
         ),
       );
@@ -652,7 +636,7 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
               tabController.index == 2 ? 'Grafik Resultan' : 'Grafik Shaft',
               style: Constant.iBlackMedium16,
             ),
-            Constant.xSizedBox8,
+            Constant.xSizedBox4,
             Row(
               children: [
                 Expanded(

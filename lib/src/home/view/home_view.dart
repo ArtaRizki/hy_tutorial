@@ -1,11 +1,7 @@
-import 'dart:developer';
-
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
-import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
-import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/utils.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../../profile/provider/profile_provider.dart';
-import '../../profile/view/profile_view.dart';
 import '../../shaft/view/shaft_latest_view.dart';
 import '../provider/home_provider.dart';
 
@@ -151,14 +146,7 @@ class _HomeViewState extends BaseState<HomeView> {
                         staticArray.length,
                         (indexx) => InkWell(
                           onTap: () {
-                            CusNav.nPush(
-                                context,
-                                ShaftLatestView(
-                                    index: indexx == 1
-                                        ? 2
-                                        : indexx == 3
-                                            ? 1
-                                            : 0));
+                            CusNav.nPush(context, ShaftLatestView());
                           },
                           child: Column(
                             children: [

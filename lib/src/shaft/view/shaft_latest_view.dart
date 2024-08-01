@@ -13,8 +13,7 @@ import 'bolt_chart_view.dart';
 import 'upper_chart_view.dart';
 
 class ShaftLatestView extends StatefulWidget {
-  ShaftLatestView({super.key, required this.index});
-  final int index;
+  ShaftLatestView({super.key});
   @override
   State<ShaftLatestView> createState() => _ShaftLatestViewState();
 }
@@ -32,16 +31,14 @@ class _ShaftLatestViewState extends State<ShaftLatestView>
 
   getData() async {
     final p = context.read<DataAddProvider>();
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 4, vsync: this, initialIndex: 3);
     tabController1 = TabController(length: 3, vsync: this);
-    tabController.index = widget.index;
-    tabController1.index = widget.index;
     tabController.addListener(() {
       log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
     });
     tabController1.addListener(() {
-      log("INDEX ACTIVE : ${tabController1.index}");
+      log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
     });
     await p.fetchTurbineLatest();
@@ -50,7 +47,7 @@ class _ShaftLatestViewState extends State<ShaftLatestView>
   @override
   Widget build(BuildContext context) {
     final d = context.watch<DataAddProvider>();
-    final data = context.watch<DataAddProvider>().turbineDetailModel.data;
+    final data = context.watch<DataAddProvider>().turbineLatestModel.data;
     final shaft =
         context.watch<DataAddProvider>().turbineLatestModel.data?.shaft;
     final status =
@@ -629,7 +626,7 @@ class _ShaftLatestViewState extends State<ShaftLatestView>
               tabController.index == 2 ? 'Grafik Resultan' : 'Grafik Shaft',
               style: Constant.iBlackMedium16,
             ),
-            Constant.xSizedBox8,
+            Constant.xSizedBox4,
             Row(
               children: [
                 Expanded(

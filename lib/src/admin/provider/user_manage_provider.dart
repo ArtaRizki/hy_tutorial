@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:powers/powers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/component/custom_alert.dart';
 import '../../../main.dart';
 import '../../../utils/utils.dart';
@@ -587,8 +585,11 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  Future<void> updateUser(BuildContext context,
-      {required String id, bool fromHome = false}) async {
+  Future<void> updateUser(
+    BuildContext context, {
+    required String id,
+    bool fromHome = false,
+  }) async {
     loading(true);
     FocusManager.instance.primaryFocus?.unfocus();
     Map<String, String> param = {

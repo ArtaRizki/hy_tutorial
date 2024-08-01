@@ -474,7 +474,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (upperData != null) {
       upper = upperData
           .split('|')
-          .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
+          .map((e) => double.tryParse(e) ?? 0)
+          // .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
           .toList();
       upperBolt =
           upperData.split('|').map((e) => double.tryParse(e) ?? 0).toList();
@@ -485,6 +486,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       List<String> listSKey = [];
       boltsData = Map.fromEntries(boltsData.entries.toList()
         ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
+      log("LIST BOLTS DATA DETAIL : $boltsData");
       boltsData.forEach((key, value) {
         listS.add(value);
         listSKey.add(key);
@@ -530,9 +532,12 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       log("LIST TORQUE SUGGESTION Y : $listTorqueSuggestionsY");
     }
 
-    acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
-    bdCrockedLine = divideUntilTwoDigits(bdCrockness ?? 0);
-    upperCrockedLine = divideUntilTwoDigits(upperCrockness ?? 0);
+    acCrockedLine = (acCrockness ?? 0);
+    bdCrockedLine = (bdCrockness ?? 0);
+    upperCrockedLine = (upperCrockness ?? 0);
+    // acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
+    // bdCrockedLine = divideUntilTwoDigits(bdCrockness ?? 0);
+    // upperCrockedLine = divideUntilTwoDigits(upperCrockness ?? 0);
     log("AC UPPER : $acUpper");
     log("AC CLUTCH : $acClutch");
     log("AC TURBINE : $acTurbine");
@@ -831,7 +836,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (upperData != null) {
       upper = upperData
           .split('|')
-          .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
+          .map((e) => double.tryParse(e) ?? 0)
+          // .map((e) => divideUntilTwoDigits(double.tryParse(e) ?? 0))
           .toList();
       upperBolt =
           upperData.split('|').map((e) => double.tryParse(e) ?? 0).toList();
@@ -842,6 +848,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       List<String> listSKey = [];
       boltsData = Map.fromEntries(boltsData.entries.toList()
         ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
+      log("LIST BOLTS DATA DETAIL : $boltsData");
       boltsData.forEach((key, value) {
         listS.add(value);
         listSKey.add(key);
@@ -887,9 +894,12 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       log("LIST TORQUE SUGGESTION Y : $listTorqueSuggestionsY");
     }
 
-    acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
-    bdCrockedLine = divideUntilTwoDigits(bdCrockness ?? 0);
-    upperCrockedLine = divideUntilTwoDigits(upperCrockness ?? 0);
+    acCrockedLine = (acCrockness ?? 0);
+    bdCrockedLine = (bdCrockness ?? 0);
+    upperCrockedLine = (upperCrockness ?? 0);
+    // acCrockedLine = divideUntilTwoDigits(acCrockness ?? 0);
+    // bdCrockedLine = divideUntilTwoDigits(bdCrockness ?? 0);
+    // upperCrockedLine = divideUntilTwoDigits(upperCrockness ?? 0);
     log("AC UPPER : $acUpper");
     log("AC CLUTCH : $acClutch");
     log("AC TURBINE : $acTurbine");
