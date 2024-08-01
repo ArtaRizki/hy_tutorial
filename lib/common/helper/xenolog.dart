@@ -42,7 +42,7 @@ import 'dart:developer';
 // dio: ^3.0.9
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // intl: ^0.15.0
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // shared_preferences: ^0.5.7+3
 // import 'package:get/get.dart' as g;
 // import 'package:esys_flutter_share/esys_flutter_share.dart'; // esys_flutter_share: ^1.0.2
@@ -181,14 +181,14 @@ class XenoLog {
     }
 
     if (doLog) {
-    //   if (this.logType == XenoLogType.Database) {
-    String formattedLog = _formatLog(id.toString(), log);
-    _saveUnsendLog(formattedLog, date: DateTime.now());
-    //   } else if (this.logType == XenoLogType.Discord) {
-    //     String formattedLog = _formatLog(id.toString(), log);
-    //     _saveUnsendLog(formattedLog, date: DateTime.now());
-    //     // } else if (this.logType == XenoLogType.Email) {
-    //   }
+      //   if (this.logType == XenoLogType.Database) {
+      String formattedLog = _formatLog(id.toString(), log);
+      _saveUnsendLog(formattedLog, date: DateTime.now());
+      //   } else if (this.logType == XenoLogType.Discord) {
+      //     String formattedLog = _formatLog(id.toString(), log);
+      //     _saveUnsendLog(formattedLog, date: DateTime.now());
+      //     // } else if (this.logType == XenoLogType.Email) {
+      //   }
     }
   }
 
@@ -261,10 +261,10 @@ class XenoLog {
     String fileName = await _writeToFile(title + "\r\n" + unsendLog);
 
     if (fileName != '') {
-      await Share.shareXFiles([XFile(fileName)]);
+      // await Share.shareXFiles([XFile(fileName)]);
       // await Share.shareFiles([fileName]);
     } else {
-      await Share.share(title + "\r\n" + unsendLog);
+      // await Share.share(title + "\r\n" + unsendLog);
     }
     return true;
   }

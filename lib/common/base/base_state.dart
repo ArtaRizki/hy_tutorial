@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 // import 'package:firebase_core/firebase_core.dart';
-import '../library/firebase_manager.dart';
+// import '../library/firebase_manager.dart';
 import 'base_controller.dart';
 
 abstract class BaseState<T extends StatefulWidget> extends State<T> {
