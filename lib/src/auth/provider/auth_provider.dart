@@ -119,10 +119,13 @@ class AuthProvider extends BaseController with ChangeNotifier {
             Constant.kSetPrefRefreshToken, model.Data?.RefreshToken ?? '');
         await prefs.setString(Constant.kSetPrefName, model.Data?.Name ?? '');
         await prefs.setBool(
-            Constant.kSetPrefIsAdmin, model.Data!.Source == 'admin' || model.Data!.Source == 'main' ? true : false);
+            Constant.kSetPrefIsAdmin,
+            model.Data?.Source == 'admin' || model.Data?.Source == 'main'
+                ? true
+                : false);
 
         Navigator.pushReplacementNamed(context, '/home',
-            arguments: Constant.kSetPrefIsAdmin);
+            arguments: await prefs.getString(Constant.kSetPrefIsAdmin));
         usernameC.clear();
         passC.clear();
       } else {

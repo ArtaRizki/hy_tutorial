@@ -269,6 +269,12 @@ class PltaProvider extends BaseController with ChangeNotifier {
       statusActive =
           (model.Data?.Units ?? []).map((e) => e?.Status ?? false).toList();
       pltaUnitList = model.Data?.Units ?? [];
+
+      if ((model.Data?.Units ?? []).isNotEmpty) {
+        model.Data?.Units?.forEach((item) {
+          pltaUnitListName.add(TextEditingController());
+        });
+      }
       loading(false);
       notifyListeners();
     } else {
@@ -421,7 +427,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
       if (active == null) throw 'Status harap dipilih';
       if (totalUnitC.text.isEmpty) throw 'Total unit harap diisi';
       if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
-      if (!coordinateC.text.isLatLongCoordinatesDecimal()) throw 'Koordinat Tidak Valid';
+      if (!coordinateC.text.isLatLongCoordinatesDecimal())
+        throw 'Koordinat Tidak Valid';
       if (radiusC.text.isEmpty) throw 'Radius harap diisi';
       if (radiusType == null) throw 'Tipe radius harap dipilih';
       var split = coordinateC.text.split(',');
