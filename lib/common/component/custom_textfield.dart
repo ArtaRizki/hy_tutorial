@@ -273,6 +273,7 @@ class CustomTextField {
     bool readOnly = false,
     Color? suffixIconColor,
     FontWeight? labelFontWeight,
+    FontWeight? hintFontWeight,
     Color? labelColor,
     Color? fillColor,
     Color? hintColor,
@@ -337,7 +338,7 @@ class CustomTextField {
               hoverColor: Constant.primaryColor,
               focusColor: Constant.primaryColor,
               errorStyle: TextStyle(color: validatorTextColor ?? Colors.red),
-              hintStyle: TextStyle(color: hintColor ?? Constant.textHintColor2),
+              hintStyle: TextStyle(color: hintColor ?? Constant.textHintColor2, fontWeight: hintFontWeight),
               prefixIcon: prefix,
               prefix: prefix == null ? SizedBox(width: 12) : null,
               border: OutlineInputBorder(
