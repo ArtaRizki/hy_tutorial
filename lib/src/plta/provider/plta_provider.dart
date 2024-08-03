@@ -420,9 +420,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
       if (active == null) throw 'Status harap dipilih';
       if (totalUnitC.text.isEmpty) throw 'Total unit harap diisi';
       if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
-      if (coordinateC.text.isLatLongCoordinatesDecimal()) throw 'Koordinat Tidak Valid';
+      if (!coordinateC.text.isLatLongCoordinatesDecimal()) throw 'Koordinat Tidak Valid';
       if (radiusC.text.isEmpty) throw 'Radius harap diisi';
-      
+      if (radiusType == null) throw 'Tipe radius harap dipilih';
       var split = coordinateC.text.split(',');
       Map<String, String> body = {
         'Name': nameC.text,
@@ -430,6 +430,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
         'TotalUnits': totalUnitC.text,
         'Lat': split[0].replaceAll(',', ''),
         'Long': split[1],
+        'Radius': radiusC.text,
+        'RadiusType': radiusType == 'kilometer' ? 'kilometer' : 'meter',
       };
       http.Response response;
       if (isEdit)
