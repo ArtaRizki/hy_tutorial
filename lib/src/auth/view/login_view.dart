@@ -2,6 +2,7 @@ import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
+import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
 import 'package:hy_tutorial/src/auth/view/register_view.dart';
 import 'package:hy_tutorial/src/home/view/home_view.dart';
@@ -32,7 +33,7 @@ class _LoginViewState extends State<LoginView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/icons/ic-login.png',
+                Assets.iconsIcLogin,
                 scale: 2,
               ),
               // CircleAvatar(
