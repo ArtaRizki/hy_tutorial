@@ -254,10 +254,13 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
                               desc:
                                   "Apakah anda yakin ingin\nmenghapus unit yang dipilih?",
                               yesCallback: () async {
-                                Navigator.pop(context);
+                                try {
                                 await context
                                     .read<PltaProvider>()
-                                    .deletePlta(context, id: pltaP?.Id ?? "0");
+                                    .deletePltaUnit(context, id: pltaP?.Units?[index]?.Id ?? "0");
+                              } catch (e) {
+                                Utils.showFailed(msg: "Gagal hapus PLTA Unit");
+                              }
                               },
                               noCallback: () async {
                                 Navigator.pop(context);
@@ -314,7 +317,6 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
                             yesCallback: () async {
                               Navigator.pop(context);
                               try {
-                                Navigator.pop(context);
                                 await context
                                     .read<PltaProvider>()
                                     .deletePlta(context, id: pltaP?.Id ?? "0");

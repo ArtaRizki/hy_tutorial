@@ -326,7 +326,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
   set setActive(String? active) => this.active = active;
 
   TextEditingController radiusStatusC = TextEditingController();
-  bool _radiusStatus = false;
+  bool _radiusStatus = true;
   get radiusStatus => _radiusStatus;
   set radiusStatus(value) {
     this._radiusStatus = value;
@@ -490,6 +490,25 @@ class PltaProvider extends BaseController with ChangeNotifier {
       Navigator.pop(context);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: ((context) => UserManageView())));
+    } else {
+      final message = jsonDecode(response.body)["Message"];
+      loading(false);
+      throw Exception(message);
+    }
+  }
+
+  Future<void> deletePltaUnit(BuildContext context, {required String id}) async {
+    loading(true);
+    final response = await delete(Constant.BASE_API_FULL + '/plta-unit/$id');
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      final model = BaseResponse.from(response);
+      loading(false);
+      await Utils.showSuccess(msg: model.message ?? "Sukses");
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pop(context);
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: ((context) => UserManageView())));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
