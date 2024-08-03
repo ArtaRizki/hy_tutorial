@@ -210,7 +210,9 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
 
     List<TableRow> content() {
       final p = context.read<PltaProvider>();
-      if (p.pltaUnitList.isEmpty) return [];
+      if (p.pltaUnitList.isEmpty ||
+          statusActiveList.isEmpty ||
+          pltaUnitListName.isEmpty) return [];
       return List<TableRow>.generate(
         p.pltaUnitList.length,
         (index) {
