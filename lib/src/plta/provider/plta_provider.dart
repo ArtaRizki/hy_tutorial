@@ -261,6 +261,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
   Future<void> fetchPltaDetail({required String id}) async {
     loading(true);
     statusActive = [];
+    pltaUnitListName = [];
     final response = await get(Constant.BASE_API_FULL + '/plta/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
@@ -273,7 +274,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
       if ((model.Data?.Units ?? []).isNotEmpty) {
         model.Data?.Units?.forEach((item) {
-          pltaUnitListName.add(TextEditingController());
+          pltaUnitListName.add(TextEditingController(text: item?.Name ?? ''));
         });
       }
       loading(false);
