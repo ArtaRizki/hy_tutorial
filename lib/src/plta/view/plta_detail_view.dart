@@ -217,7 +217,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
                 padding: const EdgeInsets.only(top: 4, bottom: 8),
                 child: CustomTextField.tableTextField(
                   textInputType: TextInputType.name,
-                  controller: item,
+                  controller: itemC,
                   noBorder: true,
                   isDense: true,
                 ),
