@@ -211,75 +211,66 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
           return TableRow(
             decoration: BoxDecoration(color: Color(0xffFAFAFA)),
             children: [
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 4, bottom: 8),
-                  child: CustomTextField.tableTextField(
-                    controller: itemC,
-                    noBorder: true,
-                    isDense: true,
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4, bottom: 8),
+                child: CustomTextField.tableTextField(
+                  controller: itemC,
+                  noBorder: true,
+                  isDense: true,
                 ),
               ),
-              Expanded(
-                flex: 4,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  child: Text(
-                    itemStatus ? 'Aktif' : 'Non Aktif',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0xff111E30)),
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: Text(
+                  itemStatus ? 'Aktif' : 'Non Aktif',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Color(0xff111E30)),
                 ),
               ),
-              Expanded(
-                flex: 4,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (p.statusActive.isNotEmpty)
-                      Container(
-                        width: 25,
-                        height: 25,
-                        child: FittedBox(
-                          child: CupertinoSwitch(
-                            value: p.statusActive[index],
-                            onChanged: (value) =>
-                                setState(() => p.statusActive[index] = value),
-                          ),
-                        ),
-                      ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (p.statusActive.isNotEmpty)
                     Container(
-                      width: 35,
-                      height: 35,
+                      width: 25,
+                      height: 25,
                       child: FittedBox(
-                        child: IconButton(
-                          onPressed: () {
-                            Utils.showYesNoDialogWithWarning(
-                                context: context,
-                                title: "Konfirmasi Penghapusan",
-                                desc:
-                                    "Apakah anda yakin ingin\nmenghapus unit yang dipilih?",
-                                yesCallback: () async {
-                                  Navigator.pop(context);
-                                  await context.read<PltaProvider>().deletePlta(
-                                      context,
-                                      id: pltaP?.Id ?? "0");
-                                },
-                                noCallback: () async {
-                                  Navigator.pop(context);
-                                });
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: Constant.redColor,
-                          ),
+                        child: CupertinoSwitch(
+                          value: p.statusActive[index],
+                          onChanged: (value) =>
+                              setState(() => p.statusActive[index] = value),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  Container(
+                    width: 35,
+                    height: 35,
+                    child: FittedBox(
+                      child: IconButton(
+                        onPressed: () {
+                          Utils.showYesNoDialogWithWarning(
+                              context: context,
+                              title: "Konfirmasi Penghapusan",
+                              desc:
+                                  "Apakah anda yakin ingin\nmenghapus unit yang dipilih?",
+                              yesCallback: () async {
+                                Navigator.pop(context);
+                                await context
+                                    .read<PltaProvider>()
+                                    .deletePlta(context, id: pltaP?.Id ?? "0");
+                              },
+                              noCallback: () async {
+                                Navigator.pop(context);
+                              });
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: Constant.redColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           );
