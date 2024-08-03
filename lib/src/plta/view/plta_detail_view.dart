@@ -202,8 +202,10 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
     }
 
     List<TableRow> content() {
+      final p = context.read<PltaProvider>();
+      if (p.pltaUnitList.isEmpty) return [];
       return List<TableRow>.generate(
-        context.read<PltaProvider>().pltaUnitList.length,
+        p.pltaUnitList.length,
         (index) {
           final item = pltaUnitList[index];
           final itemStatus = statusActiveList[index];
@@ -255,12 +257,14 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
                                   "Apakah anda yakin ingin\nmenghapus unit yang dipilih?",
                               yesCallback: () async {
                                 try {
-                                await context
-                                    .read<PltaProvider>()
-                                    .deletePltaUnit(context, id: pltaP?.Units?[index]?.Id ?? "0");
-                              } catch (e) {
-                                Utils.showFailed(msg: "Gagal hapus PLTA Unit");
-                              }
+                                  await context
+                                      .read<PltaProvider>()
+                                      .deletePltaUnit(context,
+                                          id: pltaP?.Units?[index]?.Id ?? "0");
+                                } catch (e) {
+                                  Utils.showFailed(
+                                      msg: "Gagal hapus PLTA Unit");
+                                }
                               },
                               noCallback: () async {
                                 Navigator.pop(context);
