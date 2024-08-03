@@ -405,13 +405,25 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   UserDetailModel get userDetailModel => this._userDetailModel;
   set userDetailModel(UserDetailModel value) => this._userDetailModel = value;
 
+  TextEditingController radiusStatusC = TextEditingController();
+  bool _radiusStatus = true;
+  bool get radiusStatus => _radiusStatus;
+  set radiusStatus(bool value) {
+    this._radiusStatus = value;
+    // notifyListeners();
+  }
+
   Future<void> fetchUserDetail({required String id}) async {
+    radiusStatus = false;
     loading(true);
     final response = await get(Constant.BASE_API_FULL + '/admin/users/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = UserDetailModel.fromJson(jsonDecode(response.body));
       userDetailModel = model;
+      radiusStatusC.text =
+          (model.Data?.RadiusStatus ?? false) ? 'Aktif' : 'Tidak Aktif';
+      radiusStatus = model.Data?.RadiusStatus ?? false;
       notifyListeners();
       loading(false);
     } else {
@@ -589,10 +601,12 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     BuildContext context, {
     required String id,
     bool fromHome = false,
+    bool fromDetail = false,
   }) async {
     loading(true);
     FocusManager.instance.primaryFocus?.unfocus();
     Map<String, String> param = {
+      'RadiusStatus': '$radiusStatus',
       // 'Name': nameC.text,
       // 'Username': usernameC.text,
       // 'Email': emailC.text,
@@ -617,9 +631,14 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: ((context) => UserManageView())));
       }
+      if (fromDetail) {
+        Navigator.pop(context);
+      }
       nameC.clear();
       emailC.clear();
       usernameC.clear();
+      radiusStatus = false;
+      radiusStatusC.clear();
       selectedDivision = null;
     } else {
       final message = jsonDecode(response.body)["message"];

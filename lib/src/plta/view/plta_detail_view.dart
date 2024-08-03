@@ -23,8 +23,7 @@ class PltaDetailView extends StatefulWidget {
   State<PltaDetailView> createState() => _PltaDetailViewState();
 }
 
-class _PltaDetailViewState extends BaseState<PltaDetailView>
-    with TickerProviderStateMixin {
+class _PltaDetailViewState extends BaseState<PltaDetailView> {
   @override
   void initState() {
     setData();
@@ -47,6 +46,14 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
       p.radiusC.text = '${data.Radius ?? 0}';
       p.radiusType = data.RadiusType ?? '';
       if (p.radiusType == '') p.radiusType = 'meter';
+      if (p.pltaUnitList.isNotEmpty) {
+        for (int i = 0; i < p.pltaUnitList.length; i++) {
+          final item = p.pltaUnitList[i];
+          p.pltaUnitListName.add(TextEditingController(text: item?.Name ?? ''));
+        }
+        log("PLTA UNIT LIST NAME : ${p.pltaUnitListName[0].text}");
+      }
+      setState(() {});
     }
   }
 
@@ -57,7 +64,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
     final pltaP = p.towerDetailModel.Data;
     final pltaUnitList = p.pltaUnitList;
     final statusActiveList = p.statusActive;
-    final pltaUnitListName = p.pltaUnitListName;
+    final pltaUnitListName = context.watch<PltaProvider>().pltaUnitListName;
 
     Widget modalHapus() {
       return CustomButton.secondaryButton('Hapus', () async {});
@@ -89,7 +96,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 8),
             child: Text(
-              'No. Unit',
+              'Nama Unit',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xff100629),
@@ -203,19 +210,23 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
 
     List<TableRow> content() {
       final p = context.read<PltaProvider>();
-      if (p.pltaUnitList.isEmpty) return [];
+      if (p.pltaUnitList.isEmpty ||
+          statusActiveList.isEmpty ||
+          pltaUnitListName.isEmpty) return [];
       return List<TableRow>.generate(
         p.pltaUnitList.length,
         (index) {
           final item = pltaUnitList[index];
           final itemStatus = statusActiveList[index];
           final itemC = pltaUnitListName[index];
+          log("ITEM C $index : ${itemC.text}");
           return TableRow(
             decoration: BoxDecoration(color: Color(0xffFAFAFA)),
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 8),
                 child: CustomTextField.tableTextField(
+                  textInputType: TextInputType.name,
                   controller: itemC,
                   noBorder: true,
                   isDense: true,
@@ -357,7 +368,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
                         color: Constant.borderSearchColor.withOpacity(0.3),
                         borderRadius: BorderRadius.circular(5)),
                     columnWidths: const <int, TableColumnWidth>{
-                      0: FixedColumnWidth(20),
+                      0: FlexColumnWidth(),
                       // 0: IntrinsicColumnWidth(flex: 0.5),
                       1: FlexColumnWidth(),
                       2: FlexColumnWidth(),

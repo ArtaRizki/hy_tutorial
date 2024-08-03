@@ -426,6 +426,7 @@ class CustomTextField {
     Color? validatorTextColor,
     Widget? prefix,
     Widget? prefixIcon,
+    TextInputType? textInputType,
     TextCapitalization? textCapitalization,
     Function()? onEditingComplete,
     Function()? onTap,
@@ -481,7 +482,7 @@ class CustomTextField {
       textInputAction: onEditingComplete != null ? TextInputAction.next : null,
       obscureText: obscureText ?? false,
       controller: controller,
-      keyboardType: TextInputType.number,
+      keyboardType: textInputType ?? TextInputType.number,
       enabled: enabled,
       enableInteractiveSelection: enableInteractiveSelection ?? true,
       // will disable paste operation
