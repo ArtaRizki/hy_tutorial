@@ -40,6 +40,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
       data.RadiusStatus == true
           ? p.radiusStatusC.text = 'Aktif'
           : p.radiusStatusC.text = 'Tidak Aktif';
+      p.radiusStatus = data.RadiusStatus ?? false;
       //p.radiusStatusC.text = 'Aktif';
       if (data.Lat != null && data.Long != null)
         p.coordinateC.text = '${data.Lat ?? 0}, ${data.Long ?? 0}';
