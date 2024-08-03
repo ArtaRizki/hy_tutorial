@@ -118,6 +118,16 @@ class PltaDetailModelData {
     }
     return data;
   }
+
+  Map<String, dynamic> toJson2() => {
+        "Units": Units == null
+            ? []
+            : List<dynamic>.from(
+                Units!.map(
+                  (x) => x?.toJson(),
+                ),
+              ),
+      };
 }
 
 class PltaDetailModel {

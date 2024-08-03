@@ -432,6 +432,8 @@ class CustomTextField {
     Function(String)? onChange,
     Color? activeBorderColor,
     bool required = false,
+    bool noBorder = false,
+    bool isDense = false,
     List<TextInputFormatter>? inputFormatters,
   }) {
     return TextFormField(
@@ -443,6 +445,7 @@ class CustomTextField {
         suffixIcon: suffixIcon,
         suffixText: suffixText ?? null,
         filled: true,
+        isDense: isDense,
         fillColor:
             fillColor ?? (enabled ? Colors.white : Constant.textHintColor),
         hoverColor: Constant.primaryColor,
@@ -451,22 +454,28 @@ class CustomTextField {
         hintStyle: TextStyle(color: hintColor ?? Constant.textHintColor2),
         prefixIcon: prefix,
         prefix: prefix == null ? SizedBox(width: 12) : null,
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: borderColor ?? Constant.borderLightColor,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: borderColor ?? Constant.borderLightColor,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            width: 0.5,
-            color: activeBorderColor ?? Constant.primaryColor,
-          ),
-        ),
+        border: noBorder
+            ? InputBorder.none
+            : OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: borderColor ?? Constant.borderLightColor,
+                ),
+              ),
+        enabledBorder: noBorder
+            ? InputBorder.none
+            : OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: borderColor ?? Constant.borderLightColor,
+                ),
+              ),
+        focusedBorder: noBorder
+            ? InputBorder.none
+            : OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 0.5,
+                  color: activeBorderColor ?? Constant.primaryColor,
+                ),
+              ),
       ),
       textInputAction: onEditingComplete != null ? TextInputAction.next : null,
       obscureText: obscureText ?? false,

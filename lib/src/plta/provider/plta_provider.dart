@@ -247,10 +247,15 @@ class PltaProvider extends BaseController with ChangeNotifier {
   List<bool> get statusActive => this._statusActive;
   set statusActive(List<bool> value) => this._statusActive = value;
 
-  List<PltaDetailModelDataUnits?> pltaUnitList = [];
-  List<PltaDetailModelDataUnits?> get getPltaUnitList => this.pltaUnitList;
-  set setPltaUnitList(List<PltaDetailModelDataUnits?> pltaUnitList) =>
-      this.pltaUnitList = pltaUnitList;
+  List<PltaDetailModelDataUnits?> _pltaUnitList = [];
+  List<PltaDetailModelDataUnits?> get pltaUnitList => this._pltaUnitList;
+  set pltaUnitList(List<PltaDetailModelDataUnits?> value) =>
+      this._pltaUnitList = value;
+
+  List<TextEditingController> _pltaUnitListName = [];
+  List<TextEditingController> get pltaUnitListName => this._pltaUnitListName;
+  set pltaUnitListName(List<TextEditingController> value) =>
+      this._pltaUnitListName = value;
 
   Future<void> fetchPltaDetail({required String id}) async {
     loading(true);
@@ -276,20 +281,16 @@ class PltaProvider extends BaseController with ChangeNotifier {
   tambahUnit() async {
     pltaUnitList.add(PltaDetailModelDataUnits(Name: '', Status: false));
     statusActive.add(false);
+    pltaUnitListName.add(TextEditingController());
     notifyListeners();
   }
 
   Future<void> sendPltaUnit(BuildContext context, {bool isEdit = false}) async {
     loading(true);
-    PltaDetailModelData param =
-        PltaDetailModelData(Units: [PltaDetailModelDataUnits()]);
-    Map<String, String> body = {
-      'Name': nameC.text,
-      'Status': active == 'aktif' ? 'true' : 'false',
-      'TotalUnits': totalUnitC.text,
-      // 'Lat': split[0],
-      // 'Long': split[1],
-    };
+    PltaDetailModelData pltaDetailModelData =
+        PltaDetailModelData(Units: pltaUnitList);
+    String param = jsonEncode(pltaDetailModelData.toJson2());
+    Map<String, String> body = jsonDecode(param);
     http.Response response;
     if (isEdit)
       response = await put(Constant.BASE_API_FULL + '/plta', body: body);

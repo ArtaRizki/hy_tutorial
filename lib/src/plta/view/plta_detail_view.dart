@@ -46,6 +46,8 @@ class _PltaDetailViewState extends State<PltaDetailView>
     final pltaDataP = p.towerDetailModel;
     final pltaP = p.towerDetailModel.Data;
     final pltaUnitList = p.pltaUnitList;
+    final statusActiveList = p.statusActive;
+    final pltaUnitListName = p.pltaUnitListName;
 
     Widget modalHapus() {
       return CustomButton.secondaryButton('Hapus', () async {});
@@ -144,74 +146,84 @@ class _PltaDetailViewState extends State<PltaDetailView>
         context.read<PltaProvider>().pltaUnitList.length,
         (index) {
           final item = pltaUnitList[index];
+          final itemStatus = statusActiveList[index];
+          final itemC = pltaUnitListName[index];
           return TableRow(
             decoration: BoxDecoration(color: Color(0xffFAFAFA)),
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 8),
-                child: Text(
-                  '${index + 1}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xff111E30)),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 8),
-                child: Text(
-                  (item?.Status ?? false) ? 'Aktif' : 'Non Aktif',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xff111E30)),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (p.statusActive.isNotEmpty)
-                    Container(
-                      width: 25,
-                      height: 25,
-                      child: FittedBox(
-                        child: CupertinoSwitch(
-                          value: p.statusActive[index],
-                          onChanged: (value) =>
-                              setState(() => p.statusActive[index] = value),
-                        ),
-                      ),
-                    ),
-                  Container(
-                    width: 35,
-                    height: 35,
-                    child: FittedBox(
-                      child: IconButton(
-                        onPressed: () {
-                          Utils.showYesNoDialogWithWarning(
-                              context: context,
-                              title: "Konfirmasi Penghapusan",
-                              desc:
-                                  "Apakah anda yakin ingin\nmenghapus unit yang dipilih?",
-                              yesCallback: () async {
-                                Navigator.pop(context);
-                                await context
-                                    .read<PltaProvider>()
-                                    .deletePlta(context, id: pltaP?.Id ?? "0");
-                              },
-                              noCallback: () async {
-                                Navigator.pop(context);
-                              });
-                        },
-                        icon: Icon(
-                          Icons.delete,
-                          color: Constant.redColor,
-                        ),
-                      ),
-                    ),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4, bottom: 8),
+                  child: CustomTextField.tableTextField(
+                    controller: itemC,
+                    noBorder: true,
+                    isDense: true,
                   ),
-                ],
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  child: Text(
+                    itemStatus ? 'Aktif' : 'Non Aktif',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Color(0xff111E30)),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (p.statusActive.isNotEmpty)
+                      Container(
+                        width: 25,
+                        height: 25,
+                        child: FittedBox(
+                          child: CupertinoSwitch(
+                            value: p.statusActive[index],
+                            onChanged: (value) =>
+                                setState(() => p.statusActive[index] = value),
+                          ),
+                        ),
+                      ),
+                    Container(
+                      width: 35,
+                      height: 35,
+                      child: FittedBox(
+                        child: IconButton(
+                          onPressed: () {
+                            Utils.showYesNoDialogWithWarning(
+                                context: context,
+                                title: "Konfirmasi Penghapusan",
+                                desc:
+                                    "Apakah anda yakin ingin\nmenghapus unit yang dipilih?",
+                                yesCallback: () async {
+                                  Navigator.pop(context);
+                                  await context.read<PltaProvider>().deletePlta(
+                                      context,
+                                      id: pltaP?.Id ?? "0");
+                                },
+                                noCallback: () async {
+                                  Navigator.pop(context);
+                                });
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Constant.redColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           );
         },
-        
       );
     }
 
@@ -283,7 +295,8 @@ class _PltaDetailViewState extends State<PltaDetailView>
                         color: Constant.borderSearchColor.withOpacity(0.3),
                         borderRadius: BorderRadius.circular(5)),
                     columnWidths: const <int, TableColumnWidth>{
-                      0: IntrinsicColumnWidth(flex: 0.5),
+                      0: FixedColumnWidth(20),
+                      // 0: IntrinsicColumnWidth(flex: 0.5),
                       1: FlexColumnWidth(),
                       2: FlexColumnWidth(),
                       3: FlexColumnWidth(),
