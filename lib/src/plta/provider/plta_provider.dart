@@ -318,12 +318,19 @@ class PltaProvider extends BaseController with ChangeNotifier {
   String? get getActive => this.active;
   set setActive(String? active) => this.active = active;
 
+  TextEditingController radiusStatusC = TextEditingController();
+  bool _radiusStatus = false;
+  get radiusStatus => _radiusStatus;
+  set radiusStatus(value) {
+    this._radiusStatus = value;
+    notifyListeners();
+  }
   TextEditingController coordinateC = TextEditingController();
   TextEditingController radiusC = TextEditingController();
   String? radiusType;
   String? get getRadiusType => this.radiusType;
   set setRadiusType(String? radiusType) => this.radiusType = radiusType;
-
+  
   List<Widget> towerForm(VoidCallback setState) {
     return [
       Text("Input Data PLTA", style: Constant.blackBold20),
@@ -430,6 +437,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
         'TotalUnits': totalUnitC.text,
         'Lat': split[0].replaceAll(',', ''),
         'Long': split[1],
+        'RadiusStatus': radiusStatus == true ? 'true' : 'false',
         'Radius': radiusC.text,
         'RadiusType': radiusType == 'kilometer' ? 'kilometer' : 'meter',
       };
