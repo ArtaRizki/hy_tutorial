@@ -37,9 +37,16 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
     final data = p.towerDetailModel.Data;
     if (data != null) {
       p.nameC.text = data.Name ?? '';
+      data.RadiusStatus == true
+          ? p.radiusStatusC.text = 'Aktif'
+          : p.radiusStatusC.text = 'Tidak Aktif';
+      p.radiusStatus = data.RadiusStatus ?? false;
+      //p.radiusStatusC.text = 'Aktif';
       if (data.Lat != null && data.Long != null)
         p.coordinateC.text = '${data.Lat ?? 0}, ${data.Long ?? 0}';
       p.radiusC.text = '${data.Radius ?? 0}';
+      p.radiusType = data.RadiusType ?? '';
+      if (p.radiusType == '') p.radiusType = 'meter';
     }
   }
 
@@ -128,6 +135,26 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
             textInputType: TextInputType.name,
             labelText: "Nama PLTA",
             hintText: "Masukkan nama PLTA",
+          ),
+          Constant.xSizedBox16,
+          CustomTextField.borderTextField(
+            controller: p.radiusStatusC,
+            labelText: "Pembatasan Lokasi",
+            textInputType: TextInputType.name,
+            readOnly: true,
+            suffixIcon: Container(
+              width: 25,
+              height: 25,
+              child: FittedBox(
+                child: CupertinoSwitch(
+                  value: p.radiusStatus,
+                  onChanged: (value) {
+                    p.radiusStatus = value;
+                    p.radiusStatusC.text = value ? 'Aktif' : 'Tidak Aktif';
+                  },
+                ),
+              ),
+            ),
           ),
           Constant.xSizedBox16,
           CustomTextField.borderTextField(
@@ -295,7 +322,12 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
                             desc: "Apakah Anda Yakin Ingin Hapus PLTA Ini?",
                             yesCallback: () async {
                               Navigator.pop(context);
-                              try {} catch (e) {
+                              try {
+                                Navigator.pop(context);
+                                await context
+                                    .read<PltaProvider>()
+                                    .deletePlta(context, id: pltaP?.Id ?? "0");
+                              } catch (e) {
                                 Utils.showFailed(msg: "Gagal hapus PLTA");
                               }
                             },
