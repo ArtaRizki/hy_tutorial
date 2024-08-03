@@ -308,7 +308,12 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
                             desc: "Apakah Anda Yakin Ingin Hapus PLTA Ini?",
                             yesCallback: () async {
                               Navigator.pop(context);
-                              try {} catch (e) {
+                              try {
+                                Navigator.pop(context);
+                                await context
+                                    .read<PltaProvider>()
+                                    .deletePlta(context, id: pltaP?.Id ?? "0");
+                              } catch (e) {
                                 Utils.showFailed(msg: "Gagal hapus PLTA");
                               }
                             },
