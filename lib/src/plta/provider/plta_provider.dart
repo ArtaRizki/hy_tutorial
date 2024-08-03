@@ -319,6 +319,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
   set setActive(String? active) => this.active = active;
 
   TextEditingController coordinateC = TextEditingController();
+  TextEditingController radiusC = TextEditingController();
+  String? radiusType;
+  String? get getRadiusType => this.radiusType;
+  set setRadiusType(String? radiusType) => this.radiusType = radiusType;
 
   List<Widget> towerForm(VoidCallback setState) {
     return [
@@ -369,12 +373,43 @@ class PltaProvider extends BaseController with ChangeNotifier {
         labelText: "Titik Lokasi (Latitude & Longitude)",
         textInputType: TextInputType.number,
         validator: (val) {
-          if (val != null && val.isLatLongCoordinatesDecimal())
+          if (val != null && !val.isLatLongCoordinatesDecimal())
             return 'Koordinat Tidak Valid';
           return null;
         },
       ),
       Constant.xSizedBox16,
+      CustomTextField.borderTextField(
+        controller: radiusC,
+        labelText: "Radius",
+        textInputType: TextInputType.number,
+        hintText: "Masukkan Radius",
+      ),
+      Constant.xSizedBox16,
+      CustomDropdown.normalDropdown(
+        //controller: roleC,
+        iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+        contentPadding: EdgeInsets.all(2),
+        borderColor: Constant.primaryColor,
+        labelText: "Tipe Radius",
+        selectedItem: radiusType,
+        hintText: "Pilih tipe Radius",
+        list: [
+          DropdownMenuItem(
+            child: Text("KM"),
+            value: "kilometer",
+          ),
+          DropdownMenuItem(
+            child: Text("M"),
+            value: "meter",
+          ),
+        ],
+        onChanged: (val) {
+          radiusType = val;
+          setState();
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+      ),
     ];
   }
 
@@ -385,7 +420,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
       if (active == null) throw 'Status harap dipilih';
       if (totalUnitC.text.isEmpty) throw 'Total unit harap diisi';
       if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
-      if (coordinateC.text.isLatLongCoordinatesDecimal()) ;
+      if (coordinateC.text.isLatLongCoordinatesDecimal()) throw 'Koordinat Tidak Valid';
+      if (radiusC.text.isEmpty) throw 'Radius harap diisi';
+      
       var split = coordinateC.text.split(',');
       Map<String, String> body = {
         'Name': nameC.text,

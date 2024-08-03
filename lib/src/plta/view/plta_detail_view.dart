@@ -8,6 +8,7 @@ import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
+import '../../../common/base/base_state.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
 import '../../../common/helper/constant.dart';
@@ -21,7 +22,7 @@ class PltaDetailView extends StatefulWidget {
   State<PltaDetailView> createState() => _PltaDetailViewState();
 }
 
-class _PltaDetailViewState extends State<PltaDetailView>
+class _PltaDetailViewState extends BaseState<PltaDetailView>
     with TickerProviderStateMixin {
   @override
   void initState() {
@@ -317,6 +318,43 @@ class _PltaDetailViewState extends State<PltaDetailView>
                     ),
                   ),
                 ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+              child: CustomButton.mainButton(
+                'Submit',
+                () async {
+                  final dataP = context.read<PltaProvider>();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  String? msg;
+                  //if (dataP.nameC.text.isEmpty) msg = 'Harap Isi Nama Lengkap';
+                  //if (dataP.nipC.text.isEmpty) msg = 'Harap Isi NIP';
+                  //if (dataP.roleC.text.isEmpty) msg = 'Harap Pilih Role';
+                  //if (dataP.towernameC.text.isEmpty) msg = 'Harap Isi Pltaname';
+                  //if (dataP.passwordC.text.isEmpty) msg = 'Harap Isi Password';
+                  if (msg != null) {
+                    Utils.showFailed(msg: msg);
+                    return;
+                  } else {
+                    await Utils.showYesNoDialog(
+                      context: context,
+                      title: "Konfirmasi",
+                      desc: "Apakah Data Anda Sudah Benar?",
+                      yesCallback: () => handleTap(
+                        () async {
+                          Navigator.pop(context);
+                          dataP.sendPlta(context, isEdit: true);
+                        },
+                      ),
+                      noCallback: () => Navigator.pop(context),
+                    );
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: ((context) => PltaView())));
+                  }
+                },
               ),
             ),
             // ),

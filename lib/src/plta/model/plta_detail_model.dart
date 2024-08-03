@@ -4,9 +4,9 @@
 class PltaDetailModelDataUnits {
 /*
 {
-  "Id": "01J4B268KF2PNMYVCJ8S0RQV24",
+  "Id": "01J4BNVANWTPB4ZNWC0909XJ2B",
   "Name": "1",
-  "Status": false
+  "Status": true
 } 
 */
 
@@ -36,20 +36,23 @@ class PltaDetailModelDataUnits {
 class PltaDetailModelData {
 /*
 {
-  "Id": "01J4B268KE75V22479S8XTSCXD",
-  "Name": "PLTA golang",
+  "Id": "01J4BNVANWTPB4ZNWC07SBPN13",
+  "Name": "PLTA Radius",
   "Status": true,
-  "Long": 1,
-  "Lat": 1,
-  "CreatedAt": "2024-08-03 09:48:07",
+  "Long": 12,
+  "Lat": 32,
+  "RadiusStatus": false,
+  "Radius": 4,
+  "RadiusType": "meter",
+  "CreatedAt": "2024-08-03 15:31:40",
   "CreatedBy": "aditya fullname",
-  "UpdatedAt": "2024-08-03 09:59:20",
-  "UpdatedBy": "aditya fullname",
+  "UpdatedAt": "",
+  "UpdatedBy": "",
   "Units": [
     {
-      "Id": "01J4B268KF2PNMYVCJ8S0RQV24",
+      "Id": "01J4BNVANWTPB4ZNWC0909XJ2B",
       "Name": "1",
-      "Status": false
+      "Status": true
     }
   ]
 } 
@@ -60,6 +63,9 @@ class PltaDetailModelData {
   bool? Status;
   int? Long;
   int? Lat;
+  bool? RadiusStatus;
+  int? Radius;
+  String? RadiusType;
   String? CreatedAt;
   String? CreatedBy;
   String? UpdatedAt;
@@ -72,6 +78,9 @@ class PltaDetailModelData {
     this.Status,
     this.Long,
     this.Lat,
+    this.RadiusStatus,
+    this.Radius,
+    this.RadiusType,
     this.CreatedAt,
     this.CreatedBy,
     this.UpdatedAt,
@@ -84,17 +93,20 @@ class PltaDetailModelData {
     Status = json['Status'];
     Long = json['Long']?.toInt();
     Lat = json['Lat']?.toInt();
+    RadiusStatus = json['RadiusStatus'];
+    Radius = json['Radius']?.toInt();
+    RadiusType = json['RadiusType']?.toString();
     CreatedAt = json['CreatedAt']?.toString();
     CreatedBy = json['CreatedBy']?.toString();
     UpdatedAt = json['UpdatedAt']?.toString();
     UpdatedBy = json['UpdatedBy']?.toString();
-    if (json['Units'] != null) {
-      final v = json['Units'];
-      final arr0 = <PltaDetailModelDataUnits>[];
-      v.forEach((v) {
-        arr0.add(PltaDetailModelDataUnits.fromJson(v));
-      });
-      Units = arr0;
+  if (json['Units'] != null) {
+  final v = json['Units'];
+  final arr0 = <PltaDetailModelDataUnits>[];
+  v.forEach((v) {
+  arr0.add(PltaDetailModelDataUnits.fromJson(v));
+  });
+    Units = arr0;
     }
   }
   Map<String, dynamic> toJson() {
@@ -104,6 +116,9 @@ class PltaDetailModelData {
     data['Status'] = Status;
     data['Long'] = Long;
     data['Lat'] = Lat;
+    data['RadiusStatus'] = RadiusStatus;
+    data['Radius'] = Radius;
+    data['RadiusType'] = RadiusType;
     data['CreatedAt'] = CreatedAt;
     data['CreatedBy'] = CreatedBy;
     data['UpdatedAt'] = UpdatedAt;
@@ -111,9 +126,9 @@ class PltaDetailModelData {
     if (Units != null) {
       final v = Units;
       final arr0 = [];
-      v!.forEach((v) {
-        arr0.add(v!.toJson());
-      });
+  v!.forEach((v) {
+  arr0.add(v!.toJson());
+  });
       data['Units'] = arr0;
     }
     return data;
@@ -127,20 +142,23 @@ class PltaDetailModel {
   "StatusCode": 200,
   "Message": "berhasil mendapatkan plta",
   "Data": {
-    "Id": "01J4B268KE75V22479S8XTSCXD",
-    "Name": "PLTA golang",
+    "Id": "01J4BNVANWTPB4ZNWC07SBPN13",
+    "Name": "PLTA Radius",
     "Status": true,
-    "Long": 1,
-    "Lat": 1,
-    "CreatedAt": "2024-08-03 09:48:07",
+    "Long": 12,
+    "Lat": 32,
+    "RadiusStatus": false,
+    "Radius": 4,
+    "RadiusType": "meter",
+    "CreatedAt": "2024-08-03 15:31:40",
     "CreatedBy": "aditya fullname",
-    "UpdatedAt": "2024-08-03 09:59:20",
-    "UpdatedBy": "aditya fullname",
+    "UpdatedAt": "",
+    "UpdatedBy": "",
     "Units": [
       {
-        "Id": "01J4B268KF2PNMYVCJ8S0RQV24",
+        "Id": "01J4BNVANWTPB4ZNWC0909XJ2B",
         "Name": "1",
-        "Status": false
+        "Status": true
       }
     ]
   }
@@ -162,9 +180,7 @@ class PltaDetailModel {
     Success = json['Success'];
     StatusCode = json['StatusCode']?.toInt();
     Message = json['Message']?.toString();
-    Data = (json['Data'] != null)
-        ? PltaDetailModelData.fromJson(json['Data'])
-        : null;
+    Data = (json['Data'] != null) ? PltaDetailModelData.fromJson(json['Data']) : null;
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
