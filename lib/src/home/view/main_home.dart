@@ -80,18 +80,17 @@ class _MainHomeState extends State<MainHome> {
             turbineP.createdAt = false;
             turbineP.turbineSearchC.clear();
             // context.read<PaketProvider>().clearFilter();
-            if (index == 1) {
-              currentIndex = index;
-              if (isAdmin == true)
-                await CusNav.nPush(context, UserManageView());
-              else
-                await CusNav.nPush(context, DataAddView());
-              setState(() {
-                currentIndex = 0;
-              });
-            } else {
-              setState(() => currentIndex = index);
-            }
+            // if (index == 1) {
+            //   currentIndex = index;
+            //   if (isAdmin == true)
+            //     await CusNav.nPush(context, UserManageView());
+            //   else
+            //     await CusNav.nPush(context, DataAddView());
+            //   setState(() {
+            //     currentIndex = 0;
+            //   });
+            // } 
+            setState(() => currentIndex = index);
           },
           type: BottomNavigationBarType.fixed,
           selectedIconTheme: IconThemeData(color: Constant.primaryColor),
@@ -199,9 +198,9 @@ class _MainHomeState extends State<MainHome> {
                   jumpToProfile: () => setState(() => currentIndex = 3),
                   jumpToManageUsers: () async {
                     currentIndex = 1;
-                    await CusNav.nPush(context, UserManageView());
+                    //await CusNav.nPush(context, UserManageView());
                     setState(() {
-                      currentIndex = 0;
+                      currentIndex = 1;
                     });
                     await getData();
                   },
