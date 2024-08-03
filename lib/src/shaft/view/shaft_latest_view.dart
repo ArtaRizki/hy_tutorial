@@ -616,7 +616,8 @@ class _ShaftLatestViewState extends State<ShaftLatestView>
 
     return Scaffold(
       appBar: CustomAppBar.appBar(
-          context, tabController.index == 2 ? 'Upper' : 'Shaft'),
+          context, tabController.index == 2 ? 'Upper' : 'Shaft',
+          color: Constant.primaryColor, foregroundColor: Colors.white),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
         child: ListView(

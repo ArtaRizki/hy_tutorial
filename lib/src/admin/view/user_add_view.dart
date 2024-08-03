@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/admin/model/user_detail_model.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -52,12 +53,12 @@ class _UserAddViewState extends BaseState<UserAddView> {
     } else {
       final p = context.read<UserManageProvider>();
       p.nameC.text = '';
-      p.nipC.text = '';
       p.usernameC.text = '';
       p.emailC.text = '';
-      p.passwordC.text = '';
       p.selectedDivision = null;
       p.updateV = false;
+      p.radiusStatus = false;
+      p.radiusStatusC.text = '';
       setState(() {});
     }
   }
@@ -70,14 +71,22 @@ class _UserAddViewState extends BaseState<UserAddView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: widget.data != null
-          ? CustomAppBar.appBar(context, "Edit User")
-          : CustomAppBar.appBar(context, "Tambah User"),
+          ? CustomAppBar.appBar(context, "Edit User",
+              color: Constant.primaryColor, foregroundColor: Colors.white)
+          : CustomAppBar.appBar(context, "Tambah User",
+              color: Constant.primaryColor, foregroundColor: Colors.white),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Column(children: [
             Expanded(
-                child: ListView(
-                    children: [...p.userForm(division.divisionModel.Data)])),
+              child: ListView(
+                children: [
+                  ...p.userForm(division.divisionModel.Data, () {
+                    setState(() {});
+                  }, widget.data != null),
+                ],
+              ),
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
               child: widget.data != null

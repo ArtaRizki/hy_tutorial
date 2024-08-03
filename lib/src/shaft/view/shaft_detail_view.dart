@@ -620,6 +620,8 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
       appBar: CustomAppBar.appBar(
         context,
         tabController.index == 2 ? 'Upper' : 'Shaft',
+        color: Constant.primaryColor,
+        foregroundColor: Colors.white,
         action: [
           IconButton(
             onPressed: () {
@@ -640,7 +642,7 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
             },
             icon: Icon(
               Icons.delete,
-              color: Constant.redColor,
+              // color: Constant.redColor,
             ),
           ),
         ],

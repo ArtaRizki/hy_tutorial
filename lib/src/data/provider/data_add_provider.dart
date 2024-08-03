@@ -105,7 +105,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   Future<PltaModel> fetchPlta(BuildContext context) async {
     loading(true);
     pltaModel = PltaModel();
-    final response = await get(Constant.BASE_API_FULL + '/pltas/master');
+    final response = await get(Constant.BASE_API_FULL + '/plta/master');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = PltaModel.fromJson(jsonDecode(response.body));

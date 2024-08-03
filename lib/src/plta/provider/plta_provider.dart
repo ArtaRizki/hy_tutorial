@@ -27,15 +27,15 @@ import 'package:flutter_regex/flutter_regex.dart';
 import 'package:http/http.dart' as http;
 
 class PltaProvider extends BaseController with ChangeNotifier {
-  PltaModel _towerModel = PltaModel();
-  PltaModel get towerModel => this._towerModel;
-  set towerModel(PltaModel value) => this._towerModel = value;
+  PltaModel _pltaModel = PltaModel();
+  PltaModel get pltaModel => this._pltaModel;
+  set pltaModel(PltaModel value) => this._pltaModel = value;
 
-  List<PltaModelData?>? _towerList = [];
-  List<PltaModelData?>? get towerList => this._towerList;
+  List<PltaModelData?>? _pltaList = [];
+  List<PltaModelData?>? get pltaList => this._pltaList;
 
-  set towerList(List<PltaModelData?>? value) {
-    this._towerList = value;
+  set pltaList(List<PltaModelData?>? value) {
+    this._pltaList = value;
     notifyListeners();
   }
 
@@ -87,12 +87,12 @@ class PltaProvider extends BaseController with ChangeNotifier {
   Future<void> fetchPlta(BuildContext context) async {
     try {
       loading(true);
-      towerModel = PltaModel();
+      pltaModel = PltaModel();
       final response = await get(Constant.BASE_API_FULL + '/plta/master');
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         final model = PltaModel.fromJson(jsonDecode(response.body));
-        towerList = model.Data;
+        pltaList = model.Data;
         loading(false);
         notifyListeners();
       } else {
@@ -237,10 +237,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  PltaDetailModel _towerDetailModel = PltaDetailModel();
-  PltaDetailModel get towerDetailModel => this._towerDetailModel;
-  set towerDetailModel(PltaDetailModel value) {
-    this._towerDetailModel = value;
+  PltaDetailModel _pltaDetailModel = PltaDetailModel();
+  PltaDetailModel get pltaDetailModel => this._pltaDetailModel;
+  set pltaDetailModel(PltaDetailModel value) {
+    this._pltaDetailModel = value;
     // notifyListeners();
   }
 
@@ -261,13 +261,14 @@ class PltaProvider extends BaseController with ChangeNotifier {
   Future<void> fetchPltaDetail({required String id}) async {
     loading(true);
     statusActive = [];
+    pltaUnitList = [];
     pltaUnitListName = [];
     final response = await get(Constant.BASE_API_FULL + '/plta/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       // final model = PltaDetailModel.fromJson(dummyDetail);
       final model = PltaDetailModel.fromJson(jsonDecode(response.body));
-      towerDetailModel = model;
+      pltaDetailModel = model;
       statusActive =
           (model.Data?.Units ?? []).map((e) => e?.Status ?? false).toList();
       pltaUnitList = model.Data?.Units ?? [];
@@ -287,36 +288,72 @@ class PltaProvider extends BaseController with ChangeNotifier {
   }
 
   tambahUnit() async {
+    pltaUnitListName.add(TextEditingController());
     pltaUnitList.add(PltaDetailModelDataUnits(Name: '', Status: false));
     statusActive.add(false);
-    pltaUnitListName.add(TextEditingController());
     notifyListeners();
   }
 
-  Future<void> sendPltaUnit(BuildContext context, {bool isEdit = false}) async {
-    loading(true);
+  hapusUnit(int index) async {
+    pltaUnitListName.removeAt(index);
+    pltaUnitList.removeAt(index);
+    statusActive.removeAt(index);
+    notifyListeners();
+  }
+
+  setPltaUnitListName(int index, String v) {
+    pltaUnitList[index]?.Name = v;
+    notifyListeners();
+  }
+
+  Future<void> sendPltaUnit(
+    BuildContext context, {
+    required String pltaId,
+    bool isEdit = false,
+    bool back = false,
+    bool withLoading = false,
+  }) async {
+    if (withLoading) loading(true);
     PltaDetailModelData pltaDetailModelData =
         PltaDetailModelData(Units: pltaUnitList);
     String param = jsonEncode(pltaDetailModelData.toJson2());
-    Map<String, String> body = jsonDecode(param);
+    log("PARAM : $param");
+    // Map<String, dynamic> body = jsonDecode(param);
+    List<Map<String, dynamic>> b = [];
+    for (int i = 0; i < (pltaDetailModelData.Units ?? []).length; i++) {
+      final item = pltaDetailModelData.Units?[i];
+      final itemC = pltaUnitListName[i].text;
+      final bodyItem = {
+        'Name': item?.Name ?? '',
+        'Status': item?.Status ?? '',
+      };
+      if (item?.Id != null) bodyItem.addAll({'Id': item?.Id ?? ''});
+      b.add(bodyItem);
+    }
+    notifyListeners();
+    Map<String, dynamic> body = {"Units": jsonEncode(b)};
     http.Response response;
     if (isEdit)
-      response = await put(Constant.BASE_API_FULL + '/plta-unit', body: body);
+      response =
+          await put(Constant.BASE_API_FULL + '/plta-unit/$pltaId', body: body);
     else
-      response = await post(Constant.BASE_API_FULL + '/plta-unit', body: body);
+      response =
+          await post(Constant.BASE_API_FULL + '/plta-unit/$pltaId', body: body);
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
+      if (withLoading) loading(false);
       await Utils.showSuccess(msg: model.message);
       await Future.delayed(Duration(seconds: 2));
-      loading(false);
-      Navigator.pop(context);
-      nameC.clear();
-      active = null;
-      totalUnitC.clear();
-      coordinateC.clear();
+      if (!isEdit || back) {
+        Navigator.pop(context);
+        nameC.clear();
+        active = null;
+        totalUnitC.clear();
+        coordinateC.clear();
+      }
     } else {
       final message = jsonDecode(response.body)["Message"];
-      loading(false);
+      if (withLoading) loading(false);
       throw Exception(message);
     }
   }
@@ -334,13 +371,14 @@ class PltaProvider extends BaseController with ChangeNotifier {
     this._radiusStatus = value;
     notifyListeners();
   }
+
   TextEditingController coordinateC = TextEditingController();
   TextEditingController radiusC = TextEditingController();
   String? radiusType;
   String? get getRadiusType => this.radiusType;
   set setRadiusType(String? radiusType) => this.radiusType = radiusType;
-  
-  List<Widget> towerForm(VoidCallback setState) {
+
+  List<Widget> pltaForm(VoidCallback setState) {
     return [
       Text("Input Data PLTA", style: Constant.blackBold20),
       Constant.xSizedBox8,
@@ -387,6 +425,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       CustomTextField.borderTextField(
         controller: coordinateC,
         labelText: "Titik Lokasi (Latitude & Longitude)",
+        hintText: "Koordinat",
         textInputType: TextInputType.number,
         validator: (val) {
           if (val != null && !val.isLatLongCoordinatesDecimal())
@@ -429,12 +468,18 @@ class PltaProvider extends BaseController with ChangeNotifier {
     ];
   }
 
-  Future<void> sendPlta(BuildContext context, {bool isEdit = false}) async {
+  Future<void> sendPlta(
+    BuildContext context, {
+    bool isEdit = false,
+    bool back = false,
+    String? pltaId,
+    bool withLoading = true,
+  }) async {
     try {
-      loading(true);
+      if (withLoading) loading(true);
       if (nameC.text.isEmpty) throw 'Nama harap diisi';
-      if (active == null) throw 'Status harap dipilih';
-      if (totalUnitC.text.isEmpty) throw 'Total unit harap diisi';
+      if (active == null && !isEdit) throw 'Status harap dipilih';
+      if (totalUnitC.text.isEmpty && !isEdit) throw 'Total unit harap diisi';
       if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
       if (!coordinateC.text.isLatLongCoordinatesDecimal())
         throw 'Koordinat Tidak Valid';
@@ -444,31 +489,34 @@ class PltaProvider extends BaseController with ChangeNotifier {
       Map<String, String> body = {
         'Name': nameC.text,
         'Status': active == 'aktif' ? 'true' : 'false',
-        'TotalUnits': totalUnitC.text,
-        'Lat': split[0].replaceAll(',', ''),
-        'Long': split[1],
+        'Lat': split[0].replaceAll(',', '').trim(),
+        'Long': split[1].trim(),
         'RadiusStatus': radiusStatus == true ? 'true' : 'false',
         'Radius': radiusC.text,
         'RadiusType': radiusType == 'kilometer' ? 'kilometer' : 'meter',
       };
+      if (!isEdit) body.addAll({'TotalUnits': totalUnitC.text});
       http.Response response;
       if (isEdit)
-        response = await put(Constant.BASE_API_FULL + '/plta', body: body);
+        response =
+            await put(Constant.BASE_API_FULL + '/plta/$pltaId', body: body);
       else
         response = await post(Constant.BASE_API_FULL + '/plta', body: body);
       if (response.statusCode == 201 || response.statusCode == 200) {
         final model = BaseResponse.from(response);
         await Utils.showSuccess(msg: model.message);
         await Future.delayed(Duration(seconds: 2));
-        loading(false);
-        Navigator.pop(context);
-        nameC.clear();
-        active = null;
-        totalUnitC.clear();
-        coordinateC.clear();
+        if (withLoading) loading(false);
+        if (back) {
+          Navigator.pop(context);
+          nameC.clear();
+          active = null;
+          totalUnitC.clear();
+          coordinateC.clear();
+        }
       } else {
         final message = jsonDecode(response.body)["Message"];
-        loading(false);
+        if (withLoading) loading(false);
         throw Exception(message);
       }
     } catch (e) {
@@ -491,7 +539,11 @@ class PltaProvider extends BaseController with ChangeNotifier {
       await Future.delayed(Duration(seconds: 2));
       Navigator.pop(context);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: ((context) => MainHome(index: 1,))));
+          context,
+          MaterialPageRoute(
+              builder: ((context) => MainHome(
+                    index: 1,
+                  ))));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
@@ -499,7 +551,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  Future<void> deletePltaUnit(BuildContext context, {required String id}) async {
+  Future<void> deletePltaUnit(BuildContext context,
+      {required String id}) async {
     loading(true);
     final response = await delete(Constant.BASE_API_FULL + '/plta-unit/$id');
 

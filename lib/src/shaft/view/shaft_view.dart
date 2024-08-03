@@ -615,18 +615,18 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
 
     return Scaffold(
       appBar: CustomAppBar.appBar(
-        context,
-        tabController.index == 2 ? 'Upper' : 'Shaft',
-        leading: InkWell(
-          onTap: () async {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => MainHome()),
-                (route) => false);
-          },
-          child: Icon(Icons.arrow_back),
-        ),
-      ),
+          context, tabController.index == 2 ? 'Upper' : 'Shaft',
+          leading: InkWell(
+            onTap: () async {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainHome()),
+                  (route) => false);
+            },
+            child: Icon(Icons.arrow_back),
+          ),
+          color: Constant.primaryColor,
+          foregroundColor: Colors.white),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
         child: ListView(

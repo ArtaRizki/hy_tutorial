@@ -244,15 +244,13 @@ class _TurbineViewState extends BaseState<TurbineView> {
         );
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(
-        context,
-        "Riwayat",
-        textStyle: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
-        titleSpacing: 20,
-        isLeading: false,
-        color: Constant.primaryColor,
-      ),
+      appBar: CustomAppBar.appBar(context, "Riwayat",
+          textStyle: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
+          titleSpacing: 20,
+          isLeading: false,
+          color: Constant.primaryColor,
+          foregroundColor: Colors.white),
       body: SafeArea(
         child: RefreshIndicator(
           color: Constant.primaryColor,

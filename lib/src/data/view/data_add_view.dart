@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/data/view/data_add_upper_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,8 @@ class _DataAddViewState extends State<DataAddView> {
     final p = context.watch<DataAddProvider>();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(context, "Tambah Data"),
+      appBar: CustomAppBar.appBar(context, "Tambah Data",
+              color: Constant.primaryColor, foregroundColor: Colors.white),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
         child: Column(

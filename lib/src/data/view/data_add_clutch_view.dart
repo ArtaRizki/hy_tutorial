@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/utils.dart';
 import '../provider/data_add_provider.dart';
@@ -20,7 +21,8 @@ class _DataAddClutchViewState extends State<DataAddClutchView> {
     final p = context.watch<DataAddProvider>();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(context, "Tambah Data Clutch"),
+      appBar: CustomAppBar.appBar(context, "Tambah Data Clutch",
+          color: Constant.primaryColor, foregroundColor: Colors.white),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
         child: Column(

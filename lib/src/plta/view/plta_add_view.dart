@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/plta/model/plta_detail_model.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/utils/utils.dart';
@@ -34,6 +35,11 @@ class PltaAddViewState extends BaseState<PltaAddView> {
       final p = context.read<PltaProvider>();
       p.nameC.text = '';
       p.totalUnitC.text = '';
+      p.active = null;
+      p.coordinateC.text = '';
+      p.radiusC.text = '';
+      p.radiusType = null;
+
       setState(() {});
     }
   }
@@ -45,14 +51,16 @@ class PltaAddViewState extends BaseState<PltaAddView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: widget.data != null
-          ? CustomAppBar.appBar(context, "Edit Plta")
-          : CustomAppBar.appBar(context, "Tambah Plta"),
+          ? CustomAppBar.appBar(context, "Edit Plta",
+              color: Constant.primaryColor, foregroundColor: Colors.white)
+          : CustomAppBar.appBar(context, "Tambah Plta",
+              color: Constant.primaryColor, foregroundColor: Colors.white),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Column(children: [
             Expanded(
-                child: ListView(
-                    children: [...p.towerForm(() => setState(() {}))])),
+                child:
+                    ListView(children: [...p.pltaForm(() => setState(() {}))])),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
               child: CustomButton.mainButton(
@@ -77,7 +85,7 @@ class PltaAddViewState extends BaseState<PltaAddView> {
                       yesCallback: () => handleTap(
                         () async {
                           Navigator.pop(context);
-                          dataP.sendPlta(context);
+                          await dataP.sendPlta(context);
                         },
                       ),
                       noCallback: () => Navigator.pop(context),

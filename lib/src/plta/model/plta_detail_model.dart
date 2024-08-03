@@ -25,10 +25,10 @@ class PltaDetailModelDataUnits {
     Status = json['Status'];
   }
   Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['Id'] = Id;
-    data['Name'] = Name;
-    data['Status'] = Status;
+    final data = <String, String>{};
+    data['Id'] = Id ?? '';
+    data['Name'] = Name ?? '';
+    data['Status'] = '${Status ?? false}';
     return data;
   }
 }
@@ -100,13 +100,13 @@ class PltaDetailModelData {
     CreatedBy = json['CreatedBy']?.toString();
     UpdatedAt = json['UpdatedAt']?.toString();
     UpdatedBy = json['UpdatedBy']?.toString();
-  if (json['Units'] != null) {
-  final v = json['Units'];
-  final arr0 = <PltaDetailModelDataUnits>[];
-  v.forEach((v) {
-  arr0.add(PltaDetailModelDataUnits.fromJson(v));
-  });
-    Units = arr0;
+    if (json['Units'] != null) {
+      final v = json['Units'];
+      final arr0 = <PltaDetailModelDataUnits>[];
+      v.forEach((v) {
+        arr0.add(PltaDetailModelDataUnits.fromJson(v));
+      });
+      Units = arr0;
     }
   }
   Map<String, dynamic> toJson() {
@@ -126,9 +126,9 @@ class PltaDetailModelData {
     if (Units != null) {
       final v = Units;
       final arr0 = [];
-  v!.forEach((v) {
-  arr0.add(v!.toJson());
-  });
+      v!.forEach((v) {
+        arr0.add(v!.toJson());
+      });
       data['Units'] = arr0;
     }
     return data;
@@ -137,11 +137,10 @@ class PltaDetailModelData {
   Map<String, dynamic> toJson2() => {
         "Units": Units == null
             ? []
-            : List<dynamic>.from(
-                Units!.map(
-                  (x) => x?.toJson(),
-                ),
-              ),
+
+            // "Units":
+            //     Units == null ? [] : (Units ?? []).map((x) => x?.toJson()).toList(),
+            : List<dynamic>.from((Units ?? []).map((x) => x?.toJson())),
       };
 }
 
@@ -190,7 +189,9 @@ class PltaDetailModel {
     Success = json['Success'];
     StatusCode = json['StatusCode']?.toInt();
     Message = json['Message']?.toString();
-    Data = (json['Data'] != null) ? PltaDetailModelData.fromJson(json['Data']) : null;
+    Data = (json['Data'] != null)
+        ? PltaDetailModelData.fromJson(json['Data'])
+        : null;
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};

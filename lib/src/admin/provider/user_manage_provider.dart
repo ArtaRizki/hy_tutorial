@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
@@ -433,7 +434,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  List<Widget> userForm(List<DivisionModelData?>? Data) {
+  List<Widget> userForm(
+      List<DivisionModelData?>? Data, VoidCallback setState, bool isEdit) {
     return [
       Text("Input Data User", style: Constant.blackBold20),
       Constant.xSizedBox8,
@@ -445,6 +447,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
         ],
+        readOnly: isEdit,
+        enabled: !isEdit,
         labelText: "Nama",
       ),
       // Constant.xSizedBox16,
@@ -482,11 +486,15 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       CustomTextField.borderTextField(
         controller: usernameC,
         labelText: "Username",
+        readOnly: isEdit,
+        enabled: !isEdit,
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
         controller: emailC,
         labelText: "Email",
+        readOnly: isEdit,
+        enabled: !isEdit,
       ),
       Constant.xSizedBox16,
       Visibility(
@@ -547,6 +555,26 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         ),
       ),
       Constant.xSizedBox16,
+      CustomTextField.borderTextField(
+        controller: radiusStatusC,
+        labelText: "Pembatasan Lokasi",
+        textInputType: TextInputType.name,
+        readOnly: true,
+        suffixIcon: Container(
+          width: 25,
+          height: 25,
+          child: FittedBox(
+            child: CupertinoSwitch(
+              value: radiusStatus,
+              onChanged: (value) async {
+                radiusStatus = value;
+                radiusStatusC.text = value ? 'Aktif' : 'Tidak Aktif';
+                setState();
+              },
+            ),
+          ),
+        ),
+      ),
       // CustomTextField.borderTextField(
       //   controller: passwordC,
       //   labelText: "Password",
@@ -573,6 +601,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       'Username': usernameC.text,
       'Email': emailC.text,
       'DivisionId': selectedDivision ?? '',
+      'RadiusStatus': '$radiusStatus',
     };
     final response =
         await post(Constant.BASE_API_FULL + '/admin/users', body: param);
@@ -586,10 +615,12 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       Navigator.pop(context);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: ((context) => UserManageView())));
-      nameC.clear();
-      emailC.clear();
-      usernameC.clear();
+      nameC.text = '';
       selectedDivision = null;
+      usernameC.text = '';
+      emailC.text = '';
+      radiusStatus = false;
+      radiusStatusC.clear();
     } else {
       final message = jsonDecode(response.body)["message"];
       loading(false);
@@ -634,12 +665,12 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       if (fromDetail) {
         Navigator.pop(context);
       }
-      nameC.clear();
-      emailC.clear();
-      usernameC.clear();
+      nameC.text = '';
+      selectedDivision = null;
+      usernameC.text = '';
+      emailC.text = '';
       radiusStatus = false;
       radiusStatusC.clear();
-      selectedDivision = null;
     } else {
       final message = jsonDecode(response.body)["message"];
       loading(false);

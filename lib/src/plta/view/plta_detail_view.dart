@@ -33,7 +33,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
   setData() async {
     final p = context.read<PltaProvider>();
     await p.fetchPltaDetail(id: widget.id);
-    final data = p.towerDetailModel.Data;
+    final data = p.pltaDetailModel.Data;
     if (data != null) {
       p.nameC.text = data.Name ?? '';
       data.RadiusStatus == true
@@ -46,13 +46,13 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
       p.radiusC.text = '${data.Radius ?? 0}';
       p.radiusType = data.RadiusType ?? '';
       if (p.radiusType == '') p.radiusType = 'meter';
-      if (p.pltaUnitList.isNotEmpty) {
-        for (int i = 0; i < p.pltaUnitList.length; i++) {
-          final item = p.pltaUnitList[i];
-          p.pltaUnitListName.add(TextEditingController(text: item?.Name ?? ''));
-        }
-        log("PLTA UNIT LIST NAME : ${p.pltaUnitListName[0].text}");
-      }
+      // if (p.pltaUnitList.isNotEmpty) {
+      //   for (int i = 0; i < p.pltaUnitList.length; i++) {
+      //     final item = p.pltaUnitList[i];
+      //     p.pltaUnitListName.add(TextEditingController(text: item?.Name ?? ''));
+      //   }
+      //   log("PLTA UNIT LIST NAME : ${p.pltaUnitListName[0].text}");
+      // }
       setState(() {});
     }
   }
@@ -60,11 +60,11 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
   @override
   Widget build(BuildContext context) {
     final p = context.watch<PltaProvider>();
-    final pltaDataP = p.towerDetailModel;
-    final pltaP = p.towerDetailModel.Data;
-    final pltaUnitList = p.pltaUnitList;
-    final statusActiveList = p.statusActive;
-    final pltaUnitListName = context.watch<PltaProvider>().pltaUnitListName;
+    final pltaDataP = p.pltaDetailModel;
+    final pltaP = p.pltaDetailModel.Data;
+    var pltaUnitList = p.pltaUnitList;
+    var statusActiveList = p.statusActive;
+    var pltaUnitListName = context.watch<PltaProvider>().pltaUnitListName;
 
     Widget modalHapus() {
       return CustomButton.secondaryButton('Hapus', () async {});
@@ -227,7 +227,13 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
                 padding: const EdgeInsets.only(top: 4, bottom: 8),
                 child: CustomTextField.tableTextField(
                   textInputType: TextInputType.name,
-                  controller: itemC,
+                  controller:
+                      context.read<PltaProvider>().pltaUnitListName[index],
+                  onChange: (v) {
+                    context.read<PltaProvider>().setPltaUnitListName(index, v);
+                    setState(() {});
+                  },
+                  fillColor: Colors.transparent,
                   noBorder: true,
                   isDense: true,
                 ),
@@ -249,10 +255,15 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
                       height: 25,
                       child: FittedBox(
                         child: CupertinoSwitch(
-                          value: p.statusActive[index],
-                          onChanged: (value) =>
-                              setState(() => p.statusActive[index] = value),
-                        ),
+                            value: p.statusActive[index],
+                            onChanged: (value) async {
+                              p.statusActive[index] = value;
+                              p.pltaUnitList[index]?.Status = value;
+                              setState(() {});
+                              await p.sendPltaUnit(context,
+                                  pltaId: p.pltaDetailModel.Data?.Id ?? '',
+                                  isEdit: true);
+                            }),
                       ),
                     ),
                   Container(
@@ -268,10 +279,16 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
                                   "Apakah anda yakin ingin\nmenghapus unit yang dipilih?",
                               yesCallback: () async {
                                 try {
-                                  await context
-                                      .read<PltaProvider>()
-                                      .deletePltaUnit(context,
-                                          id: pltaP?.Units?[index]?.Id ?? "0");
+                                  if (pltaP?.Units?[index]?.Id != null) {
+                                    await context
+                                        .read<PltaProvider>()
+                                        .deletePltaUnit(context,
+                                            id: pltaP?.Units?[index]?.Id ??
+                                                "0");
+                                  } else {
+                                    p.hapusUnit(index);
+                                    CusNav.nPop(context);
+                                  }
                                 } catch (e) {
                                   Utils.showFailed(
                                       msg: "Gagal hapus PLTA Unit");
@@ -416,7 +433,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
                   //if (dataP.nameC.text.isEmpty) msg = 'Harap Isi Nama Lengkap';
                   //if (dataP.nipC.text.isEmpty) msg = 'Harap Isi NIP';
                   //if (dataP.roleC.text.isEmpty) msg = 'Harap Pilih Role';
-                  //if (dataP.towernameC.text.isEmpty) msg = 'Harap Isi Pltaname';
+                  //if (dataP.pltanameC.text.isEmpty) msg = 'Harap Isi Pltaname';
                   //if (dataP.passwordC.text.isEmpty) msg = 'Harap Isi Password';
                   if (msg != null) {
                     Utils.showFailed(msg: msg);
@@ -429,7 +446,20 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
                       yesCallback: () => handleTap(
                         () async {
                           Navigator.pop(context);
-                          dataP.sendPlta(context, isEdit: true);
+                          Utils.showLoading();
+                          await p.sendPlta(
+                            context,
+                            isEdit: true,
+                            back: false,
+                            withLoading: false,
+                            pltaId: pltaDataP.Data?.Id ?? '',
+                          );
+                          await dataP.sendPltaUnit(context,
+                              isEdit: true,
+                              back: true,
+                              withLoading: false,
+                              pltaId: pltaDataP.Data?.Id ?? '');
+                          Utils.dismissLoading();
                         },
                       ),
                       noCallback: () => Navigator.pop(context),

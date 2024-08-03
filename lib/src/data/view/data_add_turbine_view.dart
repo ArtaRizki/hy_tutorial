@@ -25,7 +25,8 @@ class _DataAddTurbineViewState extends BaseState<DataAddTurbineView> {
     final p = context.watch<DataAddProvider>();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(context, "Tambah Data Turbine"),
+      appBar: CustomAppBar.appBar(context, "Tambah Data Turbine",
+          color: Constant.primaryColor, foregroundColor: Colors.white),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
         child: Column(
