@@ -89,7 +89,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 8),
             child: Text(
-              'No. Unit',
+              'Nama Unit',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xff100629),
@@ -216,7 +216,8 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
               Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 8),
                 child: CustomTextField.tableTextField(
-                  controller: itemC,
+                  textInputType: TextInputType.name,
+                  controller: item,
                   noBorder: true,
                   isDense: true,
                 ),
@@ -357,7 +358,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
                         color: Constant.borderSearchColor.withOpacity(0.3),
                         borderRadius: BorderRadius.circular(5)),
                     columnWidths: const <int, TableColumnWidth>{
-                      0: FixedColumnWidth(20),
+                      0: FlexColumnWidth(),
                       // 0: IntrinsicColumnWidth(flex: 0.5),
                       1: FlexColumnWidth(),
                       2: FlexColumnWidth(),

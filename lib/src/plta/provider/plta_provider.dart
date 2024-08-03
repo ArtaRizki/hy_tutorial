@@ -9,6 +9,7 @@ import 'package:hy_tutorial/common/component/custom_dropdown.dart';
 import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
+import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:hy_tutorial/src/plta/model/create_update_plta_unit_model.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
 import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
@@ -299,9 +300,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
     Map<String, String> body = jsonDecode(param);
     http.Response response;
     if (isEdit)
-      response = await put(Constant.BASE_API_FULL + '/plta', body: body);
+      response = await put(Constant.BASE_API_FULL + '/plta-unit', body: body);
     else
-      response = await post(Constant.BASE_API_FULL + '/plta', body: body);
+      response = await post(Constant.BASE_API_FULL + '/plta-unit', body: body);
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
       await Utils.showSuccess(msg: model.message);
@@ -489,7 +490,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       await Future.delayed(Duration(seconds: 2));
       Navigator.pop(context);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: ((context) => UserManageView())));
+          context, MaterialPageRoute(builder: ((context) => MainHome(index: 1,))));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
