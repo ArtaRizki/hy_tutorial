@@ -23,8 +23,7 @@ class PltaDetailView extends StatefulWidget {
   State<PltaDetailView> createState() => _PltaDetailViewState();
 }
 
-class _PltaDetailViewState extends BaseState<PltaDetailView>
-    with TickerProviderStateMixin {
+class _PltaDetailViewState extends BaseState<PltaDetailView> {
   @override
   void initState() {
     setData();
@@ -47,6 +46,14 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
       p.radiusC.text = '${data.Radius ?? 0}';
       p.radiusType = data.RadiusType ?? '';
       if (p.radiusType == '') p.radiusType = 'meter';
+      if (p.pltaUnitList.isNotEmpty) {
+        for (int i = 0; i < p.pltaUnitList.length; i++) {
+          final item = p.pltaUnitList[i];
+          p.pltaUnitListName.add(TextEditingController(text: item?.Name ?? ''));
+        }
+        log("PLTA UNIT LIST NAME : ${p.pltaUnitListName[0].text}");
+      }
+      setState(() {});
     }
   }
 
@@ -57,7 +64,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
     final pltaP = p.towerDetailModel.Data;
     final pltaUnitList = p.pltaUnitList;
     final statusActiveList = p.statusActive;
-    final pltaUnitListName = p.pltaUnitListName;
+    final pltaUnitListName = context.watch<PltaProvider>().pltaUnitListName;
 
     Widget modalHapus() {
       return CustomButton.secondaryButton('Hapus', () async {});
@@ -210,6 +217,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
           final item = pltaUnitList[index];
           final itemStatus = statusActiveList[index];
           final itemC = pltaUnitListName[index];
+          log("ITEM C $index : ${itemC.text}");
           return TableRow(
             decoration: BoxDecoration(color: Color(0xffFAFAFA)),
             children: [
@@ -217,7 +225,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
                 padding: const EdgeInsets.only(top: 4, bottom: 8),
                 child: CustomTextField.tableTextField(
                   textInputType: TextInputType.name,
-                  controller: item,
+                  controller: itemC,
                   noBorder: true,
                   isDense: true,
                 ),

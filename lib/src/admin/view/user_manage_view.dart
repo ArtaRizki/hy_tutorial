@@ -572,6 +572,9 @@ class _UserManageViewState extends BaseState<UserManageView>
     return Scaffold(
       appBar: CustomAppBar.appBar(
           context, "Manage ${tabController.index != 2 ? 'User' : 'PLTA'}",
+          leading: SizedBox(),
+          isLeading: false,
+          titleSpacing: 24,
           textStyle: TextStyle(color: Colors.white, fontSize: 18),
           color: Constant.primaryColor,
           foregroundColor: Colors.white),

@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 // import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
@@ -29,6 +31,7 @@ class _UserDetailViewState extends State<UserDetailView>
 
   @override
   Widget build(BuildContext context) {
+    final p = context.watch<UserManageProvider>();
     final userDataP = context.watch<UserManageProvider>().userDetailModel;
     final userP = context.watch<UserManageProvider>().userDetailModel.Data;
 
@@ -217,6 +220,40 @@ class _UserDetailViewState extends State<UserDetailView>
                       ],
                     ),
                   ),
+                  Constant.xSizedBox16,
+                  CustomTextField.borderTextField(
+                    controller: p.radiusStatusC,
+                    labelText: "Pembatasan Lokasi",
+                    textInputType: TextInputType.name,
+                    readOnly: true,
+                    suffixIcon: Container(
+                      width: 25,
+                      height: 25,
+                      child: FittedBox(
+                        child: CupertinoSwitch(
+                          value: p.radiusStatus,
+                          onChanged: (value) async {
+                            p.radiusStatus = value;
+                            p.radiusStatusC.text =
+                                value ? 'Aktif' : 'Tidak Aktif';
+
+                            await p.updateUser(
+                              context,
+                              id: p.userDetailModel.Data?.Id ?? "",
+                              fromDetail: true,
+                              fromHome: true,
+                            );
+                            // Future.delayed(Duration(seconds: 2));
+
+                            // context
+                            //     .read<UserManageProvider>()
+                            //     .fetchUserDetail(id: widget.id);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Constant.xSizedBox16,
                 ],
               ),
             ),

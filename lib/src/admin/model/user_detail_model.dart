@@ -4,15 +4,16 @@
 class UserDetailModelData {
 /*
 {
-  "Id": "01J1WQEDH0SZYZWAC1Z9QDTXCK",
-  "Name": "UP Brantas",
-  "Username": "upbrantas",
-  "Email": "upbrantas@gmail.com",
+  "Id": "01J43C21T51C8ZEY1AC0CX8EET",
+  "Name": "nama7",
+  "Username": "nama7",
+  "Email": "nama7@yopmail.com",
   "Division": "Engineer",
-  "Role": "admin",
+  "Role": "user",
   "Status": "active",
-  "CreatedAt": "2024-07-03 23:39:34",
-  "UpdatedAt": ""
+  "RadiusStatus": true,
+  "CreatedAt": "2024-07-31 10:06:39",
+  "UpdatedAt": "2024-08-03 20:01:53"
 } 
 */
 
@@ -23,6 +24,7 @@ class UserDetailModelData {
   String? Division;
   String? Role;
   String? Status;
+  bool? RadiusStatus;
   String? CreatedAt;
   String? UpdatedAt;
 
@@ -34,6 +36,7 @@ class UserDetailModelData {
     this.Division,
     this.Role,
     this.Status,
+    this.RadiusStatus,
     this.CreatedAt,
     this.UpdatedAt,
   });
@@ -45,6 +48,7 @@ class UserDetailModelData {
     Division = json['Division']?.toString();
     Role = json['Role']?.toString();
     Status = json['Status']?.toString();
+    RadiusStatus = json['RadiusStatus'];
     CreatedAt = json['CreatedAt']?.toString();
     UpdatedAt = json['UpdatedAt']?.toString();
   }
@@ -57,6 +61,7 @@ class UserDetailModelData {
     data['Division'] = Division;
     data['Role'] = Role;
     data['Status'] = Status;
+    data['RadiusStatus'] = RadiusStatus;
     data['CreatedAt'] = CreatedAt;
     data['UpdatedAt'] = UpdatedAt;
     return data;
@@ -70,15 +75,16 @@ class UserDetailModel {
   "StatusCode": 200,
   "Message": "berhasil mendapatkan user",
   "Data": {
-    "Id": "01J1WQEDH0SZYZWAC1Z9QDTXCK",
-    "Name": "UP Brantas",
-    "Username": "upbrantas",
-    "Email": "upbrantas@gmail.com",
+    "Id": "01J43C21T51C8ZEY1AC0CX8EET",
+    "Name": "nama7",
+    "Username": "nama7",
+    "Email": "nama7@yopmail.com",
     "Division": "Engineer",
-    "Role": "admin",
+    "Role": "user",
     "Status": "active",
-    "CreatedAt": "2024-07-03 23:39:34",
-    "UpdatedAt": ""
+    "RadiusStatus": true,
+    "CreatedAt": "2024-07-31 10:06:39",
+    "UpdatedAt": "2024-08-03 20:01:53"
   }
 } 
 */
@@ -98,7 +104,9 @@ class UserDetailModel {
     Success = json['Success'];
     StatusCode = json['StatusCode']?.toInt();
     Message = json['Message']?.toString();
-    Data = (json['Data'] != null) ? UserDetailModelData.fromJson(json['Data']) : null;
+    Data = (json['Data'] != null)
+        ? UserDetailModelData.fromJson(json['Data'])
+        : null;
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
