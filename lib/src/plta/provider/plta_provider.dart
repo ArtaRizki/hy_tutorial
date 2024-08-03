@@ -320,6 +320,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
   set setActive(String? active) => this.active = active;
 
   TextEditingController coordinateC = TextEditingController();
+  TextEditingController radiusC = TextEditingController();
+  String? radiusType;
+  String? get getRadiusType => this.radiusType;
+  set setRadiusType(String? radiusType) => this.radiusType = radiusType;
 
   List<Widget> towerForm(VoidCallback setState) {
     return [
@@ -376,44 +380,86 @@ class PltaProvider extends BaseController with ChangeNotifier {
         },
       ),
       Constant.xSizedBox16,
+      CustomTextField.borderTextField(
+        controller: radiusC,
+        labelText: "Radius",
+        textInputType: TextInputType.number,
+        hintText: "Masukkan Radius",
+      ),
+      Constant.xSizedBox16,
+      CustomDropdown.normalDropdown(
+        //controller: roleC,
+        iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+        contentPadding: EdgeInsets.all(2),
+        borderColor: Constant.primaryColor,
+        labelText: "Tipe Radius",
+        selectedItem: radiusType,
+        hintText: "Pilih tipe Radius",
+        list: [
+          DropdownMenuItem(
+            child: Text("KM"),
+            value: "kilometer",
+          ),
+          DropdownMenuItem(
+            child: Text("M"),
+            value: "meter",
+          ),
+        ],
+        onChanged: (val) {
+          radiusType = val;
+          setState();
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+      ),
     ];
   }
 
   Future<void> sendPlta(BuildContext context, {bool isEdit = false}) async {
-    loading(true);
-    if (nameC.text.isEmpty) throw 'Nama harap diisi';
-    if (active == null) throw 'Status harap dipilih';
-    if (totalUnitC.text.isEmpty) throw 'Total unit harap diisi';
-    if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
-    if (coordinateC.text.isLatLongCoordinatesDecimal())
-      throw 'Koordinat tidak valid';
-    var split = coordinateC.text.split(',');
-    Map<String, String> body = {
-      'Name': nameC.text,
-      'Status': active == 'aktif' ? 'true' : 'false',
-      'TotalUnits': totalUnitC.text,
-      'Lat': split[0],
-      'Long': split[1],
-    };
-    http.Response response;
-    if (isEdit)
-      response = await put(Constant.BASE_API_FULL + '/plta', body: body);
-    else
-      response = await post(Constant.BASE_API_FULL + '/plta', body: body);
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = BaseResponse.from(response);
-      await Utils.showSuccess(msg: model.message);
-      await Future.delayed(Duration(seconds: 2));
-      loading(false);
-      Navigator.pop(context);
-      nameC.clear();
-      active = null;
-      totalUnitC.clear();
-      coordinateC.clear();
-    } else {
-      final message = jsonDecode(response.body)["Message"];
-      loading(false);
-      throw Exception(message);
+    try {
+      loading(true);
+      if (nameC.text.isEmpty) throw 'Nama harap diisi';
+      if (active == null) throw 'Status harap dipilih';
+      if (totalUnitC.text.isEmpty) throw 'Total unit harap diisi';
+      if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
+      if (!coordinateC.text.isLatLongCoordinatesDecimal()) throw 'Koordinat Tidak Valid';
+      if (radiusC.text.isEmpty) throw 'Radius harap diisi';
+      if (radiusType == null) throw 'Tipe radius harap dipilih';
+      var split = coordinateC.text.split(',');
+      Map<String, String> body = {
+        'Name': nameC.text,
+        'Status': active == 'aktif' ? 'true' : 'false',
+        'TotalUnits': totalUnitC.text,
+        'Lat': split[0].replaceAll(',', ''),
+        'Long': split[1],
+        'Radius': radiusC.text,
+        'RadiusType': radiusType == 'kilometer' ? 'kilometer' : 'meter',
+      };
+      http.Response response;
+      if (isEdit)
+        response = await put(Constant.BASE_API_FULL + '/plta', body: body);
+      else
+        response = await post(Constant.BASE_API_FULL + '/plta', body: body);
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        final model = BaseResponse.from(response);
+        await Utils.showSuccess(msg: model.message);
+        await Future.delayed(Duration(seconds: 2));
+        loading(false);
+        Navigator.pop(context);
+        nameC.clear();
+        active = null;
+        totalUnitC.clear();
+        coordinateC.clear();
+      } else {
+        final message = jsonDecode(response.body)["Message"];
+        loading(false);
+        throw Exception(message);
+      }
+    } catch (e) {
+      await Utils.showFailed(
+          msg: e.toString().toLowerCase().contains("doctype")
+              ? "Maaf, Terjadi Galat!"
+              : "$e");
+      throw Exception(e);
     }
   }
 
