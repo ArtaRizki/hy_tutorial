@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_regex/flutter_regex.dart';
+import 'package:hy_tutorial/common/component/custom_dropdown.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
@@ -38,6 +39,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
       p.nameC.text = data.Name ?? '';
       if (data.Lat != null && data.Long != null)
         p.coordinateC.text = '${data.Lat ?? 0}, ${data.Long ?? 0}';
+      p.radiusC.text = '${data.Radius ?? 0}';
     }
   }
 
@@ -136,6 +138,36 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
               return null;
             },
           ),
+          Constant.xSizedBox16,
+          CustomTextField.borderTextField(
+              controller: p.radiusC,
+              labelText: "Radius",
+              textInputType: TextInputType.number,
+              hintText: "Masukkan Radius"),
+          Constant.xSizedBox16,
+          CustomDropdown.normalDropdown(
+            //controller: roleC,
+            iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+            contentPadding: EdgeInsets.all(2),
+            borderColor: Constant.primaryColor,
+            labelText: "Tipe Radius",
+            selectedItem: p.radiusType,
+            hintText: "Pilih tipe Radius",
+            list: [
+              DropdownMenuItem(
+                child: Text("KM"),
+                value: "kilometer",
+              ),
+              DropdownMenuItem(
+                child: Text("M"),
+                value: "meter",
+              ),
+            ],
+            onChanged: (val) {
+              p.radiusType = val;
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+          ),
         ],
       );
     }
@@ -212,7 +244,6 @@ class _PltaDetailViewState extends BaseState<PltaDetailView>
             ],
           );
         },
-        
       );
     }
 
