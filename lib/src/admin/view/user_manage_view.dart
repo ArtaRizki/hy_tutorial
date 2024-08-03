@@ -134,7 +134,7 @@ class _UserManageViewState extends BaseState<UserManageView>
                         Expanded(
                           flex: 4,
                           child: InkWell(
-                            onTap: () => CusNav.nPush(context, UserAddView()),
+                            onTap: () => tabController.index != 2 ? CusNav.nPush(context, UserAddView()) : CusNav.nPush(context, PltaAddView()),
                             child: Container(
                                 padding: EdgeInsets.all(7),
                                 height: 35,

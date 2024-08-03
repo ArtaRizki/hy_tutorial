@@ -369,7 +369,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
         labelText: "Titik Lokasi (Latitude & Longitude)",
         textInputType: TextInputType.number,
         validator: (val) {
-          if (val != null && !val.isLatLongCoordinatesDecimal())
+          if (val != null && val.isLatLongCoordinatesDecimal())
             return 'Koordinat Tidak Valid';
           return null;
         },
@@ -379,40 +379,47 @@ class PltaProvider extends BaseController with ChangeNotifier {
   }
 
   Future<void> sendPlta(BuildContext context, {bool isEdit = false}) async {
-    loading(true);
-    if (nameC.text.isEmpty) throw 'Nama harap diisi';
-    if (active == null) throw 'Status harap dipilih';
-    if (totalUnitC.text.isEmpty) throw 'Total unit harap diisi';
-    if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
-    if (coordinateC.text.isLatLongCoordinatesDecimal())
-      throw 'Koordinat tidak valid';
-    var split = coordinateC.text.split(',');
-    Map<String, String> body = {
-      'Name': nameC.text,
-      'Status': active == 'aktif' ? 'true' : 'false',
-      'TotalUnits': totalUnitC.text,
-      'Lat': split[0],
-      'Long': split[1],
-    };
-    http.Response response;
-    if (isEdit)
-      response = await put(Constant.BASE_API_FULL + '/plta', body: body);
-    else
-      response = await post(Constant.BASE_API_FULL + '/plta', body: body);
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = BaseResponse.from(response);
-      await Utils.showSuccess(msg: model.message);
-      await Future.delayed(Duration(seconds: 2));
-      loading(false);
-      Navigator.pop(context);
-      nameC.clear();
-      active = null;
-      totalUnitC.clear();
-      coordinateC.clear();
-    } else {
-      final message = jsonDecode(response.body)["Message"];
-      loading(false);
-      throw Exception(message);
+    try {
+      loading(true);
+      if (nameC.text.isEmpty) throw 'Nama harap diisi';
+      if (active == null) throw 'Status harap dipilih';
+      if (totalUnitC.text.isEmpty) throw 'Total unit harap diisi';
+      if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
+      if (coordinateC.text.isLatLongCoordinatesDecimal()) ;
+      var split = coordinateC.text.split(',');
+      Map<String, String> body = {
+        'Name': nameC.text,
+        'Status': active == 'aktif' ? 'true' : 'false',
+        'TotalUnits': totalUnitC.text,
+        'Lat': split[0].replaceAll(',', ''),
+        'Long': split[1],
+      };
+      http.Response response;
+      if (isEdit)
+        response = await put(Constant.BASE_API_FULL + '/plta', body: body);
+      else
+        response = await post(Constant.BASE_API_FULL + '/plta', body: body);
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        final model = BaseResponse.from(response);
+        await Utils.showSuccess(msg: model.message);
+        await Future.delayed(Duration(seconds: 2));
+        loading(false);
+        Navigator.pop(context);
+        nameC.clear();
+        active = null;
+        totalUnitC.clear();
+        coordinateC.clear();
+      } else {
+        final message = jsonDecode(response.body)["Message"];
+        loading(false);
+        throw Exception(message);
+      }
+    } catch (e) {
+      await Utils.showFailed(
+          msg: e.toString().toLowerCase().contains("doctype")
+              ? "Maaf, Terjadi Galat!"
+              : "$e");
+      throw Exception(e);
     }
   }
 
