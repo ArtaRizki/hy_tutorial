@@ -1,5 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
+import 'package:hy_tutorial/src/data/view/data_add_view.dart';
+import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
+import 'package:hy_tutorial/src/plta/view/plta_detail_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../common/helper/constant.dart';
 import 'auth/view/login_view.dart';
@@ -29,10 +34,12 @@ class _SplashViewState extends State<SplashView> {
     final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin);
 
     Timer(
-        Duration(seconds: 3),
-        () => Navigator.pushReplacementNamed(
-            context, isLoggedIn ? '/home' : '/login',
-            arguments: isAdmin ?? false));
+      Duration(seconds: 2),
+      // () => CusNav.nPush(context, UserManageView())
+      () => Navigator.pushReplacementNamed(
+          context, isLoggedIn ? '/home' : '/login',
+          arguments: isAdmin ?? false),
+    );
   }
 
   @override

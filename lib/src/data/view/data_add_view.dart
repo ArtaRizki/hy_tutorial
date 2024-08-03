@@ -18,7 +18,7 @@ class _DataAddViewState extends State<DataAddView> {
   @override
   void initState() {
     final p = context.read<DataAddProvider>();
-    p.fetchTower(context);
+    p.fetchPlta(context);
     p.resetData();
     p.generateAllData();
     super.initState();
@@ -49,7 +49,7 @@ class _DataAddViewState extends State<DataAddView> {
                 final dataP = context.read<DataAddProvider>();
                 FocusManager.instance.primaryFocus?.unfocus();
                 String? msg;
-                if (dataP.selectedTower == null) msg = 'Harap Pilih PLTA';
+                if (dataP.selectedPlta == null) msg = 'Harap Pilih PLTA';
                 if (dataP.genBearingKoplingC.text.isEmpty)
                   msg = 'Harap Isi Gen Bearing Kopling';
                 if (dataP.koplingTurbinC.text.isEmpty)

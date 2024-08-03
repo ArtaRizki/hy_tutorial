@@ -130,7 +130,7 @@ class _MainHomeState extends State<MainHome> {
                   ),
                 ),
               ),
-              label: isAdmin == true ? 'Manage Users' : 'Form',
+              label: isAdmin == true ? 'Manage' : 'Form',
             ),
             BottomNavigationBarItem(
               icon: Container(

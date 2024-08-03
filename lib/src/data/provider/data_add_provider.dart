@@ -4,6 +4,7 @@ import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hy_tutorial/common/base/base_response.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:powers/powers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,11 +12,10 @@ import '../../../main.dart';
 import '../../../utils/utils.dart';
 import '../../shaft/view/shaft_view.dart';
 import '../model/create_data_param.dart';
-import '../../tower/model/tower_model.dart';
+import '../../plta/model/plta_model.dart';
 import '../../turbine/model/turbine_create_model.dart';
 import '../../../common/base/base_controller.dart';
 import '../../../common/helper/constant.dart';
-import '../../../common/component/custom_dropdown.dart';
 import '../../../common/component/custom_textfield.dart';
 
 class DataAddProvider extends BaseController with ChangeNotifier {
@@ -34,17 +34,17 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   TextEditingController differenceQtyC = TextEditingController();
 
   String? selectedDropdown;
-  String? selectedTower;
+  String? selectedPlta;
 
-  TowerModel _towerModel = TowerModel();
-  TowerModel get towerModel => this._towerModel;
-  set towerModel(TowerModel value) => this._towerModel = value;
+  PltaModel _pltaModel = PltaModel();
+  PltaModel get pltaModel => this._pltaModel;
+  set pltaModel(PltaModel value) => this._pltaModel = value;
 
-  List<TowerModelData?>? _towerList = [];
-  List<TowerModelData?>? get towerList => this._towerList;
+  List<PltaModelData?>? _pltaList = [];
+  List<PltaModelData?>? get pltaList => this._pltaList;
 
-  set towerList(List<TowerModelData?>? value) {
-    this._towerList = value;
+  set pltaList(List<PltaModelData?>? value) {
+    this._pltaList = value;
     notifyListeners();
   }
 
@@ -71,7 +71,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     dataUpperC.clear();
     dataClutchC.clear();
     dataTurbineC.clear();
-    selectedTower = null;
+    selectedPlta = null;
   }
 
   clearDetailData() {
@@ -102,20 +102,20 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     upperCrockedLine = 0.0;
   }
 
-  Future<TowerModel> fetchTower(BuildContext context) async {
+  Future<PltaModel> fetchPlta(BuildContext context) async {
     loading(true);
-    towerModel = TowerModel();
-    final response = await get(Constant.BASE_API_FULL + '/towers/master');
+    pltaModel = PltaModel();
+    final response = await get(Constant.BASE_API_FULL + '/pltas/master');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = TowerModel.fromJson(jsonDecode(response.body));
-      towerList = model.Data;
+      final model = PltaModel.fromJson(jsonDecode(response.body));
+      pltaList = model.Data;
       loading(false);
       return model;
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
-      return TowerModel();
+      return PltaModel();
       // throw Exception(message);
     }
   }
@@ -1016,7 +1016,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     loading(true);
     createDataParam = CreateDataParam(
         Title: titleC.text,
-        TowerId: selectedTower,
+        TowerId: selectedPlta,
         GenBearingToCoupling: genBearingKoplingC.text,
         CouplingToTurbine: koplingTurbinC.text,
         TotalBolts: boltQtyC.text,
@@ -1085,24 +1085,41 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
   }
 
+  Future<void> deleteTurbine(BuildContext context, {required String id}) async {
+    loading(true);
+    final response = await delete(Constant.BASE_API_FULL + '/turbines/$id');
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      final model = BaseResponse.from(response);
+      loading(false);
+      await Utils.showSuccess(msg: model.message ?? "Sukses");
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pop(context);
+    } else {
+      final message = jsonDecode(response.body)["message"];
+      loading(false);
+      return message;
+    }
+  }
+
   onChangedPLTA(String? v) {
     String? selected =
-        (towerList ?? []).firstWhere((element) => element?.Name == v)?.Id;
+        (pltaList ?? []).firstWhere((element) => element?.Name == v)?.Id;
     if (selected != null) {
-      selectedTower = selected;
+      selectedPlta = selected;
       pltaC.text = selected;
     }
   }
 
-  onChangedPLTA2(TowerModelData? v) {
+  onChangedPLTA2(PltaModelData? v) {
     if (v != null) {
-      selectedTower = v.Id ?? '0';
+      selectedPlta = v.Id ?? '0';
       pltaC.text = v.Name ?? '';
     }
   }
 
-  List<TowerModelData?> searchPlta(String pattern) {
-    return (towerList ?? [])
+  List<PltaModelData?> searchPlta(String pattern) {
+    return (pltaList ?? [])
         .where(
             (element) => (element?.Name ?? '').toLowerCase().contains(pattern))
         .toList();
@@ -1139,7 +1156,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           ],
         ),
       ),
-      DropDownSearchField<TowerModelData?>(
+      // if ((pltaList ?? []).isNotEmpty)
+      DropDownSearchField<PltaModelData?>(
         displayAllSuggestionWhenTap: true,
         textFieldConfiguration: TextFieldConfiguration(
           controller: pltaC,
@@ -1156,18 +1174,18 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             enabled: true,
             fillColor: Colors.white,
             suffixIconColor: Constant.primaryColor,
-            suffix: InkWell(
-              onTap: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                pltaC.clear();
-                selectedTower = null;
-                refresh;
-              },
-              child: Icon(
-                Icons.close,
-                size: 24,
-              ),
-            ),
+            // suffixIcon: InkWell(
+            //   onTap: () {
+            //     FocusManager.instance.primaryFocus?.unfocus();
+            //     pltaC.clear();
+            //     selectedPlta = null;
+            //     refresh;
+            //   },
+            //   child: Icon(
+            //     Icons.close,
+            //     size: 24,
+            //   ),
+            // ),
             hoverColor: Constant.primaryColor,
             focusColor: Constant.primaryColor,
             prefix: SizedBox(width: 12),
@@ -1210,9 +1228,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       //   padding: EdgeInsets.zero,
       //   borderColor: Constant.primaryColor,
       //   labelText: 'Nama PLTA',
-      //   selectedItem: selectedTower,
+      //   selectedItem: selectedPlta,
       //   hintText: "Pilih PLTA",
-      //   list: (towerList ?? []).map((e) => e?.Name ?? '').toList(),
+      //   list: (pltaList ?? []).map((e) => e?.Name ?? '').toList(),
       //   onChanged: onChangedPLTA,
       // ),
       // Constant.xSizedBox16,
@@ -1524,11 +1542,11 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   generateShaftLocalData(CreateDataParam? data) {
     if (data != null) {
-      selectedTower = data.TowerId;
-      String? towerName = (towerList ?? [])
+      selectedPlta = data.TowerId;
+      String? pltaName = (pltaList ?? [])
           .firstWhere((element) => element?.Id == data.TowerId)
           ?.Name;
-      if (towerName != null && towerName != '') pltaC.text = towerName;
+      if (pltaName != null && pltaName != '') pltaC.text = pltaName;
       if (data.GenBearingToCoupling != null)
         genBearingKoplingC.text = data.GenBearingToCoupling ?? '';
       if (data.CouplingToTurbine != null)

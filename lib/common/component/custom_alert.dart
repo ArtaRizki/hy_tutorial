@@ -9,7 +9,7 @@ class CustomAlert {
     String text,
     bool isError, {
     SnackBarAction? action,
-    Duration? duration,
+  Duration? duration,
     Color? color,
   }) {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();

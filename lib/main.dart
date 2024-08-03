@@ -4,7 +4,7 @@ import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
-import 'package:hy_tutorial/src/tower/provider/tower_provider.dart';
+import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ part 'common/routes.dart';
 
 void main() {
   runZonedGuarded(() async {
-    await WidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
 
     // await requestPermission(Permission.storage);
     // await requestPermission(Permission.accessMediaLocation);
@@ -144,22 +144,22 @@ void main() {
 
     /// [START] Cache directory system management for storing Face Recognition Tflite Model & maintain lost image from state restoration
     /// Bersihkan directory cache
-    getTemporaryDirectory().then((value) {
-      Directory dir = Directory(value.path + '/download');
-      if (dir.existsSync()) {
-        dir.listSync().forEach((file) {
-          file.deleteSync(recursive: true);
-        });
-      }
-    });
+    // getTemporaryDirectory().then((value) {
+    //   Directory dir = Directory(value.path + '/download');
+    //   if (dir.existsSync()) {
+    //     dir.listSync().forEach((file) {
+    //       file.deleteSync(recursive: true);
+    //     });
+    //   }
+    // });
 
     /// Buat temp directory untuk open only
-    getTemporaryDirectory().then((value) {
-      Directory dir = Directory(value.path + '/download');
-      if (!dir.existsSync()) {
-        dir.createSync(recursive: true);
-      }
-    });
+    // getTemporaryDirectory().then((value) {
+    //   Directory dir = Directory(value.path + '/download');
+    //   if (!dir.existsSync()) {
+    //     dir.createSync(recursive: true);
+    //   }
+    // });
 
     /// [END] Handle state restoration
 
@@ -236,8 +236,8 @@ class MyApp extends StatelessWidget {
                 create: (context) => UserManageProvider()),
             ChangeNotifierProvider<ProfileProvider>(
                 create: (context) => ProfileProvider()),
-            ChangeNotifierProvider<TowerProvider>(
-                create: (context) => TowerProvider()),
+            ChangeNotifierProvider<PltaProvider>(
+                create: (context) => PltaProvider()),
             ChangeNotifierProvider<TurbineProvider>(
                 create: (context) => TurbineProvider()),
             ChangeNotifierProvider<AuthProvider>(

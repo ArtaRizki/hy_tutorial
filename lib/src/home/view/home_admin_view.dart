@@ -87,7 +87,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
     name = data?.Name ?? name2;
     division = data?.Division ?? division2;
     setState(() {});
-    await context.read<AuthProvider>().getConfig(withLoading: false);
+    // await context.read<AuthProvider>().getConfig(withLoading: false);
     await context.read<HomeProvider>().fetchUserList(withLoading: true);
     Utils.dismissLoading();
   }

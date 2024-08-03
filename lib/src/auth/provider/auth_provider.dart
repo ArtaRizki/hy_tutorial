@@ -1,16 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:hy_tutorial/src/auth/model/firebase_token_model.dart';
+import 'package:hy_tutorial/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../common/base/base_controller.dart';
 import '../../../common/base/base_response.dart';
 import '../../../common/helper/constant.dart';
-import '../../division/model/divison_model.dart';
 import '../model/config_model.dart';
 import '../model/login_model.dart';
 import 'package:flutter/material.dart';
-
 import '../model/refresh_token_model.dart';
 
 class AuthProvider extends BaseController with ChangeNotifier {
@@ -91,56 +89,55 @@ class AuthProvider extends BaseController with ChangeNotifier {
     //notifyListeners();
   }
 
-  Future<LoginModel> login() async {
-    log("USERNAME : ${usernameC.text}");
-    log("PASS : ${passC.text}");
-    loading(true);
-    // if (loginKey.currentState!.validate()) {
-    FocusManager.instance.primaryFocus?.unfocus();
-    String? fcmId;
+  Future<void> login(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    fcmId = prefs.getString(Constant.kSetPrefFcmToken);
-    Map<String, String> param = {
-      // 'username': "19950601831",
-      // 'username': "adminatria",
-      // 'password': "123456",
-      'Username': usernameC.text,
-      'Password': passC.text,
-      // 'device_id': fcmId ?? '-1',
-    };
-    final response =
-        await post(Constant.BASE_API_FULL + '/auth/login', body: param);
+    try {
+      log("USERNAME : ${usernameC.text}");
+      log("PASS : ${passC.text}");
+      // validate
+      if (usernameC.text.isEmpty) throw 'Harap isi username';
+      if (passC.text.isEmpty) throw 'Harap isi password';
 
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final model = LoginModel.fromJson(jsonDecode(response.body));
+      loading(true);
+      FocusManager.instance.primaryFocus?.unfocus();
+      Map<String, String> param = {
+        'Username': usernameC.text,
+        'Password': passC.text,
+      };
+      final response =
+          await post(Constant.BASE_API_FULL + '/auth/login', body: param);
 
-      // set to shared preferences
-      // await prefs.setString(Constant.kSetPrefId, "${model.Data?.Id ?? 0}");
-      await prefs.setString(Constant.kSetPrefToken, model.Data?.Token ?? '');
-      await prefs.setString(
-          Constant.kSetPrefDivision, model.Data?.Division ?? '');
-      await prefs.setString(
-          Constant.kSetPrefRefreshToken, model.Data?.RefreshToken ?? '');
-      await prefs.setString(Constant.kSetPrefName, model.Data?.Name ?? '');
-      await prefs.setBool(
-          Constant.kSetPrefIsAdmin, model.Data!.IsAdmin ?? false);
-      // await prefs.setString(Constant.kSetPrefCompany, model.Data!.companyName!);
-      usernameC.clear();
-      passC.clear();
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        loading(false);
+        final model = LoginModel.fromJson(jsonDecode(response.body));
 
-      loading(false);
-      return model;
-    } else {
-      final message = jsonDecode(response.body)["Message"];
-      loading(false);
-      // return LoginModel();
-      throw Exception(message);
+        // set to shared preferences
+        await prefs.setString(Constant.kSetPrefToken, model.Data?.Token ?? '');
+        await prefs.setString(
+            Constant.kSetPrefDivision, model.Data?.Division ?? '');
+        await prefs.setString(
+            Constant.kSetPrefRefreshToken, model.Data?.RefreshToken ?? '');
+        await prefs.setString(Constant.kSetPrefName, model.Data?.Name ?? '');
+        await prefs.setBool(
+            Constant.kSetPrefIsAdmin, model.Data!.IsAdmin ?? false);
+
+        Navigator.pushReplacementNamed(context, '/home',
+            arguments: model.Data?.IsAdmin ?? false);
+        usernameC.clear();
+        passC.clear();
+      } else {
+        loading(false);
+        final message = jsonDecode(response.body)["Message"];
+        await Utils.showFailed(msg: message ?? "Error");
+      }
+    } catch (e) {
+      prefs.clear();
+      await Utils.showFailed(
+          msg: e.toString().toLowerCase().contains("doctype")
+              ? "Maaf, Terjadi Galat!"
+              : "$e");
+      throw Exception(e);
     }
-    // } else {
-    //   loading(false);
-    //   throw 'Harap Lengkapi Form';
-    // }
   }
 
   Future<void> getConfig({bool withLoading = false}) async {
@@ -172,43 +169,56 @@ class AuthProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  Future<BaseResponse> register() async {
-    loading(true);
-    // if (loginKey.currentState!.validate()) {
-    if (selectedDivision == null) throw 'Pilih Divisi Terlebih Dahulu';
-    FocusManager.instance.primaryFocus?.unfocus();
-    String? fcmId;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    fcmId = prefs.getString(Constant.kSetPrefFcmToken);
-    Map<String, String> param = {
-      // 'username': "19950601831",
-      // 'username': "adminatria",
-      // 'password': "123456",
-      'Name': nameC.text,
-      'Username': usernameC.text,
-      'Email': emailC.text,
-      'DivisionId': selectedDivision ?? '', //Engineer
-      'Password': passC.text,
-      'PasswordConfirmation': passConfirmationC.text,
-      // 'device_id': fcmId ?? '-1',
-    };
-    final response =
-        await post(Constant.BASE_API_FULL + '/auth/register', body: param);
+  Future<void> register(BuildContext context) async {
+    try {
+      // validate
+      if (nameC.text.isEmpty) throw 'Harap isi username';
+      if (selectedDivision == null) throw 'Pilih divisi terlebih dahulu';
+      if (usernameC.text.isEmpty) throw 'Harap isi username';
+      if (emailC.text.isEmpty) throw 'Harap isi email';
+      if (passC.text.isEmpty) throw 'Harap isi password';
+      if (passConfirmationC.text.isEmpty) throw 'Harap isi konfirmasi password';
+      if (passC.text != passConfirmationC.text)
+        throw 'Password & konfirmasi password tidak sama';
 
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = BaseResponse.from(response);
+      loading(true);
+      FocusManager.instance.primaryFocus?.unfocus();
+      Map<String, String> param = {
+        'Name': nameC.text,
+        'Username': usernameC.text,
+        'Email': emailC.text,
+        'DivisionId': selectedDivision ?? '',
+        'Password': passC.text,
+        'PasswordConfirmation': passConfirmationC.text,
+      };
+      final response =
+          await post(Constant.BASE_API_FULL + '/auth/register', body: param);
 
-      loading(false);
-      return model;
-    } else {
-      final message = jsonDecode(response.body)["Message"];
-      loading(false);
-      throw Exception(message);
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        loading(false);
+        final model = BaseResponse.from(response);
+
+        await Utils.showSuccess(msg: model.message);
+        await Future.delayed(Duration(seconds: 2));
+        Navigator.pushReplacementNamed(context, '/login', arguments: false);
+        nameC.clear();
+        selectedDivision = null;
+        selectedDivisionC.clear();
+        usernameC.clear();
+        passC.clear();
+        passConfirmationC.clear();
+      } else {
+        loading(false);
+        final message = jsonDecode(response.body)["Message"];
+        await Utils.showFailed(msg: message ?? "Error");
+      }
+    } catch (e) {
+      await Utils.showFailed(
+          msg: e.toString().toLowerCase().contains("doctype")
+              ? "Maaf, Terjadi Galat!"
+              : "$e");
+      throw Exception(e);
     }
-    // } else {
-    //   loading(false);
-    //   throw 'Harap Lengkapi Form';
-    // }
   }
 
   RefreshTokenModel _refreshTokenModel = RefreshTokenModel();

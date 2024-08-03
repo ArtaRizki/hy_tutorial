@@ -56,7 +56,8 @@ class BaseController<S extends BaseState> {
     return (await preferences())!.getString('token');
   }
 
-  Future get(String url, {Map? headers, Map<String, String?>? body}) async {
+  Future<http.Response> get(String url,
+      {Map? headers, Map<String, String?>? body}) async {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
@@ -74,13 +75,16 @@ class BaseController<S extends BaseState> {
 
     final uri = Uri.parse('$url?$param');
     log("URI PATH : ${uri.path}");
+    log("URI COMPLETE : ${Constant.BASE_API_FULL3 + uri.path + '${body != null ? '?' : ''}' + param}");
 
     Response response = await http
         .get(
-            Uri.parse(Constant.BASE_API_FULL +
-                uri.path +
-                '${body != null ? '?' : ''}' +
-                param),
+            Uri.parse(
+              Constant.BASE_API_FULL3 +
+                  uri.path +
+                  '${body != null ? '?' : ''}' +
+                  param,
+            ),
             headers: h)
         .timeout(
           Duration(seconds: 30),
@@ -143,7 +147,8 @@ class BaseController<S extends BaseState> {
             .toString()
             .toLowerCase()
             .contains("Internal Server Error")) {
-      return response.body;
+      return response;
+      // return response.body;
     }
 
     return response;
@@ -232,6 +237,7 @@ class BaseController<S extends BaseState> {
               .toLowerCase()
               .contains("Internal Server Error")) {
         return response;
+        // return response.body;
       }
       return response;
     } else {
@@ -308,12 +314,13 @@ class BaseController<S extends BaseState> {
               .toLowerCase()
               .contains("Internal Server Error")) {
         return response;
+        // return response.body;
       }
       return response;
     }
   }
 
-  Future put(String url,
+  Future<http.Response> put(String url,
       {Map<String, String>? headers,
       Map<String, dynamic>? body,
       List<http.MultipartFile>? files}) async {
@@ -392,7 +399,8 @@ class BaseController<S extends BaseState> {
               .toString()
               .toLowerCase()
               .contains("Internal Server Error")) {
-        return response.body;
+        return response;
+        // return response.body;
       }
       return response;
     } else {
@@ -468,13 +476,15 @@ class BaseController<S extends BaseState> {
               .toString()
               .toLowerCase()
               .contains("Internal Server Error")) {
-        return response.body;
+        return response;
+        // return response.body;
       }
       return response;
     }
   }
 
-  Future delete(String url, {Map? headers, Map<String, String?>? body}) async {
+  Future<http.Response> delete(String url,
+      {Map? headers, Map<String, String?>? body}) async {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
@@ -548,7 +558,8 @@ class BaseController<S extends BaseState> {
             .toString()
             .toLowerCase()
             .contains("Internal Server Error")) {
-      return response.body;
+      return response;
+      // return response.body;
     }
     return response;
   }

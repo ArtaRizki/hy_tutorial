@@ -1,0 +1,328 @@
+import 'dart:developer';
+
+// import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_regex/flutter_regex.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/common/component/custom_textfield.dart';
+import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
+import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
+import '../../../common/component/custom_appbar.dart';
+import '../../../common/component/custom_button.dart';
+import '../../../common/helper/constant.dart';
+import 'package:provider/provider.dart';
+import '../../../utils/utils.dart';
+
+class PltaDetailView extends StatefulWidget {
+  PltaDetailView({super.key, required this.id});
+  final String id;
+  @override
+  State<PltaDetailView> createState() => _PltaDetailViewState();
+}
+
+class _PltaDetailViewState extends State<PltaDetailView>
+    with TickerProviderStateMixin {
+  @override
+  void initState() {
+    setData();
+    super.initState();
+  }
+
+  setData() async {
+    final p = context.read<PltaProvider>();
+    await p.fetchPltaDetail(id: widget.id);
+    final data = p.towerDetailModel.Data;
+    if (data != null) {
+      p.nameC.text = data.Name ?? '';
+      if (data.Lat != null && data.Long != null)
+        p.coordinateC.text = '${data.Lat ?? 0}, ${data.Long ?? 0}';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<PltaProvider>();
+    final pltaDataP = p.towerDetailModel;
+    final pltaP = p.towerDetailModel.Data;
+    final pltaUnitList = p.pltaUnitList;
+
+    Widget modalHapus() {
+      return CustomButton.secondaryButton('Hapus', () async {});
+    }
+
+    Widget modalSimpan() {
+      return CustomButton.secondaryButton(
+        'Simpan',
+        () async {
+          Utils.showYesNoDialog(
+            context: context,
+            title: "Simpan Perubahan",
+            desc: "Apakah anda yakin\ningin menyimpan perubahan?",
+            yesCallback: () async {
+              Navigator.pop(context);
+            },
+            noCallback: () async {
+              Navigator.pop(context);
+            },
+          );
+        },
+      );
+    }
+
+    TableRow title() {
+      return TableRow(
+        decoration: BoxDecoration(color: Color(0xffFAFAFA)),
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
+            child: Text(
+              'No. Unit',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xff100629),
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
+            child: Text(
+              'Status',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xff100629),
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
+            child: Text(
+              'Aksi',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xff100629),
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget detailPlta() {
+      final p = context.read<PltaProvider>();
+      return Column(
+        children: [
+          CustomTextField.borderTextField(
+            controller: p.nameC,
+            textInputType: TextInputType.name,
+            labelText: "Nama PLTA",
+            hintText: "Masukkan nama PLTA",
+          ),
+          Constant.xSizedBox16,
+          CustomTextField.borderTextField(
+            controller: p.coordinateC,
+            labelText: "Titik Lokasi (Latitude & Longitude)",
+            textInputType: TextInputType.number,
+            validator: (val) {
+              if (val != null && !val.isLatLongCoordinatesDecimal())
+                return 'Koordinat Tidak Valid';
+              return null;
+            },
+          ),
+        ],
+      );
+    }
+
+    List<TableRow> content() {
+      return List<TableRow>.generate(
+        context.read<PltaProvider>().pltaUnitList.length,
+        (index) {
+          final item = pltaUnitList[index];
+          return TableRow(
+            decoration: BoxDecoration(color: Color(0xffFAFAFA)),
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: Text(
+                  '${index + 1}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Color(0xff111E30)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: Text(
+                  (item?.Status ?? false) ? 'Aktif' : 'Non Aktif',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Color(0xff111E30)),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (p.statusActive.isNotEmpty)
+                    Container(
+                      width: 25,
+                      height: 25,
+                      child: FittedBox(
+                        child: CupertinoSwitch(
+                          value: p.statusActive[index],
+                          onChanged: (value) =>
+                              setState(() => p.statusActive[index] = value),
+                        ),
+                      ),
+                    ),
+                  Container(
+                    width: 35,
+                    height: 35,
+                    child: FittedBox(
+                      child: IconButton(
+                        onPressed: () {
+                          Utils.showYesNoDialogWithWarning(
+                              context: context,
+                              title: "Konfirmasi Penghapusan",
+                              desc:
+                                  "Apakah anda yakin ingin\nmenghapus unit yang dipilih?",
+                              yesCallback: () async {
+                                Navigator.pop(context);
+                                await context
+                                    .read<PltaProvider>()
+                                    .deletePlta(context, id: pltaP?.Id ?? "0");
+                              },
+                              noCallback: () async {
+                                Navigator.pop(context);
+                              });
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: Constant.redColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+        
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: CustomAppBar.appBar(
+        context,
+        "Detail PLTA",
+        color: Constant.primaryColor,
+        foregroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  Constant.xSizedBox16,
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Detail PLTA", style: Constant.blackBold20),
+                          Text("Detail data terakhir dari plta",
+                              style: Constant.grayMedium),
+                        ],
+                      )),
+                      InkWell(
+                        onTap: () async {
+                          await Utils.showYesNoDialog(
+                            context: context,
+                            title: "Konfirmasi",
+                            desc: "Apakah Anda Yakin Ingin Hapus PLTA Ini?",
+                            yesCallback: () async {
+                              Navigator.pop(context);
+                              try {} catch (e) {
+                                Utils.showFailed(msg: "Gagal hapus PLTA");
+                              }
+                            },
+                            noCallback: () => Navigator.pop(context),
+                          );
+                        },
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Constant.redColor),
+                          ),
+                          child: Text(
+                            'Hapus PLTA',
+                            style: TextStyle(
+                                fontSize: 12, color: Constant.redColor),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Constant.xSizedBox16,
+                  detailPlta(),
+                  Constant.xSizedBox16,
+                  Table(
+                    border: TableBorder.all(
+                        width: 0.5,
+                        color: Constant.borderSearchColor.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(5)),
+                    columnWidths: const <int, TableColumnWidth>{
+                      0: IntrinsicColumnWidth(flex: 0.5),
+                      1: FlexColumnWidth(),
+                      2: FlexColumnWidth(),
+                      3: FlexColumnWidth(),
+                      4: FlexColumnWidth(),
+                    },
+                    defaultVerticalAlignment: TableCellVerticalAlignment.top,
+                    children: [title(), ...content()],
+                  ),
+                  Constant.xSizedBox16,
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () async {
+                        await context.read<PltaProvider>().tambahUnit();
+                        setState(() {});
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Constant.primaryColor),
+                        ),
+                        child: Text(
+                          'Tambah Unit',
+                          style: TextStyle(
+                              fontSize: 12, color: Constant.primaryColor),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+}

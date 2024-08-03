@@ -57,38 +57,39 @@ class _UserDetailViewState extends State<UserDetailView>
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(context, "Detail User", action: [
-        IconButton(
-          onPressed: () {
-            CusNav.nPush(context, UserAddView(data: userDataP));
-          },
-          icon: Icon(
-            Icons.edit,
-            color: Constant.primaryColor,
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            Utils.showYesNoDialogWithWarning(
-                context: context,
-                title: "Konfirmasi Penghapusan",
-                desc: "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
-                yesCallback: () async {
-                  Navigator.pop(context);
-                  await context
-                      .read<UserManageProvider>()
-                      .deleteUser(context, id: userP?.Id ?? "0");
-                },
-                noCallback: () async {
-                  Navigator.pop(context);
-                });
-          },
-          icon: Icon(
-            Icons.delete,
-            color: Constant.redColor,
-          ),
-        ),
-      ]),
+      appBar: CustomAppBar.appBar(context, "Detail User",
+          color: Constant.primaryColor,
+          foregroundColor: Colors.white,
+          action: [
+            IconButton(
+              onPressed: () {
+                CusNav.nPush(context, UserAddView(data: userDataP));
+              },
+              icon: Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Utils.showYesNoDialogWithWarning(
+                    context: context,
+                    title: "Konfirmasi Penghapusan",
+                    desc:
+                        "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
+                    yesCallback: () async {
+                      Navigator.pop(context);
+                      await context
+                          .read<UserManageProvider>()
+                          .deleteUser(context, id: userP?.Id ?? "0");
+                    },
+                    noCallback: () async {
+                      Navigator.pop(context);
+                    });
+              },
+              icon: Icon(Icons.delete),
+            ),
+          ]),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
         child: Column(

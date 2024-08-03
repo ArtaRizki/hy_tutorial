@@ -159,27 +159,33 @@ class CustomButton {
   static Widget secondaryButton(String text, VoidCallback onClick,
       {EdgeInsetsGeometry? margin,
       bool stretched = true,
+      double? borderWidth,
       EdgeInsetsGeometry? contentPadding,
+      // EdgeInsetsGeometry? contentPadding,
       TextStyle? textStyle,
       double? fontSize,
+      Color? borderColor,
+      Color? textColor,
       BorderRadiusGeometry? borderRadius}) {
     return Padding(
       padding: margin ?? EdgeInsets.all(0),
       child: ElevatedButton(
         style: ButtonStyle(
+          padding: MaterialStateProperty.all(contentPadding ??
+              EdgeInsets.symmetric(vertical: 16, horizontal: 14)),
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: borderRadius ?? BorderRadius.circular(25),
-              side: BorderSide(color: Constant.primaryColor, width: 2),
+              side: BorderSide(
+                  color: borderColor ?? Constant.primaryColor,
+                  width: borderWidth ?? 2),
             ),
           ),
           elevation: MaterialStateProperty.all<double>(0),
         ),
         onPressed: onClick,
         child: Container(
-          padding: contentPadding ??
-              EdgeInsets.symmetric(vertical: 16, horizontal: 14),
           alignment: stretched ? Alignment.center : null,
           child: Center(
             child: Text(
@@ -188,7 +194,7 @@ class CustomButton {
                   TextStyle(
                     fontWeight: Constant.medium,
                     fontSize: fontSize ?? 16,
-                    color: Constant.primaryColor,
+                    color: textColor ?? Constant.primaryColor,
                   ),
               textAlign: TextAlign.center,
             ),

@@ -63,7 +63,7 @@ class _HomeViewState extends BaseState<HomeView> {
     name = data?.Name ?? name2;
     division = data?.Division ?? division2;
     setState(() {});
-    await context.read<AuthProvider>().getConfig(withLoading: false);
+    // await context.read<AuthProvider>().getConfig(withLoading: false);
     await context.read<HomeProvider>().fetchUserList(withLoading: true);
     Utils.dismissLoading();
   }
@@ -220,7 +220,7 @@ class _HomeViewState extends BaseState<HomeView> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          await context.read<AuthProvider>().getConfig();
+          // await context.read<AuthProvider>().getConfig();
         },
         child: SingleChildScrollView(
           child: Column(

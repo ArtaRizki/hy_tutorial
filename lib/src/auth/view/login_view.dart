@@ -110,26 +110,8 @@ class _LoginViewState extends State<LoginView> {
                     labelColor: Constant.primaryColor,
                     borderColor: Constant.primaryColor.withOpacity(0.5),
                     obscureText: authP.obscurePass,
-                    onEditingComplete: () async {
-                      try {
-                        final result =
-                            await context.read<AuthProvider>().login();
-                        if (result.Success == true) {
-                          Navigator.pushReplacementNamed(context, '/home',
-                              arguments: result.Data?.IsAdmin ?? false);
-                        } else {
-                          Utils.showFailed(msg: result.Message ?? "Error");
-                        }
-                      } catch (e) {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.clear();
-                        Utils.showFailed(
-                            msg: e.toString().toLowerCase().contains("doctype")
-                                ? "Maaf, Terjadi Galat!"
-                                : "$e");
-                      }
-                    },
+                    onEditingComplete: () async =>
+                        await context.read<AuthProvider>().login(context),
                     suffixIcon: InkWell(
                       onTap: () => authP.toggleObscurePass(),
                       child: Icon(
@@ -144,22 +126,8 @@ class _LoginViewState extends State<LoginView> {
               ),
 
               SizedBox(height: 30),
-              CustomButton.mainButton("Masuk", () async {
-                try {
-                  final result = await context.read<AuthProvider>().login();
-                  if (result.Success == true) {
-                    Navigator.pushReplacementNamed(context, '/home',
-                        arguments: result.Data?.IsAdmin ?? false);
-                  } else {
-                    Utils.showFailed(msg: result.Message ?? "Error");
-                  }
-                } catch (e) {
-                  Utils.showFailed(
-                      msg: e.toString().toLowerCase().contains("doctype")
-                          ? "Maaf, Terjadi Galat!"
-                          : "$e");
-                }
-              },
+              CustomButton.mainButton("Masuk",
+                  () async => await context.read<AuthProvider>().login(context),
                   borderRadius: BorderRadius.circular(10),
                   contentPadding: EdgeInsets.symmetric(vertical: 8),
                   textStyle: TextStyle(

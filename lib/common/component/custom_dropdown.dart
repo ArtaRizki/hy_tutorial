@@ -60,6 +60,7 @@ class CustomDropdown {
             ),
           DropdownButtonFormField(
             isDense: isDense,
+            elevation: 0,
             padding: EdgeInsets.zero,
             items: readOnly ? null : list,
             onChanged: readOnly ? null : onChanged,
@@ -85,7 +86,7 @@ class CustomDropdown {
               focusColor: Constant.primaryColor,
               prefix: SizedBox(width: 12),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
                   width: 0.5,
                   color: borderColor ?? Constant.borderSearchColor,
@@ -93,7 +94,7 @@ class CustomDropdown {
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
                   width: 0.5,
                   color: borderColor ?? Constant.borderSearchColor,
@@ -101,9 +102,9 @@ class CustomDropdown {
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  width: 1,
+                  width: 0.5,
                   color: borderColor ?? Constant.primaryColor,
                   style: BorderStyle.solid,
                 ),
@@ -274,7 +275,7 @@ class CustomDropdown {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(
-                    width: 1,
+                    width: 0.5,
                     color: borderColor ?? Constant.primaryColor,
                     style: BorderStyle.solid,
                   ),

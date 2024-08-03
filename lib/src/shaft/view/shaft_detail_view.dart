@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_container.dart';
 import '../../../common/helper/constant.dart';
+import '../../../utils/utils.dart';
 import 'sample_chart_view.dart';
 import "package:provider/provider.dart";
 import '../../../common/component/custom_textfield.dart';
@@ -617,7 +618,33 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
 
     return Scaffold(
       appBar: CustomAppBar.appBar(
-          context, tabController.index == 2 ? 'Upper' : 'Shaft'),
+        context,
+        tabController.index == 2 ? 'Upper' : 'Shaft',
+        action: [
+          IconButton(
+            onPressed: () {
+              Utils.showYesNoDialogWithWarning(
+                  context: context,
+                  title: "Konfirmasi Penghapusan",
+                  desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
+                  yesCallback: () async {
+                    Navigator.pop(context);
+                    await context
+                        .read<DataAddProvider>()
+                        .deleteTurbine(context, id: data?.id ?? "0");
+                    getData();
+                  },
+                  noCallback: () async {
+                    Navigator.pop(context);
+                  });
+            },
+            icon: Icon(
+              Icons.delete,
+              color: Constant.redColor,
+            ),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
         child: ListView(

@@ -34,7 +34,7 @@ class CustomAppBar {
         style: textStyle ??
             TextStyle(
               fontWeight: Constant.semibold,
-              color: Colors.black,
+              color: foregroundColor ?? Colors.black,
               fontSize: 17,
             ),
       ),
@@ -45,6 +45,7 @@ class CustomAppBar {
       elevation: 0,
       backgroundColor: color ?? Colors.white,
       foregroundColor: foregroundColor ?? Colors.black,
+      surfaceTintColor: color ?? Colors.white,
       bottom: bottom ?? null,
       automaticallyImplyLeading: isLeading,
       centerTitle: isCenter,

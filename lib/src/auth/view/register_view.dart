@@ -1,15 +1,11 @@
 import 'package:hy_tutorial/common/component/custom_button.dart';
-import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_dropdown.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
-import 'package:hy_tutorial/src/home/view/home_view.dart';
-import 'package:hy_tutorial/src/home/view/main_home.dart';
-import 'package:hy_tutorial/src/splash_view.dart';
-import 'package:hy_tutorial/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,13 +19,10 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   @override
   void initState() {
-    super.initState();
     context.read<DivisionProvider>().fetchDivision();
     context.read<AuthProvider>().clearRegisterForm();
-    //getData();
+    super.initState();
   }
-
-  getData() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +36,8 @@ class _RegisterViewState extends State<RegisterView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/icons/ic-register.png',
-                scale: 4,
-              ),
-              // CircleAvatar(
-              //   backgroundColor: Colors.grey.shade300,
-              //   radius: 50,
-              // ),
-              SizedBox(
-                height: 15,
-              ),
+              Image.asset('assets/icons/ic-register.png', scale: 4),
+              SizedBox(height: 15),
               Text(
                 "Register",
                 style: TextStyle(
@@ -62,9 +46,7 @@ class _RegisterViewState extends State<RegisterView> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
-                height: 15,
-              ),
+              SizedBox(height: 15),
               Text(
                   "Silakan daftar dan masukan data diri anda, lalu tunggu sampai disetujui oleh admin",
                   textAlign: TextAlign.center,
@@ -72,23 +54,16 @@ class _RegisterViewState extends State<RegisterView> {
                       color: Colors.black54,
                       fontSize: 14,
                       fontWeight: FontWeight.w400)),
-              SizedBox(
-                height: 20,
-              ),
-
+              SizedBox(height: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Nama",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      )),
-                  SizedBox(
-                    height: 10,
+                  Text(
+                    "Nama",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-
+                  SizedBox(height: 10),
                   CustomTextField.borderTextField(
                     borderRadius: BorderRadius.circular(5),
                     controller: authP.nameC,
@@ -100,20 +75,14 @@ class _RegisterViewState extends State<RegisterView> {
                     labelColor: Constant.primaryColor,
                     borderColor: Constant.primaryColor.withOpacity(0.5),
                   ),
-                  SizedBox(
-                    height: 10,
+                  SizedBox(height: 10),
+                  Text(
+                    "Divisi",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  Text("Divisi",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   CustomDropdown.searchDropdown(
-                    // readOnly: !woAgreementP.isCreate,
                     required: true,
                     list: List.generate(
                         division.divisionModel.Data?.length ?? 0,
@@ -126,62 +95,17 @@ class _RegisterViewState extends State<RegisterView> {
                           ?.Id;
                       if (selected != null && val != null) {
                         p.selectedDivision = selected;
-                        p.selectedDivisionC.text = val ?? '';
+                        p.selectedDivisionC.text = val;
                       }
                     },
-                    // enabled: woAgreementP.isCreate,
-                    //controller: authP.selectedDivisionC,
-                    // labelText: "Work Type",
-                    //selectedItem: authP.selectedDivisionV,
-                    //hintText: authP.selectedDivision?.Name ?? "Select",
-
-                    // if (val == "BD" || val == "SD") {
-                    //   woAgreementP.isDowntime = true;
-                    // }
-                    // woAgreementP.workTypeV = val;
-                    // woAgreementP.workTypeShortC.text = val ?? "";
-                    // if (val == "CM") {
-                    //   woAgreementP.workTypeC.text = "Corrective Maintenance";
-                    // }
-                    // if (val == "PDM") {
-                    //   woAgreementP.workTypeC.text = "Predictive Maintenance";
-                    // }
-                    // if (val == "BD") {
-                    //   woAgreementP.workTypeC.text = "Breakdown";
-                    // }
-                    // if (val == "AC") {
-                    //   woAgreementP.workTypeC.text = "Accident";
-                    // }
-                    // if (val == "SD") {
-                    //   woAgreementP.workTypeC.text = "Shutdown";
-                    // }
-                    //setState(() {});
-                    // woAgreementP.workTypeV = val;
-                    // },
                   ),
-                  // CustomTextField.borderTextField(
-                  //   borderRadius: BorderRadius.circular(5),
-                  //   controller: authP.emailC,
-                  //   fillColor: Colors.white,
-                  //   hintColor: Constant.quarteryColor,
-                  //   hintText: "NIP",
-                  //   labelFontSize: 20,
-                  //   labelFontWeight: FontWeight.bold,
-                  //   labelColor: Constant.primaryColor,
-                  //   borderColor: Constant.primaryColor.withOpacity(0.5),
-                  // ),
-                  SizedBox(
-                    height: 10,
+                  SizedBox(height: 10),
+                  Text(
+                    "Username",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  Text("Username",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   CustomTextField.borderTextField(
                     borderRadius: BorderRadius.circular(5),
                     controller: authP.usernameC,
@@ -192,43 +116,14 @@ class _RegisterViewState extends State<RegisterView> {
                     labelFontWeight: FontWeight.bold,
                     labelColor: Constant.primaryColor,
                     borderColor: Constant.primaryColor.withOpacity(0.5),
-                    // obscureText: authP.obscurePass,
-                    // onEditingComplete: () async {
-                    //   try {
-                    //     final result = await context.read<AuthProvider>().login();
-                    //     if (result.Success == true) {
-                    //       Navigator.pushReplacementNamed(context, '/home',
-                    //           arguments: "");
-                    //     } else {
-                    //       Utils.showFailed(msg: result.Message ?? "Error");
-                    //     }
-                    //   } catch (e) {
-                    //     Utils.showFailed(
-                    //         msg: e.toString().toLowerCase().contains("doctype")
-                    //             ? "Maaf, Terjadi Galat!"
-                    //             : "$e");
-                    //   }
-                    // },
-                    // suffixIcon: InkWell(
-                    //   onTap: () => authP.toggleObscurePass(),
-                    //   child: Icon(
-                    //     authP.obscurePass ? Icons.visibility_off_outlined : Icons.visibility,
-                    //     color: Constant.primaryColor,
-                    //   ),
-                    // ),
                   ),
-                  SizedBox(
-                    height: 10,
+                  SizedBox(height: 10),
+                  Text(
+                    "Email",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  Text("Email",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   CustomTextField.borderTextField(
                     borderRadius: BorderRadius.circular(5),
                     controller: authP.emailC,
@@ -239,43 +134,14 @@ class _RegisterViewState extends State<RegisterView> {
                     labelFontWeight: FontWeight.bold,
                     labelColor: Constant.primaryColor,
                     borderColor: Constant.primaryColor.withOpacity(0.5),
-                    // obscureText: authP.obscurePass,
-                    // onEditingComplete: () async {
-                    //   try {
-                    //     final result = await context.read<AuthProvider>().login();
-                    //     if (result.Success == true) {
-                    //       Navigator.pushReplacementNamed(context, '/home',
-                    //           arguments: "");
-                    //     } else {
-                    //       Utils.showFailed(msg: result.Message ?? "Error");
-                    //     }
-                    //   } catch (e) {
-                    //     Utils.showFailed(
-                    //         msg: e.toString().toLowerCase().contains("doctype")
-                    //             ? "Maaf, Terjadi Galat!"
-                    //             : "$e");
-                    //   }
-                    // },
-                    // suffixIcon: InkWell(
-                    //   onTap: () => authP.toggleObscurePass(),
-                    //   child: Icon(
-                    //     authP.obscurePass ? Icons.visibility_off_outlined : Icons.visibility,
-                    //     color: Constant.primaryColor,
-                    //   ),
-                    // ),
                   ),
-                  SizedBox(
-                    height: 10,
+                  SizedBox(height: 10),
+                  Text(
+                    "Password",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  Text("Password",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   CustomTextField.borderTextField(
                     borderRadius: BorderRadius.circular(5),
                     controller: authP.passC,
@@ -287,23 +153,8 @@ class _RegisterViewState extends State<RegisterView> {
                     labelColor: Constant.primaryColor,
                     borderColor: Constant.primaryColor.withOpacity(0.5),
                     obscureText: authP.obscurePass,
-                    onEditingComplete: () async {
-                      try {
-                        final result =
-                            await context.read<AuthProvider>().login();
-                        if (result.Success == true) {
-                          Navigator.pushReplacementNamed(context, '/home',
-                              arguments: result.Data?.IsAdmin ?? false);
-                        } else {
-                          Utils.showFailed(msg: result.Message ?? "Error");
-                        }
-                      } catch (e) {
-                        Utils.showFailed(
-                            msg: e.toString().toLowerCase().contains("doctype")
-                                ? "Maaf, Terjadi Galat!"
-                                : "$e");
-                      }
-                    },
+                    onEditingComplete: () async =>
+                        await context.read<AuthProvider>().login(context),
                     suffixIcon: InkWell(
                       onTap: () => authP.toggleObscurePass(),
                       child: Icon(
@@ -314,18 +165,13 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
+                  SizedBox(height: 10),
+                  Text(
+                    "Konfirmasi Password",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  Text("Konfirmasi Password",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   CustomTextField.borderTextField(
                     borderRadius: BorderRadius.circular(5),
                     controller: authP.passConfirmationC,
@@ -337,23 +183,8 @@ class _RegisterViewState extends State<RegisterView> {
                     labelColor: Constant.primaryColor,
                     borderColor: Constant.primaryColor.withOpacity(0.5),
                     obscureText: authP.obscurePass1,
-                    onEditingComplete: () async {
-                      try {
-                        final result =
-                            await context.read<AuthProvider>().login();
-                        if (result.Success == true) {
-                          Navigator.pushReplacementNamed(context, '/home',
-                              arguments: result.Data?.IsAdmin ?? false);
-                        } else {
-                          Utils.showFailed(msg: result.Message ?? "Error");
-                        }
-                      } catch (e) {
-                        Utils.showFailed(
-                            msg: e.toString().toLowerCase().contains("doctype")
-                                ? "Maaf, Terjadi Galat!"
-                                : "$e");
-                      }
-                    },
+                    onEditingComplete: () async =>
+                        await context.read<AuthProvider>().login(context),
                     suffixIcon: InkWell(
                       onTap: () => authP.toggleObscurePass1(),
                       child: Icon(
@@ -366,52 +197,32 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                 ],
               ),
-
               SizedBox(height: 30),
-              CustomButton.mainButton("Daftar", () async {
-                try {
-                  final result = await context.read<AuthProvider>().register();
-                  if (result.success == true) {
-                    await Utils.showSuccess(msg: result.message ?? "Sukses");
-                    await Future.delayed(Duration(seconds: 2));
-                    Navigator.pushReplacementNamed(context, '/login',
-                        arguments: false);
-                    context.read<AuthProvider>().nameC.clear();
-                    context.read<AuthProvider>().usernameC.clear();
-                    context.read<AuthProvider>().passC.clear();
-                  } else {
-                    Utils.showFailed(msg: result.message ?? "Error");
-                  }
-                } catch (e) {
-                  Utils.showFailed(
-                      msg: e.toString().toLowerCase().contains("doctype")
-                          ? "Maaf, Terjadi Galat!"
-                          : "$e");
-                }
-              },
-                  borderRadius: BorderRadius.circular(10),
-                  contentPadding: EdgeInsets.symmetric(vertical: 8),
-                  textStyle: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: Colors.white)),
+              CustomButton.mainButton(
+                "Daftar",
+                () async =>
+                    await context.read<AuthProvider>().register(context),
+                borderRadius: BorderRadius.circular(10),
+                contentPadding: EdgeInsets.symmetric(vertical: 8),
+                textStyle: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: Colors.white),
+              ),
               SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Sudah memiliki akun?"),
-                  SizedBox(
-                    width: 5,
-                  ),
+                  SizedBox(width: 5),
                   InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginView()));
-                    },
+                    onTap: () => CusNav.nPush(context, LoginView()),
                     child: Text(
                       "Masuk",
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600),
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
