@@ -6,6 +6,7 @@ import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_loading_indicator.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
+import 'package:hy_tutorial/common/helper/xenolog.dart';
 import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/admin/view/user_detail_view.dart';
@@ -131,7 +132,14 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
                 ),
                 InkWell(
                     onTap: () async {
-                      widget.jumpToProfile;
+                      XenoLog("1",
+                              logType: XenoLogType.Database,
+                              projectName: '',
+                              version: '',
+                              webHookURL: '',
+                              emailAddress: '')
+                          .showLogDialog(context: context);
+                      // widget.jumpToProfile();
                     },
                     child: Image.asset('assets/icons/ic-user.png', scale: 4)),
               ],

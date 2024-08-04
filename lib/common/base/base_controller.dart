@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
@@ -61,11 +62,14 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
+    final ipv4 = await Ipify.ipv4();
+    h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
     if (headers != null) h.addAll(headers as Map<String, String>);
 
     log("==== PARAMETERS ====");
+    log("IP PUBLIC : $ipv4");
     log("URL : $url");
     log("BODY : $body");
     // log("HEADERS : ${h}");
@@ -104,8 +108,8 @@ class BaseController<S extends BaseState> {
             '\r\n' +
         "===================="
             '\r\n';
-    // if (kDebugMode) {    // XenoLog("GET").save(log2, alwaysLog: true);
-
+    // if (kDebugMode) {
+    XenoLog("GET").save(log2, alwaysLog: true);
     // }
     Utils.dismissLoading();
     if (response.body.contains("Timeout")) {
@@ -162,12 +166,15 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'keep-alive');
     h.putIfAbsent('Accept', () => 'application/json');
+    final ipv4 = await Ipify.ipv4();
+    h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
     if (headers != null) h.addAll(headers);
 
     if (files == null) {
       log("==== PARAMETERS ====");
+      log("IP PUBLIC : $ipv4");
       log("URL : $url");
       log("BODY : $body");
       // log("HEADERS : ${h}");
@@ -194,7 +201,7 @@ class BaseController<S extends BaseState> {
           "===================="
               '\r\n';
       // if (kDebugMode) {
-      // XenoLog("POST").save(log2, alwaysLog: true);
+      XenoLog("POST").save(log2, alwaysLog: true);
       // }
       Utils.dismissLoading();
       if (response.body.contains("Timeout")) {
@@ -243,12 +250,15 @@ class BaseController<S extends BaseState> {
     } else {
       var req = http.MultipartRequest("POST", Uri.parse(url));
       h.putIfAbsent("Content-Type", () => 'multipart/form-data');
+      final ipv4 = await Ipify.ipv4();
+      h.putIfAbsent('X-Real-IP', () => ipv4);
       req.headers.addAll(h);
       if (body != null)
         req.fields
             .addAll(body.map((key, value) => MapEntry(key, value.toString())));
       req.files.addAll(files);
       log("==== PARAMETERS ====");
+      log("IP PUBLIC : $ipv4");
       log("URL : $url");
       log("BODY : $body");
       log("FILES : $files");
@@ -271,7 +281,7 @@ class BaseController<S extends BaseState> {
           "===================="
               '\r\n';
       // if (kDebugMode) {
-      // XenoLog("POST").save(log2, alwaysLog: true);
+      XenoLog("POST").save(log2, alwaysLog: true);
       // }
       Utils.dismissLoading();
       if (response.body.contains("Timeout")) {
@@ -328,12 +338,15 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
+    final ipv4 = await Ipify.ipv4();
+    h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
     if (headers != null) h.addAll(headers);
 
     if (files == null) {
       log("==== PARAMETERS ====");
+      log("IP PUBLIC : $ipv4");
       log("URL : $url");
       log("BODY : $body");
       Response response = await http
@@ -357,7 +370,7 @@ class BaseController<S extends BaseState> {
           "===================="
               '\r\n';
       // if (kDebugMode) {
-      // XenoLog("POST").save(log2, alwaysLog: true);
+      XenoLog("PUT").save(log2, alwaysLog: true);
       // }
       Utils.dismissLoading();
       if (response.body.contains("Timeout")) {
@@ -412,6 +425,7 @@ class BaseController<S extends BaseState> {
             .addAll(body.map((key, value) => MapEntry(key, value.toString())));
       req.files.addAll(files);
       log("==== PARAMETERS ====");
+      log("IP PUBLIC : $ipv4");
       log("URL : $url");
       log("BODY : $body");
       log("FILES : $files");
@@ -434,7 +448,7 @@ class BaseController<S extends BaseState> {
           "===================="
               '\r\n';
       // if (kDebugMode) {
-      // XenoLog("POST").save(log2, alwaysLog: true);
+      XenoLog("PUT").save(log2, alwaysLog: true);
       // }
       Utils.dismissLoading();
       if (response.body.contains("Timeout")) {
@@ -488,6 +502,8 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
+    final ipv4 = await Ipify.ipv4();
+    h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
     if (headers != null) h.addAll(headers as Map<String, String>);
@@ -496,6 +512,7 @@ class BaseController<S extends BaseState> {
     final bodyUri = Uri.https(uri.authority, uri.path, body);
 
     log("==== PARAMETERS ====");
+    log("IP PUBLIC : $ipv4");
     log("URL : $url");
     log("BODY : $bodyUri");
     Response response = await http.delete(Uri.parse(url), headers: h).timeout(
@@ -516,7 +533,7 @@ class BaseController<S extends BaseState> {
         "===================="
             '\r\n';
     // if (kDebugMode) {
-    // XenoLog("DELETE").save(log2, alwaysLog: true);
+    XenoLog("DELETE").save(log2, alwaysLog: true);
     // }
     Utils.dismissLoading();
     if (response.body.contains("Timeout")) {

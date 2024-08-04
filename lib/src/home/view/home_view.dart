@@ -4,6 +4,7 @@ import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/helper/xenolog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -103,7 +104,14 @@ class _HomeViewState extends BaseState<HomeView> {
                 ),
                 InkWell(
                     onTap: () async {
-                      widget.jumpToProfile;
+                      XenoLog("1",
+                              logType: XenoLogType.Database,
+                              projectName: '',
+                              version: '',
+                              webHookURL: '',
+                              emailAddress: '')
+                          .showLogDialog(context: context);
+                      // widget.jumpToProfile();
                     },
                     child: Image.asset('assets/icons/ic-user.png', scale: 4)),
               ],

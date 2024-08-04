@@ -171,7 +171,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     String keyword = "",
   }) async {
     try {
-      if (!isFetching) {
+      if (!isFetching && next != '') {
         isFetching = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
@@ -224,7 +224,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           log("ITEMS LENGTH : ${newItems.length}");
           final isLastPage = newItems.length < pageSize;
 
-          if (isLastPage) {
+          if (isLastPage || (model.Meta?.Next ?? '') == '') {
             next = null;
             pagingController
                 .appendLastPage(newItems as List<UserListModelData>);
@@ -261,7 +261,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     String keyword = "",
   }) async {
     try {
-      if (!isFetching2) {
+      if (!isFetching2 && next2 != '' && next2 != null) {
         isFetching2 = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
@@ -313,7 +313,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           log("ITEMS LENGTH : ${newItems.length}");
           final isLastPage = newItems.length < pageSize2;
 
-          if (isLastPage) {
+          if (isLastPage || (model.Meta?.Next ?? '') == '') {
             next2 = null;
             pagingController2
                 .appendLastPage(newItems as List<UserListModelData>);

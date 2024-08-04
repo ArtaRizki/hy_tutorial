@@ -58,6 +58,7 @@ class _MainHomeState extends State<MainHome> {
   Widget build(BuildContext context) {
     Widget customBottomNav() {
       return BottomAppBar(
+        surfaceTintColor: Colors.white,
         shape: CircularNotchedRectangle(),
         notchMargin: 5,
         padding: EdgeInsets.only(top: 5),
@@ -92,7 +93,7 @@ class _MainHomeState extends State<MainHome> {
             //   setState(() {
             //     currentIndex = 0;
             //   });
-            // } 
+            // }
             setState(() => currentIndex = index);
           },
           type: BottomNavigationBarType.fixed,
@@ -173,18 +174,20 @@ class _MainHomeState extends State<MainHome> {
       //extendBody: true,
       primary: true,
       bottomNavigationBar: customBottomNav(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.transparent,
-        onPressed: () {
-          CusNav.nPush(context, DataAddView());
-        },
-        child: CircleAvatar(
-          radius: 60,
-          backgroundColor: Constant.primaryColor,
-          child:
-              Image.asset('assets/icons/ic-button.png', width: 40, height: 40),
-        ),
-      ),
+      floatingActionButton: MediaQuery.of(context).viewInsets.bottom != 0
+          ? SizedBox()
+          : FloatingActionButton(
+              backgroundColor: Colors.transparent,
+              onPressed: () {
+                CusNav.nPush(context, DataAddView());
+              },
+              child: CircleAvatar(
+                radius: 60,
+                backgroundColor: Constant.primaryColor,
+                child: Image.asset('assets/icons/ic-button.png',
+                    width: 40, height: 40),
+              ),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: WillPopScope(
         onWillPop: () async {

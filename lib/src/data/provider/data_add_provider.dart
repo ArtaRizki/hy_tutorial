@@ -62,6 +62,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   List<int> selectedUpper = [];
 
   resetData() {
+    titleC.clear();
     pltaC.clear();
     genBearingKoplingC.clear();
     koplingTurbinC.clear();

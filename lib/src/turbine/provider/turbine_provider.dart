@@ -175,7 +175,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
     String keyword = "",
   }) async {
     try {
-      if (!isFetching) {
+      if (!isFetching && next != '' && next != null) {
         isFetching = true;
         if (withLoading) loading(true);
         String startDateSelected =
@@ -228,7 +228,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
           log("ITEMS LENGTH : ${newItems.length}");
           final isLastPage = newItems.length < pageSize;
 
-          if (isLastPage) {
+          if (isLastPage || (model.Meta?.Next ?? '') == '') {
             next = null;
             pagingController.appendLastPage(newItems as List<TurbineModelData>);
           } else {

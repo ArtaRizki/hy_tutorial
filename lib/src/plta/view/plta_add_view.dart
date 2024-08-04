@@ -85,7 +85,7 @@ class PltaAddViewState extends BaseState<PltaAddView> {
                       yesCallback: () => handleTap(
                         () async {
                           Navigator.pop(context);
-                          await dataP.sendPlta(context);
+                          await dataP.sendPlta(context, back: true);
                         },
                       ),
                       noCallback: () => Navigator.pop(context),

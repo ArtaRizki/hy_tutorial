@@ -70,7 +70,7 @@ class XenoLog {
   String webHookURL = "";
   String emailAddress = "";
 
-  String projectNameDef = "BIMOPS";
+  String projectNameDef = "HY TUTORIAL";
   XenoLogType logTypeDef = XenoLogType.Database;
   // Endpoint Dev
   String setDatabaseURLDef = 'http://47.74.214.215:82/mg-log/log/ceklog?';
@@ -543,13 +543,13 @@ class XenoLog {
               alignment: Alignment.center,
               child: Text("Log File",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
-          Align(
-              alignment: Alignment.topRight,
-              child: InkWell(
-                  onTap: () async {
-                    shareAll();
-                  },
-                  child: Icon(Icons.share))),
+          // Align(
+          //     alignment: Alignment.topRight,
+          //     child: InkWell(
+          //         onTap: () async {
+          //           shareAll();
+          //         },
+          //         child: Icon(Icons.share))),
         ]),
         content: Padding(
           padding: EdgeInsets.all(8),

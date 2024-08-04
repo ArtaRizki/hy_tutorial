@@ -172,7 +172,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
     String keyword = "",
   }) async {
     try {
-      if (!isFetching) {
+      if (!isFetching && next != '' && next != null) {
         isFetching = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/plta';
@@ -207,7 +207,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
           log("ITEMS LENGTH : ${newItems.length}");
           final isLastPage = newItems.length < pageSize;
 
-          if (isLastPage) {
+          if (isLastPage || (model.Meta?.Next ?? '') == '') {
             next = null;
             pagingController
                 .appendLastPage(newItems as List<PltaListModelData>);
@@ -510,6 +510,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
         if (withLoading) loading(false);
         if (back) {
           Navigator.pop(context);
+          // Navigator.pushReplacement(context,
+          //     MaterialPageRoute(builder: (context) => MainHome(index: 1)));
           nameC.clear();
           active = null;
           totalUnitC.clear();
