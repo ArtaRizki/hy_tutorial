@@ -13,6 +13,7 @@ import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:hy_tutorial/src/plta/model/create_update_plta_unit_model.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
 import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
+import 'package:hy_tutorial/src/plta/view/plta_detail_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -552,7 +553,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
   }
 
   Future<void> deletePltaUnit(BuildContext context,
-      {required String id}) async {
+      {required String id, required String pltaId}) async {
     loading(true);
     final response = await delete(Constant.BASE_API_FULL + '/plta-unit/$id');
 
@@ -562,8 +563,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
       Navigator.pop(context);
-      // Navigator.pushReplacement(
-      //     context, MaterialPageRoute(builder: ((context) => UserManageView())));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => PltaDetailView(id: pltaId))));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);

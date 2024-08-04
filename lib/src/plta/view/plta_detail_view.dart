@@ -284,7 +284,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
                                         .read<PltaProvider>()
                                         .deletePltaUnit(context,
                                             id: pltaP?.Units?[index]?.Id ??
-                                                "0");
+                                                "0",pltaId: pltaP?.Id ?? "");       
                                   } else {
                                     p.hapusUnit(index);
                                     CusNav.nPop(context);
