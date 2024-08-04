@@ -510,8 +510,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
         if (withLoading) loading(false);
         if (back) {
           Navigator.pop(context);
-          // Navigator.pushReplacement(context,
-          //     MaterialPageRoute(builder: (context) => MainHome(index: 1)));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => MainHome(index: 1)));
           nameC.clear();
           active = null;
           totalUnitC.clear();
