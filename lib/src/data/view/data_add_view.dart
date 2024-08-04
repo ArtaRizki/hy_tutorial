@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/data/view/data_add_upper_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
@@ -14,7 +17,7 @@ class DataAddView extends StatefulWidget {
   State<DataAddView> createState() => _DataAddViewState();
 }
 
-class _DataAddViewState extends State<DataAddView> {
+class _DataAddViewState extends BaseState<DataAddView> {
   @override
   void initState() {
     getData();
@@ -22,6 +25,7 @@ class _DataAddViewState extends State<DataAddView> {
   }
 
   getData() async {
+    log("PANGGIL COU");
     final p = context.read<DataAddProvider>();
     p.fetchPlta(context);
     p.resetData();
@@ -48,7 +52,7 @@ class _DataAddViewState extends State<DataAddView> {
             Expanded(
               child: ListView(
                 children: [
-                  ...p.detailUnit(() => setState(() {})),
+                  ...p.detailUnit(),
                   ...p.boltDetailForm(),
                   ...p.shaftForm(),
                 ],

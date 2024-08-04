@@ -83,9 +83,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   resetData() {
     // pltaList.clear();
     titleC.clear();
-    // selectedPlta = null;
-    // selectedPltaModel = null;
-    pltaC.clear();
+    selectedPlta = null;
+    selectedPltaModel = null;
+    pltaC.text = '';
     genBearingKoplingC.clear();
     koplingTurbinC.clear();
     totalC.clear();
@@ -139,6 +139,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = PltaModel.fromJson(jsonDecode(response.body));
       pltaList = model.Data;
+      // notifyListeners();
       loading(false);
       return model;
     } else {
@@ -982,7 +983,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         TowerId: selectedPlta,
         GenBearingToCoupling: genBearingKoplingC.text,
         CouplingToTurbine: koplingTurbinC.text,
-        TotalBolts: boltQtyC.text,
+        TotalBolts: selectedBolt,
         CurrentTorque: currentTorqueC.text,
         MaxTorque: maxTorqueC.text,
         Data: CreateDataParamData(
@@ -1077,8 +1078,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   onChangedPLTA2(PltaModelData? v) async {
     if (v != null) {
-      loading(true);
       selectedPltaModel = v;
+      selectedPlta = v.Id ?? '0';
+      pltaC.text = v.Name ?? '';
+      loading(true);
       // check location
       if (await requestPermission(Permission.location)) {
         if (await Geolocator.isLocationServiceEnabled()) {
@@ -1128,6 +1131,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               loading(false);
             } else if (distance <= (radius ?? 0) && configStatus == true) {
               log("DALAM JANGKAUAN");
+
               selectedPltaModel = v;
               selectedPlta = v.Id ?? '0';
               pltaC.text = v.Name ?? '';
@@ -1136,42 +1140,51 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             } else {
               loading(false);
 
-              pltaC.clear();
+              pltaC.text = '';
+              selectedPltaModel = null;
+              selectedPlta = null;
               Utils.showFailed(
                   msg:
                       'Anda berada di luar batas jangkauan ($radius $radiusType)');
               throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
             }
           } else {
-            pltaC.clear();
+            pltaC.text = '';
+            selectedPltaModel = null;
+            selectedPlta = null;
             loading(false);
             Utils.showFailed(msg: 'Gagal mendapatkan lokasi');
             throw 'Gagal mendapatkan lokasi';
           }
         } else {
           loading(false);
-          pltaC.clear();
+          pltaC.text = '';
+          selectedPltaModel = null;
+          selectedPlta = null;
           Utils.showFailed(msg: 'Harap Nyalakan GPS');
           throw 'Izinkan Nyalakan GPS';
         }
       } else {
         loading(false);
-        pltaC.clear();
+        pltaC.text = '';
+        selectedPltaModel = null;
+        selectedPlta = null;
         Utils.showFailed(msg: 'Harap Izinkan Akses Lokasi GPS');
         throw 'Izinkan Akses Lokasi GPS';
       }
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   List<PltaModelData?> searchPlta(String pattern) {
     return (pltaList ?? [])
-        .where(
-            (element) => (element?.Name ?? '').toLowerCase().contains(pattern))
+        .where((element) => (element?.Name ?? '')
+            .toLowerCase()
+            .contains(pattern.trim().toLowerCase()))
         .toList();
   }
 
-  List<Widget> detailUnit(VoidCallback refresh) {
+  List<Widget> detailUnit() {
     return [
       Text("Detail Unit", style: Constant.blackBold20),
       Constant.xSizedBox8,
@@ -1223,7 +1236,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             // suffixIcon: InkWell(
             //   onTap: () {
             //     FocusManager.instance.primaryFocus?.unfocus();
-            //     pltaC.clear();
+            //     pltaC.text = '';
             //     selectedPlta = null;
             //     refresh;
             //   },
@@ -1504,7 +1517,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         list: boltList.map((e) => e).toList(),
         onChanged: (val) {
           selectedBolt = val;
-          notifyListeners();
+          // notifyListeners();
         },
       ),
       // CustomTextField.borderTextField(
