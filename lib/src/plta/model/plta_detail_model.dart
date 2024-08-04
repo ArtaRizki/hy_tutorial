@@ -61,8 +61,8 @@ class PltaDetailModelData {
   String? Id;
   String? Name;
   bool? Status;
-  int? Long;
-  int? Lat;
+  double? Long;
+  double? Lat;
   bool? RadiusStatus;
   int? Radius;
   String? RadiusType;
@@ -91,8 +91,8 @@ class PltaDetailModelData {
     Id = json['Id']?.toString();
     Name = json['Name']?.toString();
     Status = json['Status'];
-    Long = json['Long']?.toInt();
-    Lat = json['Lat']?.toInt();
+    Long = json['Long']?.toDouble();
+    Lat = json['Lat']?.toDouble();
     RadiusStatus = json['RadiusStatus'];
     Radius = json['Radius']?.toInt();
     RadiusType = json['RadiusType']?.toString();

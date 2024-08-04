@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:dart_ipify/dart_ipify.dart';
+// import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
@@ -11,6 +11,7 @@ import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
 import 'package:hy_tutorial/src/splash_view.dart';
+import 'package:public_ip_address/public_ip_address.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:provider/provider.dart';
@@ -62,14 +63,14 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
-    final ipv4 = await Ipify.ipv4();
-    h.putIfAbsent('X-Real-IP', () => ipv4);
+    final ipv4 = await IpAddress().getIpv4();
+    // h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
     if (headers != null) h.addAll(headers as Map<String, String>);
 
     log("==== PARAMETERS ====");
-    log("IP PUBLIC : $ipv4");
+    // log("IP PUBLIC : $ipv4");
     log("URL : $url");
     log("BODY : $body");
     // log("HEADERS : ${h}");
@@ -101,6 +102,8 @@ class BaseController<S extends BaseState> {
         "==== PARAMETERS ===="
             '\r\n' +
         "URL : $url"
+            '\r\n' +
+        "HEADERS : $headers"
             '\r\n' +
         "BODY : $body"
             '\r\n' +
@@ -166,15 +169,15 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'keep-alive');
     h.putIfAbsent('Accept', () => 'application/json');
-    final ipv4 = await Ipify.ipv4();
-    h.putIfAbsent('X-Real-IP', () => ipv4);
+    final ipv4 = await IpAddress().getIpv4();
+    // h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
     if (headers != null) h.addAll(headers);
 
     if (files == null) {
       log("==== PARAMETERS ====");
-      log("IP PUBLIC : $ipv4");
+      // log("IP PUBLIC : $ipv4");
       log("URL : $url");
       log("BODY : $body");
       // log("HEADERS : ${h}");
@@ -191,6 +194,8 @@ class BaseController<S extends BaseState> {
           "==== PARAMETERS ===="
               '\r\n' +
           "URL : $url"
+              '\r\n' +
+          "HEADERS : $headers"
               '\r\n' +
           "BODY : $body"
               '\r\n' +
@@ -250,15 +255,15 @@ class BaseController<S extends BaseState> {
     } else {
       var req = http.MultipartRequest("POST", Uri.parse(url));
       h.putIfAbsent("Content-Type", () => 'multipart/form-data');
-      final ipv4 = await Ipify.ipv4();
-      h.putIfAbsent('X-Real-IP', () => ipv4);
+      final ipv4 = await IpAddress().getIpv4();
+      // h.putIfAbsent('X-Real-IP', () => ipv4);
       req.headers.addAll(h);
       if (body != null)
         req.fields
             .addAll(body.map((key, value) => MapEntry(key, value.toString())));
       req.files.addAll(files);
       log("==== PARAMETERS ====");
-      log("IP PUBLIC : $ipv4");
+      // log("IP PUBLIC : $ipv4");
       log("URL : $url");
       log("BODY : $body");
       log("FILES : $files");
@@ -271,6 +276,8 @@ class BaseController<S extends BaseState> {
           "==== PARAMETERS ===="
               '\r\n' +
           "URL : $url"
+              '\r\n' +
+          "HEADERS : $headers"
               '\r\n' +
           "BODY : $body"
               '\r\n' +
@@ -338,15 +345,15 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
-    final ipv4 = await Ipify.ipv4();
-    h.putIfAbsent('X-Real-IP', () => ipv4);
+    final ipv4 = await IpAddress().getIpv4();
+    // h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
     if (headers != null) h.addAll(headers);
 
     if (files == null) {
       log("==== PARAMETERS ====");
-      log("IP PUBLIC : $ipv4");
+      // log("IP PUBLIC : $ipv4");
       log("URL : $url");
       log("BODY : $body");
       Response response = await http
@@ -360,6 +367,8 @@ class BaseController<S extends BaseState> {
           "==== PARAMETERS ===="
               '\r\n' +
           "URL : $url"
+              '\r\n' +
+          "HEADERS : $headers"
               '\r\n' +
           "BODY : $body"
               '\r\n' +
@@ -425,7 +434,7 @@ class BaseController<S extends BaseState> {
             .addAll(body.map((key, value) => MapEntry(key, value.toString())));
       req.files.addAll(files);
       log("==== PARAMETERS ====");
-      log("IP PUBLIC : $ipv4");
+      // log("IP PUBLIC : $ipv4");
       log("URL : $url");
       log("BODY : $body");
       log("FILES : $files");
@@ -438,6 +447,8 @@ class BaseController<S extends BaseState> {
           "==== PARAMETERS ===="
               '\r\n' +
           "URL : $url"
+              '\r\n' +
+          "HEADERS : $headers"
               '\r\n' +
           "BODY : $body"
               '\r\n' +
@@ -502,8 +513,8 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
-    final ipv4 = await Ipify.ipv4();
-    h.putIfAbsent('X-Real-IP', () => ipv4);
+    final ipv4 = await IpAddress().getIpv4();
+    // h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
     if (headers != null) h.addAll(headers as Map<String, String>);
@@ -512,7 +523,7 @@ class BaseController<S extends BaseState> {
     final bodyUri = Uri.https(uri.authority, uri.path, body);
 
     log("==== PARAMETERS ====");
-    log("IP PUBLIC : $ipv4");
+    // log("IP PUBLIC : $ipv4");
     log("URL : $url");
     log("BODY : $bodyUri");
     Response response = await http.delete(Uri.parse(url), headers: h).timeout(
@@ -525,6 +536,8 @@ class BaseController<S extends BaseState> {
         "==== PARAMETERS ===="
             '\r\n' +
         "URL : $url"
+            '\r\n' +
+        "HEADERS : $headers"
             '\r\n' +
         "BODY : $body"
             '\r\n' +

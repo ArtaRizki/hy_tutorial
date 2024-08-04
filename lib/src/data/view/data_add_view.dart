@@ -18,11 +18,17 @@ class DataAddView extends StatefulWidget {
 class _DataAddViewState extends State<DataAddView> {
   @override
   void initState() {
+    getData();
+    super.initState();
+  }
+
+  getData() async {
     final p = context.read<DataAddProvider>();
     p.fetchPlta(context);
     p.resetData();
     p.generateAllData();
-    super.initState();
+    p.pltaC.clear();
+    setState(() {});
   }
 
   @override
@@ -31,7 +37,10 @@ class _DataAddViewState extends State<DataAddView> {
     return Scaffold(
       backgroundColor: Constant.primaryColor,
       appBar: CustomAppBar.appBar(context, "Tambah Data",
-          color: Constant.primaryColor, foregroundColor: Colors.white, isLeading: false, titleSpacing: 20),
+          color: Constant.primaryColor,
+          foregroundColor: Colors.white,
+          isLeading: false,
+          titleSpacing: 20),
       body: Container(
         color: Colors.white,
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),

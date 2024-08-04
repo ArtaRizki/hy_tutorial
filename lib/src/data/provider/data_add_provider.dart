@@ -62,7 +62,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   List<int> selectedUpper = [];
 
   resetData() {
+    // pltaList.clear();
     titleC.clear();
+    // selectedPlta = null;
+    // selectedPltaModel = null;
     pltaC.clear();
     genBearingKoplingC.clear();
     koplingTurbinC.clear();
@@ -929,99 +932,28 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   }
 
   Future<void> sendCreateTurbines(BuildContext context) async {
-    // try {
-    if (await requestPermission(Permission.location)) {
-      if (await Geolocator.isLocationServiceEnabled()) {
-        final geo = await Geolocator.getCurrentPosition(
-                desiredAccuracy: LocationAccuracy.high)
-            .timeout(
-          Duration(seconds: 5),
-          onTimeout: () async =>
-              Future.value((await Geolocator.getLastKnownPosition())),
-        );
-        if (geo.isMocked) {
-          Utils.showFailed(
-              msg: 'Anda menggunakan fake GPS, harap matikan terlebih dahulu');
-          throw 'Anda menggunakan fake GPS, harap matikan terlebih dahulu';
-        }
-
-        // SharedPreferences prefs = await SharedPreferences.getInstance();
-        // double? lat = prefs.getDouble(Constant.kSetPrefConfigLat) ?? 0;
-        // double? lon = prefs.getDouble(Constant.kSetPrefConfigLon) ?? 0;
-        // double? radius = prefs.getDouble(Constant.kSetPrefConfigRadius) ?? 0;
-        double? lat = selectedPltaModel?.Lat?.toDouble();
-        double? lon = selectedPltaModel?.Long?.toDouble();
-        double? radius = selectedPltaModel?.Radius?.toDouble();
-        bool? configStatus = selectedPltaModel?.RadiusStatus ?? false;
-        // prefs.getBool(Constant.kSetPrefConfigStatus) ?? false;
-        double distance = Geolocator.distanceBetween(
-            geo.latitude, geo.longitude, lat ?? 0, lon ?? 0);
-
-        String? radiusType = selectedPltaModel?.RadiusType ?? 'kilometer';
-        // prefs.getString(Constant.kSetPrefConfigRadiusType) ?? 'kilometer';
-        if (radiusType == 'meter') {
-          distance = distance;
-        } else if (radiusType == 'kilometer') {
-          distance = distance / 1000;
-        }
-        log("RADIUS TYPE : $radiusType");
-        log("DISTANCE : $distance");
-        log("RADIUS : $radius");
-        log("LAT : ${geo.latitude}");
-        log("LON : ${geo.longitude}");
-        log("LAT API : ${lat}");
-        log("LON API : ${lon}");
-        if (geo.latitude != 0 && lat != 0) {
-          if (distance <= (radius ?? 0)) {
-            final response = await createTurbines();
-            if (response.success == true) {
-              Utils.showSuccess(msg: response.message ?? "Sukses");
-              await Future.delayed(Duration(seconds: 2));
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (c) => ShaftView()));
-            } else {
-              Utils.showFailed(msg: response.message ?? '');
-              throw response.message ?? '';
-            }
-          } else {
-            final response = await createTurbines();
-            if (response.success == true) {
-              Utils.showSuccess(msg: response.message ?? "Sukses");
-              await Future.delayed(Duration(seconds: 2));
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (c) => ShaftView()));
-            } else {
-              Utils.showFailed(msg: response.message ?? '');
-              throw response.message ?? '';
-            }
-          }
-          // else {
-          //   Utils.showFailed(
-          //       msg:
-          //           'Anda berada di luar batas jangkauan ($radius $radiusType)');
-          //   throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
-          // }
-        } else {
-          Utils.showFailed(msg: 'Gagal mendapatkan lokasi');
-          throw 'Gagal mendapatkan lokasi';
-        }
+    try {
+      loading(true);
+      final response = await createTurbines();
+      if (response.success == true) {
+        Utils.showSuccess(msg: response.message ?? "Sukses");
+        await Future.delayed(Duration(seconds: 2));
+        Navigator.push(context, MaterialPageRoute(builder: (c) => ShaftView()));
       } else {
-        Utils.showFailed(msg: 'Harap Nyalakan GPS');
-        throw 'Izinkan Nyalakan GPS';
+        loading(false);
+        Utils.showFailed(msg: response.message ?? '');
+        // throw response.message ?? '';
       }
-    } else {
-      Utils.showFailed(msg: 'Harap Izinkan Akses Lokasi GPS');
-      throw 'Izinkan Akses Lokasi GPS';
+    } catch (e) {
+      loading(false);
+      Utils.showFailed(
+          msg: e.toString().toLowerCase().contains("doctype")
+              ? "Maaf, Terjadi Galat!"
+              : "$e");
+      throw e.toString().toLowerCase().contains("doctype")
+          ? "Maaf, Terjadi Galat!"
+          : "$e";
     }
-    // } catch (e) {
-    //   Utils.showFailed(
-    //       msg: e.toString().toLowerCase().contains("doctype")
-    //           ? "Maaf, Terjadi Galat!"
-    //           : "$e");
-    //   throw e.toString().toLowerCase().contains("doctype")
-    //       ? "Maaf, Terjadi Galat!"
-    //       : "$e";
-    // }
   }
 
   Future<TurbineCreateModel> createTurbines() async {
@@ -1127,6 +1059,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   onChangedPLTA2(PltaModelData? v) async {
     if (v != null) {
       loading(true);
+      selectedPltaModel = v;
       // check location
       if (await requestPermission(Permission.location)) {
         if (await Geolocator.isLocationServiceEnabled()) {
@@ -1161,44 +1094,55 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           log("RADIUS STATUS : $configStatus");
           log("DISTANCE : $distance");
           log("RADIUS : $radius");
+          log("MASUK RADIUS : ${distance <= (radius ?? 0)}");
           log("LAT : ${geo.latitude}");
           log("LON : ${geo.longitude}");
           log("LAT API : ${lat}");
           log("LON API : ${lon}");
           if (geo.latitude != 0 && lat != 0) {
-            double distance = Geolocator.distanceBetween(
-                geo.latitude, geo.longitude, lat ?? 0, lon ?? 0);
+            // double distance = Geolocator.distanceBetween(
+            //     geo.latitude, geo.longitude, lat ?? 0, lon ?? 0);
             if (configStatus == false) {
               selectedPltaModel = v;
               selectedPlta = v.Id ?? '0';
               pltaC.text = v.Name ?? '';
+              loading(false);
             } else if (distance <= (radius ?? 0) && configStatus == true) {
+              log("DALAM JANGKAUAN");
               selectedPltaModel = v;
               selectedPlta = v.Id ?? '0';
               pltaC.text = v.Name ?? '';
+              loading(false);
+              return;
             } else {
               loading(false);
+
+              pltaC.clear();
               Utils.showFailed(
                   msg:
                       'Anda berada di luar batas jangkauan ($radius $radiusType)');
               throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
             }
           } else {
+            pltaC.clear();
             loading(false);
             Utils.showFailed(msg: 'Gagal mendapatkan lokasi');
             throw 'Gagal mendapatkan lokasi';
           }
         } else {
           loading(false);
+          pltaC.clear();
           Utils.showFailed(msg: 'Harap Nyalakan GPS');
           throw 'Izinkan Nyalakan GPS';
         }
       } else {
         loading(false);
+        pltaC.clear();
         Utils.showFailed(msg: 'Harap Izinkan Akses Lokasi GPS');
         throw 'Izinkan Akses Lokasi GPS';
       }
     }
+    notifyListeners();
   }
 
   List<PltaModelData?> searchPlta(String pattern) {
@@ -1584,6 +1528,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
         required: false,
+        readOnly: true,
+        enabled: false,
         controller: differenceQtyC,
         textInputType: TextInputType.number,
         inputFormatters: [
@@ -1626,10 +1572,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   generateShaftLocalData(CreateDataParam? data) {
     if (data != null) {
       selectedPlta = data.TowerId;
-      String? pltaName = (pltaList ?? [])
-          .firstWhere((element) => element?.Id == data.TowerId)
-          ?.Name;
-      if (pltaName != null && pltaName != '') pltaC.text = pltaName;
+      // String? pltaName = (pltaList ?? [])
+      //     .firstWhere((element) => element?.Id == data.TowerId)
+      //     ?.Name;
+      // if (pltaName != null && pltaName != '') pltaC.text = pltaName;
       if (data.GenBearingToCoupling != null)
         genBearingKoplingC.text = data.GenBearingToCoupling ?? '';
       if (data.CouplingToTurbine != null)

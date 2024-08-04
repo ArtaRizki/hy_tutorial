@@ -263,236 +263,240 @@ class _TurbineViewState extends BaseState<TurbineView> {
               turbineP.pagingController.refresh();
             }
           },
-          child: Container(
-            padding: EdgeInsets.fromLTRB(
-                20, 10, 20, kBottomNavigationBarHeight - 42),
-            color: Colors.transparent,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Constant.xSizedBox16,
-                search(),
-                Constant.xSizedBox16,
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Filter",
-                          style: Constant.grayMedium.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400)),
-                      InkWell(
-                        onTap: () async {
-                          CustomContainer.showModalBottomScroll(
-                              initialChildSize: 0.45,
-                              context: context,
-                              child: filterAllWidget());
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 60,
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.grey.withOpacity(0.5),
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.filter_alt_outlined, size: 20),
-                              SizedBox(width: 4),
-                              Icon(Icons.keyboard_arrow_down, size: 15)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Constant.xSizedBox8,
-                Flexible(
-                  child: PagedListView.separated(
-                    shrinkWrap: true,
-                    // itemCount: turbineData.length,
-                    pagingController: pagingC,
-                    padding: EdgeInsets.fromLTRB(0, 18, 0, 20),
-                    separatorBuilder: (_, __) => Constant.xSizedBox16,
-                    builderDelegate:
-                        PagedChildBuilderDelegate<TurbineModelData>(
-                      firstPageProgressIndicatorBuilder: (_) => Container(
-                        color: Colors.white,
-                        padding: EdgeInsets.only(top: 32),
-                        child: CustomLoadingIndicator.buildIndicator(),
-                      ),
-                      newPageProgressIndicatorBuilder: (_) => Container(
-                        color: Colors.white,
-                        child: CustomLoadingIndicator.buildIndicator(),
-                      ),
-                      noItemsFoundIndicatorBuilder: (_) => Padding(
-                        padding: const EdgeInsets.only(top: 56),
-                        child: Text("Tidak ada data"),
-                      ),
-                      itemBuilder: (context, item, indexs) {
-                        return InkWell(
+          child: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: Container(
+              padding: EdgeInsets.fromLTRB(
+                  20, 10, 20, kBottomNavigationBarHeight - 42),
+              color: Colors.transparent,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Constant.xSizedBox16,
+                  search(),
+                  Constant.xSizedBox16,
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Filter",
+                            style: Constant.grayMedium.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400)),
+                        InkWell(
                           onTap: () async {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            turbineP.turbineSearchC.clear();
-                            final f = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ShaftDetailView(id: item.Id ?? ''
-                                            // id: '01J30MN6BRT962T3E8JPMK157H',
-                                            // id: '01J1YT2GYVWPNJX777WM9S76DC',
-                                            // id: '01J06H7N5A16M6FGP600A6MH0F',
-                                            // id: '01J20BBZFRKTRDS9JJYDD6GK5P',
-                                            )));
-                            if (f != null) {
-                              turbineP.next = null;
-                              pagingC.refresh();
-                            }
-                            // turbineP.turbineModelData =
-                            //     TurbineModelData();
+                            CustomContainer.showModalBottomScroll(
+                                initialChildSize: 0.45,
+                                context: context,
+                                child: filterAllWidget());
                           },
                           child: Container(
-                            padding: EdgeInsets.all(10),
+                            height: 30,
+                            width: 60,
+                            padding: EdgeInsets.all(2),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  width: 1,
-                                  color: Colors.grey.withOpacity(0.5)),
-                              borderRadius: BorderRadius.circular(10),
+                                width: 1,
+                                color: Colors.grey.withOpacity(0.5),
+                              ),
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '${DateFormat('HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item.CreatedAt ?? '${DateTime.now()}'))}',
-                                      style: Constant.blackRegular12,
-                                    ),
-                                    Text(
-                                      '${DateFormat('dd MMM yyyy').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item.CreatedAt ?? '${DateTime.now()}'))}',
-                                      style: Constant.blackRegular12,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 5),
-                                Divider(
-                                  thickness: 0.5,
-                                  color: Colors.grey.withOpacity(0.5),
-                                ),
-                                SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/ic-file.png',
-                                      scale: 3.5,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          // item.Title == '' || item.Title == null
-                                          //     ? "-"
-                                          //     :
-                                          item.Title ?? '',
-                                          style: Constant.blackBold15,
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(item.TowerName ?? "-",
-                                            style: Constant.grayRegular13),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Constant.xSizedBox8,
+                                Icon(Icons.filter_alt_outlined, size: 20),
+                                SizedBox(width: 4),
+                                Icon(Icons.keyboard_arrow_down, size: 15)
                               ],
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
-                    // itemBuilder: (context, index) {
-                    //   final item = turbineData[index];
-                    //   if (isLoading)
-                    //     return Container(
-                    //       color: Colors.white,
-                    //       padding: EdgeInsets.only(top: 32),
-                    //       child: CustomLoadingIndicator.buildIndicator(),
-                    //     );
-                    //   return InkWell(
-                    //     onTap: () async {
-                    //       FocusManager.instance.primaryFocus?.unfocus();
-                    //       turbineP.turbineSearchC.clear();
-                    //       final f = await Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //               builder: (context) =>
-                    //                   ShaftDetailView(id: item?.Id ?? '')));
-                    //       if (f != null) {
-                    //         pagingC.refresh();
-                    //       }
-
-                    //       // turbineP.turbineModelData =
-                    //       //     TurbineModelData();
-                    //     },
-                    //     child: CustomContainer.mainCard(
-                    //       child: Column(
-                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                    //         children: [
-                    //           Row(
-                    //             crossAxisAlignment: CrossAxisAlignment.start,
-                    //             children: [
-                    //               Expanded(
-                    //                 flex: 5,
-                    //                 child: Column(
-                    //                   crossAxisAlignment:
-                    //                       CrossAxisAlignment.start,
-                    //                   children: [
-                    //                     Text(item?.TowerName ?? "-",
-                    //                         style: Constant.blackBold),
-                    //                     SizedBox(height: 5),
-                    //                   ],
-                    //                 ),
-                    //               ),
-                    //               Constant.xSizedBox4,
-                    //               Expanded(
-                    //                 flex: 5,
-                    //                 child: Column(
-                    //                   crossAxisAlignment:
-                    //                       CrossAxisAlignment.end,
-                    //                   children: [
-                    //                     Text(
-                    //                       '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item?.createdAt ?? '${DateTime.now()}'))}',
-                    //                       // style: Constant.gray,
-                    //                       textAlign: TextAlign.right,
-                    //                     ),
-                    //                     SizedBox(height: 7),
-                    //                   ],
-                    //                 ),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //           Constant.xSizedBox12,
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   );
-                    // }
                   ),
-                ),
-                // SizedBox(height: 8),
-              ],
+                  Constant.xSizedBox8,
+                  Flexible(
+                    child: PagedListView.separated(
+                      shrinkWrap: true,
+                      // itemCount: turbineData.length,
+                      pagingController: pagingC,
+                      padding: EdgeInsets.fromLTRB(0, 18, 0, 20),
+                      separatorBuilder: (_, __) => Constant.xSizedBox16,
+                      builderDelegate:
+                          PagedChildBuilderDelegate<TurbineModelData>(
+                        firstPageProgressIndicatorBuilder: (_) => Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.only(top: 32),
+                          child: CustomLoadingIndicator.buildIndicator(),
+                        ),
+                        newPageProgressIndicatorBuilder: (_) => Container(
+                          color: Colors.white,
+                          child: CustomLoadingIndicator.buildIndicator(),
+                        ),
+                        noItemsFoundIndicatorBuilder: (_) => Padding(
+                          padding: const EdgeInsets.only(top: 56),
+                          child: Text("Tidak ada data"),
+                        ),
+                        itemBuilder: (context, item, indexs) {
+                          return InkWell(
+                            onTap: () async {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              turbineP.turbineSearchC.clear();
+                              final f = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ShaftDetailView(
+                                          id: item.Id ?? ''
+                                          // id: '01J30MN6BRT962T3E8JPMK157H',
+                                          // id: '01J1YT2GYVWPNJX777WM9S76DC',
+                                          // id: '01J06H7N5A16M6FGP600A6MH0F',
+                                          // id: '01J20BBZFRKTRDS9JJYDD6GK5P',
+                                          )));
+                              if (f != null) {
+                                turbineP.next = null;
+                                pagingC.refresh();
+                              }
+                              // turbineP.turbineModelData =
+                              //     TurbineModelData();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1,
+                                    color: Colors.grey.withOpacity(0.5)),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '${DateFormat('HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item.CreatedAt ?? '${DateTime.now()}'))}',
+                                        style: Constant.blackRegular12,
+                                      ),
+                                      Text(
+                                        '${DateFormat('dd MMM yyyy').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item.CreatedAt ?? '${DateTime.now()}'))}',
+                                        style: Constant.blackRegular12,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5),
+                                  Divider(
+                                    thickness: 0.5,
+                                    color: Colors.grey.withOpacity(0.5),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/icons/ic-file.png',
+                                        scale: 3.5,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            // item.Title == '' || item.Title == null
+                                            //     ? "-"
+                                            //     :
+                                            item.Title ?? '',
+                                            style: Constant.blackBold15,
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(item.TowerName ?? "-",
+                                              style: Constant.grayRegular13),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Constant.xSizedBox8,
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      // itemBuilder: (context, index) {
+                      //   final item = turbineData[index];
+                      //   if (isLoading)
+                      //     return Container(
+                      //       color: Colors.white,
+                      //       padding: EdgeInsets.only(top: 32),
+                      //       child: CustomLoadingIndicator.buildIndicator(),
+                      //     );
+                      //   return InkWell(
+                      //     onTap: () async {
+                      //       FocusManager.instance.primaryFocus?.unfocus();
+                      //       turbineP.turbineSearchC.clear();
+                      //       final f = await Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) =>
+                      //                   ShaftDetailView(id: item?.Id ?? '')));
+                      //       if (f != null) {
+                      //         pagingC.refresh();
+                      //       }
+
+                      //       // turbineP.turbineModelData =
+                      //       //     TurbineModelData();
+                      //     },
+                      //     child: CustomContainer.mainCard(
+                      //       child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           Row(
+                      //             crossAxisAlignment: CrossAxisAlignment.start,
+                      //             children: [
+                      //               Expanded(
+                      //                 flex: 5,
+                      //                 child: Column(
+                      //                   crossAxisAlignment:
+                      //                       CrossAxisAlignment.start,
+                      //                   children: [
+                      //                     Text(item?.TowerName ?? "-",
+                      //                         style: Constant.blackBold),
+                      //                     SizedBox(height: 5),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //               Constant.xSizedBox4,
+                      //               Expanded(
+                      //                 flex: 5,
+                      //                 child: Column(
+                      //                   crossAxisAlignment:
+                      //                       CrossAxisAlignment.end,
+                      //                   children: [
+                      //                     Text(
+                      //                       '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item?.createdAt ?? '${DateTime.now()}'))}',
+                      //                       // style: Constant.gray,
+                      //                       textAlign: TextAlign.right,
+                      //                     ),
+                      //                     SizedBox(height: 7),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //           Constant.xSizedBox12,
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   );
+                      // }
+                    ),
+                  ),
+                  // SizedBox(height: 8),
+                ],
+              ),
             ),
           ),
         ),

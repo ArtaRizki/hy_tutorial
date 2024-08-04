@@ -42,6 +42,8 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
       p.radiusStatus = data.RadiusStatus ?? false;
       p.active = data.Status == true ? 'aktif' : 'non_aktif';
       //p.radiusStatusC.text = 'Aktif';
+      log("DATA LAT : ${data.Lat}");
+      log("DATA ONG : ${data.Long}");
       if (data.Lat != null && data.Long != null)
         p.coordinateC.text = '${data.Lat ?? 0}, ${data.Long ?? 0}';
       p.radiusC.text = '${data.Radius ?? 0}';
