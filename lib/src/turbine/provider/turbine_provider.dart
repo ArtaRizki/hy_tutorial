@@ -175,7 +175,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
     String keyword = "",
   }) async {
     try {
-      if (!isFetching && next != '' && next != null) {
+      if (!isFetching) {
         isFetching = true;
         if (withLoading) loading(true);
         String startDateSelected =

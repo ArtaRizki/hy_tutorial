@@ -172,7 +172,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
     String keyword = "",
   }) async {
     try {
-      if (!isFetching && next != '' && next != null) {
+      if (!isFetching) {
         isFetching = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/plta';

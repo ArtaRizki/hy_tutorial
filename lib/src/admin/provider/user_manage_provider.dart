@@ -171,7 +171,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     String keyword = "",
   }) async {
     try {
-      if (!isFetching && next != '') {
+      if (!isFetching) {
         isFetching = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
@@ -261,7 +261,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     String keyword = "",
   }) async {
     try {
-      if (!isFetching2 && next2 != '' && next2 != null) {
+      if (!isFetching2) {
         isFetching2 = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
