@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
+import 'package:hy_tutorial/common/component/custom_dropdown.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:powers/powers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +33,24 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   TextEditingController currentTorqueC = TextEditingController();
   TextEditingController maxTorqueC = TextEditingController();
   TextEditingController differenceQtyC = TextEditingController();
+
+  List<String> boltList = [
+    "2",
+    "4",
+    "6",
+    "8",
+    "10",
+    "12",
+    "14",
+    "16",
+    "18",
+    "20",
+    "22",
+    "24",
+  ];
+  String? _selectedBolt;
+  String? get selectedBolt => this._selectedBolt;
+  set selectedBolt(String? value) => this._selectedBolt = value;
 
   String? selectedDropdown;
   String? selectedPlta;
@@ -1464,25 +1483,49 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       Constant.xSizedBox8,
       Text("Masukan detail baut", style: Constant.grayMedium),
       Constant.xSizedBox16,
-      CustomTextField.borderTextField(
+      CustomDropdown.searchDropdown(
         required: false,
         controller: boltQtyC,
-        textInputType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
-          FilteringTextInputFormatter.digitsOnly
-        ],
+        iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+        contentPadding: EdgeInsets.all(2),
+        borderColor: Constant.primaryColor,
         labelText: "Jumlah Baut",
         hintText: "Jumlah Baut",
+        selectedItem: selectedBolt,
         suffixIcon: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: Text(
             'Bolt',
             textAlign: TextAlign.right,
-            style: TextStyle(color: Constant.redColor),
+            style: TextStyle(
+                color: Constant.redColor, fontWeight: FontWeight.w400),
           ),
         ),
+        list: boltList.map((e) => e).toList(),
+        onChanged: (val) {
+          selectedBolt = val;
+          notifyListeners();
+        },
       ),
+      // CustomTextField.borderTextField(
+      //   required: false,
+      //   controller: boltQtyC,
+      //   textInputType: TextInputType.number,
+      //   inputFormatters: [
+      //     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
+      //     FilteringTextInputFormatter.digitsOnly
+      //   ],
+      //   labelText: "Jumlah Baut",
+      //   hintText: "Jumlah Baut",
+      //   suffixIcon: Padding(
+      //     padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+      //     child: Text(
+      //       'Bolt',
+      //       textAlign: TextAlign.right,
+      //       style: TextStyle(color: Constant.redColor),
+      //     ),
+      //   ),
+      // ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
         required: false,

@@ -60,6 +60,7 @@ class _DataAddViewState extends State<DataAddView> {
                 final dataP = context.read<DataAddProvider>();
                 FocusManager.instance.primaryFocus?.unfocus();
                 String? msg;
+                if (dataP.selectedBolt == null) msg = 'Harap Pilih Jumlah Baut';
                 if (dataP.selectedPlta == null) msg = 'Harap Pilih PLTA';
                 if (dataP.genBearingKoplingC.text.isEmpty)
                   msg = 'Harap Isi Gen Bearing Kopling';

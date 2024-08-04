@@ -16,6 +16,7 @@ class CustomDropdown {
     bool isDense = false,
     Color? fillColor,
     Color? borderColor,
+    Color? hintColor,
     String? selectedItem,
     Function(String?)? onChanged,
     required List<DropdownMenuItem<String>> list,
@@ -26,6 +27,7 @@ class CustomDropdown {
     EdgeInsetsGeometry? contentPadding,
     EdgeInsetsGeometry? iconPadding,
     double? labelFontSize,
+    Widget? suffixIcon,
     FormFieldValidator? validator,
   }) {
     return Padding(
@@ -65,18 +67,32 @@ class CustomDropdown {
             items: readOnly ? null : list,
             onChanged: readOnly ? null : onChanged,
             onSaved: (val) => FocusManager.instance.primaryFocus?.unfocus(),
-            icon: Padding(
-              padding: iconPadding ?? const EdgeInsets.fromLTRB(16, 0, 12, 0),
-              child: Icon(Icons.keyboard_arrow_down,
-                  color: Constant.textHintColor2, size: 24),
-            ),
+            icon: suffixIcon != null
+                ? Padding(
+                    padding:
+                        iconPadding ?? const EdgeInsets.fromLTRB(16, 0, 12, 0),
+                    child: Row(
+                      children: [
+                        suffixIcon,
+                        Constant.xSizedBox8,
+                        Icon(Icons.keyboard_arrow_down,
+                            color: Constant.textHintColor2, size: 24),
+                      ],
+                    ),
+                  )
+                : Padding(
+                    padding:
+                        iconPadding ?? const EdgeInsets.fromLTRB(16, 0, 12, 0),
+                    child: Icon(Icons.keyboard_arrow_down,
+                        color: Constant.textHintColor2, size: 24),
+                  ),
             // style: Constant.primaryTextStyle,
             isExpanded: true,
             decoration: InputDecoration(
               contentPadding: contentPadding ?? EdgeInsets.zero,
               hintText: hintText ?? "",
               isDense: isDense,
-              hintStyle: TextStyle(color: Constant.textHintColor2),
+              hintStyle: TextStyle(color: hintColor ?? Constant.textHintColor2),
               filled: true,
               enabled: enabled,
               fillColor: fillColor ??
@@ -192,6 +208,8 @@ class CustomDropdown {
     EdgeInsetsGeometry? contentPadding,
     EdgeInsetsGeometry? iconPadding,
     double? labelFontSize,
+    Widget? suffixIcon,
+    Color? hintColor,
     FormFieldValidator? validator,
   }) {
     return Padding(
@@ -236,18 +254,33 @@ class CustomDropdown {
             onChanged: onChanged,
             selectedItem: selectedItem,
             dropdownButtonProps: DropdownButtonProps(
-              icon: Padding(
-                padding: iconPadding ?? const EdgeInsets.fromLTRB(16, 0, 12, 0),
-                child: Icon(Icons.keyboard_arrow_down,
-                    color: Constant.textHintColor2, size: 24),
-              ),
+              icon: suffixIcon != null
+                  ? Row(
+                      children: [
+                        suffixIcon,
+                        Constant.xSizedBox8,
+                        Padding(
+                          padding: iconPadding ??
+                              const EdgeInsets.fromLTRB(16, 0, 12, 0),
+                          child: Icon(Icons.keyboard_arrow_down,
+                              color: Constant.textHintColor2, size: 24),
+                        ),
+                      ],
+                    )
+                  : Padding(
+                      padding: iconPadding ??
+                          const EdgeInsets.fromLTRB(16, 0, 12, 0),
+                      child: Icon(Icons.keyboard_arrow_down,
+                          color: Constant.textHintColor2, size: 24),
+                    ),
             ),
             dropdownDecoratorProps: DropDownDecoratorProps(
               dropdownSearchDecoration: InputDecoration(
                 contentPadding: contentPadding ?? EdgeInsets.zero,
                 hintText: hintText ?? "",
                 isDense: isDense,
-                hintStyle: TextStyle(color: Constant.textHintColor2),
+                hintStyle:
+                    TextStyle(color: hintColor ?? Constant.textHintColor2),
                 filled: true,
                 enabled: enabled,
                 fillColor: fillColor ??

@@ -501,7 +501,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
         await Future.delayed(Duration(seconds: 2));
         if (withLoading) loading(false);
         if (back) {
-          Navigator.pop(context);
+          // Navigator.pop(context);
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => MainHome(index: 1)));
           nameC.clear();

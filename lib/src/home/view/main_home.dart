@@ -37,7 +37,7 @@ class _MainHomeState extends State<MainHome> {
   @override
   void didChangeDependencies() {
     isAdmin = ModalRoute.of(context)?.settings.arguments as bool?;
-    // getData();
+    getData();
     super.didChangeDependencies();
   }
 
