@@ -482,127 +482,132 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
 
     Widget bodyKonten() {
       return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Menu",
-                style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500),
-              ),
-              ListView.separated(
-                shrinkWrap: true,
-                // scrollDirection: Axis.horizontal,
-                physics: ScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(
-                      staticArray.length,
-                      (indexx) => InkWell(
-                        onTap: () {
-                          CusNav.nPush(context, ShaftLatestView());
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40),
-                                  color: Colors.lightBlueAccent.shade200
-                                      .withOpacity(0.3),
-                                  image: DecorationImage(
-                                      image: AssetImage(staticImage[indexx]),
-                                      scale: 3)),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              staticArray[indexx],
-                              style: Constant.iPrimaryMedium8
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ],
-                        ),
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              "Menu",
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500),
+            ),
+            ListView.separated(
+              shrinkWrap: true,
+              // scrollDirection: Axis.horizontal,
+              physics: ScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(
+                    staticArray.length,
+                    (indexx) => InkWell(
+                      onTap: () {
+                        CusNav.nPush(context, ShaftLatestView());
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(40),
+                                color: Colors.lightBlueAccent.shade200
+                                    .withOpacity(0.3),
+                                image: DecorationImage(
+                                    image: AssetImage(staticImage[indexx]),
+                                    scale: 3)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            staticArray[indexx],
+                            style:
+                                Constant.iPrimaryMedium8.copyWith(fontSize: 16),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox();
-                },
-                itemCount: 1,
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Divider(
-                thickness: 0.5,
-                color: Colors.grey.withOpacity(0.5),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Register Request",
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
                   ),
-                  InkWell(
-                    onTap: () async {
-                      widget.jumpToManageUsers();
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          "Selengkapnya",
-                          style: TextStyle(
-                              color: Constant.primaryColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400),
-                        ),
-                        Icon(
-                          Icons.arrow_forward,
-                          color: Constant.primaryColor,
-                        )
-                      ],
-                    ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return SizedBox();
+              },
+              itemCount: 1,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Divider(
+              thickness: 0.5,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Register Request",
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+                InkWell(
+                  onTap: () async {
+                    widget.jumpToManageUsers();
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        "Selengkapnya",
+                        style: TextStyle(
+                            color: Constant.primaryColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      Icon(
+                        Icons.arrow_forward,
+                        color: Constant.primaryColor,
+                      )
+                    ],
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Container(height: 300, child: bodyKontenActive()),
-            ],
-          ));
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(height: 300, child: bodyKontenActive()),
+          ],
+        ),
+      );
     }
 
     return Scaffold(
+      backgroundColor: Constant.primaryColor,
       body: RefreshIndicator(
         onRefresh: () => getData(),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              headKonten(),
-              SizedBox(height: 5),
-              bodyKonten(),
-            ],
+          child: Container(
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                headKonten(),
+                SizedBox(height: 5),
+                bodyKonten(),
+              ],
+            ),
           ),
         ),
       ),

@@ -125,7 +125,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
                 : false);
 
         Navigator.pushReplacementNamed(context, '/home',
-            arguments: await prefs.getString(Constant.kSetPrefIsAdmin));
+            arguments: await prefs.getBool(Constant.kSetPrefIsAdmin));
         usernameC.clear();
         passC.clear();
       } else {

@@ -4,10 +4,13 @@
 class PltaModelData {
 /*
 {
-  "Id": "01J4B2TGE9TEH97X27SMV9KWEZ",
-  "Name": "PLTA Kebumen 1 - 2",
+  "Id": "01J4BNVANWTPB4ZNWC0FQAAMMQ",
+  "Name": "PLTA Radius - Unit 4",
   "Long": 12,
-  "Lat": 32
+  "Lat": 32,
+  "RadiusStatus": false,
+  "Radius": 10,
+  "RadiusType": "kilometer"
 } 
 */
 
@@ -15,18 +18,27 @@ class PltaModelData {
   String? Name;
   int? Long;
   int? Lat;
+  bool? RadiusStatus;
+  int? Radius;
+  String? RadiusType;
 
   PltaModelData({
     this.Id,
     this.Name,
     this.Long,
     this.Lat,
+    this.RadiusStatus,
+    this.Radius,
+    this.RadiusType,
   });
   PltaModelData.fromJson(Map<String, dynamic> json) {
     Id = json['Id']?.toString();
     Name = json['Name']?.toString();
     Long = json['Long']?.toInt();
     Lat = json['Lat']?.toInt();
+    RadiusStatus = json['RadiusStatus'];
+    Radius = json['Radius']?.toInt();
+    RadiusType = json['RadiusType']?.toString();
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -34,6 +46,9 @@ class PltaModelData {
     data['Name'] = Name;
     data['Long'] = Long;
     data['Lat'] = Lat;
+    data['RadiusStatus'] = RadiusStatus;
+    data['Radius'] = Radius;
+    data['RadiusType'] = RadiusType;
     return data;
   }
 }
@@ -46,10 +61,13 @@ class PltaModel {
   "Message": "berhasil mendapatkan semua plta master",
   "Data": [
     {
-      "Id": "01J4B2TGE9TEH97X27SMV9KWEZ",
-      "Name": "PLTA Kebumen 1 - 2",
+      "Id": "01J4BNVANWTPB4ZNWC0FQAAMMQ",
+      "Name": "PLTA Radius - Unit 4",
       "Long": 12,
-      "Lat": 32
+      "Lat": 32,
+      "RadiusStatus": false,
+      "Radius": 10,
+      "RadiusType": "kilometer"
     }
   ]
 } 

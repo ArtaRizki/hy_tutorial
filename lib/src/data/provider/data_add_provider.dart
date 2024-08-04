@@ -35,6 +35,12 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   String? selectedDropdown;
   String? selectedPlta;
+  PltaModelData? _selectedPltaModel;
+  PltaModelData? get selectedPltaModel => this._selectedPltaModel;
+  set selectedPltaModel(PltaModelData? value) {
+    this._selectedPltaModel = value;
+    notifyListeners();
+  }
 
   PltaModel _pltaModel = PltaModel();
   PltaModel get pltaModel => this._pltaModel;
@@ -937,17 +943,21 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               msg: 'Anda menggunakan fake GPS, harap matikan terlebih dahulu');
           throw 'Anda menggunakan fake GPS, harap matikan terlebih dahulu';
         }
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        double? lat = prefs.getDouble(Constant.kSetPrefConfigLat) ?? 0;
-        double? lon = prefs.getDouble(Constant.kSetPrefConfigLon) ?? 0;
-        double? radius = prefs.getDouble(Constant.kSetPrefConfigRadius) ?? 0;
-        bool? configStatus =
-            prefs.getBool(Constant.kSetPrefConfigStatus) ?? false;
-        double distance =
-            Geolocator.distanceBetween(geo.latitude, geo.longitude, lat, lon);
 
-        String? radiusType =
-            prefs.getString(Constant.kSetPrefConfigRadiusType) ?? 'kilometer';
+        // SharedPreferences prefs = await SharedPreferences.getInstance();
+        // double? lat = prefs.getDouble(Constant.kSetPrefConfigLat) ?? 0;
+        // double? lon = prefs.getDouble(Constant.kSetPrefConfigLon) ?? 0;
+        // double? radius = prefs.getDouble(Constant.kSetPrefConfigRadius) ?? 0;
+        double? lat = selectedPltaModel?.Lat?.toDouble();
+        double? lon = selectedPltaModel?.Long?.toDouble();
+        double? radius = selectedPltaModel?.Radius?.toDouble();
+        bool? configStatus = selectedPltaModel?.RadiusStatus ?? false;
+        // prefs.getBool(Constant.kSetPrefConfigStatus) ?? false;
+        double distance = Geolocator.distanceBetween(
+            geo.latitude, geo.longitude, lat ?? 0, lon ?? 0);
+
+        String? radiusType = selectedPltaModel?.RadiusType ?? 'kilometer';
+        // prefs.getString(Constant.kSetPrefConfigRadiusType) ?? 'kilometer';
         if (radiusType == 'meter') {
           distance = distance;
         } else if (radiusType == 'kilometer') {
@@ -972,7 +982,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               Utils.showFailed(msg: response.message ?? '');
               throw response.message ?? '';
             }
-          } else if (distance <= radius && configStatus == true) {
+          } else if (distance <= (radius ?? 0) && configStatus == true) {
             final response = await createTurbines();
             if (response.success == true) {
               Utils.showSuccess(msg: response.message ?? "Sukses");
@@ -1111,10 +1121,74 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  onChangedPLTA2(PltaModelData? v) {
+  onChangedPLTA2(PltaModelData? v) async {
     if (v != null) {
-      selectedPlta = v.Id ?? '0';
-      pltaC.text = v.Name ?? '';
+      // check location
+      if (await requestPermission(Permission.location)) {
+        if (await Geolocator.isLocationServiceEnabled()) {
+          final geo = await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high)
+              .timeout(
+            Duration(seconds: 5),
+            onTimeout: () async =>
+                Future.value((await Geolocator.getLastKnownPosition())),
+          );
+          if (geo.isMocked) {
+            Utils.showFailed(
+                msg:
+                    'Anda menggunakan fake GPS, harap matikan terlebih dahulu');
+            throw 'Anda menggunakan fake GPS, harap matikan terlebih dahulu';
+          }
+          double? lat = selectedPltaModel?.Lat?.toDouble();
+          double? lon = selectedPltaModel?.Long?.toDouble();
+          double? radius = selectedPltaModel?.Radius?.toDouble();
+          bool? configStatus = selectedPltaModel?.RadiusStatus ?? false;
+          double distance = Geolocator.distanceBetween(
+              geo.latitude, geo.longitude, lat ?? 0, lon ?? 0);
+
+          String? radiusType = selectedPltaModel?.RadiusType ?? 'kilometer';
+          if (radiusType == 'meter') {
+            distance = distance;
+          } else if (radiusType == 'kilometer') {
+            distance = distance / 1000;
+          }
+          log("RADIUS TYPE : $radiusType");
+          log("RADIUS STATUS : $configStatus");
+          log("DISTANCE : $distance");
+          log("RADIUS : $radius");
+          log("LAT : ${geo.latitude}");
+          log("LON : ${geo.longitude}");
+          log("LAT API : ${lat}");
+          log("LON API : ${lon}");
+          if (geo.latitude != 0 && lat != 0) {
+            double distance = Geolocator.distanceBetween(
+                geo.latitude, geo.longitude, lat ?? 0, lon ?? 0);
+            if (configStatus == false) {
+              selectedPltaModel = v;
+              selectedPlta = v.Id ?? '0';
+              pltaC.text = v.Name ?? '';
+            } else if (distance <= (radius ?? 0) && configStatus == true) {
+              selectedPltaModel = v;
+              selectedPlta = v.Id ?? '0';
+              pltaC.text = v.Name ?? '';
+            } else {
+              Utils.showFailed(
+                  msg:
+                      'Anda berada di luar batas jangkauan ($radius $radiusType)');
+              throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
+            }
+          } else {
+            Utils.showFailed(msg: 'Gagal mendapatkan lokasi');
+            throw 'Gagal mendapatkan lokasi';
+          }
+        } else {
+          Utils.showFailed(msg: 'Harap Nyalakan GPS');
+          throw 'Izinkan Nyalakan GPS';
+        }
+      } else {
+        Utils.showFailed(msg: 'Harap Izinkan Akses Lokasi GPS');
+        throw 'Izinkan Akses Lokasi GPS';
+      }
     }
   }
 

@@ -29,10 +29,11 @@ class _DataAddViewState extends State<DataAddView> {
   Widget build(BuildContext context) {
     final p = context.watch<DataAddProvider>();
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Constant.primaryColor,
       appBar: CustomAppBar.appBar(context, "Tambah Data",
-              color: Constant.primaryColor, foregroundColor: Colors.white),
-      body: Padding(
+          color: Constant.primaryColor, foregroundColor: Colors.white),
+      body: Container(
+        color: Colors.white,
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
         child: Column(
           children: [
