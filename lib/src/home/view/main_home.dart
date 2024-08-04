@@ -61,8 +61,11 @@ class _MainHomeState extends State<MainHome> {
         shape: CircularNotchedRectangle(),
         notchMargin: 5,
         padding: EdgeInsets.only(top: 5),
+        elevation: 0,
+        color: Colors.white,
         child: BottomNavigationBar(
           // backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+          elevation: 0,
           backgroundColor: Colors.white,
           selectedFontSize: 13,
           unselectedFontSize: 13,
