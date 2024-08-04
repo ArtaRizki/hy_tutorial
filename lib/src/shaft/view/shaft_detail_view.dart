@@ -634,7 +634,9 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
                     await context
                         .read<DataAddProvider>()
                         .deleteTurbine(context, id: data?.id ?? "0");
+
                     getData();
+                    Navigator.pop(context, true);
                   },
                   noCallback: () async {
                     Navigator.pop(context);

@@ -1104,7 +1104,6 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
-      Navigator.pop(context);
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);

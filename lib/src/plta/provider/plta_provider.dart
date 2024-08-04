@@ -144,28 +144,28 @@ class PltaProvider extends BaseController with ChangeNotifier {
       });
   }
 
-  var pltaListDummy = {
-    "Success": true,
-    "StatusCode": 200,
-    "Message": "berhasil mendapatkan semua plta",
-    "Data": [
-      {
-        "Id": "01J4B2TGE9TEH97X27SJB65BT1",
-        "Name": "PLTA Kebumen 1",
-        "Status": true,
-        "CreatedAt": "2024-08-03 09:59:10",
-        "CreatedBy": "aditya fullname"
-      },
-      {
-        "Id": "01J4B268KE75V22479S8XTSCXD",
-        "Name": "PLTA golang",
-        "Status": false,
-        "CreatedAt": "2024-08-03 09:48:07",
-        "CreatedBy": "aditya fullname"
-      }
-    ],
-    "Meta": {"Next": "", "Prev": ""}
-  };
+  // var pltaListDummy = {
+  //   "Success": true,
+  //   "StatusCode": 200,
+  //   "Message": "berhasil mendapatkan semua plta",
+  //   "Data": [
+  //     {
+  //       "Id": "01J4B2TGE9TEH97X27SJB65BT1",
+  //       "Name": "PLTA Kebumen 1",
+  //       "Status": true,
+  //       "CreatedAt": "2024-08-03 09:59:10",
+  //       "CreatedBy": "aditya fullname"
+  //     },
+  //     {
+  //       "Id": "01J4B268KE75V22479S8XTSCXD",
+  //       "Name": "PLTA golang",
+  //       "Status": false,
+  //       "CreatedAt": "2024-08-03 09:48:07",
+  //       "CreatedBy": "aditya fullname"
+  //     }
+  //   ],
+  //   "Meta": {"Next": "", "Prev": ""}
+  // };
   Future<void> fetchPltaList({
     bool withLoading = false,
     required int page,
@@ -564,7 +564,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
       await Future.delayed(Duration(seconds: 2));
       Navigator.pop(context);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: ((context) => PltaDetailView(id: pltaId))));
+          context,
+          MaterialPageRoute(
+              builder: ((context) => PltaDetailView(id: pltaId))));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);

@@ -40,6 +40,7 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
           ? p.radiusStatusC.text = 'Aktif'
           : p.radiusStatusC.text = 'Tidak Aktif';
       p.radiusStatus = data.RadiusStatus ?? false;
+      p.active = data.Status == true ? 'aktif' : 'non_aktif';
       //p.radiusStatusC.text = 'Aktif';
       if (data.Lat != null && data.Long != null)
         p.coordinateC.text = '${data.Lat ?? 0}, ${data.Long ?? 0}';
@@ -142,6 +143,30 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
             textInputType: TextInputType.name,
             labelText: "Nama PLTA",
             hintText: "Masukkan nama PLTA",
+          ),
+          Constant.xSizedBox16,
+          CustomDropdown.normalDropdown(
+            //controller: roleC,
+            iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+            contentPadding: EdgeInsets.all(2),
+            borderColor: Constant.primaryColor,
+            labelText: "Status",
+            selectedItem: p.active,
+            hintText: "Pilih status PLTA",
+            list: [
+              DropdownMenuItem(
+                child: Text("Aktif"),
+                value: "aktif",
+              ),
+              DropdownMenuItem(
+                child: Text("Non Aktif"),
+                value: "non_aktif",
+              ),
+            ],
+            onChanged: (val) {
+              p.active = val;
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
           ),
           Constant.xSizedBox16,
           CustomTextField.borderTextField(
@@ -283,8 +308,8 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
                                     await context
                                         .read<PltaProvider>()
                                         .deletePltaUnit(context,
-                                            id: pltaP?.Units?[index]?.Id ??
-                                                "0",pltaId: pltaP?.Id ?? "");       
+                                            id: pltaP?.Units?[index]?.Id ?? "0",
+                                            pltaId: pltaP?.Id ?? "");
                                   } else {
                                     p.hapusUnit(index);
                                     CusNav.nPop(context);
