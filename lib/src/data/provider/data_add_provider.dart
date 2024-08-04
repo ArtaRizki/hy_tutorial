@@ -972,18 +972,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         log("LAT API : ${lat}");
         log("LON API : ${lon}");
         if (geo.latitude != 0 && lat != 0) {
-          if (configStatus == false) {
-            final response = await createTurbines();
-            if (response.success == true) {
-              Utils.showSuccess(msg: response.message ?? "Sukses");
-              await Future.delayed(Duration(seconds: 2));
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (c) => ShaftView()));
-            } else {
-              Utils.showFailed(msg: response.message ?? '');
-              throw response.message ?? '';
-            }
-          } else if (distance <= (radius ?? 0) && configStatus == true) {
+          if (distance <= (radius ?? 0)) {
             final response = await createTurbines();
             if (response.success == true) {
               Utils.showSuccess(msg: response.message ?? "Sukses");
@@ -995,11 +984,23 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               throw response.message ?? '';
             }
           } else {
-            Utils.showFailed(
-                msg:
-                    'Anda berada di luar batas jangkauan ($radius $radiusType)');
-            throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
-          }
+            final response = await createTurbines();
+            if (response.success == true) {
+              Utils.showSuccess(msg: response.message ?? "Sukses");
+              await Future.delayed(Duration(seconds: 2));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (c) => ShaftView()));
+            } else {
+              Utils.showFailed(msg: response.message ?? '');
+              throw response.message ?? '';
+            }
+          } 
+          // else {
+          //   Utils.showFailed(
+          //       msg:
+          //           'Anda berada di luar batas jangkauan ($radius $radiusType)');
+          //   throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
+          // }
         } else {
           Utils.showFailed(msg: 'Gagal mendapatkan lokasi');
           throw 'Gagal mendapatkan lokasi';
