@@ -95,7 +95,7 @@ class ProfileProvider extends BaseController with ChangeNotifier {
       Navigator.pop(context);
       clearForm();
     } else {
-      final message = jsonDecode(response.body)["message"];
+      final message = jsonDecode(response.body)["Message"];
       loading(false);
       throw Exception(message);
     }

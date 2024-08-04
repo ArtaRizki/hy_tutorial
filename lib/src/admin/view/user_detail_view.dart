@@ -236,6 +236,9 @@ class _UserDetailViewState extends State<UserDetailView>
                             p.radiusStatus = value;
                             p.radiusStatusC.text =
                                 value ? 'Aktif' : 'Tidak Aktif';
+                            setState(() {});
+                            p.next = null;
+                            p.next2 = null;
 
                             await p.updateUser(
                               context,

@@ -594,7 +594,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
     }
 
     return Scaffold(
-      backgroundColor: Constant.primaryColor,
+      backgroundColor: Colors.white,
       body: RefreshIndicator(
         onRefresh: () => getData(),
         child: SingleChildScrollView(

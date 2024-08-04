@@ -622,7 +622,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       radiusStatus = false;
       radiusStatusC.clear();
     } else {
-      final message = jsonDecode(response.body)["message"];
+      final message = jsonDecode(response.body)["Message"];
       loading(false);
       throw Exception(message);
     }
@@ -659,6 +659,9 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       if (!fromHome) {
         Navigator.pop(context);
         Navigator.pop(context);
+        next = null;
+        next2 = null;
+        notifyListeners();
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: ((context) => UserManageView())));
       }
@@ -672,7 +675,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       radiusStatus = false;
       radiusStatusC.clear();
     } else {
-      final message = jsonDecode(response.body)["message"];
+      final message = jsonDecode(response.body)["Message"];
       loading(false);
       throw Exception(message);
     }
@@ -693,7 +696,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: ((context) => UserManageView())));
     } else {
-      final message = jsonDecode(response.body)["message"];
+      final message = jsonDecode(response.body)["Message"];
       loading(false);
       return message;
     }

@@ -613,6 +613,7 @@ class Utils {
   }) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
+      backgroundColor: Colors.white,
       actionsPadding: EdgeInsets.fromLTRB(20, 4, 20, 20),
       contentPadding: EdgeInsets.all(20),
       title: Center(
@@ -658,6 +659,7 @@ class Utils {
   }) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
+      backgroundColor: Colors.white,
       actionsPadding: EdgeInsets.fromLTRB(20, 4, 20, 20),
       contentPadding: EdgeInsets.all(20),
       title: Column(
