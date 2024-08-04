@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/utils.dart';
-import '../../auth/provider/auth_provider.dart';
 import '../../profile/provider/profile_provider.dart';
 import '../../shaft/view/shaft_latest_view.dart';
 import '../provider/home_provider.dart';

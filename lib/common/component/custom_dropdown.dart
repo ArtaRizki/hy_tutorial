@@ -288,6 +288,7 @@ class CustomDropdown {
                   return 'Harap isi $labelText';
                 }
               }
+              return null;
             },
             clearButtonProps: ClearButtonProps(
               icon: Icon(Icons.clear, size: 17, color: Colors.black),

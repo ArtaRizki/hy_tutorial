@@ -42,7 +42,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
     if (firebaseSubs != null) firebaseSubs!.cancel();
   }
 
-  dynamic? args() {
+  dynamic args() {
     return ModalRoute.of(context)?.settings.arguments;
   }
 

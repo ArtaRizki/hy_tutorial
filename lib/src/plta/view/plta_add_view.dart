@@ -74,28 +74,23 @@ class PltaAddViewState extends BaseState<PltaAddView> {
                   //if (dataP.roleC.text.isEmpty) msg = 'Harap Pilih Role';
                   //if (dataP.towernameC.text.isEmpty) msg = 'Harap Isi Pltaname';
                   //if (dataP.passwordC.text.isEmpty) msg = 'Harap Isi Password';
-                  if (msg != null) {
-                    Utils.showFailed(msg: msg);
-                    return;
-                  } else {
-                    await Utils.showYesNoDialog(
-                      context: context,
-                      title: "Konfirmasi",
-                      desc: "Apakah Data Anda Sudah Benar?",
-                      yesCallback: () => handleTap(
-                        () async {
-                          Navigator.pop(context);
-                          await dataP.sendPlta(context, back: true);
-                        },
-                      ),
-                      noCallback: () => Navigator.pop(context),
-                    );
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: ((context) => PltaView())));
-                  }
-                },
+                  await Utils.showYesNoDialog(
+                    context: context,
+                    title: "Konfirmasi",
+                    desc: "Apakah Data Anda Sudah Benar?",
+                    yesCallback: () => handleTap(
+                      () async {
+                        Navigator.pop(context);
+                        await dataP.sendPlta(context, back: true);
+                      },
+                    ),
+                    noCallback: () => Navigator.pop(context),
+                  );
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: ((context) => PltaView())));
+                                },
               ),
             ),
           ])),

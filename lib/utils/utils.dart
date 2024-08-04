@@ -400,13 +400,13 @@ class Utils {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor:
-            MaterialStateProperty.all<Color>(Constant.primaryColor),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            WidgetStateProperty.all<Color>(Constant.primaryColor),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
         ),
-        elevation: MaterialStateProperty.all<double>(0),
+        elevation: WidgetStateProperty.all<double>(0),
       ),
       onPressed: onClick,
       child: Container(
@@ -428,14 +428,14 @@ class Utils {
   static secondaryButton(String str, VoidCallback onClick) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
             side: BorderSide(color: Constant.primaryColor),
           ),
         ),
-        elevation: MaterialStateProperty.all<double>(0),
+        elevation: WidgetStateProperty.all<double>(0),
       ),
       onPressed: () {
         return onClick();

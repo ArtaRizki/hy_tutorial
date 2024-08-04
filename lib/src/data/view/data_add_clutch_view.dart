@@ -3,7 +3,6 @@ import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/utils.dart';
 import '../provider/data_add_provider.dart';
-import '../../shaft/view/shaft_view.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
 import 'data_add_turbine_view.dart';

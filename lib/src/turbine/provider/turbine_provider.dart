@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
-import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import '../../../common/base/base_controller.dart';
@@ -10,7 +9,6 @@ import '../../../common/component/custom_alert.dart';
 import '../../../common/helper/constant.dart';
 import '../../../main.dart';
 import '../model/turbine_create_model.dart';
-import '../model/turbine_detail_model.dart';
 import '../model/turbine_model.dart';
 
 class TurbineProvider extends BaseController with ChangeNotifier {

@@ -1,16 +1,10 @@
 import 'package:hy_tutorial/common/component/custom_button.dart';
-import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
 import 'package:hy_tutorial/src/auth/view/register_view.dart';
-import 'package:hy_tutorial/src/home/view/home_view.dart';
-import 'package:hy_tutorial/src/home/view/main_home.dart';
-import 'package:hy_tutorial/src/splash_view.dart';
-import 'package:hy_tutorial/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});

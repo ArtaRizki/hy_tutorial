@@ -263,7 +263,7 @@ class MyApp extends StatelessWidget {
               log(MediaQuery.of(context).size.toString());
               return MediaQuery(
                 child: child,
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
               );
             },
             debugShowCheckedModeBanner: false,
@@ -293,7 +293,7 @@ Future<Response> WrapLoading<Response>(Future<Response> future) async {
     Response data = await future;
     Utils.dismissLoading();
     return data;
-  } catch (e, s) {
+  } catch (e) {
     Utils.dismissLoading();
     rethrow;
   }

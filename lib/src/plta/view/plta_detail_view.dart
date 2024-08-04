@@ -462,41 +462,36 @@ class _PltaDetailViewState extends BaseState<PltaDetailView> {
                   //if (dataP.roleC.text.isEmpty) msg = 'Harap Pilih Role';
                   //if (dataP.pltanameC.text.isEmpty) msg = 'Harap Isi Pltaname';
                   //if (dataP.passwordC.text.isEmpty) msg = 'Harap Isi Password';
-                  if (msg != null) {
-                    Utils.showFailed(msg: msg);
-                    return;
-                  } else {
-                    await Utils.showYesNoDialog(
-                      context: context,
-                      title: "Konfirmasi",
-                      desc: "Apakah Data Anda Sudah Benar?",
-                      yesCallback: () => handleTap(
-                        () async {
-                          Navigator.pop(context);
-                          Utils.showLoading();
-                          await p.sendPlta(
-                            context,
+                  await Utils.showYesNoDialog(
+                    context: context,
+                    title: "Konfirmasi",
+                    desc: "Apakah Data Anda Sudah Benar?",
+                    yesCallback: () => handleTap(
+                      () async {
+                        Navigator.pop(context);
+                        Utils.showLoading();
+                        await p.sendPlta(
+                          context,
+                          isEdit: true,
+                          back: false,
+                          withLoading: false,
+                          pltaId: pltaDataP.Data?.Id ?? '',
+                        );
+                        await dataP.sendPltaUnit(context,
                             isEdit: true,
-                            back: false,
+                            back: true,
                             withLoading: false,
-                            pltaId: pltaDataP.Data?.Id ?? '',
-                          );
-                          await dataP.sendPltaUnit(context,
-                              isEdit: true,
-                              back: true,
-                              withLoading: false,
-                              pltaId: pltaDataP.Data?.Id ?? '');
-                          Utils.dismissLoading();
-                        },
-                      ),
-                      noCallback: () => Navigator.pop(context),
-                    );
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: ((context) => PltaView())));
-                  }
-                },
+                            pltaId: pltaDataP.Data?.Id ?? '');
+                        Utils.dismissLoading();
+                      },
+                    ),
+                    noCallback: () => Navigator.pop(context),
+                  );
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: ((context) => PltaView())));
+                                },
               ),
             ),
             // ),

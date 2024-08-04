@@ -16,11 +16,11 @@ class CustomButton {
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor:
-              MaterialStateProperty.all<Color>(color ?? Constant.primaryColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              WidgetStateProperty.all<Color>(color ?? Constant.primaryColor),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                   borderRadius: borderRadius ?? BorderRadius.circular(25))),
-          elevation: MaterialStateProperty.all<double>(0),
+          elevation: WidgetStateProperty.all<double>(0),
         ),
         onPressed: onClick,
         child: Container(
@@ -55,11 +55,11 @@ class CustomButton {
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor:
-              MaterialStateProperty.all<Color>(color ?? Constant.primaryColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              WidgetStateProperty.all<Color>(color ?? Constant.primaryColor),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                   borderRadius: borderRadius ?? BorderRadius.circular(25))),
-          elevation: MaterialStateProperty.all<double>(0),
+          elevation: WidgetStateProperty.all<double>(0),
         ),
         onPressed: onClick,
         child: Container(
@@ -171,10 +171,10 @@ class CustomButton {
       padding: margin ?? EdgeInsets.all(0),
       child: ElevatedButton(
         style: ButtonStyle(
-          padding: MaterialStateProperty.all(contentPadding ??
+          padding: WidgetStateProperty.all(contentPadding ??
               EdgeInsets.symmetric(vertical: 16, horizontal: 14)),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: borderRadius ?? BorderRadius.circular(25),
               side: BorderSide(
@@ -182,7 +182,7 @@ class CustomButton {
                   width: borderWidth ?? 2),
             ),
           ),
-          elevation: MaterialStateProperty.all<double>(0),
+          elevation: WidgetStateProperty.all<double>(0),
         ),
         onPressed: onClick,
         child: Container(
@@ -222,8 +222,8 @@ class CustomButton {
       padding: margin ?? EdgeInsets.all(0),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: borderRadius ?? BorderRadius.circular(25),
               side: BorderSide(
@@ -233,8 +233,8 @@ class CustomButton {
             ),
           ),
           padding:
-              MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero),
-          elevation: MaterialStateProperty.all<double>(0),
+              WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero),
+          elevation: WidgetStateProperty.all<double>(0),
         ),
         onPressed: onClick,
         child: Container(
@@ -268,14 +268,14 @@ class CustomButton {
       padding: margin ?? EdgeInsets.all(0),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: borderRadius ?? BorderRadius.circular(12.0),
               side: BorderSide(color: Colors.black),
             ),
           ),
-          elevation: MaterialStateProperty.all<double>(0),
+          elevation: WidgetStateProperty.all<double>(0),
         ),
         onPressed: onClick,
         child: Container(
@@ -300,14 +300,14 @@ class CustomButton {
       padding: margin ?? EdgeInsets.all(0),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
               side: BorderSide(color: Colors.red),
             ),
           ),
-          elevation: MaterialStateProperty.all<double>(0),
+          elevation: WidgetStateProperty.all<double>(0),
         ),
         onPressed: onClick,
         child: Container(
@@ -344,17 +344,17 @@ class CustomButton {
       ),
       onPressed: callback,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
+        backgroundColor: WidgetStateProperty.all(
           color,
         ),
-        padding: MaterialStateProperty.all<EdgeInsets>(
+        padding: WidgetStateProperty.all<EdgeInsets>(
           EdgeInsets.only(
             right: 8,
             left: 8,
           ),
         ),
-        elevation: MaterialStateProperty.all(1),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        elevation: WidgetStateProperty.all(1),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.0),
           ),

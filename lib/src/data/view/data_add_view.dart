@@ -4,7 +4,6 @@ import 'package:hy_tutorial/src/data/view/data_add_upper_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
 import '../provider/data_add_provider.dart';
-import '../../shaft/view/shaft_view.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
 

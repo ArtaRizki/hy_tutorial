@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_date_picker.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_textfield.dart';
@@ -14,7 +12,6 @@ import 'package:provider/provider.dart';
 import '../../../../common/base/base_state.dart';
 import '../../../../common/component/custom_loading_indicator.dart';
 import '../../../../common/helper/constant.dart';
-import '../../../../utils/utils.dart';
 import '../../shaft/view/shaft_detail_view.dart';
 import '../model/turbine_model.dart';
 import '../provider/turbine_provider.dart';

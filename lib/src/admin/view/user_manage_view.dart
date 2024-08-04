@@ -13,7 +13,6 @@ import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
 import 'package:hy_tutorial/src/plta/view/plta_detail_view.dart';
-import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import '../../../common/component/custom_appbar.dart';
@@ -201,7 +200,7 @@ class _UserManageViewState extends BaseState<UserManageView>
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
         indicatorColor: Constant.primaryColor,
         tabs: [
-          _buildTab("User Aktif"),
+          _buildTab("User"),
           _buildTab("Register Request"),
           _buildTab("Manage PLTA"),
         ],

@@ -30,6 +30,7 @@ class CustomDatePicker {
       },
     );
     if (picked != null && picked != date) return picked;
+    return null;
   }
 
   static Future<DateTime?> pickDateAndTime(
@@ -92,6 +93,7 @@ class CustomDatePicker {
       },
     );
     if (picked != null) return picked;
+    return null;
   }
 
   static Future<TimeOfDay?> pickTime(BuildContext context,
