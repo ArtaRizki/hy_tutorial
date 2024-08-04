@@ -122,6 +122,22 @@ class BaseController<S extends BaseState> {
         throw 'Timeout';
       }
     }
+    if (response.statusCode == 401) {
+      BuildContext? context = NavigationService.navigatorKey.currentContext;
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      // set to shared preferences
+      await prefs.remove(Constant.kSetPrefToken);
+      await prefs.remove(Constant.kSetPrefId);
+      await prefs.remove(Constant.kSetPrefName);
+      await prefs.remove(Constant.kSetPrefIsAdmin);
+      await prefs.clear();
+      if (context != null) {
+        // CustomAlert.showSnackBar(context, 'Harap Login Ulang', true);
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      }
+    }
     if (response.body.contains("Unauthorized") ||
         response.body.contains("missing authorization header")) {
       _preferences!.clear();
