@@ -176,27 +176,27 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
         Map<String, String> param = {
-          'Filter': 'Status',
-          'FilterValue': '1',
+          // 'Filter': 'Status',
+          // 'FilterValue': '1',
         };
-        if (userSearchC.text.isNotEmpty)
-          param.addAll({'Search': userSearchC.text});
-        if (ascending) {
-          param.remove('SortOrder');
-          param.addAll({'SortOrder': 'ASC'});
-        }
-        if (descending) {
-          param.remove('SortOrder');
-          param.addAll({'SortOrder': 'DESC'});
-        }
-        if (username) {
-          param.remove('SortBy');
-          param.addAll({'SortBy': 'Username'});
-        }
-        if (createdAt) {
-          param.remove('SortBy');
-          param.addAll({'SortBy': 'CreatedAt'});
-        }
+        // if (userSearchC.text.isNotEmpty)
+        //   param.addAll({'Search': userSearchC.text});
+        // if (ascending) {
+        //   param.remove('SortOrder');
+        //   param.addAll({'SortOrder': 'ASC'});
+        // }
+        // if (descending) {
+        //   param.remove('SortOrder');
+        //   param.addAll({'SortOrder': 'DESC'});
+        // }
+        // if (username) {
+        //   param.remove('SortBy');
+        //   param.addAll({'SortBy': 'Username'});
+        // }
+        // if (createdAt) {
+        //   param.remove('SortBy');
+        //   param.addAll({'SortBy': 'CreatedAt'});
+        // }
 
         if (next != null && next != '') param.addAll({'Next': next ?? ''});
         // log("PANGGIL");

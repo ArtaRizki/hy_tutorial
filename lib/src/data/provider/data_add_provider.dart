@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
+import 'package:hy_tutorial/common/component/custom_dropdown.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:powers/powers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +33,24 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   TextEditingController currentTorqueC = TextEditingController();
   TextEditingController maxTorqueC = TextEditingController();
   TextEditingController differenceQtyC = TextEditingController();
+
+  List<String> boltList = [
+    "2",
+    "4",
+    "6",
+    "8",
+    "10",
+    "12",
+    "14",
+    "16",
+    "18",
+    "20",
+    "22",
+    "24",
+  ];
+  String? _selectedBolt;
+  String? get selectedBolt => this._selectedBolt;
+  set selectedBolt(String? value) => this._selectedBolt = value;
 
   String? selectedDropdown;
   String? selectedPlta;
@@ -64,9 +83,9 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   resetData() {
     // pltaList.clear();
     titleC.clear();
-    // selectedPlta = null;
-    // selectedPltaModel = null;
-    pltaC.clear();
+    selectedPlta = null;
+    selectedPltaModel = null;
+    pltaC.text = '';
     genBearingKoplingC.clear();
     koplingTurbinC.clear();
     totalC.clear();
@@ -120,6 +139,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = PltaModel.fromJson(jsonDecode(response.body));
       pltaList = model.Data;
+      // notifyListeners();
       loading(false);
       return model;
     } else {
@@ -963,7 +983,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         TowerId: selectedPlta,
         GenBearingToCoupling: genBearingKoplingC.text,
         CouplingToTurbine: koplingTurbinC.text,
-        TotalBolts: boltQtyC.text,
+        TotalBolts: selectedBolt,
         CurrentTorque: currentTorqueC.text,
         MaxTorque: maxTorqueC.text,
         Data: CreateDataParamData(
@@ -1058,8 +1078,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   onChangedPLTA2(PltaModelData? v) async {
     if (v != null) {
-      loading(true);
       selectedPltaModel = v;
+      selectedPlta = v.Id ?? '0';
+      pltaC.text = v.Name ?? '';
+      loading(true);
       // check location
       if (await requestPermission(Permission.location)) {
         if (await Geolocator.isLocationServiceEnabled()) {
@@ -1109,6 +1131,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               loading(false);
             } else if (distance <= (radius ?? 0) && configStatus == true) {
               log("DALAM JANGKAUAN");
+
               selectedPltaModel = v;
               selectedPlta = v.Id ?? '0';
               pltaC.text = v.Name ?? '';
@@ -1117,42 +1140,51 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             } else {
               loading(false);
 
-              pltaC.clear();
+              pltaC.text = '';
+              selectedPltaModel = null;
+              selectedPlta = null;
               Utils.showFailed(
                   msg:
                       'Anda berada di luar batas jangkauan ($radius $radiusType)');
               throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
             }
           } else {
-            pltaC.clear();
+            pltaC.text = '';
+            selectedPltaModel = null;
+            selectedPlta = null;
             loading(false);
             Utils.showFailed(msg: 'Gagal mendapatkan lokasi');
             throw 'Gagal mendapatkan lokasi';
           }
         } else {
           loading(false);
-          pltaC.clear();
+          pltaC.text = '';
+          selectedPltaModel = null;
+          selectedPlta = null;
           Utils.showFailed(msg: 'Harap Nyalakan GPS');
           throw 'Izinkan Nyalakan GPS';
         }
       } else {
         loading(false);
-        pltaC.clear();
+        pltaC.text = '';
+        selectedPltaModel = null;
+        selectedPlta = null;
         Utils.showFailed(msg: 'Harap Izinkan Akses Lokasi GPS');
         throw 'Izinkan Akses Lokasi GPS';
       }
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   List<PltaModelData?> searchPlta(String pattern) {
     return (pltaList ?? [])
-        .where(
-            (element) => (element?.Name ?? '').toLowerCase().contains(pattern))
+        .where((element) => (element?.Name ?? '')
+            .toLowerCase()
+            .contains(pattern.trim().toLowerCase()))
         .toList();
   }
 
-  List<Widget> detailUnit(VoidCallback refresh) {
+  List<Widget> detailUnit() {
     return [
       Text("Detail Unit", style: Constant.blackBold20),
       Constant.xSizedBox8,
@@ -1204,7 +1236,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             // suffixIcon: InkWell(
             //   onTap: () {
             //     FocusManager.instance.primaryFocus?.unfocus();
-            //     pltaC.clear();
+            //     pltaC.text = '';
             //     selectedPlta = null;
             //     refresh;
             //   },
@@ -1464,25 +1496,49 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       Constant.xSizedBox8,
       Text("Masukan detail baut", style: Constant.grayMedium),
       Constant.xSizedBox16,
-      CustomTextField.borderTextField(
+      CustomDropdown.searchDropdown(
         required: false,
         controller: boltQtyC,
-        textInputType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
-          FilteringTextInputFormatter.digitsOnly
-        ],
+        iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+        contentPadding: EdgeInsets.all(2),
+        borderColor: Constant.primaryColor,
         labelText: "Jumlah Baut",
         hintText: "Jumlah Baut",
+        selectedItem: selectedBolt,
         suffixIcon: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: Text(
             'Bolt',
             textAlign: TextAlign.right,
-            style: TextStyle(color: Constant.redColor),
+            style: TextStyle(
+                color: Constant.redColor, fontWeight: FontWeight.w400),
           ),
         ),
+        list: boltList.map((e) => e).toList(),
+        onChanged: (val) {
+          selectedBolt = val;
+          // notifyListeners();
+        },
       ),
+      // CustomTextField.borderTextField(
+      //   required: false,
+      //   controller: boltQtyC,
+      //   textInputType: TextInputType.number,
+      //   inputFormatters: [
+      //     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
+      //     FilteringTextInputFormatter.digitsOnly
+      //   ],
+      //   labelText: "Jumlah Baut",
+      //   hintText: "Jumlah Baut",
+      //   suffixIcon: Padding(
+      //     padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+      //     child: Text(
+      //       'Bolt',
+      //       textAlign: TextAlign.right,
+      //       style: TextStyle(color: Constant.redColor),
+      //     ),
+      //   ),
+      // ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
         required: false,

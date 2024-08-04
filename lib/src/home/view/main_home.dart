@@ -43,6 +43,8 @@ class _MainHomeState extends State<MainHome> {
 
   getData() async {
     setIndex();
+
+    isAdmin = ModalRoute.of(context)?.settings.arguments as bool?;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin);
     setState(() {});
@@ -177,9 +179,11 @@ class _MainHomeState extends State<MainHome> {
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom != 0
           ? SizedBox()
           : FloatingActionButton(
-              backgroundColor: Colors.transparent,
-              onPressed: () {
-                CusNav.nPush(context, DataAddView());
+              backgroundColor: const Color.fromARGB(0, 140, 122, 122),
+              onPressed: () async {
+                setState(() => currentIndex = 0);
+                await CusNav.nPush(context, DataAddView());
+                setState(() => currentIndex = 0);
               },
               child: CircleAvatar(
                 radius: 60,

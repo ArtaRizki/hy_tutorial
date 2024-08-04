@@ -511,12 +511,12 @@ class XenoLog {
       // color: borderColor,
 
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
                 side: BorderSide(color: Constant.primaryColor),
                 borderRadius: BorderRadius.circular(16))),
-        elevation: MaterialStateProperty.all<double>(0),
+        elevation: WidgetStateProperty.all<double>(0),
       ),
       child: Text(caption, style: TextStyle(color: textColor, fontSize: 16)),
       onPressed: onClick,

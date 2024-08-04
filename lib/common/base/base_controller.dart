@@ -3,14 +3,12 @@ import 'dart:convert';
 import 'dart:developer';
 // import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
-import 'package:hy_tutorial/src/splash_view.dart';
 import 'package:public_ip_address/public_ip_address.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

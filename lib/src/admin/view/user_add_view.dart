@@ -101,30 +101,25 @@ class _UserAddViewState extends BaseState<UserAddView> {
                         //if (dataP.roleC.text.isEmpty) msg = 'Harap Pilih Role';
                         //if (dataP.usernameC.text.isEmpty) msg = 'Harap Isi Username';
                         //if (dataP.passwordC.text.isEmpty) msg = 'Harap Isi Password';
-                        if (msg != null) {
-                          Utils.showFailed(msg: msg);
-                          return;
-                        } else {
-                          await Utils.showYesNoDialog(
-                              context: context,
-                              title: "Konfirmasi",
-                              desc: "Apakah Data Anda Sudah Benar?",
-                              yesCallback: () => handleTap(() async {
-                                    Navigator.pop(context);
-                                    // Navigator.pop(context);
-                                    // Navigator.pop(context);
-                                    dataP.updateUser(
-                                      context,
-                                      id: p.userDetailModel.Data?.Id ?? "",
-                                    );
-                                  }),
-                              noCallback: () => Navigator.pop(context));
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: ((context) => UserManageView())));
-                        }
-                      },
+                        await Utils.showYesNoDialog(
+                            context: context,
+                            title: "Konfirmasi",
+                            desc: "Apakah Data Anda Sudah Benar?",
+                            yesCallback: () => handleTap(() async {
+                                  Navigator.pop(context);
+                                  // Navigator.pop(context);
+                                  // Navigator.pop(context);
+                                  dataP.updateUser(
+                                    context,
+                                    id: p.userDetailModel.Data?.Id ?? "",
+                                  );
+                                }),
+                            noCallback: () => Navigator.pop(context));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: ((context) => UserManageView())));
+                                            },
                     )
                   : CustomButton.mainButton(
                       'Submit',
@@ -137,25 +132,20 @@ class _UserAddViewState extends BaseState<UserAddView> {
                         //if (dataP.roleC.text.isEmpty) msg = 'Harap Pilih Role';
                         //if (dataP.usernameC.text.isEmpty) msg = 'Harap Isi Username';
                         //if (dataP.passwordC.text.isEmpty) msg = 'Harap Isi Password';
-                        if (msg != null) {
-                          Utils.showFailed(msg: msg);
-                          return;
-                        } else {
-                          await Utils.showYesNoDialog(
-                              context: context,
-                              title: "Konfirmasi",
-                              desc: "Apakah Data Anda Sudah Benar?",
-                              yesCallback: () => handleTap(() async {
-                                    Navigator.pop(context);
-                                    dataP.addUser(context);
-                                  }),
-                              noCallback: () => Navigator.pop(context));
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: ((context) => UserManageView())));
-                        }
-                      },
+                        await Utils.showYesNoDialog(
+                            context: context,
+                            title: "Konfirmasi",
+                            desc: "Apakah Data Anda Sudah Benar?",
+                            yesCallback: () => handleTap(() async {
+                                  Navigator.pop(context);
+                                  dataP.addUser(context);
+                                }),
+                            noCallback: () => Navigator.pop(context));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: ((context) => UserManageView())));
+                                            },
                     ),
             ),
           ])),

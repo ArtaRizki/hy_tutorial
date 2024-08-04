@@ -1,28 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/component/custom_dropdown.dart';
 import 'package:hy_tutorial/main.dart';
-import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
-import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
-import 'package:hy_tutorial/src/plta/model/create_update_plta_unit_model.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
-import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
 import 'package:hy_tutorial/src/plta/view/plta_detail_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:provider/provider.dart';
 import '../../../common/base/base_response.dart';
 import '../../../common/base/base_controller.dart';
 import '../../../common/component/custom_textfield.dart';
 import '../../../common/helper/constant.dart';
 import '../model/plta_model.dart';
-import '../model/plta_create_model.dart';
 import '../model/plta_detail_model.dart';
 import 'package:flutter_regex/flutter_regex.dart';
 import 'package:http/http.dart' as http;
@@ -509,7 +501,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
         await Future.delayed(Duration(seconds: 2));
         if (withLoading) loading(false);
         if (back) {
-          Navigator.pop(context);
+          // Navigator.pop(context);
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => MainHome(index: 1)));
           nameC.clear();

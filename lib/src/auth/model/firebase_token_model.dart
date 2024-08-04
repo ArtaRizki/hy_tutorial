@@ -95,10 +95,8 @@ class FirebaseTokenModel {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['success'] = success;
-    if (data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    data['Message'] = message;
+    data['data'] = this.data!.toJson();
+      data['Message'] = message;
     return data;
   }
 }

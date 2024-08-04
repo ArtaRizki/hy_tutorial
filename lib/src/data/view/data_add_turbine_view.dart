@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
-import 'package:hy_tutorial/main.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/utils.dart';
 import '../provider/data_add_provider.dart';
-import '../../shaft/view/shaft_view.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
-import 'package:geolocator/geolocator.dart';
 
 class DataAddTurbineView extends StatefulWidget {
   const DataAddTurbineView({super.key});

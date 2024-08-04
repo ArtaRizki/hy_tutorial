@@ -426,8 +426,8 @@ class Constant {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
-        side: MaterialStateProperty.all(BorderSide(color: primaryColor)),
-        foregroundColor: MaterialStateProperty.all(primaryColor),
+        side: WidgetStateProperty.all(BorderSide(color: primaryColor)),
+        foregroundColor: WidgetStateProperty.all(primaryColor),
       ),
     ),
     scaffoldBackgroundColor: Constant.backgroundColor,
@@ -438,7 +438,7 @@ class Constant {
       seedColor: primaryColor,
       primary: primaryColor, //<-- SEE HERE
     ).copyWith(
-        primary: Constant.primaryColor, background: Constant.backgroundColor),
+        primary: Constant.primaryColor, surface: Constant.backgroundColor),
   );
 
   // static const Color color4 = Color(0xffc2d5ee);

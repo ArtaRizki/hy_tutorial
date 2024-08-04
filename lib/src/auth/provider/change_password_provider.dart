@@ -1,12 +1,9 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../common/base/base_controller.dart';
 import '../../../common/base/base_response.dart';
-import '../../../common/component/custom_alert.dart';
 import '../../../common/helper/constant.dart';
-import '../model/login_model.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordProvider extends BaseController with ChangeNotifier {

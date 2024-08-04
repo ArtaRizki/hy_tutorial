@@ -30,6 +30,7 @@ class CustomDropdownSearch {
         if (required && value?.isNotEmpty != true) {
           return 'Harap isi $label';
         }
+        return null;
       },
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: inputDecoration ??
@@ -93,6 +94,7 @@ class CustomDropdownSearch {
         if (required && value?.isNotEmpty != true) {
           return 'Harap isi $label';
         }
+        return null;
       },
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: inputDecoration ??
@@ -235,6 +237,7 @@ class CustomDropdownSearch {
         if (required && value?.isNotEmpty != true) {
           return 'Harap isi $label';
         }
+        return null;
       },
     );
   }

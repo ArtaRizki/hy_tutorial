@@ -4,7 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:provider/provider.dart';
-import 'package:powers/powers.dart';
 import '../../data/provider/data_add_provider.dart';
 
 class UpperChartView extends StatefulWidget {

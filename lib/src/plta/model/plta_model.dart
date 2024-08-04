@@ -16,8 +16,8 @@ class PltaModelData {
 
   String? Id;
   String? Name;
-  int? Long;
-  int? Lat;
+  double? Long;
+  double? Lat;
   bool? RadiusStatus;
   int? Radius;
   String? RadiusType;
@@ -34,8 +34,8 @@ class PltaModelData {
   PltaModelData.fromJson(Map<String, dynamic> json) {
     Id = json['Id']?.toString();
     Name = json['Name']?.toString();
-    Long = json['Long']?.toInt();
-    Lat = json['Lat']?.toInt();
+    Long = json['Long']?.toDouble();
+    Lat = json['Lat']?.toDouble();
     RadiusStatus = json['RadiusStatus'];
     Radius = json['Radius']?.toInt();
     RadiusType = json['RadiusType']?.toString();

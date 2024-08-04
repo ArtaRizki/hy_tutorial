@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/data/view/data_add_upper_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
 import '../provider/data_add_provider.dart';
-import '../../shaft/view/shaft_view.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
 
@@ -15,7 +17,7 @@ class DataAddView extends StatefulWidget {
   State<DataAddView> createState() => _DataAddViewState();
 }
 
-class _DataAddViewState extends State<DataAddView> {
+class _DataAddViewState extends BaseState<DataAddView> {
   @override
   void initState() {
     getData();
@@ -23,6 +25,7 @@ class _DataAddViewState extends State<DataAddView> {
   }
 
   getData() async {
+    log("PANGGIL COU");
     final p = context.read<DataAddProvider>();
     p.fetchPlta(context);
     p.resetData();
@@ -49,7 +52,7 @@ class _DataAddViewState extends State<DataAddView> {
             Expanded(
               child: ListView(
                 children: [
-                  ...p.detailUnit(() => setState(() {})),
+                  ...p.detailUnit(),
                   ...p.boltDetailForm(),
                   ...p.shaftForm(),
                 ],
@@ -61,6 +64,7 @@ class _DataAddViewState extends State<DataAddView> {
                 final dataP = context.read<DataAddProvider>();
                 FocusManager.instance.primaryFocus?.unfocus();
                 String? msg;
+                if (dataP.selectedBolt == null) msg = 'Harap Pilih Jumlah Baut';
                 if (dataP.selectedPlta == null) msg = 'Harap Pilih PLTA';
                 if (dataP.genBearingKoplingC.text.isEmpty)
                   msg = 'Harap Isi Gen Bearing Kopling';

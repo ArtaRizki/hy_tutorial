@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:hy_tutorial/common/base/base_controller.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeProvider extends BaseController with ChangeNotifier {
   String isSubAgent = "admin";

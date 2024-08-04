@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../common/base/base_state.dart';
 import '../../../common/helper/constant.dart';
 import '../../division/provider/division_provider.dart';
-import '../model/profile_model.dart';
 import '../provider/profile_provider.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
