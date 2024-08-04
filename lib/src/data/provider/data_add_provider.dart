@@ -994,7 +994,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               Utils.showFailed(msg: response.message ?? '');
               throw response.message ?? '';
             }
-          } 
+          }
           // else {
           //   Utils.showFailed(
           //       msg:
@@ -1126,6 +1126,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   onChangedPLTA2(PltaModelData? v) async {
     if (v != null) {
+      loading(true);
       // check location
       if (await requestPermission(Permission.location)) {
         if (await Geolocator.isLocationServiceEnabled()) {
@@ -1137,6 +1138,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
                 Future.value((await Geolocator.getLastKnownPosition())),
           );
           if (geo.isMocked) {
+            loading(false);
             Utils.showFailed(
                 msg:
                     'Anda menggunakan fake GPS, harap matikan terlebih dahulu');
@@ -1175,20 +1177,24 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               selectedPlta = v.Id ?? '0';
               pltaC.text = v.Name ?? '';
             } else {
+              loading(false);
               Utils.showFailed(
                   msg:
                       'Anda berada di luar batas jangkauan ($radius $radiusType)');
               throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
             }
           } else {
+            loading(false);
             Utils.showFailed(msg: 'Gagal mendapatkan lokasi');
             throw 'Gagal mendapatkan lokasi';
           }
         } else {
+          loading(false);
           Utils.showFailed(msg: 'Harap Nyalakan GPS');
           throw 'Izinkan Nyalakan GPS';
         }
       } else {
+        loading(false);
         Utils.showFailed(msg: 'Harap Izinkan Akses Lokasi GPS');
         throw 'Izinkan Akses Lokasi GPS';
       }
