@@ -1430,7 +1430,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         textInputType: TextInputType.number,
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
-          FilteringTextInputFormatter.digitsOnly
+          FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
         ],
         labelText: "Gen. Bearing-Kopling",
         hintText: "Gen. Bearing-Kopling",

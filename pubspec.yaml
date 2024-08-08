@@ -30,7 +30,6 @@ environment:
 dependencies:
   cached_network_image: ^3.3.0
   cupertino_icons: ^1.0.2
-  # dart_ipify: ^1.1.1
   date_format: ^2.0.6
   device_info_plus: ^10.1.0
   dotted_border: ^2.0.0+3
@@ -68,6 +67,7 @@ dependencies:
   provider: ^6.1.1
   public_ip_address: ^1.2.0
   shared_preferences: ^2.0.5
+  shimmer: ^3.0.0
   sizer: ^2.0.15
 
 # dependency_overrides:

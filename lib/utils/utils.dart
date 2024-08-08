@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' as Material;
@@ -11,7 +10,6 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 import '../common/component/custom_button.dart';
 import '../common/component/custom_textfield.dart';
 import '../common/helper/constant.dart';

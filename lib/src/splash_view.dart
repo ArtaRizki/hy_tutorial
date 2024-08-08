@@ -28,11 +28,12 @@ class _SplashViewState extends State<SplashView> {
     final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin);
 
     Timer(
-      Duration(seconds: 2),
-      // () => CusNav.nPush(context, UserManageView())
+      Duration(seconds: 1),
       () => Navigator.pushReplacementNamed(
-          context, isLoggedIn ? '/home' : '/login',
-          arguments: isAdmin ?? false),
+        context,
+        isLoggedIn ? '/home' : '/login',
+        arguments: isAdmin ?? false,
+      ),
     );
   }
 

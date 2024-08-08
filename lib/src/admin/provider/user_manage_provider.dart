@@ -591,6 +591,13 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     ];
   }
 
+  bool validateUserForm() {
+    if (selectedDivision == null) return false;
+    if (selectedRole == null) return false;
+    if (selectedStatus == null) return false;
+    return true;
+  }
+
   Future<void> addUser(BuildContext context) async {
     loading(true);
 
@@ -656,7 +663,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
-      if (!fromHome) {
+      if (fromDetail) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      } else if (!fromHome) {
         Navigator.pop(context);
         Navigator.pop(context);
         next = null;
@@ -665,9 +675,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: ((context) => UserManageView())));
       }
-      if (fromDetail) {
-        Navigator.pop(context);
-      }
+
       nameC.text = '';
       selectedDivision = null;
       usernameC.text = '';

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:hy_tutorial/src/auth/model/firebase_token_model.dart';
+import 'package:hy_tutorial/src/auth/view/login_view.dart';
+import 'package:hy_tutorial/src/auth/view/register_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/base/base_controller.dart';
@@ -12,6 +14,8 @@ import 'package:flutter/material.dart';
 import '../model/refresh_token_model.dart';
 
 class AuthProvider extends BaseController with ChangeNotifier {
+  late LoginViewState loginViewState;
+  late RegisterViewState registerViewState;
   TextEditingController nameC = TextEditingController();
   TextEditingController usernameC = TextEditingController();
   TextEditingController emailC = TextEditingController();
@@ -80,13 +84,20 @@ class AuthProvider extends BaseController with ChangeNotifier {
   }
 
   Future<void> clearRegisterForm() async {
-    nameC.clear();
-    usernameC.clear();
-    emailC.clear();
-    passC.clear();
-    passConfirmationC.clear();
+    nameC.text = '';
+    usernameC.text = '';
+    emailC.text = '';
+    passC.text = '';
+    passConfirmationC.text = '';
     selectedDivision = null;
     //notifyListeners();
+  }
+
+  bool validateLogin() {
+    if (usernameC.text.isEmpty) return false;
+    if (passC.text.isEmpty) return false;
+    // if (!usernameC.text.isEmail()) return false;
+    return true;
   }
 
   Future<void> login(BuildContext context) async {
@@ -126,8 +137,8 @@ class AuthProvider extends BaseController with ChangeNotifier {
 
         Navigator.pushReplacementNamed(context, '/home',
             arguments: await prefs.getBool(Constant.kSetPrefIsAdmin));
-        usernameC.clear();
-        passC.clear();
+        usernameC.text = '';
+        passC.text = '';
       } else {
         loading(false);
         final message = jsonDecode(response.body)["Message"];
@@ -172,6 +183,17 @@ class AuthProvider extends BaseController with ChangeNotifier {
     }
   }
 
+  bool validateRegister() {
+    if (nameC.text.isEmpty) return false;
+    if (selectedDivision == null) return false;
+    if (usernameC.text.isEmpty) return false;
+    if (emailC.text.isEmpty) return false;
+    if (passC.text.isEmpty) return false;
+    if (passConfirmationC.text.isEmpty) return false;
+    if (passC.text != passConfirmationC.text) return false;
+    return true;
+  }
+
   Future<void> register(BuildContext context) async {
     try {
       // validate
@@ -204,12 +226,12 @@ class AuthProvider extends BaseController with ChangeNotifier {
         await Utils.showSuccess(msg: model.message);
         await Future.delayed(Duration(seconds: 2));
         Navigator.pushReplacementNamed(context, '/login', arguments: false);
-        nameC.clear();
+        nameC.text = '';
         selectedDivision = null;
-        selectedDivisionC.clear();
-        usernameC.clear();
-        passC.clear();
-        passConfirmationC.clear();
+        selectedDivisionC.text = '';
+        usernameC.text = '';
+        passC.text = '';
+        passConfirmationC.text = '';
       } else {
         loading(false);
         final message = jsonDecode(response.body)["Message"];

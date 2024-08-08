@@ -28,6 +28,8 @@ class ProfileProvider extends BaseController with ChangeNotifier {
   set profileModel(ProfileModel value) => this._profileModel = value;
 
   Future<void> fetchProfile({bool withLoading = false}) async {
+    profileModel = ProfileModel();
+    notifyListeners();
     if (withLoading) loading(true);
     final response = await get(Constant.BASE_API_FULL + '/my');
 

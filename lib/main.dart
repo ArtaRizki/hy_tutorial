@@ -1,41 +1,28 @@
 import 'dart:async';
-
+import 'package:flutter/services.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
-// import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
-
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
-import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/home/provider/home_provider.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:hy_tutorial/src/splash_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
 import 'package:flutter/foundation.dart';
-// import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-// import 'package:timeago/timeago.dart' as TIMEAGO;
-// import 'package:easy_localization/easy_localization.dart';
-// import 'package:flutter_app_badger/flutter_app_badger.dart';
-import 'dart:io';
-// import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
-// import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'src/profile/provider/profile_provider.dart';
 import 'utils/nav_observer.dart';
 import 'utils/utils.dart';
 import 'firebase_options.dart';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -45,35 +32,8 @@ part 'common/routes.dart';
 void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-
-    // await requestPermission(Permission.storage);
-    // await requestPermission(Permission.accessMediaLocation);
-    // await requestPermission(Permission.manageExternalStorage);
-    // await requestPermission(Permission.photos);
-
-    /// [START] initialize Firebase
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
-
-    /// [START] Google maps config for reduce crash event while using Google Maps SDK
-    // final GoogleMapsFlutterPlatform mapsImplementation =
-    //     GoogleMapsFlutterPlatform.instance;
-    // if (mapsImplementation is GoogleMapsFlutterAndroid) {
-    //   mapsImplementation.useAndroidViewSurface = true;
-    // }
-
-    /// [END]
-
-    /// [START] initialize locale
-    // init lib easy localization
-    // await EasyLocalization.ensureInitialized();
-    // localized indonesian time ago
-    // TIMEAGO.setLocaleMessages("id", TIMEAGO.IdMessages());
-    // if (kDebugMode) {
-    //   log(getTimezone());
-    // }
-
-    /// [END] initialize locale
 
     // initialize crashlytics
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
@@ -82,7 +42,6 @@ void main() {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
     };
-    //FirebaseManager().initNotification();
 
     FirebaseMessaging.instance.getToken().then((value) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -91,79 +50,6 @@ void main() {
     });
 
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
-
-    /// [END] initialize Firebase
-
-    // check current device is emulator
-    // if (Platform.isAndroid) {
-    //   // if (await MethodChannel(Constant.APP_NAME).invokeMethod('is_emulator')) {
-    //   final deviceInfo = await DeviceInfoPlugin().androidInfo;
-    //   final data = {
-    //     "board": deviceInfo.board,
-    //     "brand": deviceInfo.brand,
-    //     "product": deviceInfo.product,
-    //     "full": deviceInfo.toString(),
-    //     "timestamp": DateTime.now().millisecond
-    //   };
-
-    //   // await FirebaseCrashlytics.instance
-    //   //     .log("Emulated user, data: ${jsonEncode(data)}");
-    //   // await FirebaseCrashlytics.instance
-    //   //     .recordError(Exception("Emulated Device Detected"), StackTrace.current);
-
-    //   runApp(
-    //     EasyLocalization(
-    //       supportedLocales: [
-    //         Locale('id', 'ID'),
-    //         Locale('en'),
-    //       ],
-    //       path: 'assets/translations',
-    //       // <-- change the path of the translation files
-    //       fallbackLocale: Locale('id', 'ID'),
-    //       child: Builder(
-    //         builder: (context) {
-    //           return MaterialApp(
-    //             localizationsDelegates: context.localizationDelegates,
-    //             supportedLocales: context.supportedLocales,
-    //             locale: context.locale,
-    //             transaction: EmulatorDetectedView(),
-    //           );
-    //         },
-    //       ),
-    //     ),
-    //   );
-    //   return;
-    //   // }
-    // }
-
-    // initialize flutter downloader
-    // await FlutterDownloader.initialize(
-    // debug: false, // optional: set false to disable loging logs to console
-    // );
-    // FlutterAppBadger.removeBadge();
-
-    /// [START] Cache directory system management for storing Face Recognition Tflite Model & maintain lost image from state restoration
-    /// Bersihkan directory cache
-    // getTemporaryDirectory().then((value) {
-    //   Directory dir = Directory(value.path + '/download');
-    //   if (dir.existsSync()) {
-    //     dir.listSync().forEach((file) {
-    //       file.deleteSync(recursive: true);
-    //     });
-    //   }
-    // });
-
-    /// Buat temp directory untuk open only
-    // getTemporaryDirectory().then((value) {
-    //   Directory dir = Directory(value.path + '/download');
-    //   if (!dir.existsSync()) {
-    //     dir.createSync(recursive: true);
-    //   }
-    // });
-
-    /// [END] Handle state restoration
-
-    /// [START] initialRoute definition
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String initialRoute;
 
@@ -180,30 +66,20 @@ void main() {
     if (prefs.getString(Constant.kSetPrefToken) == null) {
       //not signed in
       initialRoute = '/';
-      // initialRoute = '/splash';
     } else {
       //signed in
       initialRoute = '/';
     }
 
     log("INITIAL ROUTE : $initialRoute");
-
-    /// [END] initialRoute definition
-    runApp(MyApp(
-            //   initialRoute: initialRoute,
-            )
-        // EasyLocalization(
-        //   supportedLocales: [
-        //     Locale('id', 'ID'),
-        //     Locale('en'),
-        //   ],
-        //   path: 'assets/translations',
-        //   // <-- change the path of the translation files
-        //   fallbackLocale: Locale('id', 'ID'),
-        //   child: MyApp(/*initialRoute: initialRoute*/),
-        // ),
-        // MyApp())
-        );
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Constant.primaryColor,
+      systemNavigationBarColor: Constant.primaryColor,
+      systemNavigationBarDividerColor: Constant.primaryColor,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light,
+    ));
+    runApp(MyApp());
   }, (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   });
@@ -263,7 +139,8 @@ class MyApp extends StatelessWidget {
               log(MediaQuery.of(context).size.toString());
               return MediaQuery(
                 child: child,
-                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: TextScaler.linear(1.0)),
               );
             },
             debugShowCheckedModeBanner: false,
@@ -273,13 +150,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// Future checkLang(BuildContext context) async {
-//   try {
-//     final lang = Localizations.localeOf(context).languageCode;
-//     Intl.defaultLocale = lang;
-//   } catch (exception, stack) {}
-// }
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();

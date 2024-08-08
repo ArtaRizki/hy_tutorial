@@ -5,16 +5,39 @@ import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/src/profile/model/profile_model.dart';
+import 'package:hy_tutorial/src/profile/provider/profile_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeProvider extends BaseController with ChangeNotifier {
-  String isSubAgent = "admin";
-  String get getIsSubAgent => this.isSubAgent;
+  String? name;
+  String? division;
+  final List<String> staticArray = [
+    'Shaft',
+    'Upper',
+    'Clutch',
+    'Turbine',
+  ];
+  final List<String> staticImage = [
+    'assets/icons/admin/ic-shaft.png',
+    'assets/icons/admin/ic-upper.png',
+    'assets/icons/admin/ic-clutch.png',
+    'assets/icons/admin/ic-turbine.png',
+  ];
+
   HomeModel homeModel = HomeModel();
-
   HomeModel get getHomeModel => this.homeModel;
-
   set setHomeModel(HomeModel homeModel) => this.homeModel = homeModel;
-  set setIsSubAgent(String isSubAgent) => this.isSubAgent = isSubAgent;
+
+  getData(BuildContext context) async {
+    name = null;
+    division = null;
+    homeModel = HomeModel();
+    userListModel = UserListModel();
+    await context.read<ProfileProvider>().fetchProfile(withLoading: false);
+    await context.read<HomeProvider>().fetchUserList(withLoading: false);
+  }
 
   Future<void> fetchHome({bool withLoading = false}) async {
     if (withLoading) loading(true);

@@ -7,6 +7,7 @@ class CustomButton {
       {Color? color,
       EdgeInsetsGeometry? margin,
       bool stretched = true,
+      bool enabled = true,
       EdgeInsetsGeometry? contentPadding,
       TextStyle? textStyle,
       double? fontSize,
@@ -15,14 +16,14 @@ class CustomButton {
       padding: margin ?? EdgeInsets.all(0),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor:
-              WidgetStateProperty.all<Color>(color ?? Constant.primaryColor),
+          backgroundColor: WidgetStateProperty.all<Color>(color ??
+              (enabled == true ? Constant.primaryColor : Constant.grayColor)),
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                   borderRadius: borderRadius ?? BorderRadius.circular(25))),
           elevation: WidgetStateProperty.all<double>(0),
         ),
-        onPressed: onClick,
+        onPressed: enabled ? onClick : null,
         child: Container(
           padding: contentPadding ?? EdgeInsets.all(16),
           alignment: stretched ? Alignment.center : null,
@@ -232,8 +233,7 @@ class CustomButton {
               ),
             ),
           ),
-          padding:
-              WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero),
+          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero),
           elevation: WidgetStateProperty.all<double>(0),
         ),
         onPressed: onClick,

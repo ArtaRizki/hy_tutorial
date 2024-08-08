@@ -10,7 +10,8 @@ import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
 
 class UserAddView extends StatefulWidget {
-  UserAddView({super.key, this.data});
+  UserAddView({super.key, this.data, this.fromDetail = false});
+  bool fromDetail;
   UserDetailModel? data;
 
   @override
@@ -92,46 +93,30 @@ class _UserAddViewState extends BaseState<UserAddView> {
               child: widget.data != null
                   ? CustomButton.mainButton(
                       'Submit',
+                      enabled: p.validateUserForm(),
                       () async {
                         final dataP = context.read<UserManageProvider>();
                         FocusManager.instance.primaryFocus?.unfocus();
-                        String? msg;
-                        //if (dataP.nameC.text.isEmpty) msg = 'Harap Isi Nama Lengkap';
-                        //if (dataP.nipC.text.isEmpty) msg = 'Harap Isi NIP';
-                        //if (dataP.roleC.text.isEmpty) msg = 'Harap Pilih Role';
-                        //if (dataP.usernameC.text.isEmpty) msg = 'Harap Isi Username';
-                        //if (dataP.passwordC.text.isEmpty) msg = 'Harap Isi Password';
                         await Utils.showYesNoDialog(
                             context: context,
                             title: "Konfirmasi",
                             desc: "Apakah Data Anda Sudah Benar?",
                             yesCallback: () => handleTap(() async {
                                   Navigator.pop(context);
-                                  // Navigator.pop(context);
-                                  // Navigator.pop(context);
                                   dataP.updateUser(
                                     context,
                                     id: p.userDetailModel.Data?.Id ?? "",
+                                    fromDetail: widget.fromDetail,
                                   );
                                 }),
                             noCallback: () => Navigator.pop(context));
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: ((context) => UserManageView())));
-                                            },
+                      },
                     )
                   : CustomButton.mainButton(
                       'Submit',
                       () async {
                         final dataP = context.read<UserManageProvider>();
                         FocusManager.instance.primaryFocus?.unfocus();
-                        String? msg;
-                        //if (dataP.nameC.text.isEmpty) msg = 'Harap Isi Nama Lengkap';
-                        //if (dataP.nipC.text.isEmpty) msg = 'Harap Isi NIP';
-                        //if (dataP.roleC.text.isEmpty) msg = 'Harap Pilih Role';
-                        //if (dataP.usernameC.text.isEmpty) msg = 'Harap Isi Username';
-                        //if (dataP.passwordC.text.isEmpty) msg = 'Harap Isi Password';
                         await Utils.showYesNoDialog(
                             context: context,
                             title: "Konfirmasi",
@@ -141,11 +126,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
                                   dataP.addUser(context);
                                 }),
                             noCallback: () => Navigator.pop(context));
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: ((context) => UserManageView())));
-                                            },
+                      },
                     ),
             ),
           ])),

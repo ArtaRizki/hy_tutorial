@@ -13,14 +13,17 @@ class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
   @override
-  State<RegisterView> createState() => _RegisterViewState();
+  State<RegisterView> createState() => RegisterViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class RegisterViewState extends State<RegisterView> {
   @override
   void initState() {
     context.read<DivisionProvider>().fetchDivision();
     context.read<AuthProvider>().clearRegisterForm();
+
+    final authP = context.read<AuthProvider>();
+    authP.registerViewState = this;
     super.initState();
   }
 
@@ -30,7 +33,7 @@ class _RegisterViewState extends State<RegisterView> {
     final authP = context.watch<AuthProvider>();
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
+        child: Padding(
           padding: EdgeInsets.fromLTRB(20, 120, 20, 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -203,6 +206,7 @@ class _RegisterViewState extends State<RegisterView> {
                 () async =>
                     await context.read<AuthProvider>().register(context),
                 borderRadius: BorderRadius.circular(10),
+                enabled: authP.validateRegister(),
                 contentPadding: EdgeInsets.symmetric(vertical: 8),
                 textStyle: TextStyle(
                     fontWeight: FontWeight.w600,
