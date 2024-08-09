@@ -7,9 +7,10 @@ import 'package:hy_tutorial/common/component/custom_dropdown.dart';
 import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
-import 'package:hy_tutorial/src/plta/view/plta_detail_view.dart';
+import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/base/base_response.dart';
 import '../../../common/base/base_controller.dart';
 import '../../../common/component/custom_textfield.dart';
@@ -121,6 +122,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       ..addPageRequestListener((pageKey) async {
         log("GET PLTA LIST");
         await fetchPltaList(page: pageKey).onError((error, stackTrace) {
+          isFetching = false;
           if (error.toString().contains('expired token')) {
             log("ERROR EXPIRED TOKEN");
             next = null;
@@ -136,28 +138,6 @@ class PltaProvider extends BaseController with ChangeNotifier {
       });
   }
 
-  // var pltaListDummy = {
-  //   "Success": true,
-  //   "StatusCode": 200,
-  //   "Message": "berhasil mendapatkan semua plta",
-  //   "Data": [
-  //     {
-  //       "Id": "01J4B2TGE9TEH97X27SJB65BT1",
-  //       "Name": "PLTA Kebumen 1",
-  //       "Status": true,
-  //       "CreatedAt": "2024-08-03 09:59:10",
-  //       "CreatedBy": "aditya fullname"
-  //     },
-  //     {
-  //       "Id": "01J4B268KE75V22479S8XTSCXD",
-  //       "Name": "PLTA golang",
-  //       "Status": false,
-  //       "CreatedAt": "2024-08-03 09:48:07",
-  //       "CreatedBy": "aditya fullname"
-  //     }
-  //   ],
-  //   "Meta": {"Next": "", "Prev": ""}
-  // };
   Future<void> fetchPltaList({
     bool withLoading = false,
     required int page,
@@ -234,7 +214,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
   PltaDetailModel get pltaDetailModel => this._pltaDetailModel;
   set pltaDetailModel(PltaDetailModel value) {
     this._pltaDetailModel = value;
-    // notifyListeners();
+    notifyListeners();
   }
 
   List<bool> _statusActive = [];
@@ -250,6 +230,31 @@ class PltaProvider extends BaseController with ChangeNotifier {
   List<TextEditingController> get pltaUnitListName => this._pltaUnitListName;
   set pltaUnitListName(List<TextEditingController> value) =>
       this._pltaUnitListName = value;
+
+  setData(BuildContext context, String? id) async {
+    clearForm();
+    if (id != null) {
+      await fetchPltaDetail(id: id);
+      final data = pltaDetailModel.Data;
+      if (data != null) {
+        nameC.text = data.Name ?? '';
+        totalUnitC.text = '${(data.Units ?? []).length}';
+        data.RadiusStatus == true
+            ? radiusStatusC.text = 'Aktif'
+            : radiusStatusC.text = 'Tidak Aktif';
+        radiusStatus = data.RadiusStatus ?? false;
+        active = data.Status == true ? 'aktif' : 'non_aktif';
+        log("DATA LAT : ${data.Lat}");
+        log("DATA ONG : ${data.Long}");
+        if (data.Lat != null && data.Long != null)
+          coordinateC.text = '${data.Lat ?? 0}, ${data.Long ?? 0}';
+        radiusC.text = '${data.Radius ?? 0}';
+        radiusType = data.RadiusType ?? '';
+        if (radiusType == '') radiusType = 'meter';
+      }
+    }
+    notifyListeners();
+  }
 
   Future<void> fetchPltaDetail({required String id}) async {
     loading(true);
@@ -301,7 +306,6 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
   Future<void> sendPltaUnit(
     BuildContext context, {
-    required String pltaId,
     bool isEdit = false,
     bool back = false,
     bool withLoading = false,
@@ -327,22 +331,24 @@ class PltaProvider extends BaseController with ChangeNotifier {
     Map<String, dynamic> body = {"Units": jsonEncode(b)};
     http.Response response;
     if (isEdit)
-      response =
-          await put(Constant.BASE_API_FULL + '/plta-unit/$pltaId', body: body);
+      response = await put(
+          Constant.BASE_API_FULL +
+              '/plta-unit/${pltaDetailModel.Data?.Id ?? ''}',
+          body: body);
     else
-      response =
-          await post(Constant.BASE_API_FULL + '/plta-unit/$pltaId', body: body);
+      response = await put(
+          Constant.BASE_API_FULL +
+              '/plta-unit/${pltaDetailModel.Data?.Id ?? ''}',
+          body: body);
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
       if (withLoading) loading(false);
       await Utils.showSuccess(msg: model.message);
       await Future.delayed(Duration(seconds: 2));
+      next = null;
       if (!isEdit || back) {
         Navigator.pop(context);
-        nameC.clear();
-        active = null;
-        totalUnitC.clear();
-        coordinateC.clear();
+        clearForm();
       }
     } else {
       final message = jsonDecode(response.body)["Message"];
@@ -359,10 +365,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
   TextEditingController radiusStatusC = TextEditingController();
   bool _radiusStatus = true;
-  get radiusStatus => _radiusStatus;
-  set radiusStatus(value) {
+  bool get radiusStatus => _radiusStatus;
+  set radiusStatus(bool value) {
     this._radiusStatus = value;
-    notifyListeners();
+    // notifyListeners();
   }
 
   TextEditingController coordinateC = TextEditingController();
@@ -370,6 +376,38 @@ class PltaProvider extends BaseController with ChangeNotifier {
   String? radiusType;
   String? get getRadiusType => this.radiusType;
   set setRadiusType(String? radiusType) => this.radiusType = radiusType;
+
+  bool validatePltaForm({bool isEdit = false}) {
+    if (nameC.text.isEmpty) return false;
+    if (active == null) return false;
+    if (!isEdit && totalUnitC.text.isEmpty) return false;
+    if (radiusC.text.isEmpty) return false;
+    if (coordinateC.text.isEmpty) return false;
+    if (radiusType == null) return false;
+    if (isEdit && pltaUnitListName.isEmpty) return false;
+    if (isEdit &&
+        pltaUnitListName.isNotEmpty &&
+        pltaUnitListName.any((c) => c.text.isEmpty)) return false;
+    if (isEdit && pltaUnitList.isEmpty) return false;
+    if (isEdit && statusActive.isEmpty) return false;
+    return true;
+  }
+
+  Future<void> clearForm() async {
+    pltaDetailModel = PltaDetailModel();
+    nameC.clear();
+    active = null;
+    totalUnitC.clear();
+    coordinateC.clear();
+    radiusStatus = false;
+    radiusType = null;
+    pltaUnitList.clear();
+    statusActive.clear();
+    pltaUnitListName.clear();
+    radiusStatusC.text = "Tidak Aktif";
+    radiusC.clear();
+    notifyListeners();
+  }
 
   List<Widget> pltaForm(VoidCallback setState) {
     return [
@@ -461,6 +499,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
     ];
   }
 
+  // PltaDetailModel _pltaCreateModel = PltaDetailModel();
+  // PltaDetailModel get pltaCreateModel => this._pltaCreateModel;
+  // set pltaCreateModel(PltaDetailModel value) => this._pltaCreateModel = value;
+
   Future<void> sendPlta(
     BuildContext context, {
     bool isEdit = false,
@@ -470,9 +512,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
   }) async {
     try {
       if (withLoading) loading(true);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       if (nameC.text.isEmpty) throw 'Nama harap diisi';
       if (active == null && !isEdit) throw 'Status harap dipilih';
-      if (totalUnitC.text.isEmpty && !isEdit) throw 'Total unit harap diisi';
       if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
       if (!coordinateC.text.isLatLongCoordinatesDecimal())
         throw 'Koordinat Tidak Valid';
@@ -487,8 +529,12 @@ class PltaProvider extends BaseController with ChangeNotifier {
         'RadiusStatus': radiusStatus == true ? 'true' : 'false',
         'Radius': radiusC.text,
         'RadiusType': radiusType == 'kilometer' ? 'kilometer' : 'meter',
+
+        // 'TotalUnits': '${pltaUnitListName.length}'
       };
-      if (!isEdit) body.addAll({'TotalUnits': totalUnitC.text});
+      if (!isEdit) {
+        body.addAll({'TotalUnits': totalUnitC.text});
+      }
       http.Response response;
       if (isEdit)
         response =
@@ -497,17 +543,25 @@ class PltaProvider extends BaseController with ChangeNotifier {
         response = await post(Constant.BASE_API_FULL + '/plta', body: body);
       if (response.statusCode == 201 || response.statusCode == 200) {
         final model = BaseResponse.from(response);
+        if (!isEdit) {
+          log("PLTA DETAIL MODEL INIT");
+          pltaDetailModel = PltaDetailModel.fromJson(jsonDecode(response.body));
+          notifyListeners();
+        }
         await Utils.showSuccess(msg: model.message);
         await Future.delayed(Duration(seconds: 2));
+        next = null;
         if (withLoading) loading(false);
         if (back) {
           // Navigator.pop(context);
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => MainHome(index: 1)));
-          nameC.clear();
-          active = null;
-          totalUnitC.clear();
-          coordinateC.clear();
+          final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MainHome(index: 1),
+                  settings: RouteSettings(arguments: isAdmin)),
+              (route) => false);
+          clearForm();
         }
       } else {
         final message = jsonDecode(response.body)["Message"];
@@ -525,6 +579,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
   Future<void> deletePlta(BuildContext context, {required String id}) async {
     loading(true);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await delete(Constant.BASE_API_FULL + '/plta/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
@@ -532,13 +587,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
+      final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+      next = null;
       Navigator.pop(context);
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: ((context) => MainHome(
-                    index: 1,
-                  ))));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
@@ -554,13 +605,13 @@ class PltaProvider extends BaseController with ChangeNotifier {
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
       loading(false);
+      next = null;
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
       Navigator.pop(context);
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: ((context) => PltaDetailView(id: pltaId))));
+      Navigator.pop(context);
+      // Navigator.pushReplacement(context,
+      //     MaterialPageRoute(builder: ((context) => PltaAddView(id: pltaId))));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);

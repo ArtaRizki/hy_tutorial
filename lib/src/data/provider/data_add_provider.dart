@@ -58,7 +58,6 @@ class DataAddProvider extends BaseController with ChangeNotifier {
   PltaModelData? get selectedPltaModel => this._selectedPltaModel;
   set selectedPltaModel(PltaModelData? value) {
     this._selectedPltaModel = value;
-    notifyListeners();
   }
 
   PltaModel _pltaModel = PltaModel();
@@ -949,6 +948,24 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     log("LIST BOLTS DATA : $listBolts");
     log("LIST TORQUE SUGGESTIONS KEY : $listTorqueSuggestionsKey");
     log("LIST TORQUE SUGGESTIONS : $torqueSuggestionsData");
+  }
+
+  bool validatePage1() {
+    // Detail Unit
+    if (titleC.text.isEmpty) return false;
+    if (pltaC.text.isEmpty) return false;
+    if (selectedPlta == null) return false;
+    if (selectedPltaModel == null) return false;
+    // Detail Baut
+    if (boltQtyC.text.isEmpty) return false;
+    if (selectedBolt == null) return false;
+    if (currentTorqueC.text.isEmpty) return false;
+    if (maxTorqueC.text.isEmpty) return false;
+    // Shaft
+    if (genBearingKoplingC.text.isEmpty) return false;
+    if (koplingTurbinC.text.isEmpty) return false;
+
+    return true;
   }
 
   Future<void> sendCreateTurbines(BuildContext context) async {

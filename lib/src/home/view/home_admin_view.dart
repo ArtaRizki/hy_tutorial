@@ -379,8 +379,8 @@ class _HomeAdminViewState extends BaseState<HomeAdminView> {
             ? Padding(
                 padding: const EdgeInsets.only(top: 24),
                 child: Center(
-                    child:
-                        Text('Tidak ada data', style: Constant.grayRegular13)),
+                    child: Text('Data tidak ditemukan',
+                        style: Constant.grayRegular13)),
               )
             : ListView.separated(
                 itemCount:

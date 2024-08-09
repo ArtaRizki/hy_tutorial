@@ -35,8 +35,8 @@ class Skeleton<Data> extends StatelessWidget {
           width: width,
           height: height,
           decoration: BoxDecoration(
-            border: Border.all(width: 0),
-            borderRadius: BorderRadius.circular(16),
+            border: isCircle ? null : Border.all(width: 0),
+            borderRadius: isCircle ? null : BorderRadius.circular(16),
             color: Colors.black,
             shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
           ),

@@ -10,9 +10,8 @@ import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
 
 class UserAddView extends StatefulWidget {
-  UserAddView({super.key, this.data, this.fromDetail = false});
-  bool fromDetail;
-  UserDetailModel? data;
+  UserAddView({super.key, this.id});
+  String? id;
 
   @override
   State<UserAddView> createState() => _UserAddViewState();
@@ -21,59 +20,44 @@ class UserAddView extends StatefulWidget {
 class _UserAddViewState extends BaseState<UserAddView> {
   @override
   void initState() {
-    setData();
+    context.read<UserManageProvider>().setData(context, widget.id);
     super.initState();
-  }
-
-  setData() async {
-    await context.read<DivisionProvider>().fetchDivision(withLoading: true);
-    if (widget.data != null) {
-      final data = widget.data;
-      final p = context.read<UserManageProvider>();
-      p.nameC.text = data?.Data?.Name ?? '';
-      p.nipC.text = '';
-      final division = context.read<DivisionProvider>().divisionModel.Data;
-      p.selectedDivision = division
-          ?.firstWhere((element) => element?.Name == data?.Data?.Division)
-          ?.Id;
-      p.usernameC.text = data?.Data?.Username ?? '';
-      p.emailC.text = data?.Data?.Email ?? '';
-      p.passwordC.text = '';
-      p.updateV = true;
-      if (data?.Data?.Role == "admin")
-        p.selectedRole = "2";
-      else
-        p.selectedRole = "3";
-      if (data?.Data?.Status == "inactive")
-        p.selectedStatus = "0";
-      else if (data?.Data?.Status == "active")
-        p.selectedStatus = "1";
-      else
-        p.selectedStatus = "2";
-      setState(() {});
-    } else {
-      final p = context.read<UserManageProvider>();
-      p.nameC.text = '';
-      p.usernameC.text = '';
-      p.emailC.text = '';
-      p.selectedDivision = null;
-      p.updateV = false;
-      p.radiusStatus = false;
-      p.radiusStatusC.text = '';
-      setState(() {});
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final p = context.watch<UserManageProvider>();
     final division = context.watch<DivisionProvider>();
-
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: widget.data != null
-          ? CustomAppBar.appBar(context, "Edit User",
-              color: Constant.primaryColor, foregroundColor: Colors.white)
+      appBar: widget.id != null
+          ? CustomAppBar.appBar(
+              context,
+              "Edit User",
+              color: Constant.primaryColor,
+              foregroundColor: Colors.white,
+              action: [
+                IconButton(
+                  onPressed: () {
+                    Utils.showYesNoDialogWithWarning(
+                        context: context,
+                        title: "Konfirmasi Penghapusan",
+                        desc:
+                            "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
+                        yesCallback: () async {
+                          Navigator.pop(context);
+                          await context
+                              .read<UserManageProvider>()
+                              .deleteUser(context, id: widget.id ?? "0");
+                        },
+                        noCallback: () async {
+                          Navigator.pop(context);
+                        });
+                  },
+                  icon: Icon(Icons.delete),
+                ),
+              ],
+            )
           : CustomAppBar.appBar(context, "Tambah User",
               color: Constant.primaryColor, foregroundColor: Colors.white),
       body: Padding(
@@ -84,48 +68,50 @@ class _UserAddViewState extends BaseState<UserAddView> {
                 children: [
                   ...p.userForm(division.divisionModel.Data, () {
                     setState(() {});
-                  }, widget.data != null),
+                  }, widget.id != null),
                 ],
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-              child: widget.data != null
+              child: widget.id != null
                   ? CustomButton.mainButton(
                       'Submit',
                       enabled: p.validateUserForm(),
                       () async {
-                        final dataP = context.read<UserManageProvider>();
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        await Utils.showYesNoDialog(
-                            context: context,
-                            title: "Konfirmasi",
-                            desc: "Apakah Data Anda Sudah Benar?",
-                            yesCallback: () => handleTap(() async {
-                                  Navigator.pop(context);
-                                  dataP.updateUser(
-                                    context,
-                                    id: p.userDetailModel.Data?.Id ?? "",
-                                    fromDetail: widget.fromDetail,
-                                  );
-                                }),
-                            noCallback: () => Navigator.pop(context));
+                        if (p.validateUserForm()) {
+                          final dataP = context.read<UserManageProvider>();
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          await Utils.showYesNoDialog(
+                              context: context,
+                              title: "Konfirmasi",
+                              desc: "Apakah Data Anda Sudah Benar?",
+                              yesCallback: () => handleTap(() async {
+                                    Navigator.pop(context);
+                                    dataP.updateUser(context,
+                                        id: p.userDetailModel.Data?.Id ?? "");
+                                  }),
+                              noCallback: () => Navigator.pop(context));
+                        }
                       },
                     )
                   : CustomButton.mainButton(
                       'Submit',
+                      enabled: p.validateUserForm(),
                       () async {
-                        final dataP = context.read<UserManageProvider>();
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        await Utils.showYesNoDialog(
-                            context: context,
-                            title: "Konfirmasi",
-                            desc: "Apakah Data Anda Sudah Benar?",
-                            yesCallback: () => handleTap(() async {
-                                  Navigator.pop(context);
-                                  dataP.addUser(context);
-                                }),
-                            noCallback: () => Navigator.pop(context));
+                        if (p.validateUserForm()) {
+                          final dataP = context.read<UserManageProvider>();
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          await Utils.showYesNoDialog(
+                              context: context,
+                              title: "Konfirmasi",
+                              desc: "Apakah Data Anda Sudah Benar?",
+                              yesCallback: () => handleTap(() async {
+                                    Navigator.pop(context);
+                                    dataP.addUser(context);
+                                  }),
+                              noCallback: () => Navigator.pop(context));
+                        }
                       },
                     ),
             ),

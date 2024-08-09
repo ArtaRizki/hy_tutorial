@@ -338,7 +338,9 @@ class CustomTextField {
               hoverColor: Constant.primaryColor,
               focusColor: Constant.primaryColor,
               errorStyle: TextStyle(color: validatorTextColor ?? Colors.red),
-              hintStyle: TextStyle(color: hintColor ?? Constant.textHintColor2, fontWeight: hintFontWeight),
+              hintStyle: TextStyle(
+                  color: hintColor ?? Constant.textHintColor2,
+                  fontWeight: hintFontWeight),
               prefixIcon: prefix,
               prefix: prefix == null ? SizedBox(width: 12) : null,
               border: OutlineInputBorder(
@@ -413,6 +415,7 @@ class CustomTextField {
     bool? obscureText,
     Widget? suffixIcon,
     String? suffixText,
+    String? hintText,
     bool enabled = true,
     bool? enableInteractiveSelection,
     FocusNode? focusNode,
@@ -446,6 +449,7 @@ class CustomTextField {
         contentPadding: EdgeInsets.zero,
         suffixIcon: suffixIcon,
         suffixText: suffixText ?? null,
+        hintText: hintText,
         filled: true,
         isDense: isDense,
         fillColor:
@@ -453,7 +457,8 @@ class CustomTextField {
         hoverColor: Constant.primaryColor,
         focusColor: Constant.primaryColor,
         errorStyle: TextStyle(color: validatorTextColor ?? Colors.red),
-        hintStyle: TextStyle(color: hintColor ?? Constant.textHintColor2),
+        hintStyle: TextStyle(
+            color: hintColor ?? Constant.textHintColor2, fontSize: 12),
         prefixIcon: prefix,
         prefix: prefix == null ? SizedBox(width: 12) : null,
         border: noBorder

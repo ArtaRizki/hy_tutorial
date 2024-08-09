@@ -5,7 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
+import 'package:hy_tutorial/src/division/provider/division_provider.dart';
+import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/component/custom_alert.dart';
 import '../../../main.dart';
 import '../../../utils/utils.dart';
@@ -130,6 +134,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       ..addPageRequestListener((pageKey) async {
         log("GET USER");
         await fetchUser(page: pageKey).onError((error, stackTrace) {
+          isFetching = false;
           if (error.toString().contains('expired token')) {
             log("ERROR EXPIRED TOKEN");
             next = null;
@@ -150,6 +155,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       ..addPageRequestListener((pageKey) async {
         log("GET USER 2");
         await fetchUser2(page: pageKey).onError((error, stackTrace) {
+          isFetching2 = false;
           if (error.toString().contains('expired token')) {
             log("ERROR EXPIRED TOKEN");
             next2 = null;
@@ -175,51 +181,19 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         isFetching = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
-        Map<String, String> param = {
-          // 'Filter': 'Status',
-          // 'FilterValue': '1',
-        };
-        // if (userSearchC.text.isNotEmpty)
-        //   param.addAll({'Search': userSearchC.text});
-        // if (ascending) {
-        //   param.remove('SortOrder');
-        //   param.addAll({'SortOrder': 'ASC'});
-        // }
-        // if (descending) {
-        //   param.remove('SortOrder');
-        //   param.addAll({'SortOrder': 'DESC'});
-        // }
-        // if (username) {
-        //   param.remove('SortBy');
-        //   param.addAll({'SortBy': 'Username'});
-        // }
-        // if (createdAt) {
-        //   param.remove('SortBy');
-        //   param.addAll({'SortBy': 'CreatedAt'});
-        // }
+        Map<String, String> param = {};
 
         if (next != null && next != '') param.addAll({'Next': next ?? ''});
-        // log("PANGGIL");
         if (_pagingController.itemList?.length != 0) {
           await Future.delayed(Duration(seconds: 1));
         }
-        final response = await get(
-          url,
-          body: param,
-        );
+        final response = await get(url, body: param);
 
         if (response.statusCode == 201 || response.statusCode == 200) {
           final model = UserListModel.fromJson(jsonDecode(response.body));
           final items = model.Data ?? [];
           List<UserListModelData?> newItems;
           newItems = items;
-          // items.where((element) => element?.Status == 'active').toList();
-
-          // userModel = model;
-          // notifyListeners();
-
-          final previouslyFetchedWordCount =
-              _pagingController.itemList?.length ?? 0;
           pageSize = 10;
           log("ITEMS LENGTH : ${newItems.length}");
           final isLastPage = newItems.length < pageSize;
@@ -288,27 +262,16 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           param.addAll({'SortBy': 'CreatedAt'});
         }
         if (next2 != null && next2 != '') param.addAll({'Next': next2 ?? ''});
-        // log("PANGGIL");
         if (_pagingController2.itemList?.length != 0) {
           await Future.delayed(Duration(seconds: 1));
         }
-        final response = await get(
-          url,
-          body: param,
-        );
+        final response = await get(url, body: param);
 
         if (response.statusCode == 201 || response.statusCode == 200) {
           final model = UserListModel.fromJson(jsonDecode(response.body));
           final items = model.Data ?? [];
           List<UserListModelData?> newItems;
           newItems = items;
-          // items.where((element) => element?.Status != 'active').toList();
-
-          // userModel = model;
-          // notifyListeners();
-
-          final previouslyFetchedWordCount =
-              _pagingController2.itemList?.length ?? 0;
           pageSize2 = 10;
           log("ITEMS LENGTH : ${newItems.length}");
           final isLastPage = newItems.length < pageSize2;
@@ -352,14 +315,50 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   TextEditingController passwordC = TextEditingController();
   //TextEditingController statusC = TextEditingController();
 
+  setData(BuildContext context, String? id) async {
+    clearForm();
+    updateV = false;
+    if (id != null) {
+      updateV = true;
+      await fetchUserDetail(id: id);
+      final data = userDetailModel;
+      nameC.text = data.Data?.Name ?? '';
+      nipC.text = '';
+      final p = context.read<DivisionProvider>();
+      await p.fetchDivision(withLoading: true);
+      final division = p.divisionModel.Data;
+      selectedDivision = division
+          ?.firstWhere((element) => element?.Name == data.Data?.Division)
+          ?.Id;
+      usernameC.text = data.Data?.Username ?? '';
+      emailC.text = data.Data?.Email ?? '';
+      passwordC.text = '';
+      if (data.Data?.Role == "admin")
+        selectedRole = "2";
+      else
+        selectedRole = "3";
+      if (data.Data?.Status == "inactive")
+        selectedStatus = "0";
+      else if (data.Data?.Status == "active")
+        selectedStatus = "1";
+      else
+        selectedStatus = "2";
+    } else {
+      updateV = true;
+    }
+    notifyListeners();
+  }
+
   Future<void> clearForm() async {
     emailC.clear();
     usernameC.clear();
     nameC.clear();
-    nipC.clear();
-    //roleC.clear();
     usernameC.clear();
     selectedDivision = null;
+    selectedRole = null;
+    selectedStatus = null;
+    radiusStatus = false;
+    radiusStatusC.text = 'Tidak Aktif';
   }
 
   bool _obscurePass = true;
@@ -415,7 +414,6 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   }
 
   Future<void> fetchUserDetail({required String id}) async {
-    radiusStatus = false;
     loading(true);
     final response = await get(Constant.BASE_API_FULL + '/admin/users/$id');
 
@@ -450,18 +448,11 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         readOnly: isEdit,
         enabled: !isEdit,
         labelText: "Nama",
+        hintText: "Nama",
+        onChange: (v) {
+          setState();
+        },
       ),
-      // Constant.xSizedBox16,
-      // CustomTextField.borderTextField(
-      //   controller: nipC,
-      //   required: false,
-      //   textInputType: TextInputType.number,
-      //   inputFormatters: [
-      //     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-      //     FilteringTextInputFormatter.digitsOnly,
-      //   ],
-      //   labelText: "NIP",
-      // ),
       Constant.xSizedBox16,
       CustomDropdown.normalDropdown(
         //controller: roleC,
@@ -480,28 +471,37 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         ),
         onChanged: (val) {
           selectedDivision = val;
+          setState();
         },
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
         controller: usernameC,
         labelText: "Username",
+        hintText: "Username",
         readOnly: isEdit,
         enabled: !isEdit,
+        onChange: (v) {
+          setState();
+        },
       ),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
         controller: emailC,
         labelText: "Email",
+        hintText: "Email",
         readOnly: isEdit,
         enabled: !isEdit,
+        onChange: (v) {
+          setState();
+        },
       ),
-      Constant.xSizedBox16,
       Visibility(
         visible: updateV,
         child: CustomDropdown.normalDropdown(
           //controller: roleC,
-          iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+          padding: EdgeInsets.only(top: 16),
+          iconPadding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
           contentPadding: EdgeInsets.all(2),
           borderColor: Constant.primaryColor,
           labelText: "Role",
@@ -520,15 +520,16 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           ],
           onChanged: (val) {
             selectedRole = val;
+            setState();
           },
         ),
       ),
-      Constant.xSizedBox16,
       Visibility(
         visible: updateV,
         child: CustomDropdown.normalDropdown(
           //controller: roleC,
-          iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+          padding: EdgeInsets.only(top: 16),
+          iconPadding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
           contentPadding: EdgeInsets.all(2),
           borderColor: Constant.primaryColor,
           labelText: "Status",
@@ -551,6 +552,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           ],
           onChanged: (val) {
             selectedStatus = val;
+            validateUserForm();
+            setState();
           },
         ),
       ),
@@ -560,6 +563,9 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         labelText: "Pembatasan Lokasi",
         textInputType: TextInputType.name,
         readOnly: true,
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         suffixIcon: Container(
           width: 25,
           height: 25,
@@ -569,38 +575,35 @@ class UserManageProvider extends BaseController with ChangeNotifier {
               onChanged: (value) async {
                 radiusStatus = value;
                 radiusStatusC.text = value ? 'Aktif' : 'Tidak Aktif';
+                FocusManager.instance.primaryFocus?.unfocus();
                 setState();
               },
             ),
           ),
         ),
       ),
-      // CustomTextField.borderTextField(
-      //   controller: passwordC,
-      //   labelText: "Password",
-      //   obscureText: obscurePass,
-      //   suffixIcon: InkWell(
-      //     onTap: () => toggleObscurePass(),
-      //     child: Icon(
-      //       obscurePass ? Icons.visibility_off_outlined : Icons.visibility,
-      //       color: Constant.primaryColor,
-      //     ),
-      //   ),
-      // ),
-      // Constant.xSizedBox16,
+      SizedBox(height: 64),
     ];
   }
 
   bool validateUserForm() {
-    if (selectedDivision == null) return false;
-    if (selectedRole == null) return false;
-    if (selectedStatus == null) return false;
+    if (!updateV) {
+      if (nameC.text.isEmpty) return false;
+      if (selectedDivision == null) return false;
+      if (usernameC.text.isEmpty) return false;
+      if (emailC.text.isEmpty) return false;
+    } else {
+      if (selectedDivision == null) return false;
+      if (selectedRole == null) return false;
+      if (selectedStatus == null) return false;
+    }
     return true;
   }
 
   Future<void> addUser(BuildContext context) async {
     loading(true);
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (selectedDivision == null) throw 'Pilih Divisi Terlebih Dahulu';
     FocusManager.instance.primaryFocus?.unfocus();
     Map<String, String> param = {
@@ -619,15 +622,16 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
-      Navigator.pop(context);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: ((context) => UserManageView())));
-      nameC.text = '';
-      selectedDivision = null;
-      usernameC.text = '';
-      emailC.text = '';
-      radiusStatus = false;
-      radiusStatusC.clear();
+      final isAdmin = await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+
+      // Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MainHome(index: 1),
+              settings: RouteSettings(arguments: isAdmin)),
+          (route) => false);
+      clearForm();
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
@@ -635,20 +639,12 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  Future<void> updateUser(
-    BuildContext context, {
-    required String id,
-    bool fromHome = false,
-    bool fromDetail = false,
-  }) async {
+  Future<void> updateUser(BuildContext context,
+      {required String id, bool fromHome = false}) async {
     loading(true);
     FocusManager.instance.primaryFocus?.unfocus();
-    Map<String, String> param = {
-      'RadiusStatus': '$radiusStatus',
-      // 'Name': nameC.text,
-      // 'Username': usernameC.text,
-      // 'Email': emailC.text,
-    };
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, String> param = {'RadiusStatus': '$radiusStatus'};
     if (selectedRole != null) param.addAll({'Role': selectedRole ?? ''});
     if (selectedDivision != null)
       param.addAll({'DivisionId': selectedDivision ?? ''});
@@ -663,25 +659,22 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
-      if (fromDetail) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-      } else if (!fromHome) {
+      if (!fromHome) {
         Navigator.pop(context);
         Navigator.pop(context);
         next = null;
         next2 = null;
         notifyListeners();
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: ((context) => UserManageView())));
+        final isAdmin = await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MainHome(index: 1),
+                settings: RouteSettings(arguments: isAdmin)),
+            (route) => false);
       }
 
-      nameC.text = '';
-      selectedDivision = null;
-      usernameC.text = '';
-      emailC.text = '';
-      radiusStatus = false;
-      radiusStatusC.clear();
+      clearForm();
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
@@ -699,10 +692,6 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
       Navigator.pop(context);
-      // Navigator.pop(context);
-      // Navigator.pop(context);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: ((context) => UserManageView())));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);

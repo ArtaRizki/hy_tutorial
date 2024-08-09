@@ -9,9 +9,7 @@ import 'package:hy_tutorial/common/helper/xenolog.dart';
 import 'package:hy_tutorial/src/home/provider/home_provider.dart';
 import 'package:hy_tutorial/src/profile/model/profile_model.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../utils/utils.dart';
 import '../../profile/provider/profile_provider.dart';
 import '../../shaft/view/shaft_latest_view.dart';
 

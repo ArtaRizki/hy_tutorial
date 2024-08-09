@@ -60,34 +60,31 @@ class _ProfileEditViewState extends BaseState<ProfileEditView> {
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                 child: CustomButton.mainButton(
                   'Submit',
+                  enabled: p.validateEdit(),
                   () async {
-                    final dataP = context.read<ProfileProvider>();
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    String? msg;
-                    if (dataP.usernameC.text.isEmpty)
-                      msg = 'Harap Isi Username';
-                    if (dataP.nameC.text.isEmpty)
-                      msg = 'Harap Isi Nama Lengkap';
-                    if (dataP.emailC.text.isEmpty) msg = 'Harap Isi Email';
-                    if (msg != null) {
-                      Utils.showFailed(msg: msg);
-                      return;
-                    } else {
-                      await Utils.showYesNoDialog(
-                          context: context,
-                          title: "Konfirmasi",
-                          desc: "Apakah Data Anda Sudah Benar?",
-                          yesCallback: () => handleTap(() async {
-                                Navigator.pop(context);
-                                // Navigator.pop(context);
-                                // Navigator.pop(context);
-                                dataP.updateProfile(context);
-                              }),
-                          noCallback: () => Navigator.pop(context));
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: ((context) => ProfileManageView())));
+                    if (p.validateEdit()) {
+                      final dataP = context.read<ProfileProvider>();
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      String? msg;
+                      if (dataP.usernameC.text.isEmpty)
+                        msg = 'Harap Isi Username';
+                      if (dataP.nameC.text.isEmpty)
+                        msg = 'Harap Isi Nama Lengkap';
+                      if (dataP.emailC.text.isEmpty) msg = 'Harap Isi Email';
+                      if (msg != null) {
+                        Utils.showFailed(msg: msg);
+                        return;
+                      } else {
+                        await Utils.showYesNoDialog(
+                            context: context,
+                            title: "Konfirmasi",
+                            desc: "Apakah Data Anda Sudah Benar?",
+                            yesCallback: () => handleTap(() async {
+                                  Navigator.pop(context);
+                                  dataP.updateProfile(context);
+                                }),
+                            noCallback: () => Navigator.pop(context));
+                      }
                     }
                   },
                 )),

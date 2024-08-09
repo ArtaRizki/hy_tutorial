@@ -65,12 +65,10 @@ class _UserDetailViewState extends State<UserDetailView>
           action: [
             IconButton(
               onPressed: () {
-                CusNav.nPush(
-                    context,
-                    UserAddView(
-                      data: userDataP,
-                      fromDetail: true,
-                    ));
+                // CusNav.nPush(
+                //   context,
+                //   UserAddView(data: userDataP, fromDetail: true),
+                // );
               },
               icon: Icon(
                 Icons.edit,
@@ -254,7 +252,7 @@ class _UserDetailViewState extends State<UserDetailView>
                               await p.updateUser(
                                 context,
                                 id: p.userDetailModel.Data?.Id ?? "",
-                                fromDetail: true,
+                                // fromDetail: true,
                                 fromHome: true,
                               );
                             },

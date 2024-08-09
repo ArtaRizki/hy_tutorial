@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_date_picker.dart';
+import 'package:hy_tutorial/common/component/skeleton.dart';
 
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_textfield.dart';
@@ -10,7 +11,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../../common/base/base_state.dart';
-import '../../../../common/component/custom_loading_indicator.dart';
 import '../../../../common/helper/constant.dart';
 import '../../shaft/view/shaft_detail_view.dart';
 import '../model/turbine_model.dart';
@@ -239,13 +239,130 @@ class _TurbineViewState extends BaseState<TurbineView> {
             );
           },
         );
+
+    Widget itemListShimmer() {
+      return Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.grey.withOpacity(0.5)),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Skeleton<bool>(
+                  width: 24,
+                  height: 10,
+                  value:
+                      turbineP.isFetching == true ? null : turbineP.isFetching,
+                  child: Text(
+                    '',
+                    style: Constant.blackRegular12,
+                  ),
+                ),
+                Skeleton<bool>(
+                  width: 48,
+                  height: 10,
+                  value:
+                      turbineP.isFetching == true ? null : turbineP.isFetching,
+                  child: Text(
+                    '',
+                    style: Constant.blackRegular12,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 5),
+            Divider(
+              thickness: 0.5,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Skeleton<bool>(
+                    width: 45,
+                    height: 45,
+                    value: turbineP.isFetching == true
+                        ? null
+                        : turbineP.isFetching,
+                    child: Image.asset('assets/icons/ic-file.png', scale: 3.5)),
+                SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Constant.xSizedBox4,
+                    Skeleton<bool>(
+                      width: 175,
+                      height: 17,
+                      value: turbineP.isFetching == true
+                          ? null
+                          : turbineP.isFetching,
+                      child: Text(
+                        '',
+                        style: Constant.blackBold15,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Skeleton<bool>(
+                        width: 100,
+                        height: 12,
+                        value: turbineP.isFetching == true
+                            ? null
+                            : turbineP.isFetching,
+                        child: Text("-", style: Constant.grayRegular13)),
+                  ],
+                ),
+              ],
+            ),
+            Constant.xSizedBox8,
+          ],
+        ),
+      );
+    }
+
+    Widget noData() {
+      return ListView(shrinkWrap: true, children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 56),
+          child: Center(child: Text("Data tidak ditemukan")),
+        )
+      ]);
+    }
+
+    Widget failedData() {
+      return ListView(shrinkWrap: true, children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 56),
+          child: Center(child: Text("Gagal mendapatkan data")),
+        )
+      ]);
+    }
+
+    Widget listShimmer() {
+      return Column(
+        children: [
+          itemListShimmer(),
+          SizedBox(height: 20),
+          itemListShimmer(),
+          SizedBox(height: 20),
+          itemListShimmer(),
+          SizedBox(height: 20),
+        ],
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar.appBar(context, "Riwayat",
           textStyle: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
-          titleSpacing: 20,
           isLeading: false,
+          titleSpacing: 20,
           color: Constant.primaryColor,
           foregroundColor: Colors.white),
       body: SafeArea(
@@ -316,25 +433,15 @@ class _TurbineViewState extends BaseState<TurbineView> {
                   Flexible(
                     child: PagedListView.separated(
                       shrinkWrap: true,
-                      // itemCount: turbineData.length,
                       pagingController: pagingC,
                       padding: EdgeInsets.fromLTRB(0, 18, 0, 20),
                       separatorBuilder: (_, __) => Constant.xSizedBox16,
                       builderDelegate:
                           PagedChildBuilderDelegate<TurbineModelData>(
-                        firstPageProgressIndicatorBuilder: (_) => Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.only(top: 32),
-                          child: CustomLoadingIndicator.buildIndicator(),
-                        ),
-                        newPageProgressIndicatorBuilder: (_) => Container(
-                          color: Colors.white,
-                          child: CustomLoadingIndicator.buildIndicator(),
-                        ),
-                        noItemsFoundIndicatorBuilder: (_) => Padding(
-                          padding: const EdgeInsets.only(top: 56),
-                          child: Text("Tidak ada data"),
-                        ),
+                        firstPageProgressIndicatorBuilder: (_) => listShimmer(),
+                        firstPageErrorIndicatorBuilder: (_) => failedData(),
+                        newPageProgressIndicatorBuilder: (_) => listShimmer(),
+                        noItemsFoundIndicatorBuilder: (_) => noData(),
                         itemBuilder: (context, item, indexs) {
                           return InkWell(
                             onTap: () async {
@@ -343,19 +450,12 @@ class _TurbineViewState extends BaseState<TurbineView> {
                               final f = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ShaftDetailView(
-                                          id: item.Id ?? ''
-                                          // id: '01J30MN6BRT962T3E8JPMK157H',
-                                          // id: '01J1YT2GYVWPNJX777WM9S76DC',
-                                          // id: '01J06H7N5A16M6FGP600A6MH0F',
-                                          // id: '01J20BBZFRKTRDS9JJYDD6GK5P',
-                                          )));
+                                      builder: (context) =>
+                                          ShaftDetailView(id: item.Id ?? '')));
                               if (f != null) {
                                 turbineP.next = null;
                                 pagingC.refresh();
                               }
-                              // turbineP.turbineModelData =
-                              //     TurbineModelData();
                             },
                             child: Container(
                               padding: EdgeInsets.all(10),
@@ -402,9 +502,6 @@ class _TurbineViewState extends BaseState<TurbineView> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            // item.Title == '' || item.Title == null
-                                            //     ? "-"
-                                            //     :
                                             item.Title ?? '',
                                             style: Constant.blackBold15,
                                           ),
@@ -422,76 +519,8 @@ class _TurbineViewState extends BaseState<TurbineView> {
                           );
                         },
                       ),
-                      // itemBuilder: (context, index) {
-                      //   final item = turbineData[index];
-                      //   if (isLoading)
-                      //     return Container(
-                      //       color: Colors.white,
-                      //       padding: EdgeInsets.only(top: 32),
-                      //       child: CustomLoadingIndicator.buildIndicator(),
-                      //     );
-                      //   return InkWell(
-                      //     onTap: () async {
-                      //       FocusManager.instance.primaryFocus?.unfocus();
-                      //       turbineP.turbineSearchC.clear();
-                      //       final f = await Navigator.push(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //               builder: (context) =>
-                      //                   ShaftDetailView(id: item?.Id ?? '')));
-                      //       if (f != null) {
-                      //         pagingC.refresh();
-                      //       }
-
-                      //       // turbineP.turbineModelData =
-                      //       //     TurbineModelData();
-                      //     },
-                      //     child: CustomContainer.mainCard(
-                      //       child: Column(
-                      //         crossAxisAlignment: CrossAxisAlignment.start,
-                      //         children: [
-                      //           Row(
-                      //             crossAxisAlignment: CrossAxisAlignment.start,
-                      //             children: [
-                      //               Expanded(
-                      //                 flex: 5,
-                      //                 child: Column(
-                      //                   crossAxisAlignment:
-                      //                       CrossAxisAlignment.start,
-                      //                   children: [
-                      //                     Text(item?.TowerName ?? "-",
-                      //                         style: Constant.blackBold),
-                      //                     SizedBox(height: 5),
-                      //                   ],
-                      //                 ),
-                      //               ),
-                      //               Constant.xSizedBox4,
-                      //               Expanded(
-                      //                 flex: 5,
-                      //                 child: Column(
-                      //                   crossAxisAlignment:
-                      //                       CrossAxisAlignment.end,
-                      //                   children: [
-                      //                     Text(
-                      //                       '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(item?.createdAt ?? '${DateTime.now()}'))}',
-                      //                       // style: Constant.gray,
-                      //                       textAlign: TextAlign.right,
-                      //                     ),
-                      //                     SizedBox(height: 7),
-                      //                   ],
-                      //                 ),
-                      //               ),
-                      //             ],
-                      //           ),
-                      //           Constant.xSizedBox12,
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   );
-                      // }
                     ),
                   ),
-                  // SizedBox(height: 8),
                 ],
               ),
             ),

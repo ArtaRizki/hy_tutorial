@@ -51,11 +51,11 @@ class CustomAppBar {
       centerTitle: isCenter,
       actions: action,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarIconBrightness:
-            Brightness.dark, //<-- For Android SEE HERE (dark icons)
-        statusBarBrightness:
-            Brightness.dark, //<-- For iOS SEE HERE (dark icons)
+        statusBarColor: Constant.primaryColor,
+        systemNavigationBarColor: Constant.primaryColor,
+        systemNavigationBarDividerColor: Constant.primaryColor,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
       ),
     );
   }

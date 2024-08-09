@@ -11,8 +11,8 @@ import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
 
 class DataAddView extends StatefulWidget {
-  const DataAddView({super.key});
-
+  DataAddView({super.key, this.isFromCenter = false});
+  bool isFromCenter;
   @override
   State<DataAddView> createState() => _DataAddViewState();
 }
@@ -39,11 +39,14 @@ class _DataAddViewState extends BaseState<DataAddView> {
     final p = context.watch<DataAddProvider>();
     return Scaffold(
       backgroundColor: Constant.primaryColor,
-      appBar: CustomAppBar.appBar(context, "Tambah Data",
-          color: Constant.primaryColor,
-          foregroundColor: Colors.white,
-          isLeading: false,
-          titleSpacing: 20),
+      appBar: CustomAppBar.appBar(
+        context,
+        "Tambah Data",
+        color: Constant.primaryColor,
+        foregroundColor: Colors.white,
+        isLeading: widget.isFromCenter,
+        titleSpacing: widget.isFromCenter ? null : 20,
+      ),
       body: Container(
         color: Colors.white,
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -60,24 +63,33 @@ class _DataAddViewState extends BaseState<DataAddView> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-              child: CustomButton.mainButton('Selanjutnya', () {
-                final dataP = context.read<DataAddProvider>();
-                FocusManager.instance.primaryFocus?.unfocus();
-                String? msg;
-                if (dataP.selectedBolt == null) msg = 'Harap Pilih Jumlah Baut';
-                if (dataP.selectedPlta == null) msg = 'Harap Pilih PLTA';
-                if (dataP.genBearingKoplingC.text.isEmpty)
-                  msg = 'Harap Isi Gen Bearing Kopling';
-                if (dataP.koplingTurbinC.text.isEmpty)
-                  msg = 'Harap Isi Kopling Turbin';
-                if (msg != null) {
-                  Utils.showFailed(msg: msg);
-                  return;
-                } else {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => DataAddUpperView()));
-                }
-              }),
+              child: CustomButton.mainButton(
+                'Selanjutnya',
+                () {
+                  if (p.validatePage1()) {
+                    final dataP = context.read<DataAddProvider>();
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    String? msg;
+                    if (dataP.selectedBolt == null)
+                      msg = 'Harap Pilih Jumlah Baut';
+                    if (dataP.selectedPlta == null) msg = 'Harap Pilih PLTA';
+                    if (dataP.genBearingKoplingC.text.isEmpty)
+                      msg = 'Harap Isi Gen Bearing Kopling';
+                    if (dataP.koplingTurbinC.text.isEmpty)
+                      msg = 'Harap Isi Kopling Turbin';
+                    if (msg != null) {
+                      Utils.showFailed(msg: msg);
+                      return;
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (c) => DataAddUpperView()));
+                    }
+                  }
+                },
+                enabled: p.validatePage1(),
+              ),
             ),
           ],
         ),

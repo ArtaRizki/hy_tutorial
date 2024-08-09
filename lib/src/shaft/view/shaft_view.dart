@@ -620,7 +620,7 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
             onTap: () async {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => MainHome()),
+                  MaterialPageRoute(builder: (context) => MainHome(index: 2)),
                   (route) => false);
             },
             child: Icon(Icons.arrow_back),

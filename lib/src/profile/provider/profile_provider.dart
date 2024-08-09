@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
+import 'package:provider/provider.dart';
 import '../../../utils/utils.dart';
 import '../../../common/base/base_controller.dart';
 import '../../../common/helper/constant.dart';
@@ -23,13 +24,17 @@ class ProfileProvider extends BaseController with ChangeNotifier {
     emailC.clear();
   }
 
+  getData(BuildContext context) async {
+    profileModel = ProfileModel();
+    await context.read<ProfileProvider>().fetchProfile(withLoading: false);
+  }
+
   ProfileModel _profileModel = ProfileModel();
   ProfileModel get profileModel => this._profileModel;
   set profileModel(ProfileModel value) => this._profileModel = value;
 
   Future<void> fetchProfile({bool withLoading = false}) async {
     profileModel = ProfileModel();
-    notifyListeners();
     if (withLoading) loading(true);
     final response = await get(Constant.BASE_API_FULL + '/my');
 
@@ -72,6 +77,13 @@ class ProfileProvider extends BaseController with ChangeNotifier {
       ),
       Constant.xSizedBox16,
     ];
+  }
+
+  bool validateEdit() {
+    if (usernameC.text.isEmpty) return false;
+    if (nameC.text.isEmpty) return false;
+    if (emailC.text.isEmpty) return false;
+    return true;
   }
 
   Future<void> updateProfile(BuildContext context) async {

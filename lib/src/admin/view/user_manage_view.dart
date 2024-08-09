@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
@@ -11,12 +12,11 @@ import 'package:hy_tutorial/src/admin/view/user_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
+import 'package:hy_tutorial/src/plta/view/plta_add_view_old.dart';
 import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
-import 'package:hy_tutorial/src/plta/view/plta_detail_view.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import '../../../common/component/custom_appbar.dart';
-import '../../../common/component/custom_loading_indicator.dart';
 
 class UserManageView extends StatefulWidget {
   const UserManageView({super.key});
@@ -207,7 +207,245 @@ class _UserManageViewState extends BaseState<UserManageView>
       );
     }
 
-    Widget bodyKontenActive() {
+    Widget itemShimmer() {
+      return CustomContainer.mainCard(
+        isShadow: false,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Skeleton<bool>(
+                width: 50,
+                height: 55,
+                isCircle: true,
+                value: userManageP.isFetching == true
+                    ? null
+                    : userManageP.isFetching,
+                child: Container(
+                  height: 50,
+                  width: 55,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    color: Colors.white,
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'assets/icons/ic-user-black.png',
+                      ),
+                      scale: 3,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              flex: 8,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Constant.xSizedBox8,
+                  Skeleton<bool>(
+                    width: 100,
+                    height: 13,
+                    value: userManageP.isFetching == true
+                        ? null
+                        : userManageP.isFetching,
+                    child: Text(
+                      'Nama -',
+                      style: Constant.iPrimaryMedium8
+                          .copyWith(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                  Constant.xSizedBox4,
+                  Skeleton<bool>(
+                    width: 50,
+                    height: 10,
+                    value: userManageP.isFetching == true
+                        ? null
+                        : userManageP.isFetching,
+                    child: Text(
+                      'Status -',
+                      style: Constant.iPrimaryMedium8
+                          .copyWith(fontSize: 14, color: Colors.black),
+                    ),
+                  ),
+                  Constant.xSizedBox4,
+                  Skeleton<bool>(
+                    width: 60,
+                    height: 10,
+                    value: userManageP.isFetching == true
+                        ? null
+                        : userManageP.isFetching,
+                    child: Text(
+                      'Divisi -',
+                      style: TextStyle(color: Constant.textHintColor2),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Skeleton<bool>(
+                value: userManageP.isFetching == true
+                    ? null
+                    : userManageP.isFetching,
+                width: 1,
+                height: 25,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey,
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget itemShimmer2() {
+      return CustomContainer.mainCard(
+        isShadow: false,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Skeleton<bool>(
+                width: 50,
+                height: 55,
+                isCircle: true,
+                value: userManageP.isFetching2 == true
+                    ? null
+                    : userManageP.isFetching2,
+                child: Container(
+                  height: 50,
+                  width: 55,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    color: Colors.white,
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'assets/icons/ic-user-black.png',
+                      ),
+                      scale: 3,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              flex: 8,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Constant.xSizedBox8,
+                  Skeleton<bool>(
+                    width: 100,
+                    height: 13,
+                    value: userManageP.isFetching2 == true
+                        ? null
+                        : userManageP.isFetching2,
+                    child: Text(
+                      'Nama -',
+                      style: Constant.iPrimaryMedium8
+                          .copyWith(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                  Constant.xSizedBox4,
+                  Skeleton<bool>(
+                    width: 50,
+                    height: 10,
+                    value: userManageP.isFetching2 == true
+                        ? null
+                        : userManageP.isFetching2,
+                    child: Text(
+                      'Status -',
+                      style: Constant.iPrimaryMedium8
+                          .copyWith(fontSize: 14, color: Colors.black),
+                    ),
+                  ),
+                  Constant.xSizedBox4,
+                  Skeleton<bool>(
+                    width: 60,
+                    height: 10,
+                    value: userManageP.isFetching2 == true
+                        ? null
+                        : userManageP.isFetching2,
+                    child: Text(
+                      'Divisi -',
+                      style: TextStyle(color: Constant.textHintColor2),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Skeleton<bool>(
+                width: 1,
+                height: 25,
+                value: userManageP.isFetching2 == true
+                    ? null
+                    : userManageP.isFetching2,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey,
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget bodyUserListShimmer() {
+      return Column(
+        children: [
+          itemShimmer(),
+          SizedBox(height: 20),
+          itemShimmer(),
+          SizedBox(height: 20),
+          itemShimmer(),
+          SizedBox(height: 20),
+        ],
+      );
+    }
+
+    Widget bodyUserListShimmer2() {
+      return Column(
+        children: [
+          itemShimmer2(),
+          SizedBox(height: 20),
+          itemShimmer2(),
+          SizedBox(height: 20),
+          itemShimmer2(),
+          SizedBox(height: 20),
+        ],
+      );
+    }
+
+    Widget noData() {
+      return ListView(shrinkWrap: true, children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 56),
+          child: Center(child: Text("Data tidak ditemukan")),
+        )
+      ]);
+    }
+
+    Widget failedData() {
+      return ListView(shrinkWrap: true, children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 56),
+          child: Center(child: Text("Gagal mendapatkan data")),
+        )
+      ]);
+    }
+
+    Widget bodyUserList() {
       return RefreshIndicator(
         onRefresh: () async {
           userManageP.next = null;
@@ -225,38 +463,22 @@ class _UserManageViewState extends BaseState<UserManageView>
                 pagingController: pagingC,
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                 shrinkWrap: true,
-                physics: ScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return SizedBox();
-                },
+                physics: AlwaysScrollableScrollPhysics(),
+                separatorBuilder: (_, __) => SizedBox(),
                 builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
-                  firstPageProgressIndicatorBuilder: (_) => Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.only(top: 32),
-                    child: CustomLoadingIndicator.buildIndicator(),
-                  ),
-                  firstPageErrorIndicatorBuilder: (_) => Padding(
-                    padding: const EdgeInsets.only(top: 56),
-                    child: Center(child: Text("Gagal mendapatkan data")),
-                  ),
-                  newPageProgressIndicatorBuilder: (_) => Container(
-                    color: Colors.white,
-                    child: CustomLoadingIndicator.buildIndicator(),
-                  ),
-                  newPageErrorIndicatorBuilder: (_) => Padding(
-                    padding: const EdgeInsets.only(top: 56),
-                    child: Center(child: Text("Gagal mendapatkan data")),
-                  ),
-                  noItemsFoundIndicatorBuilder: (_) => Padding(
-                    padding: const EdgeInsets.only(top: 56),
-                    child: Center(child: Text("Tidak ada data")),
-                  ),
+                  firstPageProgressIndicatorBuilder: (_) =>
+                      bodyUserListShimmer(),
+                  firstPageErrorIndicatorBuilder: (_) => failedData(),
+                  newPageProgressIndicatorBuilder: (_) => bodyUserListShimmer(),
+                  newPageErrorIndicatorBuilder: (_) => failedData(),
+                  noItemsFoundIndicatorBuilder: (_) => noData(),
                   itemBuilder: (context, item, index) {
                     if (item.Status != 'active') return SizedBox();
                     return InkWell(
                       onTap: () async {
                         await CusNav.nPush(
-                            context, UserDetailView(id: item.Id ?? ''));
+                            context, UserAddView(id: item.Id ?? ''));
+                        // context, UserDetailView(id: item.Id ?? ''));
                         pagingC.refresh();
                       },
                       child: Column(
@@ -336,7 +558,7 @@ class _UserManageViewState extends BaseState<UserManageView>
       );
     }
 
-    Widget bodyKontenRequest() {
+    Widget bodyUserRequest() {
       return RefreshIndicator(
         onRefresh: () async {
           userManageP.next2 = null;
@@ -359,19 +581,13 @@ class _UserManageViewState extends BaseState<UserManageView>
                   return SizedBox();
                 },
                 builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
-                  firstPageProgressIndicatorBuilder: (_) => Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.only(top: 32),
-                    child: CustomLoadingIndicator.buildIndicator(),
-                  ),
-                  newPageProgressIndicatorBuilder: (_) => Container(
-                    color: Colors.white,
-                    child: CustomLoadingIndicator.buildIndicator(),
-                  ),
-                  noItemsFoundIndicatorBuilder: (_) => Padding(
-                    padding: const EdgeInsets.only(top: 56),
-                    child: Center(child: Text("Tidak ada data")),
-                  ),
+                  firstPageProgressIndicatorBuilder: (_) =>
+                      bodyUserListShimmer2(),
+                  firstPageErrorIndicatorBuilder: (_) => failedData(),
+                  newPageProgressIndicatorBuilder: (_) =>
+                      bodyUserListShimmer2(),
+                  newPageErrorIndicatorBuilder: (_) => failedData(),
+                  noItemsFoundIndicatorBuilder: (_) => noData(),
                   itemBuilder: (context, item, index) {
                     return InkWell(
                       onTap: () async {
@@ -456,6 +672,103 @@ class _UserManageViewState extends BaseState<UserManageView>
       );
     }
 
+    Widget itemShimmer3() {
+      return Column(
+        children: [
+          CustomContainer.mainCard(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            isShadow: false,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Skeleton<bool>(
+                    width: 50,
+                    height: 55,
+                    isCircle: true,
+                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: Colors.white,
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/icons/ic-plta-black.png',
+                          ),
+                          scale: 3,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5),
+                Expanded(
+                  flex: 8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Constant.xSizedBox8,
+                      Skeleton<bool>(
+                        width: 100,
+                        height: 13,
+                        value:
+                            pltaP.isFetching == true ? null : pltaP.isFetching,
+                        child: Text(
+                          'Nama -',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                      Constant.xSizedBox4,
+                      Skeleton<bool>(
+                        width: 50,
+                        height: 10,
+                        value:
+                            pltaP.isFetching == true ? null : pltaP.isFetching,
+                        child: Text(
+                          'Status -',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 14, color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Skeleton<bool>(
+                    width: 1,
+                    height: 25,
+                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget bodyPLTAListShimmer() {
+      return Column(
+        children: [
+          itemShimmer3(),
+          SizedBox(height: 20),
+          itemShimmer3(),
+          SizedBox(height: 20),
+          itemShimmer3(),
+          SizedBox(height: 20),
+        ],
+      );
+    }
+
     Widget bodyPLTA() {
       return RefreshIndicator(
         onRefresh: () async {
@@ -479,24 +792,17 @@ class _UserManageViewState extends BaseState<UserManageView>
                   return SizedBox();
                 },
                 builderDelegate: PagedChildBuilderDelegate<PltaListModelData>(
-                  firstPageProgressIndicatorBuilder: (_) => Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.only(top: 32),
-                    child: CustomLoadingIndicator.buildIndicator(),
-                  ),
-                  newPageProgressIndicatorBuilder: (_) => Container(
-                    color: Colors.white,
-                    child: CustomLoadingIndicator.buildIndicator(),
-                  ),
-                  noItemsFoundIndicatorBuilder: (_) => Padding(
-                    padding: const EdgeInsets.only(top: 56),
-                    child: Center(child: Text("Tidak ada data")),
-                  ),
+                  firstPageProgressIndicatorBuilder: (_) =>
+                      bodyPLTAListShimmer(),
+                  firstPageErrorIndicatorBuilder: (_) => failedData(),
+                  newPageProgressIndicatorBuilder: (_) => bodyPLTAListShimmer(),
+                  newPageErrorIndicatorBuilder: (_) => failedData(),
+                  noItemsFoundIndicatorBuilder: (_) => noData(),
                   itemBuilder: (context, item, index) {
                     return InkWell(
                       onTap: () async {
                         await CusNav.nPush(
-                            context, PltaDetailView(id: item.Id ?? ''));
+                            context, PltaAddView(id: item.Id ?? ''));
                         pagingC3.refresh();
                       },
                       child: Column(
@@ -574,10 +880,8 @@ class _UserManageViewState extends BaseState<UserManageView>
     return Scaffold(
       appBar: CustomAppBar.appBar(
           context, "Manage ${tabController.index != 2 ? 'User' : 'PLTA'}",
-          leading: SizedBox(),
           isLeading: false,
-          titleSpacing: 24,
-          textStyle: TextStyle(color: Colors.white, fontSize: 18),
+          titleSpacing: 20,
           color: Constant.primaryColor,
           foregroundColor: Colors.white),
       body: SafeArea(
@@ -593,8 +897,8 @@ class _UserManageViewState extends BaseState<UserManageView>
                 physics: NeverScrollableScrollPhysics(),
                 controller: tabController,
                 children: [
-                  bodyKontenActive(),
-                  bodyKontenRequest(),
+                  bodyUserList(),
+                  bodyUserRequest(),
                   bodyPLTA(),
                 ],
               ),

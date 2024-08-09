@@ -123,8 +123,10 @@ class LoginViewState extends BaseState<LoginView> {
                 ],
               ),
               SizedBox(height: 30),
-              CustomButton.mainButton("Masuk",
-                  () async => await context.read<AuthProvider>().login(context),
+              CustomButton.mainButton("Masuk", () async {
+                if (authP.validateLogin())
+                  await context.read<AuthProvider>().login(context);
+              },
                   borderRadius: BorderRadius.circular(10),
                   contentPadding: EdgeInsets.symmetric(vertical: 8),
                   enabled: authP.validateLogin(),

@@ -135,8 +135,11 @@ class AuthProvider extends BaseController with ChangeNotifier {
                 ? true
                 : false);
 
-        Navigator.pushReplacementNamed(context, '/home',
-            arguments: await prefs.getBool(Constant.kSetPrefIsAdmin));
+        Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/home',
+            arguments: await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false,
+            (route) => false);
         usernameC.text = '';
         passC.text = '';
       } else {
@@ -225,7 +228,8 @@ class AuthProvider extends BaseController with ChangeNotifier {
 
         await Utils.showSuccess(msg: model.message);
         await Future.delayed(Duration(seconds: 2));
-        Navigator.pushReplacementNamed(context, '/login', arguments: false);
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/login', arguments: false, (route) => false);
         nameC.text = '';
         selectedDivision = null;
         selectedDivisionC.text = '';

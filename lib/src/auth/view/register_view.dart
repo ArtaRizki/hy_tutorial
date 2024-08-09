@@ -203,8 +203,10 @@ class RegisterViewState extends State<RegisterView> {
               SizedBox(height: 30),
               CustomButton.mainButton(
                 "Daftar",
-                () async =>
-                    await context.read<AuthProvider>().register(context),
+                () async {
+                  if (authP.validateRegister())
+                    await context.read<AuthProvider>().register(context);
+                },
                 borderRadius: BorderRadius.circular(10),
                 enabled: authP.validateRegister(),
                 contentPadding: EdgeInsets.symmetric(vertical: 8),

@@ -1,3 +1,4 @@
+import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
@@ -6,6 +7,7 @@ import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
 import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,18 +28,18 @@ class _MainHomeState extends State<MainHome> {
   int currentIndex = 0;
   late HomeModel homeModel;
   bool? isAdmin;
+  DateTime? lastPressed;
 
   @override
   void initState() {
-    getData();
-    // setIndex();
+    // getData();
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
     isAdmin = ModalRoute.of(context)?.settings.arguments as bool?;
-    // getData();
+    getData();
     super.didChangeDependencies();
   }
 
@@ -46,7 +48,7 @@ class _MainHomeState extends State<MainHome> {
 
     isAdmin = ModalRoute.of(context)?.settings.arguments as bool?;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin);
+    isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
     setState(() {});
   }
 
@@ -85,17 +87,6 @@ class _MainHomeState extends State<MainHome> {
             turbineP.towerName = false;
             turbineP.createdAt = false;
             turbineP.turbineSearchC.clear();
-            // context.read<PaketProvider>().clearFilter();
-            // if (index == 1) {
-            //   currentIndex = index;
-            //   if (isAdmin == true)
-            //     await CusNav.nPush(context, UserManageView());
-            //   else
-            //     await CusNav.nPush(context, DataAddView());
-            //   setState(() {
-            //     currentIndex = 0;
-            //   });
-            // }
             setState(() => currentIndex = index);
           },
           type: BottomNavigationBarType.fixed,
@@ -173,7 +164,6 @@ class _MainHomeState extends State<MainHome> {
     }
 
     return Scaffold(
-      //extendBody: true,
       primary: true,
       bottomNavigationBar: customBottomNav(),
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom != 0
@@ -182,22 +172,38 @@ class _MainHomeState extends State<MainHome> {
               backgroundColor: const Color.fromARGB(0, 140, 122, 122),
               onPressed: () async {
                 setState(() => currentIndex = 0);
-                await CusNav.nPush(context, DataAddView());
+                await CusNav.nPush(context, DataAddView(isFromCenter: true));
                 setState(() => currentIndex = 0);
               },
               child: CircleAvatar(
                 radius: 60,
                 backgroundColor: Constant.primaryColor,
-                child: Image.asset('assets/icons/ic-button.png',
-                    width: 40, height: 40),
+                child: Image.asset(
+                  'assets/icons/ic-button.png',
+                  width: 40,
+                  height: 40,
+                ),
               ),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: WillPopScope(
         onWillPop: () async {
+          final now = DateTime.now();
+          const maxDuration = Duration(seconds: 2);
+          final isWarning =
+              lastPressed == null || now.difference(lastPressed!) > maxDuration;
           if (currentIndex != 0) {
             setState(() => currentIndex = 0);
             return false;
+          } else {
+            if (isWarning) {
+              lastPressed = DateTime.now();
+              CustomAlert.showSnackBar(
+                  context, 'Tekan 2 kali untuk keluar aplikasi', false);
+              return false;
+            } else {
+              return true;
+            }
           }
           // kalau sudah ada api maka muncul konfirm exit dua kali
           return true;
