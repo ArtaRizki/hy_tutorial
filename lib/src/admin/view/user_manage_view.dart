@@ -12,7 +12,6 @@ import 'package:hy_tutorial/src/admin/view/user_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
-import 'package:hy_tutorial/src/plta/view/plta_add_view_old.dart';
 import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';

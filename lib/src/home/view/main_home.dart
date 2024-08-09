@@ -7,7 +7,6 @@ import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
 import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';

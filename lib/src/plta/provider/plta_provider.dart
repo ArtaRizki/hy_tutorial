@@ -7,7 +7,6 @@ import 'package:hy_tutorial/common/component/custom_dropdown.dart';
 import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
-import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shared_preferences/shared_preferences.dart';
