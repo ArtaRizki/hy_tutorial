@@ -22,6 +22,8 @@ class HomeProvider extends BaseController with ChangeNotifier {
     'assets/icons/admin/ic-turbine.png',
   ];
 
+
+
   HomeModel homeModel = HomeModel();
   HomeModel get getHomeModel => this.homeModel;
   set setHomeModel(HomeModel homeModel) => this.homeModel = homeModel;

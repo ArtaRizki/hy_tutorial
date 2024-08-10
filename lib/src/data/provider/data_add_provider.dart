@@ -1203,7 +1203,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   List<Widget> detailUnit() {
     return [
-      Text("Detail Unit", style: Constant.blackBold20),
+      Text("Detail Unit", style: Constant.iBlackMedium16),
       Constant.xSizedBox8,
       Text("Masukan data unit", style: Constant.grayMedium),
       Constant.xSizedBox16,

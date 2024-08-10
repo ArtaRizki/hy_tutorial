@@ -341,7 +341,7 @@ class CustomTextField {
               hintStyle: TextStyle(
                   color: hintColor ?? Constant.textHintColor2,
                   fontWeight: hintFontWeight),
-              prefixIcon: prefix,
+              prefixIcon: prefixIcon,
               prefix: prefix == null ? SizedBox(width: 12) : null,
               border: OutlineInputBorder(
                 borderRadius: borderRadius ?? BorderRadius.circular(10),
