@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../common/base/base_controller.dart';
 import '../../../common/component/custom_alert.dart';
 import '../../../common/helper/constant.dart';
@@ -26,6 +27,13 @@ class TurbineProvider extends BaseController with ChangeNotifier {
 
   set isFetching(bool value) {
     this._isFetching = value;
+  }
+
+  bool _isFetching2 = false;
+  bool get isFetching2 => this._isFetching2;
+
+  set isFetching2(bool value) {
+    this._isFetching2 = value;
   }
 
   int pageSize = 0;
@@ -93,7 +101,10 @@ class TurbineProvider extends BaseController with ChangeNotifier {
     notifyListeners();
   }
 
+  DateRangePickerController dateRangePickerController =
+      DateRangePickerController();
   TextEditingController turbineSearchC = TextEditingController();
+  FocusNode turbineSearchN = FocusNode();
   TextEditingController filterC = TextEditingController();
   TextEditingController startDateC = TextEditingController();
   TextEditingController endDateC = TextEditingController();
@@ -117,6 +128,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
       startDateC.text =
           DateFormat("yyyy-MM-dd").format(date ?? DateTime.now()).toString();
     notifyListeners();
+    log("START DATE : ${_startDate}");
   }
 
   DateTime? _endDate;
@@ -129,6 +141,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
       endDateC.text =
           DateFormat("yyyy-MM-dd").format(date ?? DateTime.now()).toString();
     notifyListeners();
+    log("END DATE : ${_endDate}");
   }
 
   PagingController<int, TurbineModelData> _pagingController =
@@ -143,6 +156,18 @@ class TurbineProvider extends BaseController with ChangeNotifier {
 
   String? next;
 
+  PagingController<int, TurbineModelData> _pagingController2 =
+      PagingController(firstPageKey: 1);
+
+  PagingController<int, TurbineModelData> get pagingController2 =>
+      this._pagingController2;
+
+  set pagingController2(PagingController<int, TurbineModelData> value) {
+    this._pagingController2 = value;
+  }
+
+  String? next2;
+
   TurbineModel _turbineModel = TurbineModel();
   TurbineModel get turbineModel => this._turbineModel;
   set turbineModel(TurbineModel value) => this._turbineModel = value;
@@ -156,6 +181,26 @@ class TurbineProvider extends BaseController with ChangeNotifier {
             log("ERROR EXPIRED TOKEN");
             next = null;
             pagingController.refresh();
+          } else {
+            BuildContext? context =
+                NavigationService.navigatorKey.currentContext;
+            if (context != null)
+              CustomAlert.showSnackBar(
+                  context, 'Gagal Mendapatkan Data Turbine', true);
+          }
+        });
+      });
+  }
+
+  Future<void> getTurbine2() async {
+    pagingController2 = PagingController(firstPageKey: 1)
+      ..addPageRequestListener((pageKey) async {
+        // log("GET TURBINE");
+        await fetchTurbine2(page: pageKey).onError((error, stackTrace) {
+          if (error.toString().contains('expired token')) {
+            log("ERROR EXPIRED TOKEN");
+            next2 = null;
+            pagingController2.refresh();
           } else {
             BuildContext? context =
                 NavigationService.navigatorKey.currentContext;
@@ -187,22 +232,22 @@ class TurbineProvider extends BaseController with ChangeNotifier {
           param.addAll({'Search': turbineSearchC.text});
         if (startDate != null) param.addAll({'StartDate': startDateSelected});
         if (endDate != null) param.addAll({'EndDate': endDateSelected});
-        if (ascending) {
-          param.remove('SortOrder');
-          param.addAll({'SortOrder': 'ASC'});
-        }
-        if (descending) {
-          param.remove('SortOrder');
-          param.addAll({'SortOrder': 'DESC'});
-        }
-        if (towerName) {
-          param.remove('SortBy');
-          param.addAll({'SortBy': 'TowerName'});
-        }
-        if (createdAt) {
-          param.remove('SortBy');
-          param.addAll({'SortBy': 'CreatedAt'});
-        }
+        // if (ascending) {
+        //   param.remove('SortOrder');
+        //   param.addAll({'SortOrder': 'ASC'});
+        // }
+        // if (descending) {
+        //   param.remove('SortOrder');
+        //   param.addAll({'SortOrder': 'DESC'});
+        // }
+        // if (towerName) {
+        //   param.remove('SortBy');
+        //   param.addAll({'SortBy': 'TowerName'});
+        // }
+        // if (createdAt) {
+        //   param.remove('SortBy');
+        //   param.addAll({'SortBy': 'CreatedAt'});
+        // }
         if (next != null) param.addAll({'Next': next ?? ''});
         // log("PANGGIL");
         if (_pagingController.itemList?.length != 0) {
@@ -256,11 +301,77 @@ class TurbineProvider extends BaseController with ChangeNotifier {
     }
   }
 
+  Future<void> fetchTurbine2({
+    bool withLoading = false,
+    required int page,
+    String keyword = "",
+  }) async {
+    try {
+      if (!isFetching2) {
+        isFetching2 = true;
+        if (withLoading) loading(true);
+        String startDateSelected = DateFormat("yyyy-MM-dd")
+            .format(DateTime.now().subtract(Duration(days: 7)));
+        String endDateSelected =
+            DateFormat("yyyy-MM-dd").format(DateTime.now());
+
+        String url = Constant.BASE_API_FULL + '/turbines';
+        Map<String, String> param = {};
+
+        if (turbineSearchC.text.isNotEmpty)
+          param.addAll({'Search': turbineSearchC.text});
+        param.addAll({'StartDate': startDateSelected});
+        param.addAll({'EndDate': endDateSelected});
+        if (next2 != null) param.addAll({'Next': next2 ?? ''});
+        if (_pagingController2.itemList?.length != 0)
+          await Future.delayed(Duration(seconds: 1));
+
+        final response = await get(url, body: param);
+
+        if (response.statusCode == 201 || response.statusCode == 200) {
+          turbineModel = TurbineModel();
+          final model = TurbineModel.fromJson(jsonDecode(response.body));
+          final newItems = model.Data ?? [];
+          pageSize = 10;
+          final isLastPage = newItems.length < pageSize;
+
+          if (isLastPage || (model.Meta?.Next ?? '') == '') {
+            next2 = null;
+            pagingController2
+                .appendLastPage(newItems as List<TurbineModelData>);
+          } else {
+            final next2PageKey = page += 1;
+            if (model.Meta?.Next != null && model.Meta?.Next != '')
+              next2 = model.Meta?.Next ?? '';
+            pagingController2.appendPage(
+                newItems as List<TurbineModelData>, next2PageKey);
+          }
+
+          if (withLoading) loading(false);
+          isFetching2 = false;
+        } else {
+          log("MASUK ELSE");
+          loading(false);
+          isFetching2 = false;
+          final message = jsonDecode(response.body)["Message"];
+          throw Exception(message);
+        }
+      }
+    } catch (e) {
+      log("MASUK ELSE CATCH $e");
+      loading(false);
+      isFetching2 = false;
+      throw Exception(e.toString());
+    }
+  }
+
   clearData() {
     startDateC.clear();
     endDateC.clear();
     setStartDate(null);
     setEndDate(null);
+
+    dateRangePickerController.selectedRange = null;
     ascending = false;
     descending = false;
     towerName = false;

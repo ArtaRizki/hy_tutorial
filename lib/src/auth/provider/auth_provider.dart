@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/src/auth/model/firebase_token_model.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
-import 'package:hy_tutorial/src/auth/view/new_login_view.dart';
-import 'package:hy_tutorial/src/auth/view/new_register_view.dart';
+import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/auth/view/register_view.dart';
+import 'package:hy_tutorial/src/auth/view/register_view.dart';
+import 'package:hy_tutorial/src/home/view/main_home.dart';
+import 'package:hy_tutorial/src/home/view/home_new_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/base/base_controller.dart';
@@ -17,9 +20,7 @@ import '../model/refresh_token_model.dart';
 
 class AuthProvider extends BaseController with ChangeNotifier {
   late LoginViewState loginViewState;
-  late NewLoginViewState newLoginViewState;
   late RegisterViewState registerViewState;
-  late NewRegisterViewState newRegisterViewState;
   TextEditingController nameC = TextEditingController();
   TextEditingController usernameC = TextEditingController();
   TextEditingController emailC = TextEditingController();
@@ -127,7 +128,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
         loading(false);
         notifyListeners();
         final model = LoginModel.fromJson(jsonDecode(response.body));
-
+        final roles = model.Data?.Source;
         // set to shared preferences
         await prefs.setString(Constant.kSetPrefToken, model.Data?.Token ?? '');
         await prefs.setString(
@@ -135,17 +136,18 @@ class AuthProvider extends BaseController with ChangeNotifier {
         await prefs.setString(
             Constant.kSetPrefRefreshToken, model.Data?.RefreshToken ?? '');
         await prefs.setString(Constant.kSetPrefName, model.Data?.Name ?? '');
-        await prefs.setBool(
-            Constant.kSetPrefIsAdmin,
-            model.Data?.Source == 'admin' || model.Data?.Source == 'main'
-                ? true
-                : false);
+        await prefs.setBool(Constant.kSetPrefIsAdmin,
+            roles == 'admin' || roles == 'main' ? true : false);
 
-        Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/home',
-            arguments: await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false,
-            (route) => false);
+        if (roles == 'admin' || roles == 'main') {
+          CusNav.nPushAndRemoveUntil(context, HomeNewView(), arguments: true);
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/home',
+              arguments: await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false,
+              (route) => false);
+        }
         usernameC.text = '';
         passC.text = '';
       } else {

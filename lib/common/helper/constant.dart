@@ -25,9 +25,8 @@ class Constant {
   ///
   /// Constant.firstColor;
   ///
-  static Color primaryColor = Color(0xFF10345A);
-  static Color secondaryColor = Color(0xFF2F5273);
-  static Color redisignColor = Color(0xFF00A1B8);
+  static Color primaryColor = Color(0xFF00A1B8);
+  static Color secondaryColor = Color(0xFF10345A);
   static Color thirdColor = Color(0xFFFBBB00);
   static Color tertiaryColor = Color(0xFF8CC6FF);
   static Color quarteryColor = Color(0xFFC5E2FF);
@@ -61,96 +60,96 @@ class Constant {
   static Color blueColor = Color(0xFF093CA9);
 
   static TextStyle primaryTextStyle =
-      TextStyle(fontFamily: 'SF-Pro-Display', color: textColor);
+      TextStyle(fontFamily: 'Inter', color: textColor);
   static TextStyle secondaryTextStyle =
-      TextStyle(fontFamily: 'SF-Pro-Display', color: textColor2);
+      TextStyle(fontFamily: 'Inter', color: textColor2);
   static TextStyle komisiTextStyle =
-      TextStyle(fontFamily: 'SF-Pro-Display', color: textKomisiColor);
+      TextStyle(fontFamily: 'Inter', color: textKomisiColor);
   static TextStyle priceTextStyle =
-      TextStyle(fontFamily: 'SF-Pro-Display', color: textPriceColor);
+      TextStyle(fontFamily: 'Inter', color: textPriceColor);
   static TextStyle s12BoldBlack = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColor,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle primaryTextStyle2 =
-      TextStyle(fontFamily: 'SF-Pro-Display', color: textColor);
+      TextStyle(fontFamily: 'Inter', color: textColor);
   static TextStyle secondaryTextStyle2 =
-      TextStyle(fontFamily: 'SF-Pro-Display', color: textColor2);
+      TextStyle(fontFamily: 'Inter', color: textColor2);
   static TextStyle komisiTextStyle2 =
-      TextStyle(fontFamily: 'SF-Pro-Display', color: textKomisiColor);
+      TextStyle(fontFamily: 'Inter', color: textKomisiColor);
   static TextStyle priceTextStyle2 =
-      TextStyle(fontFamily: 'SF-Pro-Display', color: textPriceColor);
+      TextStyle(fontFamily: 'Inter', color: textPriceColor);
   static TextStyle s12BoldBlack2 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColor,
     fontWeight: FontWeight.bold,
   );
-  static TextStyle iBlack = TextStyle(fontFamily: 'SF-Pro-Display');
+  static TextStyle iBlack = TextStyle(fontFamily: 'Inter');
 
   static TextStyle iPrimaryMedium8 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: primaryColor,
     fontSize: 8,
     fontWeight: medium,
   );
   static TextStyle iPrimaryMedium14 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: primaryColor,
     fontSize: 14,
     fontWeight: medium,
   );
   static TextStyle iPrimaryMedium12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: primaryColor,
     fontSize: 12,
     fontWeight: medium,
   );
 
   static TextStyle iBlackMedium8 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 8,
     fontWeight: medium,
   );
   static TextStyle iBlackMedium10 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 8,
     fontWeight: medium,
   );
   static TextStyle iBlackMedium12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 12,
     fontWeight: medium,
   );
   static TextStyle iBlackMedium13 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 13,
     fontWeight: medium,
   );
   static TextStyle blackRegular12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 12,
     fontWeight: FontWeight.w300,
   );
   static TextStyle iBlackMedium = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontWeight: medium,
   );
   static TextStyle iBlackMedium18 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 18,
     fontWeight: medium,
   );
   static TextStyle iBlackMedium16StrkWhite = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 16,
     shadows: [
@@ -174,19 +173,19 @@ class Constant {
     fontWeight: medium,
   );
   static TextStyle iBlackMedium16 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 16,
     fontWeight: medium,
   );
   static TextStyle iBlackMedium20 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 20,
     fontWeight: medium,
   );
   static TextStyle iBlackMedium40StrkWhite = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 40,
     shadows: [
@@ -211,179 +210,179 @@ class Constant {
   );
 
   static TextStyle primaryBold15 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: primaryColor,
     fontSize: 15,
     fontWeight: bold,
   );
   static TextStyle primaryBold20 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: primaryColor,
     fontSize: 20,
     fontWeight: bold,
   );
   static TextStyle quartenary = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: quarteryColor,
     fontWeight: regular,
   );
   static TextStyle whiteExtraBold18 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: Colors.white,
     fontSize: 18,
     fontWeight: bold,
   );
 
   static TextStyle blackBold10 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 10,
     fontWeight: bold,
   );
   static TextStyle blackBold13 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 13,
     fontWeight: bold,
   );
   static TextStyle blackBold = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontWeight: bold,
   );
   static TextStyle blackBold15 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 15,
     fontWeight: bold,
   );
   static TextStyle blackBold16 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 16,
     fontWeight: bold,
   );
   static TextStyle blackBold20 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 20,
     fontWeight: bold,
   );
 
   static TextStyle grayRegular = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
   );
   static TextStyle grayRegular8 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
     fontSize: 8,
   );
   static TextStyle grayRegular12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
     fontSize: 12,
   );
   static TextStyle grayRegular13 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: grayColor,
     fontSize: 13,
   );
   static TextStyle grayMedium10 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
     fontSize: 10,
     fontWeight: medium,
   );
   static TextStyle grayMedium13 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
     fontSize: 13,
     fontWeight: medium,
   );
   static TextStyle grayMedium = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
     fontWeight: medium,
   );
   static TextStyle grayMedium15 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
     fontSize: 15,
     fontWeight: medium,
   );
   static TextStyle grayBold12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
     fontSize: 12,
     fontWeight: bold,
   );
   static TextStyle grayBold15 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
     fontSize: 15,
     fontWeight: bold,
   );
   static TextStyle grayBold16 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: lightGrayColor,
     fontSize: 16,
     fontWeight: bold,
   );
   static TextStyle whiteRegular12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: Colors.white,
     fontSize: 12,
   );
   static TextStyle whiteBold = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: Colors.white,
     fontWeight: bold,
   );
   static TextStyle whiteBold15 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: Colors.white,
     fontSize: 15,
     fontWeight: bold,
   );
   static TextStyle whiteBold16 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: Colors.white,
     fontSize: 16,
     fontWeight: bold,
   );
   static TextStyle whiteExtraBold = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: Colors.white,
     fontWeight: extraBold,
   );
 
   static TextStyle greenBold12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: greenColor,
     fontSize: 12,
     fontWeight: bold,
   );
   static TextStyle blueBold12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: blueColor,
     fontSize: 12,
     fontWeight: bold,
   );
   static TextStyle redBold12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: redColor,
     fontSize: 12,
     fontWeight: bold,
   );
   static TextStyle redRegular12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: redColor,
     fontSize: 12,
     fontWeight: regular,
   );
   static TextStyle redMedium12 = TextStyle(
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     color: redColor,
     fontSize: 12,
     fontWeight: medium,
@@ -432,7 +431,7 @@ class Constant {
     scaffoldBackgroundColor: Constant.backgroundColor,
     primaryColor: primaryColor,
     focusColor: Colors.black,
-    fontFamily: 'SF-Pro-Display',
+    fontFamily: 'Inter',
     colorScheme: ColorScheme.fromSeed(
       seedColor: primaryColor,
       primary: primaryColor, //<-- SEE HERE

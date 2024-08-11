@@ -33,7 +33,6 @@ class _TurbineViewState extends BaseState<TurbineView> {
       turbineP.next = null;
       turbineP.getTurbine();
     }
-    // turbineP.fetchTurbine(withLoading: true);
     super.initState();
   }
 

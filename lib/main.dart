@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
+import 'package:hy_tutorial/src/auth/view/boarding_view.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
+import 'package:hy_tutorial/src/home/view/home_new_view.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
 import 'package:flutter/material.dart';
@@ -127,6 +130,12 @@ class MyApp extends StatelessWidget {
             // localizationsDelegates: context.localizationDelegates,
             // supportedLocales: context.supportedLocales,
             // locale: context.locale,
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('id', 'ID'), Locale('en')],
+            locale: Locale('id'),
             navigatorObservers: [XNObsever()],
             navigatorKey: NavigationService.navigatorKey,
             theme: Constant.mainThemeData,

@@ -1,7 +1,8 @@
 import 'dart:developer';
 
-import 'package:easy_localization/easy_localization.dart';
+// import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_container.dart';
 import '../../../common/helper/constant.dart';

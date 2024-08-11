@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+// import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,10 +89,10 @@ class CustomTextField {
       validator: (validator ??
           (value) {
             if ((value == null || value.isEmpty) && required) {
-              // return 'Maaf, $hintText tidak boleh kosong';
-              return "Maaf".tr() +
-                  ", " +
-                  "mandatory_message".tr(args: [hintText?.tr() ?? ""]);
+              return 'Maaf, $hintText tidak boleh kosong';
+              // return "Maaf".tr() +
+              //     ", " +
+              //     "mandatory_message".tr(args: [hintText?.tr() ?? ""]);
             }
             return null;
           }),
@@ -672,9 +672,11 @@ class CustomTextField {
         ),
         validator: (value) {
           if ((value == null || value.isEmpty) && required) {
-            return "Maaf".tr() +
-                ", " +
-                "mandatory_message".tr(args: [hint?.tr() ?? ""]);
+            return 'Maaf, $hint tidak boleh kosong';
+
+            // return "Maaf".tr() +
+            //     ", " +
+            //     "mandatory_message".tr(args: [hint?.tr() ?? ""]);
           }
           return null;
         },

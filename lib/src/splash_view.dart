@@ -31,7 +31,11 @@ class _SplashViewState extends State<SplashView> {
       Duration(seconds: 1),
       () => Navigator.pushNamedAndRemoveUntil(
           context,
-          isLoggedIn ? '/home' : '/login',
+          isLoggedIn
+              ? isAdmin
+                  ? '/new_home'
+                  : '/home'
+              : '/boarding',
           arguments: isAdmin,
           (route) => false),
     );
