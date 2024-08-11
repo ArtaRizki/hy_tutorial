@@ -3,6 +3,7 @@ import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_date_picker.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_textfield.dart';
@@ -96,6 +97,24 @@ class _TurbineViewState extends BaseState<TurbineView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SfDateRangePicker(
+                        view: DateRangePickerView.month,
+                        initialSelectedDates: [
+                          DateTime.now(),
+                          DateTime.now().add(Duration(days: 7)),
+                        ],
+                        onSubmit: (p0) async {
+                          if (p0 is List<DateTime>) {
+                            final data = p0;
+
+                            await turbineP.setStartDate(
+                                await CustomDatePicker.pickDate(
+                                    context, DateTime.now()));
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          }
+                        },
+                        selectionMode: DateRangePickerSelectionMode.range,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -401,7 +420,7 @@ class _TurbineViewState extends BaseState<TurbineView> {
                         InkWell(
                           onTap: () async {
                             CustomContainer.showModalBottomScroll(
-                                initialChildSize: 0.45,
+                                initialChildSize: 0.85,
                                 context: context,
                                 child: filterAllWidget());
                           },

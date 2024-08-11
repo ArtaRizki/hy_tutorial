@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../helper/constant.dart';
 
@@ -36,6 +37,83 @@ class CustomButton {
                   color: Colors.white,
                 ),
             textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Widget mainButtonSpinner(
+    String text,
+    VoidCallback onClick, {
+    Color? color,
+    EdgeInsetsGeometry? margin,
+    bool stretched = true,
+    bool enabled = true,
+    EdgeInsetsGeometry? contentPadding,
+    TextStyle? textStyle,
+    double? fontSize,
+    BorderRadiusGeometry? borderRadius,
+  }) {
+    return Padding(
+      padding: margin ?? EdgeInsets.all(0),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all<Color>(color ??
+              (enabled == true ? Constant.primaryColor : Constant.grayColor)),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: borderRadius ?? BorderRadius.circular(25))),
+          elevation: WidgetStateProperty.all<double>(0),
+        ),
+        onPressed: enabled ? onClick : null,
+        child: Container(
+          padding: contentPadding ?? EdgeInsets.all(16),
+          alignment: stretched ? Alignment.center : null,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 4,
+                child: !EasyLoading.isShow
+                    ? SizedBox()
+                    : Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: SizedBox(
+                            width: 24,
+                            height: 20,
+                            child: FittedBox(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 2),
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 3,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+              Expanded(
+                flex: 6,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    text,
+                    style: textStyle ??
+                        TextStyle(
+                          fontWeight: Constant.medium,
+                          fontSize: fontSize ?? 16,
+                          color: Colors.white,
+                        ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

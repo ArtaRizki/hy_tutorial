@@ -120,7 +120,9 @@ class BaseController<S extends BaseState> {
         throw 'Timeout';
       }
     }
-    if (response.statusCode == 401) {
+    if (response.statusCode == 401 &&
+        !(response.body.contains("invalid token") ||
+            response.body.contains("expired token"))) {
       _preferences!.clear();
       BuildContext? context = NavigationService.navigatorKey.currentContext;
       if (context != null)
@@ -220,7 +222,9 @@ class BaseController<S extends BaseState> {
           throw 'Timeout';
         }
       }
-      if (response.statusCode == 401) {
+      if (response.statusCode == 401 &&
+          !(response.body.contains("invalid token") ||
+              response.body.contains("expired token"))) {
         _preferences!.clear();
         BuildContext? context = NavigationService.navigatorKey.currentContext;
         if (context != null)
@@ -308,7 +312,9 @@ class BaseController<S extends BaseState> {
           throw 'Timeout';
         }
       }
-      if (response.statusCode == 401) {
+      if (response.statusCode == 401 &&
+          !(response.body.contains("invalid token") ||
+              response.body.contains("expired token"))) {
         _preferences!.clear();
         BuildContext? context = NavigationService.navigatorKey.currentContext;
         if (context != null)
@@ -405,7 +411,9 @@ class BaseController<S extends BaseState> {
           throw 'Timeout';
         }
       }
-      if (response.statusCode == 401) {
+      if (response.statusCode == 401 &&
+          !(response.body.contains("invalid token") ||
+              response.body.contains("expired token"))) {
         _preferences!.clear();
         BuildContext? context = NavigationService.navigatorKey.currentContext;
         if (context != null)
@@ -491,7 +499,9 @@ class BaseController<S extends BaseState> {
           throw 'Timeout';
         }
       }
-      if (response.statusCode == 401) {
+      if (response.statusCode == 401 &&
+          !(response.body.contains("invalid token") ||
+              response.body.contains("expired token"))) {
         _preferences!.clear();
         BuildContext? context = NavigationService.navigatorKey.currentContext;
         if (context != null)
@@ -584,7 +594,9 @@ class BaseController<S extends BaseState> {
         throw 'Timeout';
       }
     }
-    if (response.statusCode == 401) {
+    if (response.statusCode == 401 &&
+        !(response.body.contains("invalid token") ||
+            response.body.contains("expired token"))) {
       _preferences!.clear();
       BuildContext? context = NavigationService.navigatorKey.currentContext;
       if (context != null)

@@ -50,6 +50,8 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
   bool get isLoading => this._isLoading;
   set isLoading(bool value) => this._isLoading = value;
 
+  bool checkIsLoading() => EasyLoading.isShow;
+
   loading(bool show) {
     if (show) {
       isLoading = true;

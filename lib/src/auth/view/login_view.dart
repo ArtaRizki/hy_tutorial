@@ -15,9 +15,11 @@ class LoginView extends StatefulWidget {
 }
 
 class LoginViewState extends BaseState<LoginView> {
+  AuthProvider authProvider = AuthProvider();
   @override
   void initState() {
     final authP = context.read<AuthProvider>();
+    setController(authProvider);
     authP.loginViewState = this;
     super.initState();
   }
@@ -108,8 +110,12 @@ class LoginViewState extends BaseState<LoginView> {
                     labelColor: Constant.primaryColor,
                     borderColor: Constant.primaryColor.withOpacity(0.5),
                     obscureText: authP.obscurePass,
-                    onEditingComplete: () async =>
-                        await context.read<AuthProvider>().login(context),
+                    onEditingComplete: () async {
+                      setState(() {});
+                      if (authP.validateLogin())
+                        await context.read<AuthProvider>().login(context);
+                      setState(() {});
+                    },
                     suffixIcon: InkWell(
                       onTap: () => authP.toggleObscurePass(),
                       child: Icon(
@@ -123,9 +129,11 @@ class LoginViewState extends BaseState<LoginView> {
                 ],
               ),
               SizedBox(height: 30),
-              CustomButton.mainButton("Masuk", () async {
+              CustomButton.mainButtonSpinner("Masuk", () async {
+                setState(() {});
                 if (authP.validateLogin())
                   await context.read<AuthProvider>().login(context);
+                setState(() {});
               },
                   borderRadius: BorderRadius.circular(10),
                   contentPadding: EdgeInsets.symmetric(vertical: 8),

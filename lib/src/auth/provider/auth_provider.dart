@@ -110,6 +110,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
       if (passC.text.isEmpty) throw 'Harap isi password';
 
       loading(true);
+      notifyListeners();
       FocusManager.instance.primaryFocus?.unfocus();
       Map<String, String> param = {
         'Username': usernameC.text,
@@ -120,6 +121,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         loading(false);
+        notifyListeners();
         final model = LoginModel.fromJson(jsonDecode(response.body));
 
         // set to shared preferences
@@ -144,10 +146,13 @@ class AuthProvider extends BaseController with ChangeNotifier {
         passC.text = '';
       } else {
         loading(false);
+        notifyListeners();
         final message = jsonDecode(response.body)["Message"];
         await Utils.showFailed(msg: message ?? "Error");
       }
     } catch (e) {
+      loading(false);
+      notifyListeners();
       prefs.clear();
       await Utils.showFailed(
           msg: e.toString().toLowerCase().contains("doctype")

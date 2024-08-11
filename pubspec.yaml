@@ -69,6 +69,7 @@ dependencies:
   shared_preferences: ^2.0.5
   shimmer: ^3.0.0
   sizer: ^2.0.15
+  syncfusion_flutter_datepicker: ^26.2.8
 
 # dependency_overrides:
 #   firebase_messaging_platform_interface: 3.1.6

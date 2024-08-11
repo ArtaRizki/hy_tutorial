@@ -152,7 +152,7 @@ class Utils {
       ..progressColor = Colors.white
       ..indicatorSize = 42
       ..maskType = EasyLoadingMaskType.black
-      ..indicatorType = EasyLoadingIndicatorType.pulse
+      ..indicatorType = EasyLoadingIndicatorType.dualRing
       ..backgroundColor = Constant.backgroundColor
       ..dismissOnTap = true
       ..indicatorColor = Constant.primaryColor;
@@ -191,7 +191,7 @@ class Utils {
       ..dismissOnTap = false
       ..loadingStyle = EasyLoadingStyle.custom
       ..maskType = EasyLoadingMaskType.black
-      ..indicatorType = EasyLoadingIndicatorType.pulse
+      ..indicatorType = EasyLoadingIndicatorType.dualRing
       // ..textStyle = TextStyle(fontWeight: FontWeight.bold)
       ..textColor = Colors.black
       ..indicatorColor = Constant.primaryColor;
@@ -397,8 +397,7 @@ class Utils {
       {double? width, double? height, double? textSize, double? padding}) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor:
-            WidgetStateProperty.all<Color>(Constant.primaryColor),
+        backgroundColor: WidgetStateProperty.all<Color>(Constant.primaryColor),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
