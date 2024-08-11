@@ -15,10 +15,13 @@ class Assets {
   static const String fontsSFProDisplaySemibold = 'assets/fonts/SF-Pro-Display-Semibold.otf';
   static const String fontsSFProDisplayThin = 'assets/fonts/SF-Pro-Display-Thin.otf';
   static const String fontsSFProDisplayUltralight = 'assets/fonts/SF-Pro-Display-Ultralight.otf';
+  static const String iconsIcAddData = 'assets/icons/ic-add-data.png';
   static const String iconsIcAddPlta = 'assets/icons/ic-add-plta.png';
   static const String iconsIcAddUser = 'assets/icons/ic-add-user.png';
+  static const String iconsIcAuth = 'assets/icons/ic-auth.png';
   static const String iconsIcButton = 'assets/icons/ic-button.png';
   static const String iconsIcClutch = 'assets/icons/ic-clutch.png';
+  static const String iconsIcDataTerakhir = 'assets/icons/ic-data-terakhir.png';
   static const String iconsIcDelete = 'assets/icons/ic-delete.png';
   static const String iconsIcEdit = 'assets/icons/ic-edit.png';
   static const String iconsIcEditProf = 'assets/icons/ic-edit-prof.png';
@@ -43,8 +46,9 @@ class Assets {
   static const String iconsIcUserBlack = 'assets/icons/ic-user-black.png';
   static const String imagesIconBimops = 'assets/images/icon-bimops.png';
   static const String imagesIconPln = 'assets/images/icon-pln.png';
-  static const String imagesImgLogin = 'assets/images/img-login.png';
+  static const String imagesImgHomeTop = 'assets/images/img-home-top.png';
   static const String imagesImgSplashscreen = 'assets/images/img_splashscreen.png';
+  static const String imagesImgSplashtop = 'assets/images/img_splashtop.png';
   static const String imagesMainImageNotFound = 'assets/images/main-image-not-found.png';
   static const String lottieDownloading = 'assets/lottie/downloading.json';
   static const String lottieFailed = 'assets/lottie/failed.json';

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:hy_tutorial/src/auth/model/firebase_token_model.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
+import 'package:hy_tutorial/src/auth/view/new_login_view.dart';
+import 'package:hy_tutorial/src/auth/view/new_register_view.dart';
 import 'package:hy_tutorial/src/auth/view/register_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +17,9 @@ import '../model/refresh_token_model.dart';
 
 class AuthProvider extends BaseController with ChangeNotifier {
   late LoginViewState loginViewState;
+  late NewLoginViewState newLoginViewState;
   late RegisterViewState registerViewState;
+  late NewRegisterViewState newRegisterViewState;
   TextEditingController nameC = TextEditingController();
   TextEditingController usernameC = TextEditingController();
   TextEditingController emailC = TextEditingController();

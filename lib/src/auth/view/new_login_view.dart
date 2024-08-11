@@ -3,26 +3,27 @@ import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
+import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
+import 'package:hy_tutorial/src/auth/view/new_register_view.dart';
 import 'package:hy_tutorial/src/auth/view/register_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/src/auth/view/splash_screen_new_view.dart';
+import 'package:hy_tutorial/src/home/view/new_home_view.dart';
 import 'package:provider/provider.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class NewLoginView extends StatefulWidget {
+  const NewLoginView({super.key});
 
   @override
-  State<LoginView> createState() => LoginViewState();
+  State<NewLoginView> createState() => NewLoginViewState();
 }
 
-class LoginViewState extends BaseState<LoginView> {
-  AuthProvider authProvider = AuthProvider();
+class NewLoginViewState extends BaseState<NewLoginView> {
   @override
   void initState() {
     final authP = context.read<AuthProvider>();
-    setController(authProvider);
-    authP.loginViewState = this;
+    authP.newLoginViewState = this;
     super.initState();
   }
 
@@ -38,18 +39,18 @@ class LoginViewState extends BaseState<LoginView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/icons/ic-register.png',
-                scale: 4,
+                Assets.iconsIcAuth,
+                scale: 3,
               ),
               SizedBox(
                 height: 15,
               ),
               InkWell(
                 onTap: () {
-                  CusNav.nPush(context, SplashScreenNewView());
+                  CusNav.nPush(context, NewHomeView());
                 },
                 child: Text(
-                  "Selamat Datang",
+                  "Masuk",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
@@ -57,16 +58,6 @@ class LoginViewState extends BaseState<LoginView> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 15,
-              ),
-              Text(
-                  "Selamat datang, sebelum login pastikan kamu memasukan akun dengan benar.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w300)),
               SizedBox(
                 height: 20,
               ),
@@ -77,7 +68,7 @@ class LoginViewState extends BaseState<LoginView> {
                     "Username",
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: Colors.black,
                       fontSize: 14,
                     ),
                   ),
@@ -86,61 +77,55 @@ class LoginViewState extends BaseState<LoginView> {
                     borderRadius: BorderRadius.circular(5),
                     controller: authP.usernameC,
                     fillColor: Colors.white,
-                    hintColor: Constant.quarteryColor,
-                    hintText: "Username",
+                    hintColor: Constant.grayColor.withOpacity(0.5),
+                    hintText: "Masukan username",
                     onChange: (v) {
                       setState(() {});
                     },
                     labelFontSize: 20,
                     labelFontWeight: FontWeight.bold,
-                    labelColor: Constant.primaryColor,
-                    borderColor: Constant.primaryColor.withOpacity(0.5),
+                    labelColor: Constant.redisignColor,
+                    borderColor: Constant.grayColor.withOpacity(0.5),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Password",
+                    "Kata Sandi",
                     textAlign: TextAlign.start,
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                    style: TextStyle(color: Colors.black, fontSize: 14),
                   ),
                   SizedBox(height: 10),
                   CustomTextField.borderTextField(
                     borderRadius: BorderRadius.circular(5),
                     controller: authP.passC,
                     fillColor: Colors.white,
-                    hintColor: Constant.quarteryColor,
-                    hintText: "Password",
+                    hintColor: Constant.grayColor.withOpacity(0.5),
+                    hintText: "Ketik kata sandi",
                     onChange: (v) {
                       setState(() {});
                     },
                     labelFontSize: 20,
                     labelFontWeight: FontWeight.bold,
-                    labelColor: Constant.primaryColor,
-                    borderColor: Constant.primaryColor.withOpacity(0.5),
+                    labelColor: Constant.redisignColor,
+                    borderColor: Constant.grayColor.withOpacity(0.5),
                     obscureText: authP.obscurePass,
-                    onEditingComplete: () async {
-                      setState(() {});
-                      if (authP.validateLogin())
-                        await context.read<AuthProvider>().login(context);
-                      setState(() {});
-                    },
+                    onEditingComplete: () async =>
+                    await context.read<AuthProvider>().login(context),
                     suffixIcon: InkWell(
                       onTap: () => authP.toggleObscurePass(),
                       child: Icon(
                         authP.obscurePass
                             ? Icons.visibility_off_outlined
                             : Icons.visibility,
-                        color: Constant.primaryColor,
+                        color: Constant.redisignColor,
                       ),
                     ),
                   ),
                 ],
               ),
               SizedBox(height: 30),
-              CustomButton.mainButtonSpinner("Masuk", () async {
-                setState(() {});
+              CustomButton.mainButton("Masuk", () async {
                 if (authP.validateLogin())
                   await context.read<AuthProvider>().login(context);
-                setState(() {});
               },
                   borderRadius: BorderRadius.circular(10),
                   contentPadding: EdgeInsets.symmetric(vertical: 8),
@@ -162,12 +147,12 @@ class LoginViewState extends BaseState<LoginView> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterView()));
+                              builder: (context) => NewRegisterView()));
                     },
                     child: Text(
                       "Daftar",
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600),
+                          color: Constant.redisignColor, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ],
