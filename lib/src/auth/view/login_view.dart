@@ -47,7 +47,7 @@ class LoginViewState extends BaseState<LoginView> {
               ),
               InkWell(
                 onTap: () {
-                  CusNav.nPush(context, HomeNewView());
+                  // CusNav.nPush(context, HomeNewView());
                 },
                 child: Text(
                   "Masuk",

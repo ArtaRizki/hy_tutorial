@@ -33,8 +33,8 @@ class _SplashViewState extends State<SplashView> {
           context,
           isLoggedIn
               ? isAdmin
-                  ? '/new_home'
-                  : '/home'
+                  ? '/home'
+                  : '/new_home'
               : '/boarding',
           arguments: isAdmin,
           (route) => false),

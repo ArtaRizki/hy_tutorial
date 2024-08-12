@@ -630,10 +630,10 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
               final isAdmin =
                   await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
               if (isAdmin) {
-                CusNav.nPushAndRemoveUntil(context, HomeNewView());
-              } else {
                 CusNav.nPushAndRemoveUntil(context, MainHome(index: 2),
                     arguments: isAdmin);
+              } else {
+                CusNav.nPushAndRemoveUntil(context, HomeNewView());
               }
             },
             child: Icon(Icons.arrow_back),
@@ -646,10 +646,10 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
           final isAdmin =
               await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
           if (isAdmin) {
-            CusNav.nPushAndRemoveUntil(context, HomeNewView());
-          } else {
             CusNav.nPushAndRemoveUntil(context, MainHome(index: 2),
                 arguments: isAdmin);
+          } else {
+            CusNav.nPushAndRemoveUntil(context, HomeNewView());
           }
           return true;
         },

@@ -1168,7 +1168,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           if (geo.latitude != 0 && lat != 0) {
             // double distance = Geolocator.distanceBetween(
             //     geo.latitude, geo.longitude, lat ?? 0, lon ?? 0);
-            if (configStatus == true) {
+            if (configStatus == false) {
               selectedPltaModel = v;
               selectedPlta = v.Id ?? '0';
               pltaC.text = v.Name ?? '';

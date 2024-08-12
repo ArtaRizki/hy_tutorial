@@ -140,13 +140,9 @@ class AuthProvider extends BaseController with ChangeNotifier {
             roles == 'admin' || roles == 'main' ? true : false);
 
         if (roles == 'admin' || roles == 'main') {
-          CusNav.nPushAndRemoveUntil(context, HomeNewView(), arguments: true);
+          CusNav.nPushAndRemoveUntil(context, MainHome(), arguments: true);
         } else {
-          Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/home',
-              arguments: await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false,
-              (route) => false);
+          CusNav.nPushAndRemoveUntil(context, HomeNewView());
         }
         usernameC.text = '';
         passC.text = '';
