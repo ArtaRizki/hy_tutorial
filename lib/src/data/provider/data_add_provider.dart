@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
+import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_dropdown.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:powers/powers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,12 +81,14 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     "Turbine",
   ];
   List<int> selectedUpper = [];
+  DataAddViewState? dataAddViewState;
 
   resetData() {
     // pltaList.clear();
     titleC.clear();
     selectedPlta = null;
     selectedPltaModel = null;
+    selectedBolt = null;
     pltaC.text = '';
     genBearingKoplingC.clear();
     koplingTurbinC.clear();
@@ -957,7 +962,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     if (selectedPlta == null) return false;
     if (selectedPltaModel == null) return false;
     // Detail Baut
-    if (boltQtyC.text.isEmpty) return false;
+    // if (boltQtyC.text.isEmpty) return false;
     if (selectedBolt == null) return false;
     if (currentTorqueC.text.isEmpty) return false;
     if (maxTorqueC.text.isEmpty) return false;
@@ -968,6 +973,28 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     return true;
   }
 
+  bool validateAddShaft() {
+    // upper
+    for (int i = 0; i < dataUpperC.length; i++) {
+      for (int j = 0; j < dataUpperC[i].length; j++) {
+        if (dataUpperC[i][j].text.isEmpty) return false;
+      }
+    }
+    // clutch
+    for (int i = 0; i < dataClutchC.length; i++) {
+      for (int j = 0; j < dataClutchC[i].length; j++) {
+        if (dataClutchC[i][j].text.isEmpty) return false;
+      }
+    }
+    // turbine
+    for (int i = 0; i < dataTurbineC.length; i++) {
+      for (int j = 0; j < dataTurbineC[i].length; j++) {
+        if (dataTurbineC[i][j].text.isEmpty) return false;
+      }
+    }
+    return true;
+  }
+
   Future<void> sendCreateTurbines(BuildContext context) async {
     try {
       loading(true);
@@ -975,7 +1002,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       if (response.success == true) {
         Utils.showSuccess(msg: response.message ?? "Sukses");
         await Future.delayed(Duration(seconds: 2));
-        Navigator.push(context, MaterialPageRoute(builder: (c) => ShaftView()));
+        CusNav.nPush(context, ShaftView());
       } else {
         loading(false);
         Utils.showFailed(msg: response.message ?? '');
@@ -1059,10 +1086,10 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       loading(false);
       return model;
     } else {
-      final message = jsonDecode(response.body)["Message"];
+      final message = BaseResponse.from(response).message;
       loading(false);
-      return TurbineCreateModel();
-      // throw Exception(message);
+      throw Exception(message);
+      // return TurbineCreateModel();
     }
   }
 
@@ -1141,7 +1168,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           if (geo.latitude != 0 && lat != 0) {
             // double distance = Geolocator.distanceBetween(
             //     geo.latitude, geo.longitude, lat ?? 0, lon ?? 0);
-            if (configStatus == false) {
+            if (configStatus == true) {
               selectedPltaModel = v;
               selectedPlta = v.Id ?? '0';
               pltaC.text = v.Name ?? '';
@@ -1162,8 +1189,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               selectedPlta = null;
               Utils.showFailed(
                   msg:
-                      'Anda berada di luar batas jangkauan ($radius $radiusType)');
-              throw 'Anda berada di luar batas jangkauan ($radius $radiusType)';
+                      'Lokasi Anda ${distance.toStringAsFixed(2)} ${radiusType} berada di luar batas jangkauan ($radius $radiusType)');
+              throw 'Lokasi Anda ${distance.toStringAsFixed(2)} ${radiusType} berada di luar batas jangkauan ($radius $radiusType)';
             }
           } else {
             pltaC.text = '';
@@ -1203,113 +1230,125 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   List<Widget> detailUnit() {
     return [
-      Text("Detail Unit", style: Constant.iBlackMedium16),
-      Constant.xSizedBox8,
-      Text("Masukan data unit", style: Constant.grayMedium),
-      Constant.xSizedBox16,
-      CustomTextField.borderTextField(
-        required: false,
-        controller: titleC,
-        textInputType: TextInputType.name,
-        labelText: "Nama File",
-        hintText: "Nama File",
-      ),
-      Constant.xSizedBox16,
-      Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Row(
+      CustomContainer.mainCard(
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Nama PLTA",
-              style: Constant.primaryTextStyle
-                  .copyWith(fontSize: 14, fontWeight: Constant.medium),
+            Constant.xSizedBox8,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: Text(
+                "Detail Unit",
+                style: Constant.iBlackMedium16
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
             ),
-            // Text(
-            //   '*',
-            //   style: Constant.primaryTextStyle
-            //       .copyWith(fontWeight: Constant.medium, color: Colors.red),
-            // )
+            Constant.xSizedBox4,
+            Container(
+              height: 1,
+              width: double.infinity,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            Constant.xSizedBox12,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: CustomTextField.borderTextField(
+                required: false,
+                controller: titleC,
+                textInputType: TextInputType.name,
+                labelText: "Nama File",
+                hintText: "Nama File",
+              ),
+            ),
+            Constant.xSizedBox4,
+            Padding(
+              padding: const EdgeInsets.only(
+                  bottom: 10, left: 12, right: 12, top: 4),
+              child: Row(
+                children: [
+                  Text(
+                    "Nama PLTA",
+                    style: Constant.primaryTextStyle
+                        .copyWith(fontSize: 14, fontWeight: Constant.medium),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: DropDownSearchField<PltaModelData?>(
+                displayAllSuggestionWhenTap: true,
+                textFieldConfiguration: TextFieldConfiguration(
+                  controller: pltaC,
+                  autofocus: false,
+                  // style: DefaultTextStyle.of(context).style.copyWith(
+                  //   fontStyle: FontStyle.italic
+                  // ),
+                  onChanged: (value) {},
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero,
+                    hintText: "Pilih PLTA",
+                    isDense: false,
+                    hintStyle: TextStyle(color: Constant.textHintColor2),
+                    filled: true,
+                    enabled: true,
+                    fillColor: Colors.white,
+                    suffixIconColor: Constant.grayColor,
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        pltaC.text = '';
+                        selectedPlta = null;
+                      },
+                      child: Icon(
+                        pltaC.text.isEmpty
+                            ? Icons.keyboard_arrow_down
+                            : Icons.close,
+                        size: 24,
+                      ),
+                    ),
+                    hoverColor: Constant.primaryColor,
+                    focusColor: Constant.primaryColor,
+                    prefix: SizedBox(width: 12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        width: 0.5,
+                        color: Constant.borderSearchColor,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        width: 0.5,
+                        color: Constant.borderSearchColor,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Constant.primaryColor,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                  ),
+                ),
+                onSuggestionSelected: onChangedPLTA2,
+                suggestionsCallback: (pattern) async =>
+                    await searchPlta(pattern),
+                itemBuilder: (context, suggestion) =>
+                    ListTile(title: Text(suggestion?.Name ?? '')),
+              ),
+            ),
+            Constant.xSizedBox16,
           ],
         ),
       ),
-      // if ((pltaList ?? []).isNotEmpty)
-      DropDownSearchField<PltaModelData?>(
-        displayAllSuggestionWhenTap: true,
-        textFieldConfiguration: TextFieldConfiguration(
-          controller: pltaC,
-          autofocus: false,
-          // style: DefaultTextStyle.of(context).style.copyWith(
-          //   fontStyle: FontStyle.italic
-          // ),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.zero,
-            hintText: "Pilih PLTA",
-            isDense: false,
-            hintStyle: TextStyle(color: Constant.textHintColor2),
-            filled: true,
-            enabled: true,
-            fillColor: Colors.white,
-            suffixIconColor: Constant.primaryColor,
-            // suffixIcon: InkWell(
-            //   onTap: () {
-            //     FocusManager.instance.primaryFocus?.unfocus();
-            //     pltaC.text = '';
-            //     selectedPlta = null;
-            //     refresh;
-            //   },
-            //   child: Icon(
-            //     Icons.close,
-            //     size: 24,
-            //   ),
-            // ),
-            hoverColor: Constant.primaryColor,
-            focusColor: Constant.primaryColor,
-            prefix: SizedBox(width: 12),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                width: 0.5,
-                color: Constant.borderSearchColor,
-                style: BorderStyle.solid,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                width: 0.5,
-                color: Constant.borderSearchColor,
-                style: BorderStyle.solid,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                width: 1,
-                color: Constant.primaryColor,
-                style: BorderStyle.solid,
-              ),
-            ),
-          ),
-        ),
-        onSuggestionSelected: onChangedPLTA2,
-        suggestionsCallback: (pattern) async => await searchPlta(pattern),
-        itemBuilder: (context, suggestion) =>
-            ListTile(title: Text(suggestion?.Name ?? '')),
-      ),
-      Constant.xSizedBox16,
-      // CustomDropdown.searchDropdown(
-      //   controller: pltaC,
-      //   iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-      //   contentPadding: EdgeInsets.all(2),
-      //   padding: EdgeInsets.zero,
-      //   borderColor: Constant.primaryColor,
-      //   labelText: 'Nama PLTA',
-      //   selectedItem: selectedPlta,
-      //   hintText: "Pilih PLTA",
-      //   list: (pltaList ?? []).map((e) => e?.Name ?? '').toList(),
-      //   onChanged: onChangedPLTA,
-      // ),
-      // Constant.xSizedBox16,
     ];
   }
 
@@ -1678,6 +1717,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
   }
 
+  VoidCallback? refresh;
+
   // DATA UPPER
   List<List<TextEditingController>> dataUpperC = [];
   List<TableRow> wDataUpperRow = [];
@@ -1701,10 +1742,22 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ]);
         wDataUpperRow.add(TableRow(children: [
           Text('$i', textAlign: TextAlign.center),
-          CustomTextField.tableTextField(controller: dataUpperC[i - 1][0]),
-          CustomTextField.tableTextField(controller: dataUpperC[i - 1][1]),
-          CustomTextField.tableTextField(controller: dataUpperC[i - 1][2]),
-          CustomTextField.tableTextField(controller: dataUpperC[i - 1][3]),
+          CustomTextField.tableTextField(
+            controller: dataUpperC[i - 1][0],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataUpperC[i - 1][1],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataUpperC[i - 1][2],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataUpperC[i - 1][3],
+            onChange: (_) => notifyListeners(),
+          ),
         ]));
       }
     }
@@ -1771,10 +1824,22 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         }
         wDataUpperRow.add(TableRow(children: [
           Text('$i', textAlign: TextAlign.center),
-          CustomTextField.tableTextField(controller: dataUpperC[i - 1][0]),
-          CustomTextField.tableTextField(controller: dataUpperC[i - 1][1]),
-          CustomTextField.tableTextField(controller: dataUpperC[i - 1][2]),
-          CustomTextField.tableTextField(controller: dataUpperC[i - 1][3]),
+          CustomTextField.tableTextField(
+            controller: dataUpperC[i - 1][0],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataUpperC[i - 1][1],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataUpperC[i - 1][2],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataUpperC[i - 1][3],
+            onChange: (_) => notifyListeners(),
+          ),
         ]));
       }
     }
@@ -1800,101 +1865,22 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             children: wDataUpperRow,
           ),
         ),
-        // Constant.xSizedBox12,
-        // Column(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: List.generate(
-        //     wDataUpperRow.length + 1,
-        //     (index) {
-        //       return Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
-        //         child: InkWell(
-        //           onTap: index == 0 || index == 1
-        //               ? null
-        //               : () async {
-        //                   // jika ADD BARIS
-        //                   if (index == wDataUpperRow.length) {
-        //                     dataUpperC.add([
-        //                       TextEditingController(),
-        //                       TextEditingController(),
-        //                       TextEditingController(),
-        //                       TextEditingController(),
-        //                     ]);
-        //                     wDataUpperRow.add(TableRow(children: [
-        //                       Text('$index', textAlign: TextAlign.center),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataUpperC[index - 1][0]),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataUpperC[index - 1][1]),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataUpperC[index - 1][2]),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataUpperC[index - 1][3]),
-        //                     ]));
-        //                   }
-        //                   // JIKA HAPUS BARIS DI INDEKS TERTENTU
-        //                   else {
-        //                     await Utils.showYesNoDialog(
-        //                       context: context,
-        //                       title: "Konfirmasi",
-        //                       desc: "Apakah Anda Yakin Ingin Hapus Data Ini?",
-        //                       yesCallback: () async {
-        //                         Navigator.pop(context);
-        //                         try {
-        //                           if (wDataUpperRow.length > 2) {
-        //                             wDataUpperRow.removeAt(index);
-        //                             dataUpperC.removeAt(index - 1);
-        //                           }
-        //                         } catch (e) {
-        //                           Utils.showFailed(msg: "Gagal hapus data");
-        //                         }
-        //                       },
-        //                       noCallback: () => Navigator.pop(context),
-        //                     );
-        //                   }
-        //                   notifyListeners();
-        //                 },
-        //           child: Icon(
-        //             index == wDataUpperRow.length
-        //                 ? Icons.add_circle_rounded
-        //                 : Icons.remove_circle_rounded,
-        //             color: index == 0 || index == 1
-        //                 ? Colors.white
-        //                 : index == wDataUpperRow.length
-        //                     ? Constant.greenColor
-        //                     : Constant.redColor,
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // )
       ],
     );
   }
 
-  List<Widget> upperForm(BuildContext context) {
-    return [
-      Text("Upper", style: Constant.blackBold20),
-      Constant.xSizedBox8,
-      Text("Masukan data upper pada tabel", style: Constant.grayMedium),
-      Constant.xSizedBox16,
-      tableFormUpper(context),
-      // Container(
-      //   decoration: BoxDecoration(
-      //       border: Border.all(color: Constant.borderSearchColor),
-      //       borderRadius: BorderRadius.circular(5)),
-      //   child: Column(
-      //     children: [
-      //       labelNo(),
-      //       valueTable(),
-      //       valueTable(),
-      //       valueTable(),
-      //     ],
-      //   ),
-      // ),
-      Constant.xSizedBox16,
-    ];
+  Widget upperForm(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Text("Upper", style: Constant.blackBold20),
+        Constant.xSizedBox8,
+        Text("Masukan data upper pada tabel", style: Constant.grayMedium),
+        Constant.xSizedBox16,
+        tableFormUpper(context),
+        Constant.xSizedBox16,
+      ],
+    );
   }
 
   // DATA CLUTCH /KOPLING
@@ -1920,10 +1906,22 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ]);
         wDataClutchRow.add(TableRow(children: [
           Text('$i', textAlign: TextAlign.center),
-          CustomTextField.tableTextField(controller: dataClutchC[i - 1][0]),
-          CustomTextField.tableTextField(controller: dataClutchC[i - 1][1]),
-          CustomTextField.tableTextField(controller: dataClutchC[i - 1][2]),
-          CustomTextField.tableTextField(controller: dataClutchC[i - 1][3]),
+          CustomTextField.tableTextField(
+            controller: dataClutchC[i - 1][0],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataClutchC[i - 1][1],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataClutchC[i - 1][2],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataClutchC[i - 1][3],
+            onChange: (_) => notifyListeners(),
+          ),
         ]));
       }
     }
@@ -1990,10 +1988,22 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         }
         wDataClutchRow.add(TableRow(children: [
           Text('$i', textAlign: TextAlign.center),
-          CustomTextField.tableTextField(controller: dataClutchC[i - 1][0]),
-          CustomTextField.tableTextField(controller: dataClutchC[i - 1][1]),
-          CustomTextField.tableTextField(controller: dataClutchC[i - 1][2]),
-          CustomTextField.tableTextField(controller: dataClutchC[i - 1][3]),
+          CustomTextField.tableTextField(
+            controller: dataClutchC[i - 1][0],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataClutchC[i - 1][1],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataClutchC[i - 1][2],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataClutchC[i - 1][3],
+            onChange: (_) => notifyListeners(),
+          ),
         ]));
       }
     }
@@ -2019,101 +2029,21 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             children: wDataClutchRow,
           ),
         ),
-        // Constant.xSizedBox12,
-        // Column(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: List.generate(
-        //     wDataClutchRow.length + 1,
-        //     (index) {
-        //       return Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
-        //         child: InkWell(
-        //           onTap: index == 0 || index == 1
-        //               ? null
-        //               : () async {
-        //                   // jika ADD BARIS
-        //                   if (index == wDataClutchRow.length) {
-        //                     dataClutchC.add([
-        //                       TextEditingController(),
-        //                       TextEditingController(),
-        //                       TextEditingController(),
-        //                       TextEditingController(),
-        //                     ]);
-        //                     wDataClutchRow.add(TableRow(children: [
-        //                       Text('$index', textAlign: TextAlign.center),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataClutchC[index - 1][0]),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataClutchC[index - 1][1]),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataClutchC[index - 1][2]),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataClutchC[index - 1][3]),
-        //                     ]));
-        //                   }
-        //                   // JIKA HAPUS BARIS DI INDEKS TERTENTU
-        //                   else {
-        //                     await Utils.showYesNoDialog(
-        //                       context: context,
-        //                       title: "Konfirmasi",
-        //                       desc: "Apakah Anda Yakin Ingin Hapus Data Ini?",
-        //                       yesCallback: () async {
-        //                         Navigator.pop(context);
-        //                         try {
-        //                           if (wDataClutchRow.length > 2) {
-        //                             wDataClutchRow.removeAt(index);
-        //                             dataClutchC.removeAt(index - 1);
-        //                           }
-        //                         } catch (e) {
-        //                           Utils.showFailed(msg: "Gagal hapus data");
-        //                         }
-        //                       },
-        //                       noCallback: () => Navigator.pop(context),
-        //                     );
-        //                   }
-        //                   notifyListeners();
-        //                 },
-        //           child: Icon(
-        //             index == wDataClutchRow.length
-        //                 ? Icons.add_circle_rounded
-        //                 : Icons.remove_circle_rounded,
-        //             color: index == 0 || index == 1
-        //                 ? Colors.white
-        //                 : index == wDataClutchRow.length
-        //                     ? Constant.greenColor
-        //                     : Constant.redColor,
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // )
       ],
     );
   }
 
-  List<Widget> clutchForm(BuildContext context) {
-    return [
-      Text("Clutch", style: Constant.blackBold20),
-      Constant.xSizedBox8,
-      Text("Masukan data upper pada tabel", style: Constant.grayMedium),
-      Constant.xSizedBox16,
-      tableFormClutch(context),
-      // Container(
-      //   decoration: BoxDecoration(
-      //       border: Border.all(color: Constant.borderSearchColor),
-      //       borderRadius: BorderRadius.circular(5)),
-      //   child: Column(
-      //     children: [
-      //       labelNo(),
-      //       valueTable(),
-      //       valueTable(),
-      //       valueTable(),
-      //     ],
-      //   ),
-      // ),
-      Constant.xSizedBox16,
-    ];
+  Widget clutchForm(BuildContext context) {
+    return ListView(
+      children: [
+        Text("Clutch", style: Constant.blackBold20),
+        Constant.xSizedBox8,
+        Text("Masukan data upper pada tabel", style: Constant.grayMedium),
+        Constant.xSizedBox16,
+        tableFormClutch(context),
+        Constant.xSizedBox16,
+      ],
+    );
   }
 
   // DATA TURBINE
@@ -2139,10 +2069,22 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ]);
         wDataTurbineRow.add(TableRow(children: [
           Text('$i', textAlign: TextAlign.center),
-          CustomTextField.tableTextField(controller: dataTurbineC[i - 1][0]),
-          CustomTextField.tableTextField(controller: dataTurbineC[i - 1][1]),
-          CustomTextField.tableTextField(controller: dataTurbineC[i - 1][2]),
-          CustomTextField.tableTextField(controller: dataTurbineC[i - 1][3]),
+          CustomTextField.tableTextField(
+            controller: dataTurbineC[i - 1][0],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataTurbineC[i - 1][1],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataTurbineC[i - 1][2],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataTurbineC[i - 1][3],
+            onChange: (_) => notifyListeners(),
+          ),
         ]));
       }
     }
@@ -2209,10 +2151,22 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         }
         wDataTurbineRow.add(TableRow(children: [
           Text('$i', textAlign: TextAlign.center),
-          CustomTextField.tableTextField(controller: dataTurbineC[i - 1][0]),
-          CustomTextField.tableTextField(controller: dataTurbineC[i - 1][1]),
-          CustomTextField.tableTextField(controller: dataTurbineC[i - 1][2]),
-          CustomTextField.tableTextField(controller: dataTurbineC[i - 1][3]),
+          CustomTextField.tableTextField(
+            controller: dataTurbineC[i - 1][0],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataTurbineC[i - 1][1],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataTurbineC[i - 1][2],
+            onChange: (_) => notifyListeners(),
+          ),
+          CustomTextField.tableTextField(
+            controller: dataTurbineC[i - 1][3],
+            onChange: (_) => notifyListeners(),
+          ),
         ]));
       }
     }
@@ -2238,101 +2192,21 @@ class DataAddProvider extends BaseController with ChangeNotifier {
             children: wDataTurbineRow,
           ),
         ),
-        // Constant.xSizedBox12,
-        // Column(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: List.generate(
-        //     wDataTurbineRow.length + 1,
-        //     (index) {
-        //       return Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
-        //         child: InkWell(
-        //           onTap: index == 0 || index == 1
-        //               ? null
-        //               : () async {
-        //                   // jika ADD BARIS
-        //                   if (index == wDataTurbineRow.length) {
-        //                     dataTurbineC.add([
-        //                       TextEditingController(),
-        //                       TextEditingController(),
-        //                       TextEditingController(),
-        //                       TextEditingController(),
-        //                     ]);
-        //                     wDataTurbineRow.add(TableRow(children: [
-        //                       Text('$index', textAlign: TextAlign.center),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataTurbineC[index - 1][0]),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataTurbineC[index - 1][1]),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataTurbineC[index - 1][2]),
-        //                       CustomTextField.tableTextField(
-        //                           controller: dataTurbineC[index - 1][3]),
-        //                     ]));
-        //                   }
-        //                   // JIKA HAPUS BARIS DI INDEKS TERTENTU
-        //                   else {
-        //                     await Utils.showYesNoDialog(
-        //                       context: context,
-        //                       title: "Konfirmasi",
-        //                       desc: "Apakah Anda Yakin Ingin Hapus Data Ini?",
-        //                       yesCallback: () async {
-        //                         Navigator.pop(context);
-        //                         try {
-        //                           if (wDataTurbineRow.length > 2) {
-        //                             wDataTurbineRow.removeAt(index);
-        //                             dataTurbineC.removeAt(index - 1);
-        //                           }
-        //                         } catch (e) {
-        //                           Utils.showFailed(msg: "Gagal hapus data");
-        //                         }
-        //                       },
-        //                       noCallback: () => Navigator.pop(context),
-        //                     );
-        //                   }
-        //                   notifyListeners();
-        //                 },
-        //           child: Icon(
-        //             index == wDataTurbineRow.length
-        //                 ? Icons.add_circle_rounded
-        //                 : Icons.remove_circle_rounded,
-        //             color: index == 0 || index == 1
-        //                 ? Colors.white
-        //                 : index == wDataTurbineRow.length
-        //                     ? Constant.greenColor
-        //                     : Constant.redColor,
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // )
       ],
     );
   }
 
-  List<Widget> turbineForm(BuildContext context) {
-    return [
-      Text("Turbine", style: Constant.blackBold20),
-      Constant.xSizedBox8,
-      Text("Masukan data upper pada tabel", style: Constant.grayMedium),
-      Constant.xSizedBox16,
-      tableFormTurbine(context),
-      // Container(
-      //   decoration: BoxDecoration(
-      //       border: Border.all(color: Constant.borderSearchColor),
-      //       borderRadius: BorderRadius.circular(5)),
-      //   child: Column(
-      //     children: [
-      //       labelNo(),
-      //       valueTable(),
-      //       valueTable(),
-      //       valueTable(),
-      //     ],
-      //   ),
-      // ),
-      Constant.xSizedBox16,
-    ];
+  Widget turbineForm(BuildContext context) {
+    return ListView(
+      children: [
+        Text("Turbine", style: Constant.blackBold20),
+        Constant.xSizedBox8,
+        Text("Masukan data upper pada tabel", style: Constant.grayMedium),
+        Constant.xSizedBox16,
+        tableFormTurbine(context),
+        Constant.xSizedBox16,
+      ],
+    );
   }
 
   Widget labelNo() {

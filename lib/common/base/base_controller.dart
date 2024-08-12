@@ -194,6 +194,7 @@ class BaseController<S extends BaseState> {
               headers: h, body: body, encoding: Encoding.getByName("utf-8"))
           .timeout(Duration(seconds: 30),
               onTimeout: () => http.Response("Timeout", 504));
+      log("RESPONSE POST $url STATUS CODE : ${response.statusCode}");
       log("RESPONSE POST $url : ${response.body}");
       log("====================");
       String log2 = "Log : " +

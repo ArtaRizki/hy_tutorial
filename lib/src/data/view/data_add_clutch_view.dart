@@ -26,7 +26,7 @@ class _DataAddClutchViewState extends State<DataAddClutchView> {
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
         child: Column(
           children: [
-            Expanded(child: ListView(children: [...p.clutchForm(context)])),
+            Expanded(child: ListView(children: [p.clutchForm(context)])),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
               child: CustomButton.mainButton('Selanjutnya', () {

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/component/custom_dropdown.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
@@ -554,12 +555,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
         if (back) {
           // Navigator.pop(context);
           final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MainHome(index: 1),
-                  settings: RouteSettings(arguments: isAdmin)),
-              (route) => false);
+          CusNav.nPushAndRemoveUntil(context, MainHome(index: 1),
+              arguments: isAdmin);
           clearForm();
         }
       } else {

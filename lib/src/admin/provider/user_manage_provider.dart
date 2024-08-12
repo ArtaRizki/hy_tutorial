@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -624,12 +625,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       final isAdmin = await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
 
       // Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MainHome(index: 1),
-              settings: RouteSettings(arguments: isAdmin)),
-          (route) => false);
+      CusNav.nPushAndRemoveUntil(context, MainHome(index: 1),
+          arguments: isAdmin);
       clearForm();
     } else {
       final message = jsonDecode(response.body)["Message"];
@@ -665,12 +662,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         next2 = null;
         notifyListeners();
         final isAdmin = await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MainHome(index: 1),
-                settings: RouteSettings(arguments: isAdmin)),
-            (route) => false);
+        CusNav.nPushAndRemoveUntil(context, MainHome(index: 1),
+            arguments: isAdmin);
       }
 
       clearForm();

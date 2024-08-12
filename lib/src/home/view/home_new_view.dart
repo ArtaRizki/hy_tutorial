@@ -15,6 +15,7 @@ import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/data/view/new_data_add_view.dart';
 import 'package:hy_tutorial/src/home/provider/home_provider.dart';
 import 'package:hy_tutorial/src/profile/provider/profile_provider.dart';
+import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:hy_tutorial/src/shaft/view/shaft_detail_view.dart';
 import 'package:hy_tutorial/src/shaft/view/shaft_latest_view.dart';
 import 'package:hy_tutorial/src/turbine/model/turbine_model.dart';
@@ -92,7 +93,7 @@ class _HomeNewViewState extends BaseState<HomeNewView>
                 SizedBox(width: 15),
                 InkWell(
                   onTap: () {
-                    CusNav.nPush(context, NewDataAddView());
+                    CusNav.nPush(context, ProfileView());
                   },
                   child: Image.asset(Assets.iconsIcUser, scale: 5.2),
                 ),
@@ -734,17 +735,20 @@ class _HomeNewViewState extends BaseState<HomeNewView>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              InkWell(
-                                onTap: () async {
-                                  turbineP.turbineSearchN.unfocus();
-                                  await CusNav.nPush(context, DataAddView());
-                                },
-                                child: Column(
-                                  children: [
-                                    Image.asset(Assets.iconsIcAddData),
-                                    SizedBox(height: 10),
-                                    Text("Add Data"),
-                                  ],
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    turbineP.turbineSearchN.unfocus();
+                                    await CusNav.nPush(context,
+                                        DataAddView(isFromCenter: true));
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Image.asset(Assets.iconsIcAddData),
+                                      SizedBox(height: 10),
+                                      Text("Add Data"),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Container(
@@ -752,17 +756,19 @@ class _HomeNewViewState extends BaseState<HomeNewView>
                                 height: 45,
                                 color: Colors.grey.withOpacity(0.5),
                               ),
-                              InkWell(
-                                onTap: () async {
-                                  turbineP.turbineSearchN.unfocus();
-                                  CusNav.nPush(context, ShaftLatestView());
-                                },
-                                child: Column(
-                                  children: [
-                                    Image.asset(Assets.iconsIcDataTerakhir),
-                                    SizedBox(height: 10),
-                                    Text("Data Terakhir"),
-                                  ],
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    turbineP.turbineSearchN.unfocus();
+                                    CusNav.nPush(context, ShaftLatestView());
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Image.asset(Assets.iconsIcDataTerakhir),
+                                      SizedBox(height: 10),
+                                      Text("Data Terakhir"),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

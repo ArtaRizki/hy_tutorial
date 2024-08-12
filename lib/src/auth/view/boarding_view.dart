@@ -43,16 +43,22 @@ class _BoardingViewState extends State<BoardingView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  color: Colors.grey.withOpacity(0.5),
-                  width: 94,
-                  height: 1,
+                Flexible(
+                  child: Container(
+                    color: Colors.grey.withOpacity(0.5),
+                    width: 94,
+                    height: 1,
+                  ),
                 ),
                 SizedBox(width: 5),
                 Text("Belum memiliki akun?"),
                 SizedBox(width: 5),
-                Container(
-                    color: Colors.grey.withOpacity(0.5), width: 94, height: 1),
+                Flexible(
+                  child: Container(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 94,
+                      height: 1),
+                ),
               ],
             ),
             SizedBox(height: 15),

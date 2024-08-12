@@ -31,7 +31,7 @@ class _MainHomeState extends State<MainHome> {
 
   @override
   void initState() {
-    // getData();
+    getData();
     super.initState();
   }
 

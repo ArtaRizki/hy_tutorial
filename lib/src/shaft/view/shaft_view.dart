@@ -2,7 +2,10 @@ import 'dart:developer';
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/src/home/view/home_new_view.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_container.dart';
 import '../../../common/helper/constant.dart';
@@ -90,6 +93,8 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
             isScrollable: true,
             controller: tabController,
             indicatorWeight: 4,
+            tabAlignment: TabAlignment.center,
+            indicatorSize: TabBarIndicatorSize.tab,
             unselectedLabelColor: Constant.grayColor,
             labelColor: Constant.primaryColor,
             unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
@@ -115,6 +120,8 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
             isScrollable: true,
             controller: tabController1,
             indicatorWeight: 4,
+            tabAlignment: TabAlignment.center,
+            indicatorSize: TabBarIndicatorSize.tab,
             unselectedLabelColor: Constant.grayColor,
             labelColor: Constant.primaryColor,
             unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
@@ -619,152 +626,171 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
           context, tabController.index == 2 ? 'Upper' : 'Shaft',
           leading: InkWell(
             onTap: () async {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainHome(index: 2)),
-                  (route) => false);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              final isAdmin =
+                  await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+              if (isAdmin) {
+                CusNav.nPushAndRemoveUntil(context, HomeNewView());
+              } else {
+                CusNav.nPushAndRemoveUntil(context, MainHome(index: 2),
+                    arguments: isAdmin);
+              }
             },
             child: Icon(Icons.arrow_back),
           ),
           color: Constant.primaryColor,
           foregroundColor: Colors.white),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            Text(
-              tabController.index == 2 ? 'Grafik Resultan' : 'Grafik Shaft',
-              style: Constant.iBlackMedium16,
-            ),
-            Constant.xSizedBox4,
-            Row(
-              children: [
-                Expanded(
-                    child: Text(
-                  data?.title ?? '',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.grayColor,
-                      fontWeight: FontWeight.w600),
-                )),
-                Constant.xSizedBox4,
-                Text(
-                  '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(d.turbineCreateModel.data?.createdAt ?? '${DateTime.now()}'))}',
-                  style: TextStyle(color: Constant.textColorBlack),
-                ),
-              ],
-            ),
-            Constant.xSizedBox16,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: CustomContainer.mainCard(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: status == true
-                              ? Image.asset(
-                                  width: 50,
-                                  height: 50,
-                                  'assets/icons/ic-smile.png',
-                                )
-                              : Image.asset(
-                                  width: 50,
-                                  height: 50,
-                                  'assets/icons/ic-sad.png',
-                                ),
-                        ),
-                        Constant.xSizedBox16,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Total Run Out : ',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Constant.xSizedBox4,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 8,
-                                    child: Text(
-                                      '${totalCrockedness ?? 0}',
-                                      textAlign: TextAlign.left,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+      body: WillPopScope(
+        onWillPop: () async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          final isAdmin =
+              await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+          if (isAdmin) {
+            CusNav.nPushAndRemoveUntil(context, HomeNewView());
+          } else {
+            CusNav.nPushAndRemoveUntil(context, MainHome(index: 2),
+                arguments: isAdmin);
+          }
+          return true;
+        },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Text(
+                tabController.index == 2 ? 'Grafik Resultan' : 'Grafik Shaft',
+                style: Constant.iBlackMedium16,
+              ),
+              Constant.xSizedBox4,
+              Row(
+                children: [
+                  Expanded(
+                      child: Text(
+                    data?.title ?? '',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Constant.grayColor,
+                        fontWeight: FontWeight.w600),
+                  )),
+                  Constant.xSizedBox4,
+                  Text(
+                    '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(d.turbineCreateModel.data?.createdAt ?? '${DateTime.now()}'))}',
+                    style: TextStyle(color: Constant.textColorBlack),
+                  ),
+                ],
+              ),
+              Constant.xSizedBox16,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: CustomContainer.mainCard(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: status == true
+                                ? Image.asset(
+                                    width: 50,
+                                    height: 50,
+                                    'assets/icons/ic-smile.png',
+                                  )
+                                : Image.asset(
+                                    width: 50,
+                                    height: 50,
+                                    'assets/icons/ic-sad.png',
                                   ),
-                                  Constant.xSizedBox4,
-                                  Expanded(
-                                    flex: 4,
-                                    child: Text(
-                                      'X 0,01 mm',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Constant.redColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
                           ),
-                        ),
-                      ],
-                    )
-                  ],
+                          Constant.xSizedBox16,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Total Run Out : ',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Constant.xSizedBox4,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 8,
+                                      child: Text(
+                                        '${totalCrockedness ?? 0}',
+                                        textAlign: TextAlign.left,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Constant.xSizedBox4,
+                                    Expanded(
+                                      flex: 4,
+                                      child: Text(
+                                        'X 0,01 mm',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Constant.redColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Constant.xSizedBox16,
-            toggleTab(),
-            Container(
-                child: tabController.index == 2
-                    ? UpperChartView()
-                    : tabController.index == 3
-                        ? BoltChartView()
-                        : SampleChartView(
-                            activeIndex: tabController.index,
-                            typePage: 'create')),
-            Constant.xSizedBox16,
-            Text('Detail Data', style: Constant.iBlackMedium16),
-            Constant.xSizedBox8,
-            Text(
-              tabController1.index == 2
-                  ? 'Detail data clutch yang telah di input'
-                  : tabController1.index == 1
-                      ? 'Detail data turbine yang telah di input'
-                      : 'Detail data upper yang telah di input',
-              style: TextStyle(fontSize: 12, color: Constant.grayColor),
-            ),
-            Constant.xSizedBox16,
-            toggleTab1(),
-            Constant.xSizedBox16,
-            Container(
-              child: tabController1.index == 2
-                  ? turbineActive()
-                  : tabController1.index == 1
-                      ? clutchActive()
-                      : upperActive(),
-            ),
-            Constant.xSizedBox16,
-            acBdActive(),
-            Constant.xSizedBox18,
-          ],
+              Constant.xSizedBox16,
+              toggleTab(),
+              Container(
+                  child: tabController.index == 2
+                      ? UpperChartView()
+                      : tabController.index == 3
+                          ? BoltChartView()
+                          : SampleChartView(
+                              activeIndex: tabController.index,
+                              typePage: 'create')),
+              Constant.xSizedBox16,
+              Text('Detail Data', style: Constant.iBlackMedium16),
+              Constant.xSizedBox8,
+              Text(
+                tabController1.index == 2
+                    ? 'Detail data clutch yang telah di input'
+                    : tabController1.index == 1
+                        ? 'Detail data turbine yang telah di input'
+                        : 'Detail data upper yang telah di input',
+                style: TextStyle(fontSize: 12, color: Constant.grayColor),
+              ),
+              Constant.xSizedBox16,
+              toggleTab1(),
+              Constant.xSizedBox16,
+              Container(
+                child: tabController1.index == 2
+                    ? turbineActive()
+                    : tabController1.index == 1
+                        ? clutchActive()
+                        : upperActive(),
+              ),
+              Constant.xSizedBox16,
+              acBdActive(),
+              Constant.xSizedBox18,
+            ],
+          ),
         ),
       ),
     );
