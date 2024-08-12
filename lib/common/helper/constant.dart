@@ -25,7 +25,7 @@ class Constant {
   ///
   /// Constant.firstColor;
   ///
-  static Color primaryColor = Color(0xFF00A1B8);
+  static Color primaryColor = Color(0xFF084B83);
   static Color secondaryColor = Color(0xFF10345A);
   static Color thirdColor = Color(0xFFFBBB00);
   static Color tertiaryColor = Color(0xFF8CC6FF);

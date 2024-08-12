@@ -744,8 +744,11 @@ class _HomeNewViewState extends BaseState<HomeNewView>
                                   },
                                   child: Column(
                                     children: [
-                                      Image.asset(Assets.iconsIcAddData),
-                                      SizedBox(height: 10),
+                                      Image.asset(
+                                        Assets.iconsIcAddData,
+                                        scale: 4,
+                                      ),
+                                      SizedBox(height: 4),
                                       Text("Add Data"),
                                     ],
                                   ),
@@ -764,8 +767,11 @@ class _HomeNewViewState extends BaseState<HomeNewView>
                                   },
                                   child: Column(
                                     children: [
-                                      Image.asset(Assets.iconsIcDataTerakhir),
-                                      SizedBox(height: 10),
+                                      Image.asset(
+                                        Assets.iconsIcDataTerakhir,
+                                        scale: 4,
+                                      ),
+                                      SizedBox(height: 4),
                                       Text("Data Terakhir"),
                                     ],
                                   ),
