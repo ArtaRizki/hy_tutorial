@@ -137,6 +137,12 @@ class Constant {
     fontSize: 12,
     fontWeight: FontWeight.w300,
   );
+  static TextStyle blackRegular14 = TextStyle(
+    fontFamily: 'Inter',
+    color: textColorBlack,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
   static TextStyle iBlackMedium = TextStyle(
     fontFamily: 'Inter',
     color: textColorBlack,
@@ -172,7 +178,12 @@ class Constant {
     ],
     fontWeight: medium,
   );
-  static TextStyle iBlackMedium16 = TextStyle(
+  static TextStyle iBlackMedium14 = TextStyle(
+    fontFamily: 'Inter',
+    color: textColorBlack,
+    fontSize: 14,
+    fontWeight: medium,
+  );static TextStyle iBlackMedium16 = TextStyle(
     fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 16,

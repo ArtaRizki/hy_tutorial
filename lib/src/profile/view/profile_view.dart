@@ -3,6 +3,8 @@ import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_appbar.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
+import 'package:hy_tutorial/src/home/view/home_admin_new_view.dart';
+import 'package:hy_tutorial/src/home/view/home_new_view.dart';
 import 'package:hy_tutorial/src/profile/model/profile_model.dart';
 import 'package:hy_tutorial/src/profile/view/profile_edit_view.dart';
 import 'package:provider/provider.dart';
@@ -168,9 +170,14 @@ class _ProfileViewState extends BaseState<ProfileView> {
                   Row(
                     children: [
                       SizedBox(width: 5),
-                      Image.asset(
-                        'assets/icons/ic-info.png',
-                        scale: 3.5,
+                      InkWell(
+                        onTap: () {
+                          CusNav.nPush(context, HomeAdminNewView());
+                        },
+                        child: Image.asset(
+                          'assets/icons/ic-info.png',
+                          scale: 3.5,
+                        ),
                       ),
                       SizedBox(width: 13),
                       Expanded(
@@ -178,12 +185,17 @@ class _ProfileViewState extends BaseState<ProfileView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Tentang Aplikasi",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
+                            InkWell(
+                              onTap: () {
+                                CusNav.nPush(context, HomeNewView());
+                              },
+                              child: Text(
+                                "Tentang Aplikasi",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
                             SizedBox(
                               height: 5,
