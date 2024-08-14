@@ -10,6 +10,7 @@ import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/src/data/view/tambah_plta_new_view.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
@@ -412,6 +413,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
               ),
               child: InkWell(
                 onTap: (){
+                  CusNav.nPush(context, TambahPLTANewView());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
