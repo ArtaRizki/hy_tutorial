@@ -69,7 +69,7 @@ class Constant {
       TextStyle(fontFamily: 'Inter', color: textPriceColor);
   static TextStyle s12BoldBlack = TextStyle(
     fontFamily: 'Inter',
-    color: textColor,
+    color: Colors.black,
     fontWeight: FontWeight.bold,
   );
 

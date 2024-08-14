@@ -9,6 +9,8 @@ import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
+import 'package:hy_tutorial/src/admin/view/user_manage_new_view.dart';
+import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:hy_tutorial/src/shaft/view/shaft_detail_view.dart';
@@ -790,7 +792,7 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
 
     kontenUserReq() {
       return Container(
-        height: 425,
+        height: 320,
         child: Expanded(
           flex: 6,
           child: Padding(
@@ -801,10 +803,15 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
                 children: [
                   Row(
                     children: [
-                      Text(
-                        "User Request",
-                        style: Constant.blackBold16
-                            .copyWith(fontWeight: FontWeight.w600),
+                      InkWell(
+                        onTap: () {
+                          CusNav.nPush(context, UserManageNewView());
+                        },
+                        child: Text(
+                          "User Request",
+                          style: Constant.blackBold16
+                              .copyWith(fontWeight: FontWeight.w600),
+                        ),
                       ),
                       SizedBox(
                         width: 10,
