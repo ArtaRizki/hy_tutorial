@@ -1,5 +1,6 @@
 import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
@@ -149,9 +150,22 @@ class _MainHomeState extends State<MainHome> {
                   width: 25,
                   height: 25,
                   child: FittedBox(
+                      child: Image.asset(Assets.iconsIcPltaBlack,
+                    color: currentIndex == 3
+                        ? Constant.primaryColor
+                        : Color(0xff8A8C8D),
+                  ))),
+              label: 'Profile',
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                  padding: EdgeInsets.only(bottom: 4),
+                  width: 25,
+                  height: 25,
+                  child: FittedBox(
                       child: Image.asset(
                     'assets/icons/ic-profile.png',
-                    color: currentIndex == 3
+                    color: currentIndex == 4
                         ? Constant.primaryColor
                         : Color(0xff8A8C8D),
                   ))),
