@@ -9,14 +9,20 @@ import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
+import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
+import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
+import 'package:hy_tutorial/src/admin/view/user_detail_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_new_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
+import 'package:hy_tutorial/src/home/provider/home_provider.dart';
+import 'package:hy_tutorial/src/profile/provider/profile_provider.dart';
 import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:hy_tutorial/src/shaft/view/shaft_detail_view.dart';
 import 'package:hy_tutorial/src/shaft/view/shaft_latest_view.dart';
 import 'package:hy_tutorial/src/turbine/model/turbine_model.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
+import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +58,8 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
       turbineP.next2 = null;
       turbineP.getTurbine2();
     }
+
+    context.read<HomeProvider>().getData(context);
     super.initState();
   }
 
@@ -67,6 +75,9 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
     // if (turbineP.turbineSearchN.hasFocus) turbineP.turbineSearchN.unfocus();
     final pagingC = context.watch<TurbineProvider>().pagingController;
     final pagingC2 = context.watch<TurbineProvider>().pagingController2;
+    final homeP = context.watch<HomeProvider>();
+    final profile = context.watch<ProfileProvider>().profileModel.Data;
+    final userList = homeP.userListModel.Data;
 
     Widget headKonten() {
       return Container(
@@ -697,92 +708,478 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
     }
 
     headerKonten() {
-      return Container(
+      return SizedBox(
         height: 190,
-        child: Expanded(
-          flex: 3,
-          child: Container(
-            width: double.infinity,
-            child: Stack(
+        width: double.infinity,
+        child: Stack(
+          children: [
+            headKonten(),
+            Positioned(
+              bottom: 15,
+              right: 0,
+              left: 0,
+              child: CustomContainer.mainCard(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            turbineP.turbineSearchN.unfocus();
+                            await CusNav.nPush(
+                                context, DataAddView(isFromCenter: true));
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                "128",
+                                style: Constant.blackBold16,
+                              ),
+                              SizedBox(height: 4),
+                              Text("User Aktif"),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 45,
+                        color: Colors.grey.withOpacity(0.5),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            turbineP.turbineSearchN.unfocus();
+                            CusNav.nPush(context, ShaftLatestView());
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                "8",
+                                style: Constant.blackBold16,
+                              ),
+                              SizedBox(height: 4),
+                              Text("PLTA"),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 45,
+                        color: Colors.grey.withOpacity(0.5),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            turbineP.turbineSearchN.unfocus();
+                            CusNav.nPush(context, ShaftLatestView());
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                "4",
+                                style: Constant.blackBold16,
+                              ),
+                              SizedBox(height: 4),
+                              Text("Laporan"),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget itemShimmer() {
+      return Column(
+        children: [
+          CustomContainer.mainCard(
+            isShadow: false,
+            child: Row(
               children: [
-                headKonten(),
-                Positioned(
-                  bottom: 15,
-                  right: 0,
-                  left: 0,
-                  child: CustomContainer.mainCard(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () async {
-                                turbineP.turbineSearchN.unfocus();
-                                await CusNav.nPush(
-                                    context, DataAddView(isFromCenter: true));
+                Expanded(
+                  flex: 2,
+                  child: Skeleton<List<UserListModelData?>?>(
+                    value: userList,
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: Colors.white,
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/icons/ic-user-black.png',
+                          ),
+                          scale: 3,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Skeleton<List<UserListModelData?>?>(
+                        value: userList,
+                        child: Text(
+                          'Namaaaaaaaaa',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                      Skeleton<List<UserListModelData?>?>(
+                        value: userList,
+                        child: Text(
+                          'Divisiiiiiiiii -',
+                          style: TextStyle(
+                            color: Constant.textHintColor2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Skeleton<List<UserListModelData?>?>(
+                    value: userList,
+                    child: Container(
+                      padding: EdgeInsets.all(7),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Constant.redColor),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Tolak",
+                          style: Constant.redMedium12,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  flex: 3,
+                  child: Skeleton<List<UserListModelData?>?>(
+                    value: userList,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 7),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Constant.primaryColor),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Terima",
+                          style: Constant.iBlackMedium12,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+        ],
+      );
+    }
+
+    Widget itemList(int index) {
+      final item = userList?[index];
+      return InkWell(
+        onTap: () async {
+          await CusNav.nPush(context, UserDetailView(id: item?.Id ?? ''));
+          await context.read<HomeProvider>().fetchUserList();
+        },
+        child: Column(
+          children: [
+            CustomContainer.mainCard(
+              isShadow: false,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Skeleton<List<UserListModelData?>?>(
+                      value: userList,
+                      child: Image.asset(Assets.iconsIcUserBlack),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 12,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Skeleton<List<UserListModelData?>?>(
+                          value: userList,
+                          child: Text(item?.Name ?? 'Nama -',
+                              style: Constant.iBlackMedium14),
+                        ),
+                        Skeleton<List<UserListModelData?>?>(
+                          value: userList,
+                          child: Text(item?.Division ?? 'Divisi -',
+                              style: Constant.blackRegular12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Skeleton<List<UserListModelData?>?>(
+                      value: userList,
+                      child: InkWell(
+                        onTap: () async {
+                          await Utils.showYesNoDialog(
+                              context: context,
+                              title: "Konfirmasi",
+                              desc: "Apakah Anda Yakin Menolak User Ini?",
+                              yesCallback: () async {
+                                CusNav.nPop(context);
+                                final p = context.read<UserManageProvider>();
+                                handleTap(() async {
+                                  p.selectedStatus = '2';
+                                  await p.updateUser(
+                                    context,
+                                    id: item?.Id ?? '',
+                                    fromHome: true,
+                                  );
+
+                                  p.selectedStatus = null;
+
+                                  await context
+                                      .read<HomeProvider>()
+                                      .getData(context);
+                                  ;
+                                });
                               },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "128",
-                                    style: Constant.blackBold16,
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text("User Aktif"),
-                                ],
-                              ),
-                            ),
+                              noCallback: () => CusNav.nPop(context));
+                        },
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(7),
+                              border: Border.all(width: 1, color: Colors.red)),
+                          child: Icon(
+                            Icons.close,
+                            size: 20,
+                            color: Colors.red,
                           ),
-                          Container(
-                            width: 1,
-                            height: 45,
-                            color: Colors.grey.withOpacity(0.5),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () async {
-                                turbineP.turbineSearchN.unfocus();
-                                CusNav.nPush(context, ShaftLatestView());
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    flex: 6,
+                    child: Skeleton<List<UserListModelData?>?>(
+                      value: userList,
+                      child: InkWell(
+                        onTap: () async {
+                          await Utils.showYesNoDialog(
+                              context: context,
+                              title: "Konfirmasi",
+                              desc: "Apakah Anda Yakin Menerima User Ini?",
+                              yesCallback: () async {
+                                CusNav.nPop(context);
+                                final p = context.read<UserManageProvider>();
+                                handleTap(() async {
+                                  p.selectedStatus = '1';
+                                  await p.updateUser(
+                                    context,
+                                    id: item?.Id ?? '',
+                                    fromHome: true,
+                                  );
+                                  p.selectedStatus = null;
+
+                                  await context
+                                      .read<HomeProvider>()
+                                      .getData(context);
+                                  ;
+                                });
                               },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "8",
-                                    style: Constant.blackBold16,
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text("PLTA"),
-                                ],
-                              ),
-                            ),
+                              noCallback: () => CusNav.nPop(context));
+                        },
+                        child: Container(
+                          width: 80,
+                          padding: EdgeInsets.all(5),
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF19B76E),
+                            borderRadius: BorderRadius.circular(7),
                           ),
-                          Container(
-                            width: 1,
-                            height: 45,
-                            color: Colors.grey.withOpacity(0.5),
+                          child: Text(
+                            "Terima",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () async {
-                                turbineP.turbineSearchN.unfocus();
-                                CusNav.nPush(context, ShaftLatestView());
-                              },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "4",
-                                    style: Constant.blackBold16,
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text("Laporan"),
-                                ],
-                              ),
-                            ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+          ],
+        ),
+      );
+    }
+
+    kontenUserReq() {
+      return SizedBox(
+        height: 100 +
+            ((userList?.length ?? 0) <= 3 ? (userList?.length ?? 0) * 40 : 220),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
+          child: CustomContainer.mainCard(
+            padding: EdgeInsets.fromLTRB(12, 0, 12, 12),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        CusNav.nPush(context, UserManageNewView());
+                      },
+                      child: Text(
+                        "User Request",
+                        style: Constant.blackBold16
+                            .copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.grey, width: 0.5),
+                      ),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 10,
+                        child: Center(
+                          child: Text(
+                            "7",
+                            style: Constant.blackRegular14,
                           ),
-                        ],
-                      )),
-                )
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10),
+                userList != null && userList.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 24),
+                        child: Center(
+                            child: Text('Data tidak ditemukan',
+                                style: Constant.grayRegular13)),
+                      )
+                    : ListView.separated(
+                        itemCount: (userList ?? []).isEmpty
+                            ? 1
+                            : (userList ?? []).length,
+                        padding: EdgeInsets.only(bottom: 20),
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) => SizedBox(),
+                        itemBuilder: (context, index) {
+                          if ((userList ?? []).isEmpty) return itemShimmer();
+                          return itemList(index);
+                        },
+                      ),
+                // Column(
+                //   children: List.generate(7, (index) {
+                //     return Column(
+                //       children: [
+                //         CustomContainer.mainCard(
+                //             margin: EdgeInsets.symmetric(horizontal: 5),
+                //             child: Row(
+                //               mainAxisAlignment:
+                //                   MainAxisAlignment.spaceBetween,
+                //               children: [
+                //                 Image.asset(Assets.iconsIcUser, scale: 6),
+                //                 SizedBox(
+                //                   width: 5,
+                //                 ),
+                //                 Expanded(
+                //                   flex: 6,
+                //                   child: Column(
+                //                     mainAxisAlignment:
+                //                         MainAxisAlignment.start,
+                //                     crossAxisAlignment:
+                //                         CrossAxisAlignment.start,
+                //                     children: [
+                //                       Text(
+                //                         "Alifano",
+                //                         style: Constant.iBlackMedium14,
+                //                       ),
+                //                       Text(
+                //                         "Machine Engineer",
+                //                         style: Constant.blackRegular12,
+                //                       ),
+                //                     ],
+                //                   ),
+                //                 ),
+                //                 InkWell(
+                //                   onTap: () {},
+                //                   child: Container(
+                //                       width: 30,
+                //                       height: 30,
+                //                       decoration: BoxDecoration(
+                //                           borderRadius:
+                //                               BorderRadius.circular(7),
+                //                           border: Border.all(
+                //                               width: 1, color: Colors.red)),
+                //                       child: Icon(
+                //                         Icons.close,
+                //                         size: 20,
+                //                         color: Colors.red,
+                //                       )),
+                //                 ),
+                //                 SizedBox(
+                //                   width: 5,
+                //                 ),
+                //                 InkWell(
+                //                   onTap: () {},
+                //                   child: Container(
+                //                     width: 60,
+                //                     padding: EdgeInsets.all(5),
+                //                     height: 30,
+                //                     decoration: BoxDecoration(
+                //                       color: Color(0xFF19B76E),
+                //                       borderRadius: BorderRadius.circular(7),
+                //                     ),
+                //                     child: Text(
+                //                       "Terima",
+                //                       style: TextStyle(
+                //                           color: Colors.white,
+                //                           fontWeight: FontWeight.w600),
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ],
+                //             )),
+                //         SizedBox(height: 15),
+                //       ],
+                //     );
+                //   }),
+                // ),
               ],
             ),
           ),
@@ -790,197 +1187,72 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
       );
     }
 
-    kontenUserReq() {
-      return Container(
-        height: 320,
-        child: Expanded(
-          flex: 6,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
-            child: CustomContainer.mainCard(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          CusNav.nPush(context, UserManageNewView());
-                        },
-                        child: Text(
-                          "User Request",
-                          style: Constant.blackBold16
-                              .copyWith(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.grey, width: 0.5),
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 10,
-                          child: Center(
-                            child: Text(
-                              "7",
-                              style: Constant.blackRegular14,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Column(
-                    children: List.generate(7, (index) {
-                      return Column(
-                        children: [
-                          CustomContainer.mainCard(
-                            margin: EdgeInsets.symmetric(horizontal: 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Image.asset(Assets.iconsIcUser, scale: 6),
-                                  SizedBox(width: 5,),
-                                  Expanded(
-                                    flex: 6,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Alifano",
-                                          style: Constant.iBlackMedium14,
-                                        ),
-                                        Text(
-                                          "Machine Engineer",
-                                          style: Constant.blackRegular12,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Container(
-                                        width: 30,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(7),
-                                            border:
-                                            Border.all(width: 1, color: Colors.red)),
-                                        child: Icon(
-                                          Icons.close,
-                                          size: 20,
-                                          color: Colors.red,
-                                        )),
-                                  ),
-                                  SizedBox(width: 5,),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Container(
-                                      width: 60,
-                                      padding: EdgeInsets.all(5),
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFF19B76E),
-                                        borderRadius: BorderRadius.circular(7),
-                                      ),
-                                      child: Text(
-                                        "Terima",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          SizedBox(height: 15),
-                        ],
-                      );
-                    }),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
     kontenLaporan() {
-      return Container(
+      return SizedBox(
         height: 425,
-        child: Expanded(
-          flex: 6,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
-            child: CustomContainer.mainCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Laporan",
-                    style: Constant.blackBold16
-                        .copyWith(fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(flex: 8, child: search()),
-                      SizedBox(width: 10),
-                      Expanded(
-                        flex: 2,
-                        child: InkWell(
-                          onTap: () async {
-                            if (tabController.index == 1)
-                              CustomContainer.showModalBottomScroll(
-                                initialChildSize: 0.8,
-                                context: context,
-                                child: filterAllWidget(),
-                              );
-                          },
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            padding: EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.grey.withOpacity(0.5),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
+          child: CustomContainer.mainCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Laporan",
+                  style: Constant.blackBold16
+                      .copyWith(fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(flex: 8, child: search()),
+                    SizedBox(width: 10),
+                    Expanded(
+                      flex: 2,
+                      child: InkWell(
+                        onTap: () async {
+                          if (tabController.index == 1)
+                            CustomContainer.showModalBottomScroll(
+                              initialChildSize: 0.8,
+                              context: context,
+                              child: filterAllWidget(),
+                            );
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          padding: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 1,
+                              color: Colors.grey.withOpacity(0.5),
                             ),
-                            child: Icon(
-                              Icons.filter_alt_outlined,
-                              size: 25,
-                              color: tabController.index == 0
-                                  ? Constant.textHintColor2
-                                  : null,
-                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(
+                            Icons.filter_alt_outlined,
+                            size: 25,
+                            color: tabController.index == 0
+                                ? Constant.textHintColor2
+                                : null,
                           ),
                         ),
                       ),
+                    ),
+                  ],
+                ),
+                toggleTab(),
+                SizedBox(height: 10),
+                Expanded(
+                  child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
+                    controller: tabController,
+                    children: [
+                      semingguTerakhir(),
+                      riwayat(),
                     ],
                   ),
-                  toggleTab(),
-                  SizedBox(height: 10),
-                  Expanded(
-                    child: TabBarView(
-                      physics: NeverScrollableScrollPhysics(),
-                      controller: tabController,
-                      children: [
-                        semingguTerakhir(),
-                        riwayat(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -1005,16 +1277,20 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
           }
         },
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              headerKonten(),
-              kontenUserReq(),
-              SizedBox(
-                height: 10,
-              ),
-              kontenLaporan(),
-            ],
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await await context.read<HomeProvider>().getData(context);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                headerKonten(),
+                kontenUserReq(),
+                SizedBox(height: 10),
+                kontenLaporan(),
+                SizedBox(height: 100),
+              ],
+            ),
           ),
         ),
       ),

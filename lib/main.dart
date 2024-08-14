@@ -132,6 +132,7 @@ class MyApp extends StatelessWidget {
             // locale: context.locale,
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: [Locale('id', 'ID'), Locale('en')],

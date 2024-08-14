@@ -884,6 +884,7 @@ class _UserManageViewState extends BaseState<UserManageView>
           color: Constant.primaryColor,
           foregroundColor: Colors.white),
       body: SafeArea(
+        bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

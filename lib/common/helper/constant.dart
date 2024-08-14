@@ -42,7 +42,7 @@ class Constant {
   static Color textColor2 = Color(0xFF535152);
   static Color textKomisiColor = Color(0xFFFFCB47);
   static Color textPriceColor = Color(0xFF3DA11A);
-  static Color backgroundColor = Color(0xFFF9F9F9);
+  static Color backgroundColor = Color(0xFFFAFBFD);
   static Color textColorBlack = Color(0xff1D273B);
   static Color textColorWhite = Colors.white;
   static Color textColorBlue = Color(0xFF041E42);
@@ -183,7 +183,8 @@ class Constant {
     color: textColorBlack,
     fontSize: 14,
     fontWeight: medium,
-  );static TextStyle iBlackMedium16 = TextStyle(
+  );
+  static TextStyle iBlackMedium16 = TextStyle(
     fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 16,

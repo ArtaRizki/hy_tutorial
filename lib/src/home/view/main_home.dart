@@ -2,8 +2,10 @@ import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
+import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
+import 'package:hy_tutorial/src/home/view/home_admin_new_view.dart';
 import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
 import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/src/profile/view/profile_view.dart';
@@ -38,7 +40,6 @@ class _MainHomeState extends State<MainHome> {
 
   @override
   void didChangeDependencies() {
-    isAdmin = ModalRoute.of(context)?.settings.arguments as bool?;
     getData();
     super.didChangeDependencies();
   }
@@ -46,9 +47,7 @@ class _MainHomeState extends State<MainHome> {
   getData() async {
     setIndex();
 
-    isAdmin = ModalRoute.of(context)?.settings.arguments as bool?;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
     setState(() {});
   }
 
@@ -62,15 +61,15 @@ class _MainHomeState extends State<MainHome> {
   Widget build(BuildContext context) {
     Widget customBottomNav() {
       return BottomAppBar(
-        surfaceTintColor: Colors.white,
+        color: Colors.transparent,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shadowColor: Colors.black,
+        padding: EdgeInsets.only(top: 2),
+        height: kBottomNavigationBarHeight + 15,
         shape: CircularNotchedRectangle(),
-        notchMargin: 5,
-        padding: EdgeInsets.only(top: 5),
-        elevation: 0,
-        color: Colors.white,
         child: BottomNavigationBar(
           // backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-          elevation: 0,
+          elevation: 10,
           backgroundColor: Colors.white,
           selectedFontSize: 13,
           unselectedFontSize: 13,
@@ -92,21 +91,20 @@ class _MainHomeState extends State<MainHome> {
           type: BottomNavigationBarType.fixed,
           selectedIconTheme: IconThemeData(color: Constant.primaryColor),
           selectedItemColor: Constant.primaryColor,
-          selectedLabelStyle: Constant.primaryBold15.copyWith(fontSize: 13),
+          selectedLabelStyle: Constant.primaryBold15.copyWith(fontSize: 12),
           unselectedLabelStyle:
-              TextStyle(fontSize: 13, color: Constant.textHintColor2),
+              TextStyle(fontSize: 12, color: Constant.textHintColor2),
           items: [
             BottomNavigationBarItem(
               icon: Container(
                 padding: EdgeInsets.only(bottom: 4),
-                width: 25,
-                height: 25,
+                width: 24,
+                height: 24,
                 child: FittedBox(
                   child: Image.asset(
-                    'assets/icons/ic-home.png',
-                    color: currentIndex == 0
-                        ? Constant.primaryColor
-                        : Color(0xff8A8C8D),
+                    currentIndex == 0
+                        ? Assets.iconsIcHomeBlue
+                        : Assets.iconsIcHome,
                   ),
                 ),
               ),
@@ -115,59 +113,50 @@ class _MainHomeState extends State<MainHome> {
             BottomNavigationBarItem(
               icon: Container(
                 padding: EdgeInsets.only(bottom: 4),
-                width: 25,
-                height: 25,
+                width: 24,
+                height: 24,
                 child: FittedBox(
                   child: Image.asset(
-                    'assets/icons/ic-form.png',
-                    color: currentIndex == 1
-                        ? Constant.primaryColor
-                        : Color(0xff8A8C8D),
+                    currentIndex == 1
+                        ? Assets.iconsIcUserBlue
+                        : Assets.iconsIcUserGray,
                   ),
                 ),
               ),
-              label: isAdmin == true ? 'Manage' : 'Form',
+              label: 'User',
             ),
             BottomNavigationBarItem(
               icon: Container(
                 padding: EdgeInsets.only(bottom: 4),
-                width: 25,
-                height: 25,
-                child: FittedBox(
-                  child: Image.asset(
-                    'assets/icons/ic-riwayat.png',
-                    color: currentIndex == 2
-                        ? Constant.primaryColor
-                        : Color(0xff8A8C8D),
-                  ),
-                ),
+                width: 24,
+                height: 24,
+                child: FittedBox(),
               ),
-              label: 'Riwayat',
+              label: 'Laporan',
             ),
             BottomNavigationBarItem(
               icon: Container(
                   padding: EdgeInsets.only(bottom: 4),
-                  width: 25,
-                  height: 25,
-                  child: FittedBox(
-                      child: Image.asset(Assets.iconsIcPltaBlack,
-                    color: currentIndex == 3
-                        ? Constant.primaryColor
-                        : Color(0xff8A8C8D),
-                  ))),
-              label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                  padding: EdgeInsets.only(bottom: 4),
-                  width: 25,
-                  height: 25,
+                  width: 24,
+                  height: 24,
                   child: FittedBox(
                       child: Image.asset(
-                    'assets/icons/ic-profile.png',
-                    color: currentIndex == 4
-                        ? Constant.primaryColor
-                        : Color(0xff8A8C8D),
+                    currentIndex == 3
+                        ? Assets.iconsIcPltaBlue
+                        : Assets.iconsIcPlta,
+                  ))),
+              label: 'PLTA',
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                  padding: EdgeInsets.only(bottom: 4),
+                  width: 24,
+                  height: 24,
+                  child: FittedBox(
+                      child: Image.asset(
+                    currentIndex == 4
+                        ? Assets.iconsIcProfilBlue
+                        : Assets.iconsIcProfile,
                   ))),
               label: 'Profile',
             ),
@@ -178,11 +167,12 @@ class _MainHomeState extends State<MainHome> {
 
     return Scaffold(
       primary: true,
+      extendBody: true,
       bottomNavigationBar: customBottomNav(),
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom != 0
           ? SizedBox()
           : FloatingActionButton(
-              backgroundColor: const Color.fromARGB(0, 140, 122, 122),
+              backgroundColor: Colors.transparent,
               onPressed: () async {
                 setState(() => currentIndex = 0);
                 await CusNav.nPush(context, DataAddView(isFromCenter: true));
@@ -222,21 +212,21 @@ class _MainHomeState extends State<MainHome> {
           return true;
         },
         child: [
-          isAdmin == true
-              ? HomeAdminView(
-                  jumpToProfile: () => setState(() => currentIndex = 3),
-                  jumpToManageUsers: () async {
-                    currentIndex = 1;
-                    //await CusNav.nPush(context, UserManageView());
-                    setState(() {
-                      currentIndex = 1;
-                    });
-                    await getData();
-                  },
-                )
-              : HomeView(jumpToProfile: () => setState(() => currentIndex = 3)),
-          isAdmin == true ? UserManageView() : DataAddView(),
-          TurbineView(),
+          // HomeAdminView(
+          //   jumpToProfile: () => setState(() => currentIndex = 3),
+          //   jumpToManageUsers: () async {
+          //     currentIndex = 1;
+          //     //await CusNav.nPush(context, UserManageView());
+          //     setState(() {
+          //       currentIndex = 1;
+          //     });
+          //     await getData();
+          //   },
+          // ),
+          HomeAdminNewView(),
+          UserManageView(),
+          SizedBox(),
+          DaftarPLTANewView(),
           ProfileView(),
         ][currentIndex],
       ),
