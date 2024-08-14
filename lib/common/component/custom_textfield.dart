@@ -444,6 +444,7 @@ class CustomTextField {
     return TextFormField(
       readOnly: readOnly,
       onTap: onTap,
+      textAlign: TextAlign.center,
       // The validator receives the text that the user has entered.
       decoration: InputDecoration(
         contentPadding: EdgeInsets.zero,

@@ -913,7 +913,7 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
                     flex: 3,
                     child: Skeleton<List<UserListModelData?>?>(
                       value: userList,
-                      child: Image.asset(Assets.iconsIcUserBlack),
+                      child: Image.asset(Assets.iconsIcUser),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -935,98 +935,95 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
                       ],
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: Skeleton<List<UserListModelData?>?>(
-                      value: userList,
-                      child: InkWell(
-                        onTap: () async {
-                          await Utils.showYesNoDialog(
-                              context: context,
-                              title: "Konfirmasi",
-                              desc: "Apakah Anda Yakin Menolak User Ini?",
-                              yesCallback: () async {
-                                CusNav.nPop(context);
-                                final p = context.read<UserManageProvider>();
-                                handleTap(() async {
-                                  p.selectedStatus = '2';
-                                  await p.updateUser(
-                                    context,
-                                    id: item?.Id ?? '',
-                                    fromHome: true,
-                                  );
+                  Skeleton<List<UserListModelData?>?>(
+                    width: 30,
+                    height: 30,
+                    value: userList,
+                    child: InkWell(
+                      onTap: () async {
+                        await Utils.showYesNoDialog(
+                            context: context,
+                            title: "Konfirmasi",
+                            desc: "Apakah Anda Yakin Menolak User Ini?",
+                            yesCallback: () async {
+                              CusNav.nPop(context);
+                              final p = context.read<UserManageProvider>();
+                              handleTap(() async {
+                                p.selectedStatus = '2';
+                                await p.updateUser(
+                                  context,
+                                  id: item?.Id ?? '',
+                                  fromHome: true,
+                                );
 
-                                  p.selectedStatus = null;
+                                p.selectedStatus = null;
 
-                                  await context
-                                      .read<HomeProvider>()
-                                      .getData(context);
-                                  ;
-                                });
-                              },
-                              noCallback: () => CusNav.nPop(context));
-                        },
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(7),
-                              border: Border.all(width: 1, color: Colors.red)),
-                          child: Icon(
-                            Icons.close,
-                            size: 20,
-                            color: Colors.red,
-                          ),
+                                await context
+                                    .read<HomeProvider>()
+                                    .getData(context);
+                                ;
+                              });
+                            },
+                            noCallback: () => CusNav.nPop(context));
+                      },
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            border: Border.all(width: 1, color: Colors.red)),
+                        child: Icon(
+                          Icons.close,
+                          size: 20,
+                          color: Colors.red,
                         ),
                       ),
                     ),
                   ),
                   SizedBox(width: 8),
-                  Expanded(
-                    flex: 6,
-                    child: Skeleton<List<UserListModelData?>?>(
-                      value: userList,
-                      child: InkWell(
-                        onTap: () async {
-                          await Utils.showYesNoDialog(
-                              context: context,
-                              title: "Konfirmasi",
-                              desc: "Apakah Anda Yakin Menerima User Ini?",
-                              yesCallback: () async {
-                                CusNav.nPop(context);
-                                final p = context.read<UserManageProvider>();
-                                handleTap(() async {
-                                  p.selectedStatus = '1';
-                                  await p.updateUser(
-                                    context,
-                                    id: item?.Id ?? '',
-                                    fromHome: true,
-                                  );
-                                  p.selectedStatus = null;
+                  Skeleton<List<UserListModelData?>?>(
+                    value: userList,
+                    width: 60,
+                    height: 30,
+                    child: InkWell(
+                      onTap: () async {
+                        await Utils.showYesNoDialog(
+                            context: context,
+                            title: "Konfirmasi",
+                            desc: "Apakah Anda Yakin Menerima User Ini?",
+                            yesCallback: () async {
+                              CusNav.nPop(context);
+                              final p = context.read<UserManageProvider>();
+                              handleTap(() async {
+                                p.selectedStatus = '1';
+                                await p.updateUser(
+                                  context,
+                                  id: item?.Id ?? '',
+                                  fromHome: true,
+                                );
+                                p.selectedStatus = null;
 
-                                  await context
-                                      .read<HomeProvider>()
-                                      .getData(context);
-                                  ;
-                                });
-                              },
-                              noCallback: () => CusNav.nPop(context));
-                        },
-                        child: Container(
-                          width: 80,
-                          padding: EdgeInsets.all(5),
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF19B76E),
-                            borderRadius: BorderRadius.circular(7),
-                          ),
-                          child: Text(
-                            "Terima",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          ),
+                                await context
+                                    .read<HomeProvider>()
+                                    .getData(context);
+                                ;
+                              });
+                            },
+                            noCallback: () => CusNav.nPop(context));
+                      },
+                      child: Container(
+                        width: 60,
+                        height: 30,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF19B76E),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child: Text(
+                          "Terima",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),

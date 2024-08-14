@@ -1,6 +1,7 @@
 import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
+import 'package:hy_tutorial/src/admin/view/user_manage_new_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
@@ -224,7 +225,7 @@ class _MainHomeState extends State<MainHome> {
           //   },
           // ),
           HomeAdminNewView(),
-          UserManageView(),
+          UserManageNewView(),
           SizedBox(),
           DaftarPLTANewView(),
           ProfileView(),

@@ -62,6 +62,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   }
 
   TextEditingController userSearchC = TextEditingController();
+  FocusNode userN = FocusNode();
   Duration duration2 = const Duration(seconds: 2);
   Timer? _searchOnStoppedTyping2;
   Timer? get searchOnStoppedTyping2 => this._searchOnStoppedTyping2;
@@ -79,6 +80,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   }
 
   TextEditingController userSearchC2 = TextEditingController();
+  FocusNode userN2 = FocusNode();
 
   bool _ascending = false;
   bool get ascending => this._ascending;
@@ -181,7 +183,13 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         isFetching = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
-        Map<String, String> param = {};
+        Map<String, String> param = {
+          'Filter': 'Status',
+          'FilterValue': '1',
+        };
+
+        if (userSearchC.text.isNotEmpty)
+          param.addAll({'Search': userSearchC.text});
 
         if (next != null && next != '') param.addAll({'Next': next ?? ''});
         if (_pagingController.itemList?.length != 0) {
