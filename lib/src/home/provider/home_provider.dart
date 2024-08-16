@@ -22,8 +22,6 @@ class HomeProvider extends BaseController with ChangeNotifier {
     'assets/icons/admin/ic-turbine.png',
   ];
 
-
-
   HomeModel homeModel = HomeModel();
   HomeModel get getHomeModel => this.homeModel;
   set setHomeModel(HomeModel homeModel) => this.homeModel = homeModel;
@@ -60,6 +58,7 @@ class HomeProvider extends BaseController with ChangeNotifier {
   Future<void> fetchUserList({bool withLoading = false}) async {
     if (withLoading) loading(true);
     userListModel = UserListModel();
+    notifyListeners();
     Map<String, String> param = {
       'Filter': 'Status',
       'FilterValue': '0',

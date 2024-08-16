@@ -42,7 +42,9 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
-
+    tabController.addListener(() {
+      setState(() {});
+    });
     final turbineP = context.read<TurbineProvider>();
     if ((turbineP.pagingController.itemList ?? []).isEmpty) {
       turbineP.getTurbine();
@@ -86,7 +88,7 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
           image: AssetImage(Assets.imagesImgHomeTop),
           fit: BoxFit.contain,
         )),
-        height: 150,
+        height: 128,
         width: double.infinity,
         padding: EdgeInsets.fromLTRB(20, 35, 20, 15),
         child: Column(
@@ -114,8 +116,10 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
 
     Widget search() => CustomTextField.borderTextField(
           controller: turbineP.turbineSearchC,
+          activeBorderColor: Constant.borderSearchColor,
           focusNode: turbineP.turbineSearchN,
           required: false,
+          readOnly: tabController.index == 0,
           hintText: "Cari Laporan",
           hintColor: Constant.textHintColor2,
           prefixIcon: Padding(
@@ -132,7 +136,9 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
               : InkWell(
                   onTap: () {
                     turbineP.turbineSearchC.clear();
+                    turbineP.turbineSearchN.unfocus();
                     setState(() {});
+                    pagingC.refresh();
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -283,6 +289,7 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
           isScrollable: false,
           onTap: (index) {
             setState(() {});
+            FocusManager.instance.primaryFocus?.unfocus();
           },
           padding: EdgeInsets.only(top: 8),
           labelPadding: EdgeInsets.zero,
@@ -715,82 +722,83 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
           children: [
             headKonten(),
             Positioned(
-              bottom: 15,
+              bottom: 20,
               right: 0,
               left: 0,
               child: CustomContainer.mainCard(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () async {
-                            turbineP.turbineSearchN.unfocus();
-                            await CusNav.nPush(
-                                context, DataAddView(isFromCenter: true));
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                "128",
-                                style: Constant.blackBold16,
-                              ),
-                              SizedBox(height: 4),
-                              Text("User Aktif"),
-                            ],
-                          ),
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          turbineP.turbineSearchN.unfocus();
+                          await CusNav.nPush(
+                              context, DataAddView(isFromCenter: true));
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              "128",
+                              style: Constant.blackBold16,
+                            ),
+                            SizedBox(height: 4),
+                            Text("User Aktif"),
+                          ],
                         ),
                       ),
-                      Container(
-                        width: 1,
-                        height: 45,
-                        color: Colors.grey.withOpacity(0.5),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () async {
-                            turbineP.turbineSearchN.unfocus();
-                            CusNav.nPush(context, ShaftLatestView());
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                "8",
-                                style: Constant.blackBold16,
-                              ),
-                              SizedBox(height: 4),
-                              Text("PLTA"),
-                            ],
-                          ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 45,
+                      color: Colors.grey.withOpacity(0.5),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          turbineP.turbineSearchN.unfocus();
+                          CusNav.nPush(context, ShaftLatestView());
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              "8",
+                              style: Constant.blackBold16,
+                            ),
+                            SizedBox(height: 4),
+                            Text("PLTA"),
+                          ],
                         ),
                       ),
-                      Container(
-                        width: 1,
-                        height: 45,
-                        color: Colors.grey.withOpacity(0.5),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () async {
-                            turbineP.turbineSearchN.unfocus();
-                            CusNav.nPush(context, ShaftLatestView());
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                "4",
-                                style: Constant.blackBold16,
-                              ),
-                              SizedBox(height: 4),
-                              Text("Laporan"),
-                            ],
-                          ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 45,
+                      color: Colors.grey.withOpacity(0.5),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          turbineP.turbineSearchN.unfocus();
+                          CusNav.nPush(context, ShaftLatestView());
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              "4",
+                              style: Constant.blackBold16,
+                            ),
+                            SizedBox(height: 4),
+                            Text("Laporan"),
+                          ],
                         ),
                       ),
-                    ],
-                  )),
-            )
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       );
@@ -799,38 +807,29 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
     Widget itemShimmer() {
       return Column(
         children: [
+          Constant.xSizedBox12,
           CustomContainer.mainCard(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
             isShadow: false,
             child: Row(
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Skeleton<List<UserListModelData?>?>(
                     value: userList,
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: Colors.white,
-                        image: DecorationImage(
-                          image: AssetImage(
-                            'assets/icons/ic-user-black.png',
-                          ),
-                          scale: 3,
-                        ),
-                      ),
-                    ),
+                    child: Image.asset(Assets.iconsIcUser),
                   ),
                 ),
                 SizedBox(width: 10),
                 Expanded(
-                  flex: 6,
+                  flex: 12,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Skeleton<List<UserListModelData?>?>(
                         value: userList,
+                        width: 80,
+                        height: 15,
                         child: Text(
                           'Namaaaaaaaaa',
                           style: Constant.iPrimaryMedium8
@@ -839,6 +838,8 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
                       ),
                       Skeleton<List<UserListModelData?>?>(
                         value: userList,
+                        width: 60,
+                        height: 12,
                         child: Text(
                           'Divisiiiiiiiii -',
                           style: TextStyle(
@@ -849,42 +850,42 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
                     ],
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Skeleton<List<UserListModelData?>?>(
-                    value: userList,
-                    child: Container(
-                      padding: EdgeInsets.all(7),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Constant.redColor),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Tolak",
-                          style: Constant.redMedium12,
-                        ),
-                      ),
+                Skeleton<List<UserListModelData?>?>(
+                  value: userList,
+                  width: 30,
+                  height: 30,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                        border: Border.all(width: 1, color: Colors.red)),
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: Colors.red,
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
-                Expanded(
-                  flex: 3,
-                  child: Skeleton<List<UserListModelData?>?>(
-                    value: userList,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 7),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Constant.primaryColor),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Terima",
-                          style: Constant.iBlackMedium12,
-                        ),
-                      ),
+                SizedBox(width: 4),
+                Skeleton<List<UserListModelData?>?>(
+                  width: 55,
+                  height: 30,
+                  value: userList,
+                  child: Container(
+                    width: 60,
+                    height: 30,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF19B76E),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: Text(
+                      "Terima",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -924,11 +925,15 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
                       children: [
                         Skeleton<List<UserListModelData?>?>(
                           value: userList,
+                          width: 60,
+                          height: 5,
                           child: Text(item?.Name ?? 'Nama -',
                               style: Constant.iBlackMedium14),
                         ),
                         Skeleton<List<UserListModelData?>?>(
                           value: userList,
+                          width: 60,
+                          height: 3,
                           child: Text(item?.Division ?? 'Divisi -',
                               style: Constant.blackRegular12),
                         ),
@@ -1039,13 +1044,18 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
 
     kontenUserReq() {
       return SizedBox(
-        height: 100 +
-            ((userList?.length ?? 0) <= 3 ? (userList?.length ?? 0) * 40 : 220),
+        height: userList == null && (userList ?? []).isEmpty
+            ? 275
+            : (100 +
+                ((userList?.length ?? 0) <= 3
+                    ? (userList?.length ?? 0) * 40
+                    : 220)),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
           child: CustomContainer.mainCard(
-            padding: EdgeInsets.fromLTRB(12, 0, 12, 12),
+            padding: EdgeInsets.all(12),
             child: ListView(
+              physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               children: [
                 Row(
@@ -1061,22 +1071,23 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
                       ),
                     ),
                     SizedBox(width: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.grey, width: 0.5),
-                      ),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 10,
-                        child: Center(
-                          child: Text(
-                            "7",
-                            style: Constant.blackRegular14,
+                    if (userList?.isNotEmpty ?? false)
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.grey, width: 0.5),
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 10,
+                          child: Center(
+                            child: Text(
+                              "${userList?.length ?? 0}",
+                              style: Constant.blackRegular14,
+                            ),
                           ),
                         ),
-                      ),
-                    )
+                      )
                   ],
                 ),
                 SizedBox(height: 10),
@@ -1089,11 +1100,13 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
                       )
                     : ListView.separated(
                         itemCount: (userList ?? []).isEmpty
-                            ? 1
+                            ? 3
                             : (userList ?? []).length,
                         padding: EdgeInsets.only(bottom: 20),
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: (userList?.length ?? 0) <= 3
+                            ? NeverScrollableScrollPhysics()
+                            : AlwaysScrollableScrollPhysics(),
                         separatorBuilder: (context, index) => SizedBox(),
                         itemBuilder: (context, index) {
                           if ((userList ?? []).isEmpty) return itemShimmer();
@@ -1273,21 +1286,21 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
             });
           }
         },
-        child: SingleChildScrollView(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              await await context.read<HomeProvider>().getData(context);
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                headerKonten(),
-                kontenUserReq(),
-                SizedBox(height: 10),
-                kontenLaporan(),
-                SizedBox(height: 100),
-              ],
-            ),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await await context.read<HomeProvider>().getData(context);
+          },
+          child: ListView(
+            shrinkWrap: true,
+            physics: AlwaysScrollableScrollPhysics(),
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              headerKonten(),
+              kontenUserReq(),
+              SizedBox(height: 10),
+              kontenLaporan(),
+              SizedBox(height: 100),
+            ],
           ),
         ),
       ),

@@ -194,224 +194,218 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
         tabs: [
           _buildTab(
             "User Request",
-            CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 10,
-              child: Center(
-                child: Text(
-                  '${pagingC2.itemList?.length ?? 0}',
-                  style: Constant.blackRegular14,
-                ),
-              ),
-            ),
+            (pagingC2.itemList?.isEmpty ?? false)
+                ? SizedBox()
+                : CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 10,
+                    child: Center(
+                      child: Text(
+                        '${pagingC2.itemList?.length ?? 0}',
+                        style: Constant.blackRegular14,
+                      ),
+                    ),
+                  ),
           ),
           _buildTab(
               "User Aktif",
-              CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 10,
-                child: Center(
-                  child: Text(
-                    '${pagingC.itemList?.length ?? 0}',
-                    style: Constant.blackRegular14,
+              (pagingC.itemList?.isEmpty ?? false)
+                  ? SizedBox()
+                  : CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 10,
+                      child: Center(
+                        child: Text(
+                          '${pagingC.itemList?.length ?? 0}',
+                          style: Constant.blackRegular14,
+                        ),
+                      ),
+                    )),
+        ],
+      );
+    }
+
+    Widget itemShimmer2() {
+      return Column(
+        children: [
+          Constant.xSizedBox12,
+          CustomContainer.mainCard(
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            isShadow: false,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Skeleton<bool>(
+                    width: 40,
+                    height: 40,
+                    isCircle: true,
+                    value: userManageP.isFetching2 == true
+                        ? null
+                        : userManageP.isFetching2,
+                    child: Image.asset(Assets.iconsIcUser),
                   ),
                 ),
-              )),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 12,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Skeleton<bool>(
+                        value: userManageP.isFetching2 == true
+                            ? null
+                            : userManageP.isFetching2,
+                        width: 80,
+                        height: 15,
+                        child: Text(
+                          'Namaaaaaaaaa',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                      Skeleton<bool>(
+                        value: userManageP.isFetching2 == true
+                            ? null
+                            : userManageP.isFetching2,
+                        width: 60,
+                        height: 12,
+                        child: Text(
+                          'Divisiiiiiiiii -',
+                          style: TextStyle(
+                            color: Constant.textHintColor2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Skeleton<bool>(
+                  value: userManageP.isFetching2 == true
+                      ? null
+                      : userManageP.isFetching2,
+                  width: 30,
+                  height: 30,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                        border: Border.all(width: 1, color: Colors.red)),
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 4),
+                Skeleton<bool>(
+                  width: 55,
+                  height: 30,
+                  value: userManageP.isFetching2 == true
+                      ? null
+                      : userManageP.isFetching2,
+                  child: Container(
+                    width: 60,
+                    height: 30,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF19B76E),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: Text(
+                      "Terima",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       );
     }
 
     Widget itemShimmer() {
-      return CustomContainer.mainCard(
-        isShadow: false,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Skeleton<bool>(
-                width: 50,
-                height: 55,
-                isCircle: true,
-                value: userManageP.isFetching == true
-                    ? null
-                    : userManageP.isFetching,
-                child: Container(
-                  height: 50,
-                  width: 55,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    color: Colors.white,
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/icons/ic-user-black.png',
+      return Column(
+        children: [
+          Constant.xSizedBox12,
+          CustomContainer.mainCard(
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            isShadow: true,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Skeleton<bool>(
+                    width: 40,
+                    height: 40,
+                    isCircle: true,
+                    value: userManageP.isFetching == true
+                        ? null
+                        : userManageP.isFetching,
+                    child: Image.asset(Assets.iconsIcUser),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Skeleton<bool>(
+                        width: 100,
+                        height: 13,
+                        value: userManageP.isFetching == true
+                            ? null
+                            : userManageP.isFetching,
+                        child: Text(
+                          'Nama -',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 16, color: Colors.black),
+                        ),
                       ),
-                      scale: 3,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Constant.xSizedBox8,
-                  Skeleton<bool>(
-                    width: 100,
-                    height: 13,
-                    value: userManageP.isFetching == true
-                        ? null
-                        : userManageP.isFetching,
-                    child: Text(
-                      'Nama -',
-                      style: Constant.iPrimaryMedium8
-                          .copyWith(fontSize: 16, color: Colors.black),
-                    ),
-                  ),
-                  Constant.xSizedBox4,
-                  Skeleton<bool>(
-                    width: 50,
-                    height: 10,
-                    value: userManageP.isFetching == true
-                        ? null
-                        : userManageP.isFetching,
-                    child: Text(
-                      'Status -',
-                      style: Constant.iPrimaryMedium8
-                          .copyWith(fontSize: 14, color: Colors.black),
-                    ),
-                  ),
-                  Constant.xSizedBox4,
-                  Skeleton<bool>(
-                    width: 60,
-                    height: 10,
-                    value: userManageP.isFetching == true
-                        ? null
-                        : userManageP.isFetching,
-                    child: Text(
-                      'Divisi -',
-                      style: TextStyle(color: Constant.textHintColor2),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Skeleton<bool>(
-                value: userManageP.isFetching == true
-                    ? null
-                    : userManageP.isFetching,
-                width: 1,
-                height: 25,
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.grey,
-                  size: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget itemShimmer2() {
-      return CustomContainer.mainCard(
-        isShadow: false,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Skeleton<bool>(
-                width: 50,
-                height: 55,
-                isCircle: true,
-                value: userManageP.isFetching2 == true
-                    ? null
-                    : userManageP.isFetching2,
-                child: Container(
-                  height: 50,
-                  width: 55,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    color: Colors.white,
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/icons/ic-user-black.png',
+                      Constant.xSizedBox4,
+                      Skeleton<bool>(
+                        width: 50,
+                        height: 10,
+                        value: userManageP.isFetching == true
+                            ? null
+                            : userManageP.isFetching,
+                        child: Text(
+                          'Status -',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 14, color: Colors.black),
+                        ),
                       ),
-                      scale: 3,
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Skeleton<bool>(
+                    width: 25,
+                    height: 25,
+                    value: userManageP.isFetching == true
+                        ? null
+                        : userManageP.isFetching,
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 20,
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Constant.xSizedBox8,
-                  Skeleton<bool>(
-                    width: 100,
-                    height: 13,
-                    value: userManageP.isFetching2 == true
-                        ? null
-                        : userManageP.isFetching2,
-                    child: Text(
-                      'Nama -',
-                      style: Constant.iPrimaryMedium8
-                          .copyWith(fontSize: 16, color: Colors.black),
-                    ),
-                  ),
-                  Constant.xSizedBox4,
-                  Skeleton<bool>(
-                    width: 50,
-                    height: 10,
-                    value: userManageP.isFetching2 == true
-                        ? null
-                        : userManageP.isFetching2,
-                    child: Text(
-                      'Status -',
-                      style: Constant.iPrimaryMedium8
-                          .copyWith(fontSize: 14, color: Colors.black),
-                    ),
-                  ),
-                  Constant.xSizedBox4,
-                  Skeleton<bool>(
-                    width: 60,
-                    height: 10,
-                    value: userManageP.isFetching2 == true
-                        ? null
-                        : userManageP.isFetching2,
-                    child: Text(
-                      'Divisi -',
-                      style: TextStyle(color: Constant.textHintColor2),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Skeleton<bool>(
-                width: 1,
-                height: 25,
-                value: userManageP.isFetching2 == true
-                    ? null
-                    : userManageP.isFetching2,
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.grey,
-                  size: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 
@@ -419,11 +413,8 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
       return Column(
         children: [
           itemShimmer(),
-          SizedBox(height: 20),
           itemShimmer(),
-          SizedBox(height: 20),
           itemShimmer(),
-          SizedBox(height: 20),
         ],
       );
     }
@@ -432,11 +423,8 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
       return Column(
         children: [
           itemShimmer2(),
-          SizedBox(height: 20),
           itemShimmer2(),
-          SizedBox(height: 20),
           itemShimmer2(),
-          SizedBox(height: 20),
         ],
       );
     }
@@ -477,7 +465,7 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
                 pagingController: pagingC2,
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                 shrinkWrap: true,
-                physics: ScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),
                 separatorBuilder: (context, index) => SizedBox(height: 8),
                 builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
                   firstPageProgressIndicatorBuilder: (_) =>
@@ -581,81 +569,6 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
           ],
         ),
       );
-      return ListView(
-        children: List.generate(7, (index) {
-          return Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              CustomContainer.mainCard(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset(Assets.iconsIcUser, scale: 6),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Alifano",
-                              style: Constant.iBlackMedium14,
-                            ),
-                            Text(
-                              "Machine Engineer",
-                              style: Constant.blackRegular12,
-                            ),
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7),
-                                border:
-                                    Border.all(width: 1, color: Colors.red)),
-                            child: Icon(
-                              Icons.close,
-                              size: 20,
-                              color: Colors.red,
-                            )),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 60,
-                          padding: EdgeInsets.all(5),
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF19B76E),
-                            borderRadius: BorderRadius.circular(7),
-                          ),
-                          child: Text(
-                            "Terima",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            ],
-          );
-        }),
-      );
     }
 
     Widget bodyUserAktif() {
@@ -676,14 +589,13 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
                 pagingController: pagingC,
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                 shrinkWrap: true,
-                physics: ScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),
                 separatorBuilder: (context, index) => SizedBox(height: 8),
                 builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
                   firstPageProgressIndicatorBuilder: (_) =>
-                      bodyUserListShimmer2(),
+                      bodyUserListShimmer(),
                   firstPageErrorIndicatorBuilder: (_) => failedData(),
-                  newPageProgressIndicatorBuilder: (_) =>
-                      bodyUserListShimmer2(),
+                  newPageProgressIndicatorBuilder: (_) => bodyUserListShimmer(),
                   newPageErrorIndicatorBuilder: (_) => failedData(),
                   noItemsFoundIndicatorBuilder: (_) => noData(),
                   itemBuilder: (context, item, index) {

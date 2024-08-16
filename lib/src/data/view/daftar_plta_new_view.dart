@@ -219,86 +219,68 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
     }
 
     Widget itemShimmer3() {
-      return Column(
-        children: [
-          CustomContainer.mainCard(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            isShadow: false,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Skeleton<bool>(
-                    width: 50,
-                    height: 55,
-                    isCircle: true,
-                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: Colors.white,
-                        image: DecorationImage(
-                          image: AssetImage(
-                            'assets/icons/ic-plta-black.png',
-                          ),
-                          scale: 3,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 5),
-                Expanded(
-                  flex: 8,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Constant.xSizedBox8,
-                      Skeleton<bool>(
-                        width: 100,
-                        height: 13,
-                        value:
-                            pltaP.isFetching == true ? null : pltaP.isFetching,
-                        child: Text(
-                          'Nama -',
-                          style: Constant.iPrimaryMedium8
-                              .copyWith(fontSize: 16, color: Colors.black),
-                        ),
-                      ),
-                      Constant.xSizedBox4,
-                      Skeleton<bool>(
-                        width: 50,
-                        height: 10,
-                        value:
-                            pltaP.isFetching == true ? null : pltaP.isFetching,
-                        child: Text(
-                          'Status -',
-                          style: Constant.iPrimaryMedium8
-                              .copyWith(fontSize: 14, color: Colors.black),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Skeleton<bool>(
-                    width: 1,
-                    height: 25,
-                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                    child: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.grey,
-                      size: 20,
-                    ),
-                  ),
-                )
-              ],
+      return CustomContainer.mainCard(
+        margin: EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        isShadow: true,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Skeleton<bool>(
+                width: 40,
+                height: 40,
+                isCircle: true,
+                value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                child: Image.asset(Assets.iconsIcPlta),
+              ),
             ),
-          ),
-        ],
+            SizedBox(width: 5),
+            Expanded(
+              flex: 8,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Constant.xSizedBox8,
+                  Skeleton<bool>(
+                    width: 100,
+                    height: 13,
+                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                    child: Text(
+                      'Nama -',
+                      style: Constant.iPrimaryMedium8
+                          .copyWith(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                  Constant.xSizedBox4,
+                  Skeleton<bool>(
+                    width: 50,
+                    height: 10,
+                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                    child: Text(
+                      'Status -',
+                      style: Constant.iPrimaryMedium8
+                          .copyWith(fontSize: 14, color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Skeleton<bool>(
+                width: 1,
+                height: 25,
+                value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey,
+                  size: 20,
+                ),
+              ),
+            )
+          ],
+        ),
       );
     }
 
@@ -326,77 +308,69 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
             pltaP.pagingController.refresh();
           }
         },
-        child: Column(
-          children: [
-            Expanded(
-              child: PagedListView.separated(
-                pagingController: pagingC,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return SizedBox();
+        child: PagedListView.separated(
+          pagingController: pagingC,
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+          shrinkWrap: true,
+          physics: ScrollPhysics(),
+          separatorBuilder: (context, index) {
+            return SizedBox();
+          },
+          builderDelegate: PagedChildBuilderDelegate<PltaListModelData>(
+            firstPageProgressIndicatorBuilder: (_) => bodyPLTAListShimmer(),
+            firstPageErrorIndicatorBuilder: (_) => failedData(),
+            newPageProgressIndicatorBuilder: (_) => bodyPLTAListShimmer(),
+            newPageErrorIndicatorBuilder: (_) => failedData(),
+            noItemsFoundIndicatorBuilder: (_) => noData(),
+            itemBuilder: (context, item, index) {
+              return InkWell(
+                onTap: () async {
+                  await CusNav.nPush(
+                      context, TambahPLTANewView(id: item.Id ?? '0'));
+                  pagingC.refresh();
                 },
-                builderDelegate: PagedChildBuilderDelegate<PltaListModelData>(
-                  firstPageProgressIndicatorBuilder: (_) =>
-                      bodyPLTAListShimmer(),
-                  firstPageErrorIndicatorBuilder: (_) => failedData(),
-                  newPageProgressIndicatorBuilder: (_) => bodyPLTAListShimmer(),
-                  newPageErrorIndicatorBuilder: (_) => failedData(),
-                  noItemsFoundIndicatorBuilder: (_) => noData(),
-                  itemBuilder: (context, item, index) {
-                    return InkWell(
-                      onTap: () async {
-                        await CusNav.nPush(
-                            context, TambahPLTANewView(id: item.Id ?? '0'));
-                        pagingC.refresh();
-                      },
-                      child: Column(
+                child: Column(
+                  children: [
+                    CustomContainer.mainCard(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CustomContainer.mainCard(
-                            margin: EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Image.asset(Assets.iconsIcPltaList, scale: 4),
+                          SizedBox(width: 5),
+                          Expanded(
+                            flex: 6,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.asset(Assets.iconsIcPltaList, scale: 4),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  flex: 6,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item?.Name ?? '-',
-                                        style: Constant.iBlackMedium14,
-                                      ),
-                                      Text(
-                                        '${(item.Status ?? false) ? 'Aktif' : 'Nonaktif'}',
-                                        style: Constant.blackRegular12,
-                                      ),
-                                    ],
-                                  ),
+                                Text(
+                                  item?.Name ?? '-',
+                                  style: Constant.iBlackMedium14,
                                 ),
-                                Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.black,
-                                  weight: 1,
+                                Text(
+                                  '${(item.Status ?? false) ? 'Aktif' : 'Nonaktif'}',
+                                  style: Constant.blackRegular12,
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
+                          Icon(
+                            Icons.chevron_right,
+                            color: Colors.black,
+                            weight: 1,
                           ),
                         ],
                       ),
-                    );
-                  },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
-              ),
-            ),
-          ],
+              );
+            },
+          ),
         ),
       );
       // return Column(
@@ -474,9 +448,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
             preferredSize: Size.fromHeight(85), // Ukuran tinggi
             child: Column(
               children: [
-                Container(
-                  child: headKonten(),
-                ),
+                headKonten(),
                 Divider(
                   thickness: 0.5,
                   color: Colors.grey.withOpacity(0.5),

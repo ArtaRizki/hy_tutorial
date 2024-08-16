@@ -74,7 +74,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
             searchOnStoppedTyping!.cancel();
           }
           searchOnStoppedTyping = Timer(duration, () {
-            fetchPlta(context);
+            pagingController.refresh();
           });
         },
       );
@@ -154,28 +154,18 @@ class PltaProvider extends BaseController with ChangeNotifier {
           'FilterValue': '1',
         };
         if (searchC.text.isNotEmpty) param.addAll({'Search': searchC.text});
+
         if (next != null && next != '') param.addAll({'Next': next ?? ''});
-        // log("PANGGIL");
         if (_pagingController.itemList?.length != 0) {
           await Future.delayed(Duration(seconds: 1));
         }
-        final response = await get(
-          url,
-          body: param,
-        );
+        final response = await get(url, body: param);
 
         if (response.statusCode == 201 || response.statusCode == 200) {
           final model = PltaListModel.fromJson(jsonDecode(response.body));
           final items = model.Data ?? [];
           List<PltaListModelData?> newItems;
           newItems = items;
-          // items.where((element) => element?.Status == 'active').toList();
-
-          // userModel = model;
-          // notifyListeners();
-
-          final previouslyFetchedWordCount =
-              _pagingController.itemList?.length ?? 0;
           pageSize = 10;
           log("ITEMS LENGTH : ${newItems.length}");
           final isLastPage = newItems.length < pageSize;

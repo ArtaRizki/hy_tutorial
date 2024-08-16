@@ -318,7 +318,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   TextEditingController emailC = TextEditingController();
   TextEditingController nameC = TextEditingController();
   TextEditingController nipC = TextEditingController();
-  //TextEditingController roleC = TextEditingController();
+  TextEditingController phoneNumberC = TextEditingController();
   TextEditingController usernameC = TextEditingController();
   TextEditingController passwordC = TextEditingController();
   //TextEditingController statusC = TextEditingController();
@@ -340,6 +340,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           ?.Id;
       usernameC.text = data.Data?.Username ?? '';
       emailC.text = data.Data?.Email ?? '';
+      // phoneNumberC.text = data.Data?.NoTelp ?? '';
       passwordC.text = '';
       if (data.Data?.Role == "admin")
         selectedRole = "2";
@@ -359,9 +360,11 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   Future<void> clearForm() async {
     emailC.clear();
+    phoneNumberC.clear();
     usernameC.clear();
     nameC.clear();
     usernameC.clear();
+    passwordC.clear();
     selectedDivision = null;
     selectedRole = null;
     selectedStatus = null;
@@ -599,7 +602,9 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       if (nameC.text.isEmpty) return false;
       if (selectedDivision == null) return false;
       if (usernameC.text.isEmpty) return false;
+      if (passwordC.text.isEmpty) return false;
       if (emailC.text.isEmpty) return false;
+      if (phoneNumberC.text.isEmpty) return false;
     } else {
       if (selectedDivision == null) return false;
       if (selectedRole == null) return false;
@@ -618,6 +623,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       'Name': nameC.text,
       'Username': usernameC.text,
       'Email': emailC.text,
+      // 'NoTelp': phoneNumberC.text,
       'DivisionId': selectedDivision ?? '',
       'RadiusStatus': '$radiusStatus',
     };

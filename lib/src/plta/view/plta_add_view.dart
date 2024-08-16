@@ -1,4 +1,3 @@
-
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -404,8 +403,8 @@ class _PltaAddViewState extends BaseState<PltaAddView> {
       appBar: CustomAppBar.appBar(
         context,
         "${widget.id != null ? 'Edit' : 'Tambah'} PLTA",
-        color: Constant.primaryColor,
-        foregroundColor: Colors.white,
+        color: Colors.white,
+        foregroundColor: Colors.black,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),

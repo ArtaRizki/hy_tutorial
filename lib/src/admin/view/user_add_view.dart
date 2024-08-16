@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hy_tutorial/common/component/custom_container.dart';
+import 'package:hy_tutorial/common/component/custom_dropdown.dart';
+import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -27,14 +31,176 @@ class _UserAddViewState extends BaseState<UserAddView> {
   Widget build(BuildContext context) {
     final p = context.watch<UserManageProvider>();
     final division = context.watch<DivisionProvider>();
+
+    Widget informasiDasar() {
+      return CustomContainer.mainCard(
+        margin: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Informasi Dasar",
+              style:
+                  Constant.iBlackMedium16.copyWith(fontWeight: FontWeight.w600),
+            ),
+            Constant.xSizedBox8,
+            Divider(
+              thickness: 0.5,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            Constant.xSizedBox8,
+            CustomTextField.borderTextField(
+              controller: p.nameC,
+              textInputType: TextInputType.name,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+              ],
+              readOnly: widget.id != null,
+              enabled: !(widget.id != null),
+              labelText: "Nama",
+              hintText: "Nama",
+              onChange: (v) {
+                setState(() {});
+              },
+            ),
+            Constant.xSizedBox16,
+            CustomDropdown.normalDropdown(
+              //controller: roleC,
+              iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+              contentPadding: EdgeInsets.all(2),
+              borderColor: Constant.primaryColor,
+              labelText: "Divisi",
+              //selectedItem: selectedRole,
+              selectedItem: p.selectedDivision,
+              hintText: "Divisi",
+              list: List.generate(
+                division.divisionModel.Data?.length ?? 0,
+                (index) => DropdownMenuItem(
+                    child:
+                        Text(division.divisionModel.Data?[index]?.Name ?? ""),
+                    value: division.divisionModel.Data?[index]?.Id ?? ""),
+              ),
+              onChanged: (val) {
+                p.selectedDivision = val;
+                setState(() {});
+              },
+            ),
+            Constant.xSizedBox16,
+            CustomDropdown.normalDropdown(
+              //controller: roleC,
+              padding: EdgeInsets.only(top: 16),
+              iconPadding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+              contentPadding: EdgeInsets.all(2),
+              borderColor: Constant.primaryColor,
+              labelText: "Role",
+              selectedItem: p.selectedRole,
+              //selectedItem: selectedDivision,
+              hintText: "Role",
+              list: [
+                DropdownMenuItem(
+                  child: Text("Admin"),
+                  value: "2",
+                ),
+                DropdownMenuItem(
+                  child: Text("User"),
+                  value: "3",
+                ),
+              ],
+              onChanged: (val) {
+                p.selectedRole = val;
+                setState(() {});
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget akunKredensial() {
+      return CustomContainer.mainCard(
+        margin: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Akun Kredensial",
+              style:
+                  Constant.iBlackMedium16.copyWith(fontWeight: FontWeight.w600),
+            ),
+            Constant.xSizedBox8,
+            Divider(
+              thickness: 0.5,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            Constant.xSizedBox8,
+            CustomTextField.borderTextField(
+              controller: p.emailC,
+              labelText: "Email",
+              hintText: "Email",
+              readOnly: widget.id != null,
+              enabled: !(widget.id != null),
+              onChange: (v) {
+                setState(() {});
+              },
+            ),
+            Constant.xSizedBox16,
+            CustomTextField.borderTextField(
+              controller: p.phoneNumberC,
+              labelText: "No. Telepon",
+              hintText: "No. Telepon",
+              readOnly: widget.id != null,
+              enabled: !(widget.id != null),
+              onChange: (v) {
+                setState(() {});
+              },
+            ),
+            Constant.xSizedBox16,
+            CustomTextField.borderTextField(
+              controller: p.usernameC,
+              labelText: "Username",
+              hintText: "Username",
+              readOnly: widget.id != null,
+              enabled: !(widget.id != null),
+              onChange: (v) {
+                setState(() {});
+              },
+            ),
+            Constant.xSizedBox16,
+            CustomTextField.borderTextField(
+              controller: p.passwordC,
+              labelText: "Password",
+              hintText: "Password",
+              readOnly: widget.id != null,
+              enabled: !(widget.id != null),
+              onChange: (v) {
+                setState(() {});
+              },
+              suffixIcon: InkWell(
+                onTap: () => p.toggleObscurePass(),
+                child: Icon(
+                  p.obscurePass
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility,
+                  color: Constant.primaryColor,
+                ),
+              ),
+            ),
+            Constant.xSizedBox16,
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: widget.id != null
           ? CustomAppBar.appBar(
               context,
               "Edit User",
-              color: Constant.primaryColor,
-              foregroundColor: Colors.white,
+              color: Colors.white,
+              foregroundColor: Colors.black,
               action: [
                 IconButton(
                   onPressed: () {
@@ -60,19 +226,21 @@ class _UserAddViewState extends BaseState<UserAddView> {
           : CustomAppBar.appBar(context, "Tambah User",
               color: Constant.primaryColor, foregroundColor: Colors.white),
       body: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Column(children: [
             Expanded(
               child: ListView(
                 children: [
-                  ...p.userForm(division.divisionModel.Data, () {
-                    setState(() {});
-                  }, widget.id != null),
+                  informasiDasar(),
+                  akunKredensial(),
+                  // ...p.userForm(division.divisionModel.Data, () {
+                  //   setState(() {});
+                  // }, widget.id != null),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: widget.id != null
                   ? CustomButton.mainButton(
                       'Submit',
