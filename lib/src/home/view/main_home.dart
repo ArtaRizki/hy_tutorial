@@ -170,8 +170,8 @@ class _MainHomeState extends State<MainHome> {
           currentIndex: currentIndex,
           onTap: (index) async {
             if (index == 2) {
+              await showSheet();
               setState(() => currentIndex = 0);
-              showSheet();
             } else {
               final turbineP = context.read<TurbineProvider>();
               turbineP.setStartDate(null);

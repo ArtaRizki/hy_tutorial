@@ -49,6 +49,7 @@ class _DaftarLaporanNewViewState extends BaseState<DaftarLaporanNewView> {
       turbineP.next = null;
       turbineP.getTurbine();
     }
+    setState(() {});
   }
 
   @override

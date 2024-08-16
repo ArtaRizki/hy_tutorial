@@ -417,7 +417,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
           isLeading: false,
           action: [
             Container(
-              margin: EdgeInsets.only(right: 10),
+              margin: EdgeInsets.only(right: 20),
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Constant.primaryColor),

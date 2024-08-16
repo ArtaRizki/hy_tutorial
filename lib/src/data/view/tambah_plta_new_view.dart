@@ -376,8 +376,8 @@ class _TambahPLTANewViewState extends BaseState<TambahPLTANewView> {
       appBar: CustomAppBar.appBar(
         context,
         "${widget.id != null ? 'Edit' : 'Tambah'} PLTA",
-        color: Constant.primaryColor,
-        foregroundColor: Colors.white,
+        elevation: 1,
+        shadowColor: Colors.black54,
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),

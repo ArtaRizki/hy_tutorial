@@ -199,8 +199,8 @@ class _UserAddViewState extends BaseState<UserAddView> {
           ? CustomAppBar.appBar(
               context,
               "Edit User",
-              color: Colors.white,
-              foregroundColor: Colors.black,
+              elevation: 1,
+              shadowColor: Colors.black54,
               action: [
                 IconButton(
                   onPressed: () {
@@ -223,8 +223,12 @@ class _UserAddViewState extends BaseState<UserAddView> {
                 ),
               ],
             )
-          : CustomAppBar.appBar(context, "Tambah User",
-              color: Constant.primaryColor, foregroundColor: Colors.white),
+          : CustomAppBar.appBar(
+              context,
+              "Tambah User",
+              elevation: 1,
+              shadowColor: Colors.black54,
+            ),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Column(children: [

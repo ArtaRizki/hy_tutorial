@@ -608,8 +608,12 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(context, "Tambah Data Shaft",
-          color: Constant.primaryColor, foregroundColor: Colors.white),
+      appBar: CustomAppBar.appBar(
+        context,
+        "Tambah Data Shaft",
+        elevation: 1,
+        shadowColor: Colors.black54,
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
         child: Column(

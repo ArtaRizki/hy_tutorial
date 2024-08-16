@@ -14,10 +14,12 @@ import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/src/data/view/daftar_laporan_new_view.dart';
+import 'package:hy_tutorial/src/home/provider/home_provider.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
+import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import '../../../common/component/custom_appbar.dart';
@@ -194,7 +196,7 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
         tabs: [
           _buildTab(
             "User Request",
-            (pagingC2.itemList?.isEmpty ?? false)
+            (pagingC2.itemList?.length ?? 0) == 0
                 ? SizedBox()
                 : CircleAvatar(
                     backgroundColor: Colors.white,
@@ -209,7 +211,7 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
           ),
           _buildTab(
               "User Aktif",
-              (pagingC.itemList?.isEmpty ?? false)
+              (pagingC.itemList?.length ?? 0) == 0
                   ? SizedBox()
                   : CircleAvatar(
                       backgroundColor: Colors.white,
@@ -479,7 +481,7 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
                     return InkWell(
                       onTap: () async {
                         await CusNav.nPush(
-                            context, UserDetailView(id: item.Id ?? ''));
+                            context, UserAddView(id: item.Id ?? ''));
                         pagingC2.refresh();
                       },
                       child: Column(
@@ -520,7 +522,34 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
                                   ),
                                 ),
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menolak User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '2';
+                                            await p.updateUser(
+                                              context,
+                                              id: item?.Id ?? '',
+                                              fromHome: true,
+                                            );
+
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
                                   child: Container(
                                       width: 30,
                                       height: 30,
@@ -539,7 +568,33 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
                                   width: 5,
                                 ),
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menerima User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '1';
+                                            await p.updateUser(
+                                              context,
+                                              id: item?.Id ?? '',
+                                              fromHome: true,
+                                            );
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
                                   child: Container(
                                     width: 60,
                                     padding: EdgeInsets.all(5),
@@ -663,81 +718,6 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
           ],
         ),
       );
-      return ListView(
-        children: List.generate(7, (index) {
-          return Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              CustomContainer.mainCard(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset(Assets.iconsIcUser, scale: 6),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Alifano",
-                              style: Constant.iBlackMedium14,
-                            ),
-                            Text(
-                              "Machine Engineer",
-                              style: Constant.blackRegular12,
-                            ),
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7),
-                                border:
-                                    Border.all(width: 1, color: Colors.red)),
-                            child: Icon(
-                              Icons.close,
-                              size: 20,
-                              color: Colors.red,
-                            )),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 60,
-                          padding: EdgeInsets.all(5),
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF19B76E),
-                            borderRadius: BorderRadius.circular(7),
-                          ),
-                          child: Text(
-                            "Terima",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            ],
-          );
-        }),
-      );
     }
 
     return Scaffold(
@@ -787,7 +767,7 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
               SizedBox(height: 8),
               Expanded(
                 child: TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
+                  // physics: NeverScrollableScrollPhysics(),
                   controller: tabController,
                   children: [
                     bodyUserRequest(),

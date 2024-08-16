@@ -2,6 +2,8 @@ import 'dart:developer';
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/generated/assets.dart';
 import 'package:intl/intl.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_container.dart';
@@ -84,250 +86,144 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
     }
 
     Widget toggleTab() {
-      return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            border: Border.all(color: Constant.primaryColor, width: 0.5)),
-        child: Center(
-          child: TabBar(
-            isScrollable: true,
-            controller: tabController,
-            indicatorWeight: 4,
-            tabAlignment: TabAlignment.center,
-            indicatorSize: TabBarIndicatorSize.tab,
-            unselectedLabelColor: Constant.grayColor,
-            labelColor: Constant.primaryColor,
-            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
-            indicatorColor: Constant.primaryColor,
-            tabs: [
-              _buildTab("A-C"),
-              _buildTab("B-D"),
-              _buildTab("Resultan"),
-              _buildTab("Bolt")
-            ],
+      return Center(
+        child: TabBar(
+          isScrollable: false,
+          controller: tabController,
+          indicatorWeight: 2,
+          tabAlignment: TabAlignment.center,
+          indicatorSize: TabBarIndicatorSize.tab,
+          unselectedLabelColor: Constant.grayColor,
+          labelColor: Constant.textColorBlack2,
+          labelStyle: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
           ),
+          unselectedLabelStyle: TextStyle(color: Color(0xff525252)),
+          indicatorColor: Constant.primaryColor,
+          tabs: [
+            _buildTab("A-C"),
+            _buildTab("B-D"),
+            _buildTab("Resultan"),
+            _buildTab("Baut")
+          ],
         ),
       );
     }
 
     Widget toggleTab1() {
-      return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            border: Border.all(color: Constant.primaryColor, width: 0.5)),
-        child: Center(
-          child: TabBar(
-            isScrollable: true,
-            controller: tabController1,
-            indicatorWeight: 4,
-            tabAlignment: TabAlignment.center,
-            indicatorSize: TabBarIndicatorSize.tab,
-            unselectedLabelColor: Constant.grayColor,
-            labelColor: Constant.primaryColor,
-            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
-            indicatorColor: Constant.primaryColor,
-            tabs: [
-              _buildTab("Upper"),
-              _buildTab("Clutch"),
-              _buildTab("Turbine"),
-            ],
+      return Center(
+        child: TabBar(
+          isScrollable: false,
+          controller: tabController1,
+          indicatorWeight: 2,
+          tabAlignment: TabAlignment.fill,
+          indicatorSize: TabBarIndicatorSize.tab,
+          unselectedLabelColor: Constant.grayColor,
+          labelColor: Constant.textColorBlack2,
+          labelStyle: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
           ),
+          unselectedLabelStyle: TextStyle(color: Color(0xff525252)),
+          indicatorColor: Constant.primaryColor,
+          tabs: [
+            _buildTab("Upper"),
+            _buildTab("Clutch"),
+            _buildTab("Turbine"),
+          ],
         ),
       );
     }
 
-    Widget acBdActive() => Column(
-          children: [
-            Container(
-              color: Color(0xffEFEFEF),
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      'Total Baut',
-                      style: TextStyle(color: Constant.textColorBlack),
-                    ),
-                  ),
-                  Constant.xSizedBox8,
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      '${data?.totalBolts ?? 0}',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
+    TableRow tableRowItem({
+      required String title,
+      required String value,
+      bool isGray = false,
+    }) {
+      return TableRow(
+        decoration:
+            !isGray ? null : BoxDecoration(color: Constant.tableGrayColor),
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child:
+                Text(title, style: TextStyle(color: Constant.textColorBlack)),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Text(
+              textAlign: TextAlign.center,
+              value,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Constant.textColorBlack2,
               ),
             ),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      'Torsi Saat Ini',
-                      style: TextStyle(color: Constant.textColorBlack),
-                    ),
-                  ),
-                  Constant.xSizedBox8,
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      '${data?.currentTorque ?? 0}',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: Color(0xffEFEFEF),
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      'Max Torsi',
-                      style: TextStyle(color: Constant.textColorBlack),
-                    ),
-                  ),
-                  Constant.xSizedBox8,
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      '${data?.maxTorque ?? 0}',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      'Selisih Torsi',
-                      style: TextStyle(color: Constant.textColorBlack),
-                    ),
-                  ),
-                  Constant.xSizedBox8,
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      '${data?.torqueGap ?? 0}',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: Color(0xffEFEFEF),
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      'Gen. Bearing-Kopling',
-                      style: TextStyle(color: Constant.textColorBlack),
-                    ),
-                  ),
-                  Constant.xSizedBox8,
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      '${shaft?.genBearingToCoupling ?? 0}',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      'Kopling - Turbin',
-                      style: TextStyle(color: Constant.textColorBlack),
-                    ),
-                  ),
-                  Constant.xSizedBox8,
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      '${shaft?.couplingToTurbine ?? 0}',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: Color(0xffEFEFEF),
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      'Total',
-                      style: TextStyle(color: Constant.textColorBlack),
-                    ),
-                  ),
-                  Constant.xSizedBox8,
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      '${shaft?.total ?? 0}',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      'Rasio',
-                      style: TextStyle(color: Constant.textColorBlack),
-                    ),
-                  ),
-                  Constant.xSizedBox8,
-                  Expanded(
-                    flex: 5,
-                    child: Text(
-                      (shaft?.ratio ?? 0).toStringAsFixed(2),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
+          ),
+        ],
+      );
+    }
+
+    Widget acBdActive() {
+      return Table(
+        border: TableBorder.all(
+          color: Constant.borderSearchColor,
+          width: 0.25,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        columnWidths: {
+          0: FlexColumnWidth(6),
+          1: FlexColumnWidth(2),
+        },
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        children: [
+          tableRowItem(
+            title: 'Total Baut',
+            value: '${data?.totalBolts ?? 0}',
+            isGray: true,
+          ),
+          tableRowItem(
+            title: 'Torsi Terkini',
+            value: '${data?.currentTorque ?? 0}',
+          ),
+          tableRowItem(
+            title: 'Max Torsi',
+            value: '${data?.maxTorque ?? 0}',
+            isGray: true,
+          ),
+          tableRowItem(
+            title: 'Selisih Torsi',
+            value: '${data?.torqueGap ?? 0}',
+          ),
+          tableRowItem(
+            title: 'Gen. Bearing-Kopling',
+            value: '${shaft?.genBearingToCoupling ?? 0}',
+            isGray: true,
+          ),
+          tableRowItem(
+            title: 'Kopling - Turbin',
+            value: '${shaft?.couplingToTurbine ?? 0}',
+          ),
+          tableRowItem(
+            title: 'Total',
+            value: '${shaft?.total ?? 0}',
+            isGray: true,
+          ),
+          tableRowItem(
+            title: 'Rasio',
+            value: (shaft?.ratio ?? 0).toStringAsFixed(2),
+          ),
+        ],
+      );
+    }
 
     Widget clutchActive() => Table(
           border: TableBorder.all(
-              color: Constant.borderSearchColor,
-              borderRadius: BorderRadius.circular(5)),
+            color: Constant.borderSearchColor,
+            width: 0.25,
+            borderRadius: BorderRadius.circular(5),
+          ),
           columnWidths: const <int, TableColumnWidth>{
             0: FlexColumnWidth(),
             1: FlexColumnWidth(),
@@ -337,96 +233,182 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: [
-            TableRow(children: [
-              Text('\n\n', textAlign: TextAlign.center),
-              Text('\nA\n', textAlign: TextAlign.center),
-              Text('\nB\n', textAlign: TextAlign.center),
-              Text('\nC\n', textAlign: TextAlign.center),
-              Text('\nD\n', textAlign: TextAlign.center),
-            ]),
+            TableRow(
+                decoration: BoxDecoration(color: Constant.tableGrayColor),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'No.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'A',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'B',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'C',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'D',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                ]),
             TableRow(children: [
               Text('1', textAlign: TextAlign.center),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${clutchData?.a?['1'] ?? 0}'),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${clutchData?.b?['1'] ?? 0}'),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${clutchData?.c?['1'] ?? 0}'),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${clutchData?.d?['1'] ?? 0}'),
             ]),
-            TableRow(children: [
-              Text('2', textAlign: TextAlign.center),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.a?['2'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.b?['2'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.c?['2'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.d?['2'] ?? 0}'),
-            ]),
-            TableRow(children: [
-              Text('3', textAlign: TextAlign.center),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.a?['3'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.b?['3'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.c?['3'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.d?['3'] ?? 0}'),
-            ]),
-            TableRow(children: [
-              Text('4', textAlign: TextAlign.center),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.a?['4'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.b?['4'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.c?['4'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${clutchData?.d?['4'] ?? 0}'),
-            ]),
+            TableRow(
+              decoration: BoxDecoration(color: Constant.tableGrayColor),
+              children: [
+                Text('2', textAlign: TextAlign.center),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.a?['2'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.b?['2'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.c?['2'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.d?['2'] ?? 0}'),
+              ],
+            ),
+            TableRow(
+              children: [
+                Text('3', textAlign: TextAlign.center),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.a?['3'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.b?['3'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.c?['3'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.d?['3'] ?? 0}'),
+              ],
+            ),
+            TableRow(
+              decoration: BoxDecoration(color: Constant.tableGrayColor),
+              children: [
+                Text('4', textAlign: TextAlign.center),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.a?['4'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.b?['4'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.c?['4'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${clutchData?.d?['4'] ?? 0}'),
+              ],
+            ),
           ],
         );
 
     Widget turbineActive() => Table(
           border: TableBorder.all(
-              color: Constant.borderSearchColor,
-              borderRadius: BorderRadius.circular(5)),
+            color: Constant.borderSearchColor,
+            width: 0.25,
+            borderRadius: BorderRadius.circular(5),
+          ),
           columnWidths: const <int, TableColumnWidth>{
             0: FlexColumnWidth(),
             1: FlexColumnWidth(),
@@ -436,96 +418,182 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: [
-            TableRow(children: [
-              Text('\n\n', textAlign: TextAlign.center),
-              Text('\nA\n', textAlign: TextAlign.center),
-              Text('\nB\n', textAlign: TextAlign.center),
-              Text('\nC\n', textAlign: TextAlign.center),
-              Text('\nD\n', textAlign: TextAlign.center),
-            ]),
+            TableRow(
+                decoration: BoxDecoration(color: Constant.tableGrayColor),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'No.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'A',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'B',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'C',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'D',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                ]),
             TableRow(children: [
               Text('1', textAlign: TextAlign.center),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${turbineData?.a?['1'] ?? 0}'),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${turbineData?.b?['1'] ?? 0}'),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${turbineData?.c?['1'] ?? 0}'),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${turbineData?.d?['1'] ?? 0}'),
             ]),
-            TableRow(children: [
-              Text('2', textAlign: TextAlign.center),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.a?['2'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.b?['2'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.c?['2'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.d?['2'] ?? 0}'),
-            ]),
-            TableRow(children: [
-              Text('3', textAlign: TextAlign.center),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.a?['3'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.b?['3'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.c?['3'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.d?['3'] ?? 0}'),
-            ]),
-            TableRow(children: [
-              Text('4', textAlign: TextAlign.center),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.a?['4'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.b?['4'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.c?['4'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${turbineData?.d?['4'] ?? 0}'),
-            ]),
+            TableRow(
+              decoration: BoxDecoration(color: Constant.tableGrayColor),
+              children: [
+                Text('2', textAlign: TextAlign.center),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.a?['2'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.b?['2'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.c?['2'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.d?['2'] ?? 0}'),
+              ],
+            ),
+            TableRow(
+              children: [
+                Text('3', textAlign: TextAlign.center),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.a?['3'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.b?['3'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.c?['3'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.d?['3'] ?? 0}'),
+              ],
+            ),
+            TableRow(
+              decoration: BoxDecoration(color: Constant.tableGrayColor),
+              children: [
+                Text('4', textAlign: TextAlign.center),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.a?['4'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.b?['4'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.c?['4'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${turbineData?.d?['4'] ?? 0}'),
+              ],
+            ),
           ],
         );
 
     Widget upperActive() => Table(
           border: TableBorder.all(
-              color: Constant.borderSearchColor,
-              borderRadius: BorderRadius.circular(5)),
+            color: Constant.borderSearchColor,
+            width: 0.25,
+            borderRadius: BorderRadius.circular(5),
+          ),
           columnWidths: const <int, TableColumnWidth>{
             0: FlexColumnWidth(),
             1: FlexColumnWidth(),
@@ -535,101 +603,185 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: [
-            TableRow(children: [
-              Text('\n\n', textAlign: TextAlign.center),
-              Text('\nA\n', textAlign: TextAlign.center),
-              Text('\nB\n', textAlign: TextAlign.center),
-              Text('\nC\n', textAlign: TextAlign.center),
-              Text('\nD\n', textAlign: TextAlign.center),
-            ]),
+            TableRow(
+                decoration: BoxDecoration(color: Constant.tableGrayColor),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'No.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'A',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'B',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'C',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'D',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Constant.textColorBlack2,
+                      ),
+                    ),
+                  ),
+                ]),
             TableRow(children: [
               Text('1', textAlign: TextAlign.center),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${upperData?.a?['1'] ?? 0}'),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${upperData?.b?['1'] ?? 0}'),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${upperData?.c?['1'] ?? 0}'),
               CustomTextField.tableTextField(
+                  borderColor: Colors.transparent,
                   readOnly: true,
                   controller: TextEditingController()
                     ..text = '${upperData?.d?['1'] ?? 0}'),
             ]),
-            TableRow(children: [
-              Text('2', textAlign: TextAlign.center),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.a?['2'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.b?['2'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.c?['2'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.d?['2'] ?? 0}'),
-            ]),
-            TableRow(children: [
-              Text('3', textAlign: TextAlign.center),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.a?['3'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.b?['3'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.c?['3'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.d?['3'] ?? 0}'),
-            ]),
-            TableRow(children: [
-              Text('4', textAlign: TextAlign.center),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.a?['4'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.b?['4'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.c?['4'] ?? 0}'),
-              CustomTextField.tableTextField(
-                  readOnly: true,
-                  controller: TextEditingController()
-                    ..text = '${upperData?.d?['4'] ?? 0}'),
-            ]),
+            TableRow(
+              decoration: BoxDecoration(color: Constant.tableGrayColor),
+              children: [
+                Text('2', textAlign: TextAlign.center),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.a?['2'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.b?['2'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.c?['2'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.d?['2'] ?? 0}'),
+              ],
+            ),
+            TableRow(
+              children: [
+                Text('3', textAlign: TextAlign.center),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.a?['3'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.b?['3'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.c?['3'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.d?['3'] ?? 0}'),
+              ],
+            ),
+            TableRow(
+              decoration: BoxDecoration(color: Constant.tableGrayColor),
+              children: [
+                Text('4', textAlign: TextAlign.center),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.a?['4'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.b?['4'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.c?['4'] ?? 0}'),
+                CustomTextField.tableTextField(
+                    borderColor: Colors.transparent,
+                    fillColor: Constant.tableGrayColor,
+                    readOnly: true,
+                    controller: TextEditingController()
+                      ..text = '${upperData?.d?['4'] ?? 0}'),
+              ],
+            ),
           ],
         );
 
     return Scaffold(
       appBar: CustomAppBar.appBar(
         context,
-        tabController.index == 2 ? 'Upper' : 'Shaft',
+        'Detail Laporan',
         color: Constant.primaryColor,
         foregroundColor: Colors.white,
         action: [
-          IconButton(
-            onPressed: () {
+          InkWell(
+            onTap: () async {
               Utils.showYesNoDialogWithWarning(
                   context: context,
                   title: "Konfirmasi Penghapusan",
@@ -647,151 +799,252 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
                     Navigator.pop(context);
                   });
             },
-            icon: Icon(
-              Icons.delete,
-              // color: Constant.redColor,
+            child: Container(
+              margin: EdgeInsets.only(right: 20),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Constant.redColor,
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    Icons.delete_forever_rounded,
+                    size: 15,
+                  ),
+                  Text(
+                    "Hapus",
+                    style:
+                        Constant.iPrimaryMedium12.copyWith(color: Colors.white),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            Text(
-              tabController.index == 2 ? 'Grafik Resultan' : 'Grafik Shaft',
-              style: Constant.iBlackMedium16,
+      body: ListView(
+        shrinkWrap: true,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Constant.primaryColor,
+              image: DecorationImage(
+                alignment: Alignment.bottomCenter,
+                image: AssetImage(Assets.imagesImgHomeTop),
+                fit: BoxFit.fitWidth,
+              ),
             ),
-            Constant.xSizedBox4,
-            Row(
+            width: double.infinity,
+            padding: EdgeInsets.fromLTRB(20, 8, 20, 15),
+            child: Column(
               children: [
-                Expanded(
-                    child: Text(
-                  data?.title ?? '',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.grayColor,
-                      fontWeight: FontWeight.w600),
-                )),
-                Constant.xSizedBox4,
-                Text(
-                  '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(d.turbineDetailModel.data?.createdAt ?? '${DateTime.now()}'))}',
-                  style: TextStyle(color: Constant.textColorBlack),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            data?.createdBy ?? '',
+                            style: Constant.iBlackMedium16.copyWith(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Constant.xSizedBox4,
+                          Text(
+                            data?.title ?? '',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      flex: 5,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 8),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.white24,
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Text(
+                            '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(d.turbineDetailModel.data?.createdAt ?? '${DateTime.now()}'))}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                CustomContainer.mainCard(
+                  margin: EdgeInsets.only(top: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  color: Colors.white12,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: status == true
+                                ? Container(
+                                    decoration:
+                                        BoxDecoration(color: Colors.white),
+                                    child: Image.asset(
+                                      width: 50,
+                                      height: 50,
+                                      'assets/icons/ic-smile.png',
+                                    ),
+                                  )
+                                : Container(
+                                    width: 52,
+                                    height: 52,
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle),
+                                    child: Image.asset(
+                                      width: 40,
+                                      height: 40,
+                                      'assets/icons/ic-sad.png',
+                                    ),
+                                  ),
+                          ),
+                          Constant.xSizedBox12,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Total Run Out : ',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                Constant.xSizedBox4,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      flex: 8,
+                                      child: Text(
+                                        '${totalCrockedness ?? 0}',
+                                        textAlign: TextAlign.left,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Constant.xSizedBox4,
+                                    Expanded(
+                                      flex: 4,
+                                      child: Text(
+                                        'X 0,01 mm',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
-            Constant.xSizedBox16,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: CustomContainer.mainCard(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: status == true
-                              ? Image.asset(
-                                  width: 50,
-                                  height: 50,
-                                  'assets/icons/ic-smile.png',
-                                )
-                              : Image.asset(
-                                  width: 50,
-                                  height: 50,
-                                  'assets/icons/ic-sad.png',
-                                ),
-                        ),
-                        Constant.xSizedBox16,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Total Run Out : ',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Constant.xSizedBox4,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 8,
-                                    child: Text(
-                                      '${totalCrockedness ?? 0}',
-                                      textAlign: TextAlign.left,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  Constant.xSizedBox4,
-                                  Expanded(
-                                    flex: 4,
-                                    child: Text(
-                                      'X 0,01 mm',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Constant.redColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+          ),
+          Constant.xSizedBox16,
+          CustomContainer.mainCard(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  tabController.index == 2 ? 'Grafik Resultan' : 'Grafik Shaft',
+                  style: TextStyle(
+                    color: Constant.textColorBlack2,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
+                Constant.xSizedBox12,
+                toggleTab(),
+                Container(
+                    child: tabController.index == 2
+                        ? UpperChartView()
+                        : tabController.index == 3
+                            ? BoltChartView()
+                            : SampleChartView(
+                                activeIndex: tabController.index,
+                                typePage: 'detail')),
+              ],
             ),
-            Constant.xSizedBox16,
-            toggleTab(),
-            Container(
-                child: tabController.index == 2
-                    ? UpperChartView()
-                    : tabController.index == 3
-                        ? BoltChartView()
-                        : SampleChartView(
-                            activeIndex: tabController.index,
-                            typePage: 'detail')),
-            Constant.xSizedBox16,
-            Text('Detail Data', style: Constant.iBlackMedium16),
-            Constant.xSizedBox8,
-            Text(
-              tabController1.index == 2
-                  ? 'Detail data clutch yang telah di input'
-                  : tabController1.index == 1
-                      ? 'Detail data turbine yang telah di input'
-                      : 'Detail data upper yang telah di input',
-              style: TextStyle(fontSize: 12, color: Constant.grayColor),
+          ),
+          Constant.xSizedBox16,
+          CustomContainer.mainCard(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Detail Data',
+                  style: TextStyle(
+                    color: Constant.textColorBlack2,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Constant.xSizedBox12,
+                toggleTab1(),
+                Constant.xSizedBox16,
+                Container(
+                  child: tabController1.index == 2
+                      ? turbineActive()
+                      : tabController1.index == 1
+                          ? clutchActive()
+                          : upperActive(),
+                ),
+                Constant.xSizedBox16,
+                acBdActive(),
+                Constant.xSizedBox18,
+              ],
             ),
-            Constant.xSizedBox16,
-            toggleTab1(),
-            Constant.xSizedBox16,
-            Container(
-              child: tabController1.index == 2
-                  ? turbineActive()
-                  : tabController1.index == 1
-                      ? clutchActive()
-                      : upperActive(),
-            ),
-            Constant.xSizedBox16,
-            acBdActive(),
-            Constant.xSizedBox18,
-          ],
-        ),
+          ),
+          Constant.xSizedBox16,
+        ],
       ),
     );
   }

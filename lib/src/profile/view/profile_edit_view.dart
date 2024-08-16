@@ -48,8 +48,12 @@ class _ProfileEditViewState extends BaseState<ProfileEditView> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(context, "Edit Profile",
-          color: Constant.primaryColor, foregroundColor: Colors.white),
+      appBar: CustomAppBar.appBar(
+        context,
+        "Edit Profile",
+        elevation: 1,
+        shadowColor: Colors.black54,
+      ),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Column(children: [
