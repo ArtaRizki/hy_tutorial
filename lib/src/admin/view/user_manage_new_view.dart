@@ -657,7 +657,7 @@ class _UserManageNewViewState extends BaseState<UserManageNewView>
                     return InkWell(
                       onTap: () async {
                         await CusNav.nPush(
-                            context, UserDetailView(id: item.Id ?? ''));
+                            context, UserAddView(id: item.Id ?? ''));
                         pagingC.refresh();
                       },
                       child: Column(

@@ -179,7 +179,7 @@ class _DaftarLaporanNewViewState extends BaseState<DaftarLaporanNewView> {
                   onSubmit: (p0) {
                     CusNav.nPop(context);
                     turbineP.next = null;
-                    pagingC.refresh();
+                    context.read<TurbineProvider>().pagingController.refresh();
                   },
                   onSelectionChanged:
                       (dateRangePickerSelectionChangedArgs) async {

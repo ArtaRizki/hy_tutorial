@@ -30,7 +30,7 @@ class HomeProvider extends BaseController with ChangeNotifier {
     homeModel = HomeModel();
     userListModel = UserListModel();
     await context.read<ProfileProvider>().fetchProfile(withLoading: false);
-    await context.read<HomeProvider>().fetchUserList(withLoading: false);
+    await fetchUserList(withLoading: false);
   }
 
   Future<void> fetchHome({bool withLoading = false}) async {

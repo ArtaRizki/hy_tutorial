@@ -378,6 +378,48 @@ class _TambahPLTANewViewState extends BaseState<TambahPLTANewView> {
         "${widget.id != null ? 'Edit' : 'Tambah'} PLTA",
         elevation: 1,
         shadowColor: Colors.black54,
+        action: [
+          InkWell(
+            onTap: () async {
+              Utils.showYesNoDialogWithWarning(
+                  context: context,
+                  title: "Konfirmasi Penghapusan",
+                  desc: "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
+                  yesCallback: () async {
+                    Navigator.pop(context);
+                    await context
+                        .read<PltaProvider>()
+                        .deletePlta(context, id: widget.id ?? "0");
+                  },
+                  noCallback: () async {
+                    Navigator.pop(context);
+                  });
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 20),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                border: Border.all(color: Constant.redColor),
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    Icons.delete_forever_rounded,
+                    size: 15,
+                    color: Constant.redColor,
+                  ),
+                  Text(
+                    "Hapus",
+                    style: Constant.iPrimaryMedium12
+                        .copyWith(color: Constant.redColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),

@@ -11,6 +11,7 @@ import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
+import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_detail_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_new_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
@@ -84,11 +85,13 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
     Widget headKonten() {
       return Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-          image: AssetImage(Assets.imagesImgHomeTop),
-          fit: BoxFit.contain,
-        )),
-        height: 128,
+          image: DecorationImage(
+            alignment: Alignment.topCenter,
+            image: AssetImage(Assets.imagesImgHomeTop),
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+        // height: 128,
         width: double.infinity,
         padding: EdgeInsets.fromLTRB(20, 35, 20, 15),
         child: Column(
@@ -901,7 +904,7 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
       final item = userList?[index];
       return InkWell(
         onTap: () async {
-          await CusNav.nPush(context, UserDetailView(id: item?.Id ?? ''));
+          await CusNav.nPush(context, UserAddView(id: item?.Id ?? ''));
           await context.read<HomeProvider>().fetchUserList();
         },
         child: Column(
@@ -1113,83 +1116,6 @@ class _HomeAdminNewViewState extends BaseState<HomeAdminNewView>
                           return itemList(index);
                         },
                       ),
-                // Column(
-                //   children: List.generate(7, (index) {
-                //     return Column(
-                //       children: [
-                //         CustomContainer.mainCard(
-                //             margin: EdgeInsets.symmetric(horizontal: 5),
-                //             child: Row(
-                //               mainAxisAlignment:
-                //                   MainAxisAlignment.spaceBetween,
-                //               children: [
-                //                 Image.asset(Assets.iconsIcUser, scale: 6),
-                //                 SizedBox(
-                //                   width: 5,
-                //                 ),
-                //                 Expanded(
-                //                   flex: 6,
-                //                   child: Column(
-                //                     mainAxisAlignment:
-                //                         MainAxisAlignment.start,
-                //                     crossAxisAlignment:
-                //                         CrossAxisAlignment.start,
-                //                     children: [
-                //                       Text(
-                //                         "Alifano",
-                //                         style: Constant.iBlackMedium14,
-                //                       ),
-                //                       Text(
-                //                         "Machine Engineer",
-                //                         style: Constant.blackRegular12,
-                //                       ),
-                //                     ],
-                //                   ),
-                //                 ),
-                //                 InkWell(
-                //                   onTap: () {},
-                //                   child: Container(
-                //                       width: 30,
-                //                       height: 30,
-                //                       decoration: BoxDecoration(
-                //                           borderRadius:
-                //                               BorderRadius.circular(7),
-                //                           border: Border.all(
-                //                               width: 1, color: Colors.red)),
-                //                       child: Icon(
-                //                         Icons.close,
-                //                         size: 20,
-                //                         color: Colors.red,
-                //                       )),
-                //                 ),
-                //                 SizedBox(
-                //                   width: 5,
-                //                 ),
-                //                 InkWell(
-                //                   onTap: () {},
-                //                   child: Container(
-                //                     width: 60,
-                //                     padding: EdgeInsets.all(5),
-                //                     height: 30,
-                //                     decoration: BoxDecoration(
-                //                       color: Color(0xFF19B76E),
-                //                       borderRadius: BorderRadius.circular(7),
-                //                     ),
-                //                     child: Text(
-                //                       "Terima",
-                //                       style: TextStyle(
-                //                           color: Colors.white,
-                //                           fontWeight: FontWeight.w600),
-                //                     ),
-                //                   ),
-                //                 ),
-                //               ],
-                //             )),
-                //         SizedBox(height: 15),
-                //       ],
-                //     );
-                //   }),
-                // ),
               ],
             ),
           ),

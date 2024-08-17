@@ -202,24 +202,56 @@ class _UserAddViewState extends BaseState<UserAddView> {
               elevation: 1,
               shadowColor: Colors.black54,
               action: [
-                IconButton(
-                  onPressed: () {
+                InkWell(
+                  onTap: () async {
                     Utils.showYesNoDialogWithWarning(
                         context: context,
                         title: "Konfirmasi Penghapusan",
                         desc:
                             "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
                         yesCallback: () async {
-                          Navigator.pop(context);
-                          await context
-                              .read<UserManageProvider>()
-                              .deleteUser(context, id: widget.id ?? "0");
+                          Utils.showYesNoDialogWithWarning(
+                              context: context,
+                              title: "Konfirmasi Penghapusan",
+                              desc:
+                                  "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
+                              yesCallback: () async {
+                                Navigator.pop(context);
+                                await context
+                                    .read<UserManageProvider>()
+                                    .deleteUser(context, id: widget.id ?? "0");
+                              },
+                              noCallback: () async {
+                                Navigator.pop(context);
+                              });
                         },
                         noCallback: () async {
                           Navigator.pop(context);
                         });
                   },
-                  icon: Icon(Icons.delete),
+                  child: Container(
+                    margin: EdgeInsets.only(right: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Constant.redColor),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(
+                          Icons.delete_forever_rounded,
+                          size: 15,
+                          color: Constant.redColor,
+                        ),
+                        Text(
+                          "Hapus",
+                          style: Constant.iPrimaryMedium12
+                              .copyWith(color: Constant.redColor),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             )
