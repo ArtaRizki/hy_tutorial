@@ -1,18 +1,19 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
+import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
-import 'package:hy_tutorial/src/admin/view/user_detail_view.dart';
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
-import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
-import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
+import 'package:hy_tutorial/src/home/provider/home_provider.dart';
+import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import '../../../common/component/custom_appbar.dart';
@@ -35,14 +36,13 @@ class _UserManageViewState extends BaseState<UserManageView>
   }
 
   getData() async {
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     tabController.addListener(() {
       log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
     });
 
     final userManageP = context.read<UserManageProvider>();
-    final pltaP = context.read<PltaProvider>();
     if ((userManageP.pagingController.itemList ?? []).isEmpty) {
       userManageP.getUserList();
     } else {
@@ -59,344 +59,349 @@ class _UserManageViewState extends BaseState<UserManageView>
       userManageP.getUserList2();
       setState(() {});
     }
-    //plta
-    if ((pltaP.pagingController.itemList ?? []).isEmpty) {
-      pltaP.getPltaList();
-    } else {
-      pltaP.pagingController.dispose();
-      pltaP.next = null;
-      pltaP.getPltaList();
-      setState(() {});
-    }
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final userManageP = context.watch<UserManageProvider>();
-    final pltaP = context.watch<PltaProvider>();
-    final pltaList = context.watch<PltaProvider>().pltaListModel.Data ?? [];
+
     final pagingC = context.watch<UserManageProvider>().pagingController;
     final pagingC2 = context.watch<UserManageProvider>().pagingController2;
-    final pagingC3 = context.watch<PltaProvider>().pagingController;
+
+    Widget search() => CustomTextField.borderTextField(
+          controller: tabController.index == 0
+              ? userManageP.userSearchC2
+              : userManageP.userSearchC,
+          focusNode:
+              tabController.index == 0 ? userManageP.userN2 : userManageP.userN,
+          required: false,
+          hintText: "Cari User",
+          hintColor: Constant.textHintColor2,
+          prefixIcon: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+            child: Image.asset(
+              Assets.iconsIcSearch,
+              color: Colors.black.withOpacity(0.5),
+              width: 5,
+              height: 5,
+            ),
+          ),
+          suffixIcon: (tabController.index == 0
+                  ? userManageP.userSearchC2.text.isEmpty
+                  : userManageP.userSearchC.text.isEmpty)
+              ? null
+              : InkWell(
+                  onTap: () async {
+                    if (tabController.index == 0) {
+                      userManageP.userSearchC2.clear();
+                      userManageP.userN2.unfocus();
+                      pagingC2.refresh();
+                    } else {
+                      userManageP.userSearchC.clear();
+                      userManageP.userN.unfocus();
+                      pagingC.refresh();
+                    }
+                    setState(() {});
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                    child: Icon(Icons.close),
+                  ),
+                ),
+          onEditingComplete: () {
+            setState(() {});
+            FocusManager.instance.primaryFocus?.unfocus();
+            if (tabController.index == 0) {
+              if (userManageP.searchOnStoppedTyping2 != null) {
+                userManageP.searchOnStoppedTyping2!.cancel();
+              }
+              userManageP.searchOnStoppedTyping2 =
+                  Timer(userManageP.duration2, () async {
+                userManageP.next2 = null;
+                pagingC2.refresh();
+              });
+            } else {
+              if (userManageP.searchOnStoppedTyping != null) {
+                userManageP.searchOnStoppedTyping!.cancel();
+              }
+              userManageP.searchOnStoppedTyping =
+                  Timer(userManageP.duration, () async {
+                userManageP.next = null;
+                pagingC.refresh();
+              });
+            }
+          },
+          onChange: (val) {
+            setState(() {});
+            if (userManageP.searchOnStoppedTyping != null) {
+              userManageP.searchOnStoppedTyping!.cancel();
+            }
+            userManageP.searchOnStoppedTyping =
+                Timer(userManageP.duration, () async {
+              userManageP.next = null;
+              pagingC.refresh();
+            });
+          },
+        );
+
     Widget headKonten() {
       return Container(
-        color: Constant.primaryColor,
-        height: 110,
+        color: Colors.white,
         width: double.infinity,
         padding: EdgeInsets.fromLTRB(20, 10, 20, 15),
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(bottom: 10),
-                padding: EdgeInsets.fromLTRB(15, 15, 15, 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Constant.secondaryColor),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 6,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Manage ${tabController.index != 2 ? 'User' : 'PLTA'}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "Manage ${tabController.index != 2 ? 'User' : 'PLTA'} Anda",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: InkWell(
-                            onTap: () async {
-                              tabController.index != 2
-                                  ? await CusNav.nPush(context, UserAddView())
-                                  : await CusNav.nPush(context, PltaAddView());
-                              pagingC3.refresh();
-                            },
-                            child: Container(
-                                padding: EdgeInsets.all(7),
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  color: Constant.thirdColor,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Add ${tabController.index != 2 ? 'User' : 'PLTA'}",
-                                      style: TextStyle(
-                                          color: Constant.primaryColor,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Image.asset(
-                                      tabController.index != 2
-                                          ? 'assets/icons/ic-add-user.png'
-                                          : 'assets/icons/ic-add-plta.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
+        child: search(),
       );
     }
 
-    Widget _buildTab(String tag) {
+    Widget _buildTab(String tag, Widget conten) {
       return Tab(
-          child: Text(
-        tag,
-        style: TextStyle(fontSize: 18),
-        textAlign: TextAlign.left,
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            tag,
+            style: TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(
+            width: 3,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey, width: 0.5),
+            ),
+            child: conten,
+          )
+        ],
       ));
     }
 
     Widget toggleTab() {
       return TabBar(
-        isScrollable: true,
+        isScrollable: false,
         controller: tabController,
-        indicatorWeight: 4,
-        tabAlignment: TabAlignment.start,
-        indicatorSize: TabBarIndicatorSize.label,
+        tabAlignment: TabAlignment.fill,
+        indicatorSize: TabBarIndicatorSize.tab,
         unselectedLabelColor: Constant.grayColor,
         labelColor: Constant.primaryColor,
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
         indicatorColor: Constant.primaryColor,
         tabs: [
-          _buildTab("User"),
-          _buildTab("Register Request"),
-          _buildTab("Manage PLTA"),
+          _buildTab(
+            "User Request",
+            (pagingC2.itemList?.length ?? 0) == 0
+                ? SizedBox()
+                : CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 10,
+                    child: Center(
+                      child: Text(
+                        '${pagingC2.itemList?.length ?? 0}',
+                        style: Constant.blackRegular14,
+                      ),
+                    ),
+                  ),
+          ),
+          _buildTab(
+              "User Aktif",
+              (pagingC.itemList?.length ?? 0) == 0
+                  ? SizedBox()
+                  : CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 10,
+                      child: Center(
+                        child: Text(
+                          '${pagingC.itemList?.length ?? 0}',
+                          style: Constant.blackRegular14,
+                        ),
+                      ),
+                    )),
+        ],
+      );
+    }
+
+    Widget itemShimmer2() {
+      return Column(
+        children: [
+          Constant.xSizedBox12,
+          CustomContainer.mainCard(
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            isShadow: false,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Skeleton<bool>(
+                    width: 40,
+                    height: 40,
+                    isCircle: true,
+                    value: userManageP.isFetching2 == true
+                        ? null
+                        : userManageP.isFetching2,
+                    child: Image.asset(Assets.iconsIcUser),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 12,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Skeleton<bool>(
+                        value: userManageP.isFetching2 == true
+                            ? null
+                            : userManageP.isFetching2,
+                        width: 80,
+                        height: 15,
+                        child: Text(
+                          'Namaaaaaaaaa',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                      Skeleton<bool>(
+                        value: userManageP.isFetching2 == true
+                            ? null
+                            : userManageP.isFetching2,
+                        width: 60,
+                        height: 12,
+                        child: Text(
+                          'Divisiiiiiiiii -',
+                          style: TextStyle(
+                            color: Constant.textHintColor2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Skeleton<bool>(
+                  value: userManageP.isFetching2 == true
+                      ? null
+                      : userManageP.isFetching2,
+                  width: 30,
+                  height: 30,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                        border: Border.all(width: 1, color: Colors.red)),
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 4),
+                Skeleton<bool>(
+                  width: 55,
+                  height: 30,
+                  value: userManageP.isFetching2 == true
+                      ? null
+                      : userManageP.isFetching2,
+                  child: Container(
+                    width: 60,
+                    height: 30,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF19B76E),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: Text(
+                      "Terima",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       );
     }
 
     Widget itemShimmer() {
-      return CustomContainer.mainCard(
-        isShadow: false,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Skeleton<bool>(
-                width: 50,
-                height: 55,
-                isCircle: true,
-                value: userManageP.isFetching == true
-                    ? null
-                    : userManageP.isFetching,
-                child: Container(
-                  height: 50,
-                  width: 55,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    color: Colors.white,
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/icons/ic-user-black.png',
+      return Column(
+        children: [
+          Constant.xSizedBox12,
+          CustomContainer.mainCard(
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            isShadow: true,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Skeleton<bool>(
+                    width: 40,
+                    height: 40,
+                    isCircle: true,
+                    value: userManageP.isFetching == true
+                        ? null
+                        : userManageP.isFetching,
+                    child: Image.asset(Assets.iconsIcUser),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Skeleton<bool>(
+                        width: 100,
+                        height: 13,
+                        value: userManageP.isFetching == true
+                            ? null
+                            : userManageP.isFetching,
+                        child: Text(
+                          'Nama -',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 16, color: Colors.black),
+                        ),
                       ),
-                      scale: 3,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Constant.xSizedBox8,
-                  Skeleton<bool>(
-                    width: 100,
-                    height: 13,
-                    value: userManageP.isFetching == true
-                        ? null
-                        : userManageP.isFetching,
-                    child: Text(
-                      'Nama -',
-                      style: Constant.iPrimaryMedium8
-                          .copyWith(fontSize: 16, color: Colors.black),
-                    ),
-                  ),
-                  Constant.xSizedBox4,
-                  Skeleton<bool>(
-                    width: 50,
-                    height: 10,
-                    value: userManageP.isFetching == true
-                        ? null
-                        : userManageP.isFetching,
-                    child: Text(
-                      'Status -',
-                      style: Constant.iPrimaryMedium8
-                          .copyWith(fontSize: 14, color: Colors.black),
-                    ),
-                  ),
-                  Constant.xSizedBox4,
-                  Skeleton<bool>(
-                    width: 60,
-                    height: 10,
-                    value: userManageP.isFetching == true
-                        ? null
-                        : userManageP.isFetching,
-                    child: Text(
-                      'Divisi -',
-                      style: TextStyle(color: Constant.textHintColor2),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Skeleton<bool>(
-                value: userManageP.isFetching == true
-                    ? null
-                    : userManageP.isFetching,
-                width: 1,
-                height: 25,
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.grey,
-                  size: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget itemShimmer2() {
-      return CustomContainer.mainCard(
-        isShadow: false,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Skeleton<bool>(
-                width: 50,
-                height: 55,
-                isCircle: true,
-                value: userManageP.isFetching2 == true
-                    ? null
-                    : userManageP.isFetching2,
-                child: Container(
-                  height: 50,
-                  width: 55,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    color: Colors.white,
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/icons/ic-user-black.png',
+                      Constant.xSizedBox4,
+                      Skeleton<bool>(
+                        width: 50,
+                        height: 10,
+                        value: userManageP.isFetching == true
+                            ? null
+                            : userManageP.isFetching,
+                        child: Text(
+                          'Status -',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 14, color: Colors.black),
+                        ),
                       ),
-                      scale: 3,
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Skeleton<bool>(
+                    width: 25,
+                    height: 25,
+                    value: userManageP.isFetching == true
+                        ? null
+                        : userManageP.isFetching,
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 20,
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Constant.xSizedBox8,
-                  Skeleton<bool>(
-                    width: 100,
-                    height: 13,
-                    value: userManageP.isFetching2 == true
-                        ? null
-                        : userManageP.isFetching2,
-                    child: Text(
-                      'Nama -',
-                      style: Constant.iPrimaryMedium8
-                          .copyWith(fontSize: 16, color: Colors.black),
-                    ),
-                  ),
-                  Constant.xSizedBox4,
-                  Skeleton<bool>(
-                    width: 50,
-                    height: 10,
-                    value: userManageP.isFetching2 == true
-                        ? null
-                        : userManageP.isFetching2,
-                    child: Text(
-                      'Status -',
-                      style: Constant.iPrimaryMedium8
-                          .copyWith(fontSize: 14, color: Colors.black),
-                    ),
-                  ),
-                  Constant.xSizedBox4,
-                  Skeleton<bool>(
-                    width: 60,
-                    height: 10,
-                    value: userManageP.isFetching2 == true
-                        ? null
-                        : userManageP.isFetching2,
-                    child: Text(
-                      'Divisi -',
-                      style: TextStyle(color: Constant.textHintColor2),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Skeleton<bool>(
-                width: 1,
-                height: 25,
-                value: userManageP.isFetching2 == true
-                    ? null
-                    : userManageP.isFetching2,
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.grey,
-                  size: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 
@@ -404,11 +409,8 @@ class _UserManageViewState extends BaseState<UserManageView>
       return Column(
         children: [
           itemShimmer(),
-          SizedBox(height: 20),
           itemShimmer(),
-          SizedBox(height: 20),
           itemShimmer(),
-          SizedBox(height: 20),
         ],
       );
     }
@@ -417,11 +419,8 @@ class _UserManageViewState extends BaseState<UserManageView>
       return Column(
         children: [
           itemShimmer2(),
-          SizedBox(height: 20),
           itemShimmer2(),
-          SizedBox(height: 20),
           itemShimmer2(),
-          SizedBox(height: 20),
         ],
       );
     }
@@ -444,119 +443,6 @@ class _UserManageViewState extends BaseState<UserManageView>
       ]);
     }
 
-    Widget bodyUserList() {
-      return RefreshIndicator(
-        onRefresh: () async {
-          userManageP.next = null;
-          if ((userManageP.pagingController.itemList ?? []).isEmpty) {
-            userManageP.pagingController.refresh();
-          } else {
-            userManageP.next = null;
-            userManageP.pagingController.refresh();
-          }
-        },
-        child: Column(
-          children: [
-            Expanded(
-              child: PagedListView.separated(
-                pagingController: pagingC,
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(),
-                separatorBuilder: (_, __) => SizedBox(),
-                builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
-                  firstPageProgressIndicatorBuilder: (_) =>
-                      bodyUserListShimmer(),
-                  firstPageErrorIndicatorBuilder: (_) => failedData(),
-                  newPageProgressIndicatorBuilder: (_) => bodyUserListShimmer(),
-                  newPageErrorIndicatorBuilder: (_) => failedData(),
-                  noItemsFoundIndicatorBuilder: (_) => noData(),
-                  itemBuilder: (context, item, index) {
-                    if (item.Status != 'active') return SizedBox();
-                    return InkWell(
-                      onTap: () async {
-                        await CusNav.nPush(
-                            context, UserAddView(id: item.Id ?? ''));
-                        // context, UserDetailView(id: item.Id ?? ''));
-                        pagingC.refresh();
-                      },
-                      child: Column(
-                        children: [
-                          CustomContainer.mainCard(
-                            isShadow: false,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(40),
-                                      color: Colors.white,
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                          'assets/icons/ic-user-black.png',
-                                        ),
-                                        scale: 3,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  flex: 8,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item.Name ?? 'Nama -',
-                                        style: Constant.iPrimaryMedium8
-                                            .copyWith(
-                                                fontSize: 16,
-                                                color: Colors.black),
-                                      ),
-                                      Text(
-                                        item.Status ?? 'Status -',
-                                        style: Constant.iPrimaryMedium8
-                                            .copyWith(
-                                                fontSize: 14,
-                                                color: Colors.black),
-                                      ),
-                                      Text(
-                                        item.Division ?? 'Divisi -',
-                                        style: TextStyle(
-                                            color: Constant.textHintColor2),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                    flex: 1,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Colors.grey,
-                                      size: 20,
-                                    ))
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     Widget bodyUserRequest() {
       return RefreshIndicator(
         onRefresh: () async {
@@ -575,10 +461,8 @@ class _UserManageViewState extends BaseState<UserManageView>
                 pagingController: pagingC2,
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                 shrinkWrap: true,
-                physics: ScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return SizedBox();
-                },
+                physics: AlwaysScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => SizedBox(height: 8),
                 builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
                   firstPageProgressIndicatorBuilder: (_) =>
                       bodyUserListShimmer2(),
@@ -591,14 +475,16 @@ class _UserManageViewState extends BaseState<UserManageView>
                     return InkWell(
                       onTap: () async {
                         await CusNav.nPush(
-                            context, UserDetailView(id: item.Id ?? ''));
+                            context, UserAddView(id: item.Id ?? ''));
                         pagingC2.refresh();
                       },
                       child: Column(
                         children: [
+                          SizedBox(height: 10),
                           CustomContainer.mainCard(
-                            isShadow: false,
+                            margin: EdgeInsets.symmetric(horizontal: 10),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   flex: 2,
@@ -609,55 +495,118 @@ class _UserManageViewState extends BaseState<UserManageView>
                                       borderRadius: BorderRadius.circular(40),
                                       color: Colors.white,
                                       image: DecorationImage(
-                                        image: AssetImage(
-                                          'assets/icons/ic-user-black.png',
-                                        ),
-                                        scale: 3,
+                                        image: AssetImage(Assets.iconsIcUser),
+                                        scale: 6,
                                       ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 10),
+                                SizedBox(width: 5),
                                 Expanded(
-                                  flex: 8,
+                                  flex: 6,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        item.Name ?? 'Nama -',
-                                        style: Constant.iPrimaryMedium8
-                                            .copyWith(
-                                                fontSize: 16,
-                                                color: Colors.black),
-                                      ),
-                                      Text(
-                                        item.Status ?? 'Status -',
-                                        style: Constant.iPrimaryMedium8
-                                            .copyWith(
-                                                fontSize: 14,
-                                                color: Colors.black),
-                                      ),
-                                      Text(
-                                        item.Division ?? 'Divisi -',
-                                        style: TextStyle(
-                                            color: Constant.textHintColor2),
-                                      ),
+                                      Text(item.Name ?? 'Nama -',
+                                          style: Constant.iBlackMedium14),
+                                      Text(item.Division ?? 'Divisi -',
+                                          style: Constant.blackRegular12),
                                     ],
                                   ),
                                 ),
-                                Expanded(
-                                    flex: 1,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Colors.grey,
-                                      size: 20,
-                                    ))
+                                InkWell(
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menolak User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '2';
+                                            await p.updateUser(
+                                              context,
+                                              id: item.Id ?? '',
+                                              fromHome: true,
+                                            );
+
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
+                                  child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          border: Border.all(
+                                              width: 1, color: Colors.red)),
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 20,
+                                        color: Colors.red,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menerima User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '1';
+                                            await p.updateUser(
+                                              context,
+                                              id: item.Id ?? '',
+                                              fromHome: true,
+                                            );
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
+                                  child: Container(
+                                    width: 60,
+                                    padding: EdgeInsets.all(5),
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF19B76E),
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    child: Text(
+                                      "Terima",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                          SizedBox(
-                            height: 20,
                           ),
                         ],
                       ),
@@ -671,144 +620,47 @@ class _UserManageViewState extends BaseState<UserManageView>
       );
     }
 
-    Widget itemShimmer3() {
-      return Column(
-        children: [
-          CustomContainer.mainCard(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            isShadow: false,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Skeleton<bool>(
-                    width: 50,
-                    height: 55,
-                    isCircle: true,
-                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: Colors.white,
-                        image: DecorationImage(
-                          image: AssetImage(
-                            'assets/icons/ic-plta-black.png',
-                          ),
-                          scale: 3,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 5),
-                Expanded(
-                  flex: 8,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Constant.xSizedBox8,
-                      Skeleton<bool>(
-                        width: 100,
-                        height: 13,
-                        value:
-                            pltaP.isFetching == true ? null : pltaP.isFetching,
-                        child: Text(
-                          'Nama -',
-                          style: Constant.iPrimaryMedium8
-                              .copyWith(fontSize: 16, color: Colors.black),
-                        ),
-                      ),
-                      Constant.xSizedBox4,
-                      Skeleton<bool>(
-                        width: 50,
-                        height: 10,
-                        value:
-                            pltaP.isFetching == true ? null : pltaP.isFetching,
-                        child: Text(
-                          'Status -',
-                          style: Constant.iPrimaryMedium8
-                              .copyWith(fontSize: 14, color: Colors.black),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Skeleton<bool>(
-                    width: 1,
-                    height: 25,
-                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                    child: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.grey,
-                      size: 20,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      );
-    }
-
-    Widget bodyPLTAListShimmer() {
-      return Column(
-        children: [
-          itemShimmer3(),
-          SizedBox(height: 20),
-          itemShimmer3(),
-          SizedBox(height: 20),
-          itemShimmer3(),
-          SizedBox(height: 20),
-        ],
-      );
-    }
-
-    Widget bodyPLTA() {
+    Widget bodyUserAktif() {
       return RefreshIndicator(
         onRefresh: () async {
-          pltaP.next = null;
-          if ((pltaP.pagingController.itemList ?? []).isEmpty) {
-            pltaP.pagingController.refresh();
+          userManageP.next = null;
+          if ((userManageP.pagingController.itemList ?? []).isEmpty) {
+            userManageP.pagingController.refresh();
           } else {
-            pltaP.next = null;
-            pltaP.pagingController.refresh();
+            userManageP.next = null;
+            userManageP.pagingController.refresh();
           }
         },
         child: Column(
           children: [
             Expanded(
               child: PagedListView.separated(
-                pagingController: pagingC3,
+                pagingController: pagingC,
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                 shrinkWrap: true,
-                physics: ScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return SizedBox();
-                },
-                builderDelegate: PagedChildBuilderDelegate<PltaListModelData>(
+                physics: AlwaysScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => SizedBox(height: 8),
+                builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
                   firstPageProgressIndicatorBuilder: (_) =>
-                      bodyPLTAListShimmer(),
+                      bodyUserListShimmer(),
                   firstPageErrorIndicatorBuilder: (_) => failedData(),
-                  newPageProgressIndicatorBuilder: (_) => bodyPLTAListShimmer(),
+                  newPageProgressIndicatorBuilder: (_) => bodyUserListShimmer(),
                   newPageErrorIndicatorBuilder: (_) => failedData(),
                   noItemsFoundIndicatorBuilder: (_) => noData(),
                   itemBuilder: (context, item, index) {
                     return InkWell(
                       onTap: () async {
                         await CusNav.nPush(
-                            context, PltaAddView(id: item.Id ?? ''));
-                        pagingC3.refresh();
+                            context, UserAddView(id: item.Id ?? ''));
+                        pagingC.refresh();
                       },
                       child: Column(
                         children: [
+                          SizedBox(height: 10),
                           CustomContainer.mainCard(
-                            isShadow: false,
+                            margin: EdgeInsets.symmetric(horizontal: 10),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   flex: 2,
@@ -819,50 +671,36 @@ class _UserManageViewState extends BaseState<UserManageView>
                                       borderRadius: BorderRadius.circular(40),
                                       color: Colors.white,
                                       image: DecorationImage(
-                                        image: AssetImage(
-                                          'assets/icons/ic-plta-black.png',
-                                        ),
-                                        scale: 3,
+                                        image: AssetImage(Assets.iconsIcUser),
+                                        scale: 6,
                                       ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 10),
+                                SizedBox(width: 5),
                                 Expanded(
                                   flex: 8,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        item.Name ?? 'Nama -',
-                                        style: Constant.iPrimaryMedium8
-                                            .copyWith(
-                                                fontSize: 16,
-                                                color: Colors.black),
-                                      ),
-                                      Text(
-                                        '${(item.Status ?? false) ? 'Aktif' : 'Nonaktif'}',
-                                        style: Constant.iPrimaryMedium8
-                                            .copyWith(
-                                                fontSize: 14,
-                                                color: Constant.textHintColor2),
-                                      ),
+                                      Text(item.Name ?? 'Nama -',
+                                          style: Constant.iBlackMedium14),
+                                      Text(item.Division ?? 'Divisi -',
+                                          style: Constant.blackRegular12),
                                     ],
                                   ),
                                 ),
                                 Expanded(
-                                    flex: 1,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Colors.grey,
-                                      size: 20,
-                                    ))
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.grey,
+                                    size: 20,
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                          SizedBox(
-                            height: 20,
                           ),
                         ],
                       ),
@@ -877,33 +715,62 @@ class _UserManageViewState extends BaseState<UserManageView>
     }
 
     return Scaffold(
-      appBar: CustomAppBar.appBar(
-          context, "Manage ${tabController.index != 2 ? 'User' : 'PLTA'}",
+      appBar: CustomAppBar.appBar(context, "Daftar User",
           isLeading: false,
-          titleSpacing: 20,
-          color: Constant.primaryColor,
-          foregroundColor: Colors.white),
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            headKonten(),
-            SizedBox(height: 5),
-            toggleTab(),
-            SizedBox(height: 8),
-            Expanded(
-              child: TabBarView(
-                physics: NeverScrollableScrollPhysics(),
-                controller: tabController,
-                children: [
-                  bodyUserList(),
-                  bodyUserRequest(),
-                  bodyPLTA(),
-                ],
+          action: [
+            InkWell(
+              onTap: () {
+                CusNav.nPush(context, UserAddView());
+              },
+              child: Container(
+                margin: EdgeInsets.only(right: 20),
+                padding: EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Constant.primaryColor),
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.add,
+                      size: 15,
+                    ),
+                    Text(
+                      "Tambah User",
+                      style: Constant.iPrimaryMedium12,
+                    ),
+                  ],
+                ),
               ),
-            ),
+            )
           ],
+          titleSpacing: 20,
+          color: Colors.white,
+          foregroundColor: Constant.primaryColor),
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              headKonten(),
+              SizedBox(height: 5),
+              toggleTab(),
+              SizedBox(height: 8),
+              Expanded(
+                child: TabBarView(
+                  // physics: NeverScrollableScrollPhysics(),
+                  controller: tabController,
+                  children: [
+                    bodyUserRequest(),
+                    bodyUserAktif(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

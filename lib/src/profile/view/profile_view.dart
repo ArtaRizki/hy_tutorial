@@ -3,8 +3,8 @@ import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_appbar.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
-import 'package:hy_tutorial/src/home/view/home_admin_new_view.dart';
-import 'package:hy_tutorial/src/home/view/home_new_view.dart';
+import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
+import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/src/profile/model/profile_model.dart';
 import 'package:hy_tutorial/src/profile/view/profile_edit_view.dart';
 import 'package:provider/provider.dart';
@@ -172,7 +172,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
                       SizedBox(width: 5),
                       InkWell(
                         onTap: () {
-                          CusNav.nPush(context, HomeAdminNewView());
+                          CusNav.nPush(context, HomeAdminView());
                         },
                         child: Image.asset(
                           'assets/icons/ic-info.png',
@@ -187,7 +187,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
                           children: [
                             InkWell(
                               onTap: () {
-                                CusNav.nPush(context, HomeNewView());
+                                CusNav.nPush(context, HomeView());
                               },
                               child: Text(
                                 "Tentang Aplikasi",

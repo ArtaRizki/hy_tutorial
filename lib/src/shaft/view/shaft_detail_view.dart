@@ -2,7 +2,6 @@ import 'dart:developer';
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:intl/intl.dart';
 import '../../../common/component/custom_appbar.dart';

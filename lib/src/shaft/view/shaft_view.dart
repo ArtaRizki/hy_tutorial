@@ -2,7 +2,6 @@ import 'dart:developer';
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:intl/intl.dart';
 import '../../../common/component/custom_appbar.dart';
@@ -776,32 +775,6 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
         'Detail Laporan',
         color: Constant.primaryColor,
         foregroundColor: Colors.white,
-        action: [
-          IconButton(
-            onPressed: () {
-              Utils.showYesNoDialogWithWarning(
-                  context: context,
-                  title: "Konfirmasi Penghapusan",
-                  desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
-                  yesCallback: () async {
-                    Navigator.pop(context);
-                    await context
-                        .read<DataAddProvider>()
-                        .deleteTurbine(context, id: data?.id ?? "0");
-
-                    getData();
-                    Navigator.pop(context, true);
-                  },
-                  noCallback: () async {
-                    Navigator.pop(context);
-                  });
-            },
-            icon: Icon(
-              Icons.delete,
-              // color: Constant.redColor,
-            ),
-          ),
-        ],
       ),
       body: ListView(
         shrinkWrap: true,

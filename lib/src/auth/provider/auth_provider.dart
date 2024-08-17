@@ -3,11 +3,9 @@ import 'dart:developer';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/src/auth/model/firebase_token_model.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
-import 'package:hy_tutorial/src/auth/view/login_view.dart';
-import 'package:hy_tutorial/src/auth/view/register_view.dart';
 import 'package:hy_tutorial/src/auth/view/register_view.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
-import 'package:hy_tutorial/src/home/view/home_new_view.dart';
+import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/base/base_controller.dart';
@@ -142,7 +140,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
         if (roles == 'admin' || roles == 'main') {
           CusNav.nPushAndRemoveUntil(context, MainHome(), arguments: true);
         } else {
-          CusNav.nPushAndRemoveUntil(context, HomeNewView());
+          CusNav.nPushAndRemoveUntil(context, HomeView());
         }
         usernameC.text = '';
         passC.text = '';

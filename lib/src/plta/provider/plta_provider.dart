@@ -607,7 +607,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       Navigator.pop(context);
       Navigator.pop(context);
       // Navigator.pushReplacement(context,
-      //     MaterialPageRoute(builder: ((context) => PltaAddView(id: pltaId))));
+      //     MaterialPageRoute(builder: ((context) => PLTAAddView(id: pltaId))));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);

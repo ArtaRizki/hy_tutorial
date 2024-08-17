@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
@@ -8,19 +7,12 @@ import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
-import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/src/data/view/tambah_plta_new_view.dart';
+import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
-import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
-import 'package:hy_tutorial/src/shaft/view/shaft_detail_view.dart';
-import 'package:hy_tutorial/src/turbine/model/turbine_model.dart';
-import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../common/component/custom_appbar.dart';
 
 class DaftarPLTANewView extends StatefulWidget {
@@ -325,8 +317,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
             itemBuilder: (context, item, index) {
               return InkWell(
                 onTap: () async {
-                  await CusNav.nPush(
-                      context, TambahPLTANewView(id: item.Id ?? '0'));
+                  await CusNav.nPush(context, PLTAAddView(id: item.Id ?? '0'));
                   pagingC.refresh();
                 },
                 child: Column(
@@ -345,7 +336,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  item?.Name ?? '-',
+                                  item.Name ?? '-',
                                   style: Constant.iBlackMedium14,
                                 ),
                                 Text(
@@ -425,7 +416,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
               ),
               child: InkWell(
                 onTap: () {
-                  CusNav.nPush(context, TambahPLTANewView());
+                  CusNav.nPush(context, PLTAAddView());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
