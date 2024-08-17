@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
@@ -86,7 +89,6 @@ class _UserAddViewState extends BaseState<UserAddView> {
                 setState(() {});
               },
             ),
-            Constant.xSizedBox16,
             CustomDropdown.normalDropdown(
               //controller: roleC,
               padding: EdgeInsets.only(top: 16),
@@ -111,6 +113,61 @@ class _UserAddViewState extends BaseState<UserAddView> {
                 p.selectedRole = val;
                 setState(() {});
               },
+            ),
+            CustomDropdown.normalDropdown(
+              //controller: roleC,
+              padding: EdgeInsets.only(top: 16),
+              iconPadding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+              contentPadding: EdgeInsets.all(2),
+              borderColor: Constant.primaryColor,
+              labelText: "Status",
+              selectedItem: p.selectedStatus,
+              //selectedItem: selectedDivision,
+              hintText: "Status",
+              list: [
+                DropdownMenuItem(
+                  child: Text("Inactive"),
+                  value: "0",
+                ),
+                DropdownMenuItem(
+                  child: Text("Active"),
+                  value: "1",
+                ),
+                DropdownMenuItem(
+                  child: Text("Blocked By Admin"),
+                  value: "2",
+                ),
+              ],
+              onChanged: (val) {
+                p.selectedStatus = val;
+                p.validateUserForm();
+                setState(() {});
+              },
+            ),
+            Constant.xSizedBox16,
+            CustomTextField.borderTextField(
+              controller: p.radiusStatusC,
+              labelText: "Pembatasan Lokasi",
+              textInputType: TextInputType.name,
+              readOnly: true,
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              suffixIcon: Container(
+                width: 25,
+                height: 25,
+                child: FittedBox(
+                  child: CupertinoSwitch(
+                    value: p.radiusStatus,
+                    onChanged: (value) async {
+                      p.radiusStatus = value;
+                      p.radiusStatusC.text = value ? 'Aktif' : 'Tidak Aktif';
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -167,27 +224,70 @@ class _UserAddViewState extends BaseState<UserAddView> {
                 setState(() {});
               },
             ),
-            Constant.xSizedBox16,
-            CustomTextField.borderTextField(
-              controller: p.passwordC,
-              labelText: "Password",
-              hintText: "Password",
-              readOnly: widget.id != null,
-              enabled: !(widget.id != null),
-              onChange: (v) {
-                setState(() {});
-              },
-              suffixIcon: InkWell(
-                onTap: () => p.toggleObscurePass(),
-                child: Icon(
-                  p.obscurePass
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility,
-                  color: Constant.primaryColor,
+            if (widget.id == null) Constant.xSizedBox16,
+            Visibility(
+              visible: widget.id == null,
+              child: CustomTextField.borderTextField(
+                controller: p.passwordC,
+                labelText: "Password",
+                hintText: "Password",
+                readOnly: widget.id != null,
+                enabled: !(widget.id != null),
+                onChange: (v) {
+                  setState(() {});
+                },
+                suffixIcon: InkWell(
+                  onTap: () => p.toggleObscurePass(),
+                  child: Icon(
+                    p.obscurePass
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility,
+                    color: Constant.primaryColor,
+                  ),
                 ),
               ),
             ),
-            Constant.xSizedBox16,
+            if (widget.id != null) Constant.xSizedBox16,
+            Visibility(
+              visible: widget.id != null,
+              child: CustomTextField.borderTextField(
+                controller: p.passwordC,
+                labelText: "Password",
+                readOnly: true,
+
+                hintText: "Password",
+                // enabled: !(widget.id != null),
+                onChange: (v) {
+                  setState(() {});
+                },
+                suffixIcon: GestureDetector(
+                  onTap: () async {
+                    context.read<UserManageProvider>().passwordC.text =
+                        Random().nextInt(999999999).toString();
+                    context.read<UserManageProvider>().refresh();
+                    setState(() {});
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(24, 13, 24, 12),
+                    decoration: BoxDecoration(
+                      color: Constant.primaryColor,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'Buat',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       );

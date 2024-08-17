@@ -354,6 +354,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         selectedStatus = "2";
     } else {
       updateV = true;
+      final p = context.read<DivisionProvider>();
+      await p.fetchDivision(withLoading: true);
     }
     notifyListeners();
   }
@@ -422,6 +424,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   set radiusStatus(bool value) {
     this._radiusStatus = value;
     // notifyListeners();
+  }
+
+  refresh() {
+    notifyListeners();
   }
 
   Future<void> fetchUserDetail({required String id}) async {

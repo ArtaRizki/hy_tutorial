@@ -187,7 +187,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
                           children: [
                             InkWell(
                               onTap: () {
-                                CusNav.nPush(context, HomeView());
+                                // CusNav.nPush(context, HomeView());
                               },
                               child: Text(
                                 "Tentang Aplikasi",
