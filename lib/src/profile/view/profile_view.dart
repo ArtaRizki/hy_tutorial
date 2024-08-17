@@ -172,7 +172,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
                       SizedBox(width: 5),
                       InkWell(
                         onTap: () {
-                          CusNav.nPush(context, HomeAdminView());
+                          // CusNav.nPush(context, HomeAdminView());
                         },
                         child: Image.asset(
                           'assets/icons/ic-info.png',
