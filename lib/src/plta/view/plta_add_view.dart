@@ -469,6 +469,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                                       Icon(
                                         Icons.add,
                                         size: 15,
+                                        color: Constant.primaryColor,
                                       ),
                                       Text(
                                         "Tambah",

@@ -425,6 +425,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
                     Icon(
                       Icons.add,
                       size: 15,
+                      color: Constant.primaryColor,
                     ),
                     Text(
                       "Tambah PLTA",
@@ -451,8 +452,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
           color: Colors.white,
           foregroundColor: Constant.primaryColor),
       body: Container(
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
-          child: kontenPLTA()),
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 50), child: kontenPLTA()),
     );
   }
 }

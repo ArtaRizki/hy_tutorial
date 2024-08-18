@@ -507,6 +507,7 @@ class _TurbineViewState extends BaseState<TurbineView> {
                       Icon(
                         Icons.add,
                         size: 15,
+                        color: Constant.primaryColor,
                       ),
                       Text(
                         "Tambah",

@@ -734,6 +734,7 @@ class _UserManageViewState extends BaseState<UserManageView>
                     Icon(
                       Icons.add,
                       size: 15,
+                      color: Constant.primaryColor,
                     ),
                     Text(
                       "Tambah User",
