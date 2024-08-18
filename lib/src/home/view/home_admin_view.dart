@@ -78,6 +78,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
     final homeP = context.watch<HomeProvider>();
     final profile = context.watch<ProfileProvider>().profileModel.Data;
     final userList = homeP.userListModel.Data;
+    final dashP = homeP.dashboardAdminModel.Data;
 
     Widget headKonten() {
       return Container(
@@ -740,7 +741,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                         child: Column(
                           children: [
                             Text(
-                              "128",
+                              (dashP?.TotalUserActive ?? "").toString(),
                               style: Constant.blackBold16,
                             ),
                             SizedBox(height: 4),
@@ -763,7 +764,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                         child: Column(
                           children: [
                             Text(
-                              "8",
+                              (dashP?.TotalPlta ?? "").toString(),
                               style: Constant.blackBold16,
                             ),
                             SizedBox(height: 4),
@@ -786,7 +787,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                         child: Column(
                           children: [
                             Text(
-                              "4",
+                              (dashP?.TotalTurbineReport ?? "").toString(),
                               style: Constant.blackBold16,
                             ),
                             SizedBox(height: 4),
@@ -1093,7 +1094,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                 SizedBox(height: 10),
                 userList != null && userList.isEmpty
                     ? Padding(
-                        padding: const EdgeInsets.only(top: 24),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Center(
                             child: Text('Data tidak ditemukan',
                                 style: Constant.grayRegular13)),

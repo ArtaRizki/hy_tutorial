@@ -52,7 +52,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
           controller: pltaP.searchC,
           focusNode: pltaP.searchN,
           required: false,
-          hintText: "Cari User",
+          hintText: "Cari PLTA",
           hintColor: Constant.textHintColor2,
           prefixIcon: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -224,7 +224,8 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
                 height: 40,
                 isCircle: true,
                 value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                child: Image.asset(Assets.iconsIcPlta),
+                // child: Image.asset(Assets.iconsIcPlta),
+                child: SizedBox(),
               ),
             ),
             SizedBox(width: 5),
@@ -302,7 +303,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
         },
         child: PagedListView.separated(
           pagingController: pagingC,
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
           shrinkWrap: true,
           physics: ScrollPhysics(),
           separatorBuilder: (context, index) {
@@ -449,7 +450,9 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
           ),
           color: Colors.white,
           foregroundColor: Constant.primaryColor),
-      body: kontenPLTA(),
+      body: Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
+          child: kontenPLTA()),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:hy_tutorial/common/base/base_controller.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
+import 'package:hy_tutorial/src/home/model/dashboard_admin_model.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/src/profile/provider/profile_provider.dart';
@@ -26,9 +27,15 @@ class HomeProvider extends BaseController with ChangeNotifier {
   HomeModel get getHomeModel => this.homeModel;
   set setHomeModel(HomeModel homeModel) => this.homeModel = homeModel;
 
+  DashboardAdminModel dashboardAdminModel = DashboardAdminModel();
+  DashboardAdminModel get getDashboardAdminModel => this.dashboardAdminModel;
+  set setDashboardAdminModel(DashboardAdminModel dashboardAdminModel) => this.dashboardAdminModel = dashboardAdminModel;
+
   getData(BuildContext context) async {
     homeModel = HomeModel();
+    dashboardAdminModel = DashboardAdminModel();
     userListModel = UserListModel();
+    await fetcDashboard(withLoading: false);
     await context.read<ProfileProvider>().fetchProfile(withLoading: false);
     await fetchUserList(withLoading: false);
   }
@@ -50,6 +57,25 @@ class HomeProvider extends BaseController with ChangeNotifier {
       throw Exception(message);
     }
   }
+
+  Future<void> fetcDashboard({bool withLoading = false}) async {
+    if (withLoading) loading(true);
+
+    final response =
+    await get(Constant.BASE_API_FULL + '/dashboard');
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      dashboardAdminModel = DashboardAdminModel.fromJson(jsonDecode(response.body));
+
+      notifyListeners();
+      if (withLoading) loading(false);
+    } else {
+      final message = jsonDecode(response.body)["Message"];
+      loading(false);
+      return message;
+    }
+  }
+
 
   UserListModel _userListModel = UserListModel();
   UserListModel get userListModel => this._userListModel;

@@ -459,7 +459,7 @@ class _UserManageViewState extends BaseState<UserManageView>
             Expanded(
               child: PagedListView.separated(
                 pagingController: pagingC2,
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
                 shrinkWrap: true,
                 physics: AlwaysScrollableScrollPhysics(),
                 separatorBuilder: (context, index) => SizedBox(height: 8),
@@ -636,7 +636,7 @@ class _UserManageViewState extends BaseState<UserManageView>
             Expanded(
               child: PagedListView.separated(
                 pagingController: pagingC,
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
                 shrinkWrap: true,
                 physics: AlwaysScrollableScrollPhysics(),
                 separatorBuilder: (context, index) => SizedBox(height: 8),

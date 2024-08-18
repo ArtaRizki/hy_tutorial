@@ -59,8 +59,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
               ],
-              readOnly: widget.id != null,
-              enabled: !(widget.id != null),
+              // readOnly: widget.id != null,
+              // enabled: !(widget.id != null),
+              readOnly: false,
+              enabled: true,
               labelText: "Nama",
               hintText: "Nama",
               onChange: (v) {
@@ -196,8 +198,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
               controller: p.emailC,
               labelText: "Email",
               hintText: "Email",
-              readOnly: widget.id != null,
-              enabled: !(widget.id != null),
+              // readOnly: widget.id != null,
+              // enabled: !(widget.id != null),
+              readOnly: false,
+              enabled: true,
               onChange: (v) {
                 setState(() {});
               },
@@ -207,8 +211,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
               controller: p.phoneNumberC,
               labelText: "No. Telepon",
               hintText: "No. Telepon",
-              readOnly: widget.id != null,
-              enabled: !(widget.id != null),
+              // readOnly: widget.id != null,
+              // enabled: !(widget.id != null),
+              readOnly: false,
+              enabled: true,
               onChange: (v) {
                 setState(() {});
               },
@@ -218,8 +224,8 @@ class _UserAddViewState extends BaseState<UserAddView> {
               controller: p.usernameC,
               labelText: "Username",
               hintText: "Username",
-              readOnly: widget.id != null,
-              enabled: !(widget.id != null),
+              // readOnly: widget.id != null,
+              // enabled: !(widget.id != null),
               onChange: (v) {
                 setState(() {});
               },
@@ -379,7 +385,9 @@ class _UserAddViewState extends BaseState<UserAddView> {
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: widget.id != null
                   ? CustomButton.mainButton(
-                      'Submit',
+                borderRadius: BorderRadius.circular(10),
+                      contentPadding: EdgeInsets.symmetric(vertical: 0),
+                      'Selanjutnya',
                       enabled: p.validateUserForm(),
                       () async {
                         if (p.validateUserForm()) {

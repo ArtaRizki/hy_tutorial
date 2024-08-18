@@ -198,15 +198,15 @@ class DataAddViewState extends BaseState<DataAddView> {
                 labelText: "Jumlah Baut",
                 hintText: "Jumlah Baut",
                 selectedItem: p.selectedBolt,
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Text(
-                    'Bolt',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                        color: Constant.redColor, fontWeight: FontWeight.w400),
-                  ),
-                ),
+                // suffixIcon: Padding(
+                //   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                //   child: Text(
+                //     'Bolt',
+                //     textAlign: TextAlign.right,
+                //     style: TextStyle(
+                //         color: Constant.redColor, fontWeight: FontWeight.w400),
+                //   ),
+                // ),
                 list: p.boltList.map((e) => e).toList(),
                 onChanged: (val) {
                   p.selectedBolt = val;
@@ -249,7 +249,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                   child: Text(
                     'BAR/Psi/Nm',
                     textAlign: TextAlign.right,
-                    style: TextStyle(color: Constant.redColor),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -270,7 +270,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                   child: Text(
                     'BAR/Psi/Nm',
                     textAlign: TextAlign.right,
-                    style: TextStyle(color: Constant.redColor),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -292,7 +292,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                   child: Text(
                     'BAR/Psi/Nm',
                     textAlign: TextAlign.right,
-                    style: TextStyle(color: Constant.redColor),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -330,7 +330,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                   child: Text(
                     'mm',
                     textAlign: TextAlign.right,
-                    style: TextStyle(color: Constant.redColor),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -350,7 +350,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                   child: Text(
                     'mm',
                     textAlign: TextAlign.right,
-                    style: TextStyle(color: Constant.redColor),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -365,7 +365,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                   child: Text(
                     'mm',
                     textAlign: TextAlign.right,
-                    style: TextStyle(color: Constant.redColor),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -375,6 +375,14 @@ class DataAddViewState extends BaseState<DataAddView> {
                 readOnly: true,
                 controller: p.rasioC,
                 labelText: "Rasio",
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+                  child: Text(
+                    'mm',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
               ),
               Constant.xSizedBox16,
             ],
@@ -406,9 +414,13 @@ class DataAddViewState extends BaseState<DataAddView> {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            CustomContainer.mainCard(
+              radiusBorder: 0,
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+              color: Colors.white,
               child: CustomButton.mainButton(
+                borderRadius: BorderRadius.circular(10),
+                contentPadding: EdgeInsets.symmetric(vertical: 5),
                 'Selanjutnya',
                 () {
                   if (p.validatePage1()) {
