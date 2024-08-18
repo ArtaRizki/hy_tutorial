@@ -29,6 +29,7 @@ class CustomDropdown {
     double? labelFontSize,
     Widget? suffixIcon,
     FormFieldValidator? validator,
+    OutlineInputBorder? customBorder,
   }) {
     return Padding(
       padding: padding ?? EdgeInsets.symmetric(horizontal: 0),
@@ -101,30 +102,33 @@ class CustomDropdown {
               hoverColor: Constant.primaryColor,
               focusColor: Constant.primaryColor,
               prefix: SizedBox(width: 12),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  width: 0.5,
-                  color: borderColor ?? Constant.borderSearchColor,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  width: 0.5,
-                  color: borderColor ?? Constant.borderSearchColor,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  width: 0.5,
-                  color: borderColor ?? Constant.primaryColor,
-                  style: BorderStyle.solid,
-                ),
-              ),
+              border: customBorder ??
+                  OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      width: 0.5,
+                      color: borderColor ?? Constant.borderSearchColor,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+              enabledBorder: customBorder ??
+                  OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      width: 0.5,
+                      color: borderColor ?? Constant.borderSearchColor,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+              focusedBorder: customBorder ??
+                  OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      width: 0.5,
+                      color: borderColor ?? Constant.primaryColor,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
             ),
             hint: Text(hintText ?? ""),
             value: selectedItem,

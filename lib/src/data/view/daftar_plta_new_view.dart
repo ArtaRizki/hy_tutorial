@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
@@ -8,19 +7,12 @@ import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
-import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/src/data/view/tambah_plta_new_view.dart';
+import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
 import 'package:hy_tutorial/src/plta/model/plta_list_model.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
-import 'package:hy_tutorial/src/plta/view/plta_add_view.dart';
-import 'package:hy_tutorial/src/shaft/view/shaft_detail_view.dart';
-import 'package:hy_tutorial/src/turbine/model/turbine_model.dart';
-import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../common/component/custom_appbar.dart';
 
 class DaftarPLTANewView extends StatefulWidget {
@@ -30,10 +22,7 @@ class DaftarPLTANewView extends StatefulWidget {
   State<DaftarPLTANewView> createState() => _DaftarPLTANewViewState();
 }
 
-class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
-    with TickerProviderStateMixin {
-  late TabController tabController;
-
+class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
   @override
   void initState() {
     getData();
@@ -41,31 +30,8 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
   }
 
   getData() async {
-    tabController = TabController(length: 2, vsync: this);
-    tabController.addListener(() {
-      log("INDEX ACTIVE : ${tabController.index}");
-      setState(() {});
-    });
-
-    final userManageP = context.read<UserManageProvider>();
-    final pltaP = context.read<PltaProvider>();
-    if ((userManageP.pagingController.itemList ?? []).isEmpty) {
-      userManageP.getUserList();
-    } else {
-      userManageP.pagingController.dispose();
-      userManageP.next = null;
-      userManageP.getUserList();
-      setState(() {});
-    }
-    if ((userManageP.pagingController2.itemList ?? []).isEmpty) {
-      userManageP.getUserList2();
-    } else {
-      userManageP.pagingController2.dispose();
-      userManageP.next2 = null;
-      userManageP.getUserList2();
-      setState(() {});
-    }
     //plta
+    final pltaP = context.read<PltaProvider>();
     if ((pltaP.pagingController.itemList ?? []).isEmpty) {
       pltaP.getPltaList();
     } else {
@@ -79,13 +45,12 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
 
   @override
   Widget build(BuildContext context) {
-    final turbineP = context.watch<TurbineProvider>();
-    final pagingC = context.watch<UserManageProvider>().pagingController;
-    final pagingC2 = context.watch<TurbineProvider>().pagingController2;
+    final pltaP = context.watch<PltaProvider>();
+    final pagingC = context.watch<PltaProvider>().pagingController;
 
     Widget search() => CustomTextField.borderTextField(
-          controller: turbineP.turbineSearchC,
-          focusNode: turbineP.turbineSearchN,
+          controller: pltaP.searchC,
+          focusNode: pltaP.searchN,
           required: false,
           hintText: "Cari User",
           hintColor: Constant.textHintColor2,
@@ -98,11 +63,11 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
               height: 5,
             ),
           ),
-          suffixIcon: turbineP.turbineSearchC.text.isEmpty
+          suffixIcon: pltaP.searchC.text.isEmpty
               ? null
               : InkWell(
                   onTap: () {
-                    turbineP.turbineSearchC.clear();
+                    pltaP.searchC.clear();
                     setState(() {});
                   },
                   child: Padding(
@@ -113,127 +78,23 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
           onEditingComplete: () {
             setState(() {});
             FocusManager.instance.primaryFocus?.unfocus();
-            if (turbineP.searchOnStoppedTyping != null) {
-              turbineP.searchOnStoppedTyping!.cancel();
+            if (pltaP.searchOnStoppedTyping != null) {
+              pltaP.searchOnStoppedTyping!.cancel();
             }
-            turbineP.searchOnStoppedTyping = Timer(turbineP.duration, () async {
-              turbineP.next = null;
+            pltaP.searchOnStoppedTyping = Timer(pltaP.duration, () async {
+              pltaP.next = null;
               pagingC.refresh();
             });
           },
           onChange: (val) {
             setState(() {});
-            if (turbineP.searchOnStoppedTyping != null) {
-              turbineP.searchOnStoppedTyping!.cancel();
+            if (pltaP.searchOnStoppedTyping != null) {
+              pltaP.searchOnStoppedTyping!.cancel();
             }
-            turbineP.searchOnStoppedTyping = Timer(turbineP.duration, () async {
-              turbineP.next = null;
+            pltaP.searchOnStoppedTyping = Timer(pltaP.duration, () async {
+              pltaP.next = null;
               pagingC.refresh();
             });
-          },
-        );
-
-    Widget filterAllWidget() => StatefulBuilder(
-          builder: (BuildContext context, StateSetter sheetState) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Filter',
-                        style: Constant.iPrimaryMedium14.copyWith(
-                            fontSize: 18, fontWeight: FontWeight.w500)),
-                    InkWell(
-                      onTap: () async {
-                        await context.read<TurbineProvider>().clearData();
-                        sheetState(() {});
-                        setState(() {});
-                      },
-                      child: Text(
-                        "Reset",
-                        style: Constant.primaryBold15,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: Text(turbineP.startDate == null
-                      ? 'Pilih Tanggal Awal'
-                      : turbineP.endDate == null
-                          ? 'Pilih Tanggal Akhir'
-                          : 'Silahkan Konfirmasi'),
-                ),
-                SfDateRangePicker(
-                  monthCellStyle: DateRangePickerMonthCellStyle(),
-                  headerHeight: 40,
-                  headerStyle: DateRangePickerHeaderStyle(
-                    backgroundColor: Constant.primaryColor,
-                    textStyle: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                  controller: turbineP.dateRangePickerController,
-                  showActionButtons: true,
-                  cancelText: 'Batal',
-                  confirmText: 'Konfirmasi',
-                  view: DateRangePickerView.month,
-                  backgroundColor: Colors.white,
-                  monthViewSettings: DateRangePickerMonthViewSettings(
-                      showTrailingAndLeadingDates: true,
-                      dayFormat: 'E',
-                      viewHeaderStyle: DateRangePickerViewHeaderStyle(
-                          backgroundColor: Colors.white,
-                          textStyle: TextStyle(fontWeight: FontWeight.bold)),
-                      weekNumberStyle: DateRangePickerWeekNumberStyle(
-                          backgroundColor: Colors.white)),
-                  initialSelectedRange:
-                      PickerDateRange(turbineP.startDate, turbineP.endDate),
-                  onCancel: () async {
-                    await turbineP.setStartDate(null);
-                    await turbineP.setEndDate(null);
-                    await turbineP.clearData();
-                    sheetState(() {});
-                    setState(() {});
-                  },
-                  onSubmit: (p0) {
-                    CusNav.nPop(context);
-                    turbineP.next = null;
-                    pagingC.refresh();
-                  },
-                  onSelectionChanged:
-                      (dateRangePickerSelectionChangedArgs) async {
-                    if (dateRangePickerSelectionChangedArgs.value
-                        is PickerDateRange) {
-                      await turbineP.setStartDate(
-                          dateRangePickerSelectionChangedArgs.value.startDate);
-                      await turbineP.setEndDate(
-                          dateRangePickerSelectionChangedArgs.value.endDate);
-                      sheetState(() {});
-                      setState(() {});
-                    }
-                  },
-                  selectionMode: DateRangePickerSelectionMode.range,
-                ),
-                // Constant.xSizedBox16,
-                // SizedBox(
-                //   height: 50,
-                //   child: CustomButton.mainButton(
-                //     "View Result",
-                //     () {
-                //       Navigator.pop(context);
-                //       turbineP.next2 = null;
-                //       pagingC2.refresh();
-                //     },
-                //     textStyle: TextStyle(fontSize: 14, color: Colors.white),
-                //   ),
-                // ),
-              ],
-            );
           },
         );
 
@@ -281,17 +142,13 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
                 Skeleton<bool>(
                   width: 24,
                   height: 10,
-                  value: turbineP.isFetching2 == true
-                      ? null
-                      : turbineP.isFetching2,
+                  value: pltaP.isFetching == true ? null : pltaP.isFetching,
                   child: Text('', style: Constant.blackRegular12),
                 ),
                 Skeleton<bool>(
                   width: 48,
                   height: 10,
-                  value: turbineP.isFetching2 == true
-                      ? null
-                      : turbineP.isFetching2,
+                  value: pltaP.isFetching == true ? null : pltaP.isFetching,
                   child: Text('', style: Constant.blackRegular12),
                 ),
               ],
@@ -307,9 +164,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
                 Skeleton<bool>(
                     width: 45,
                     height: 45,
-                    value: turbineP.isFetching2 == true
-                        ? null
-                        : turbineP.isFetching2,
+                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
                     child: Image.asset(Assets.iconsIcFile, scale: 3.5)),
                 SizedBox(width: 10),
                 Column(
@@ -319,9 +174,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
                     Skeleton<bool>(
                       width: 175,
                       height: 17,
-                      value: turbineP.isFetching2 == true
-                          ? null
-                          : turbineP.isFetching2,
+                      value: pltaP.isFetching == true ? null : pltaP.isFetching,
                       child: Text(
                         '',
                         style: Constant.blackBold15,
@@ -331,9 +184,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
                     Skeleton<bool>(
                       width: 100,
                       height: 12,
-                      value: turbineP.isFetching2 == true
-                          ? null
-                          : turbineP.isFetching2,
+                      value: pltaP.isFetching == true ? null : pltaP.isFetching,
                       child: Text("-", style: Constant.grayRegular13),
                     ),
                   ],
@@ -359,45 +210,197 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
       );
     }
 
-    Widget kontenPLTA() {
-      return Column(
-        children: List.generate(7, (index) {
-          return Column(
-            children: [
-              SizedBox(height: 10,),
-              CustomContainer.mainCard(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset(Assets.iconsIcPltaList, scale: 4),
-                      SizedBox(width: 5,),
-                      Expanded(
-                        flex: 6,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "PLTA 1 Bojonegoro",
-                              style: Constant.iBlackMedium14,
-                            ),
-                            Text(
-                              "Unit 1",
-                              style: Constant.blackRegular12,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(Icons.chevron_right, color: Colors.black, weight: 1,),
-                    ],
-                  )),
-            ],
-          );
-        }),
+    Widget itemShimmer3() {
+      return CustomContainer.mainCard(
+        margin: EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        isShadow: true,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Skeleton<bool>(
+                width: 40,
+                height: 40,
+                isCircle: true,
+                value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                child: Image.asset(Assets.iconsIcPlta),
+              ),
+            ),
+            SizedBox(width: 5),
+            Expanded(
+              flex: 8,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Constant.xSizedBox8,
+                  Skeleton<bool>(
+                    width: 100,
+                    height: 13,
+                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                    child: Text(
+                      'Nama -',
+                      style: Constant.iPrimaryMedium8
+                          .copyWith(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                  Constant.xSizedBox4,
+                  Skeleton<bool>(
+                    width: 50,
+                    height: 10,
+                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                    child: Text(
+                      'Status -',
+                      style: Constant.iPrimaryMedium8
+                          .copyWith(fontSize: 14, color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Skeleton<bool>(
+                width: 1,
+                height: 25,
+                value: pltaP.isFetching == true ? null : pltaP.isFetching,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey,
+                  size: 20,
+                ),
+              ),
+            )
+          ],
+        ),
       );
     }
 
+    Widget bodyPLTAListShimmer() {
+      return Column(
+        children: [
+          itemShimmer3(),
+          SizedBox(height: 20),
+          itemShimmer3(),
+          SizedBox(height: 20),
+          itemShimmer3(),
+          SizedBox(height: 20),
+        ],
+      );
+    }
+
+    Widget kontenPLTA() {
+      return RefreshIndicator(
+        onRefresh: () async {
+          pltaP.next = null;
+          if ((pltaP.pagingController.itemList ?? []).isEmpty) {
+            pltaP.pagingController.refresh();
+          } else {
+            pltaP.next = null;
+            pltaP.pagingController.refresh();
+          }
+        },
+        child: PagedListView.separated(
+          pagingController: pagingC,
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+          shrinkWrap: true,
+          physics: ScrollPhysics(),
+          separatorBuilder: (context, index) {
+            return SizedBox();
+          },
+          builderDelegate: PagedChildBuilderDelegate<PltaListModelData>(
+            firstPageProgressIndicatorBuilder: (_) => bodyPLTAListShimmer(),
+            firstPageErrorIndicatorBuilder: (_) => failedData(),
+            newPageProgressIndicatorBuilder: (_) => bodyPLTAListShimmer(),
+            newPageErrorIndicatorBuilder: (_) => failedData(),
+            noItemsFoundIndicatorBuilder: (_) => noData(),
+            itemBuilder: (context, item, index) {
+              return InkWell(
+                onTap: () async {
+                  await CusNav.nPush(context, PLTAAddView(id: item.Id ?? '0'));
+                  pagingC.refresh();
+                },
+                child: Column(
+                  children: [
+                    CustomContainer.mainCard(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.asset(Assets.iconsIcPltaList, scale: 4),
+                          SizedBox(width: 5),
+                          Expanded(
+                            flex: 6,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.Name ?? '-',
+                                  style: Constant.iBlackMedium14,
+                                ),
+                                Text(
+                                  '${(item.Status ?? false) ? 'Aktif' : 'Nonaktif'}',
+                                  style: Constant.blackRegular12,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Colors.black,
+                            weight: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      // return Column(
+      //   children: List.generate(7, (index) {
+      //     return Column(
+      //       children: [
+      //         SizedBox(height: 10,),
+      //         CustomContainer.mainCard(
+      //             margin: EdgeInsets.symmetric(horizontal: 10),
+      //             child: Row(
+      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //               children: [
+      //                 Image.asset(Assets.iconsIcPltaList, scale: 4),
+      //                 SizedBox(width: 5,),
+      //                 Expanded(
+      //                   flex: 6,
+      //                   child: Column(
+      //                     mainAxisAlignment: MainAxisAlignment.start,
+      //                     crossAxisAlignment: CrossAxisAlignment.start,
+      //                     children: [
+      //                       Text(
+      //                         "PLTA 1 Bojonegoro",
+      //                         style: Constant.iBlackMedium14,
+      //                       ),
+      //                       Text(
+      //                         "Unit 1",
+      //                         style: Constant.blackRegular12,
+      //                       ),
+      //                     ],
+      //                   ),
+      //                 ),
+      //                 Icon(Icons.chevron_right, color: Colors.black, weight: 1,),
+      //               ],
+      //             )),
+      //       ],
+      //     );
+      //   }),
+      // );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -405,15 +408,15 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
           isLeading: false,
           action: [
             Container(
-              margin: EdgeInsets.only(right: 10),
+              margin: EdgeInsets.only(right: 20),
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Constant.primaryColor),
                 borderRadius: BorderRadius.circular(7),
               ),
               child: InkWell(
-                onTap: (){
-                  CusNav.nPush(context, TambahPLTANewView());
+                onTap: () {
+                  CusNav.nPush(context, PLTAAddView());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -436,9 +439,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
             preferredSize: Size.fromHeight(85), // Ukuran tinggi
             child: Column(
               children: [
-                Container(
-                  child: headKonten(),
-                ),
+                headKonten(),
                 Divider(
                   thickness: 0.5,
                   color: Colors.grey.withOpacity(0.5),
@@ -448,11 +449,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView>
           ),
           color: Colors.white,
           foregroundColor: Constant.primaryColor),
-      body: SingleChildScrollView(
-        child: Container(
-          child: kontenPLTA(),
-        ),
-      ),
+      body: kontenPLTA(),
     );
   }
 }

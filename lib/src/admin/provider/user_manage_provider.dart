@@ -62,6 +62,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   }
 
   TextEditingController userSearchC = TextEditingController();
+  FocusNode userN = FocusNode();
   Duration duration2 = const Duration(seconds: 2);
   Timer? _searchOnStoppedTyping2;
   Timer? get searchOnStoppedTyping2 => this._searchOnStoppedTyping2;
@@ -79,6 +80,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   }
 
   TextEditingController userSearchC2 = TextEditingController();
+  FocusNode userN2 = FocusNode();
 
   bool _ascending = false;
   bool get ascending => this._ascending;
@@ -181,7 +183,13 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         isFetching = true;
         if (withLoading) loading(true);
         String url = Constant.BASE_API_FULL + '/admin/users';
-        Map<String, String> param = {};
+        Map<String, String> param = {
+          'Filter': 'Status',
+          'FilterValue': '1',
+        };
+
+        if (userSearchC.text.isNotEmpty)
+          param.addAll({'Search': userSearchC.text});
 
         if (next != null && next != '') param.addAll({'Next': next ?? ''});
         if (_pagingController.itemList?.length != 0) {
@@ -310,7 +318,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   TextEditingController emailC = TextEditingController();
   TextEditingController nameC = TextEditingController();
   TextEditingController nipC = TextEditingController();
-  //TextEditingController roleC = TextEditingController();
+  TextEditingController phoneNumberC = TextEditingController();
   TextEditingController usernameC = TextEditingController();
   TextEditingController passwordC = TextEditingController();
   //TextEditingController statusC = TextEditingController();
@@ -332,6 +340,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           ?.Id;
       usernameC.text = data.Data?.Username ?? '';
       emailC.text = data.Data?.Email ?? '';
+      // phoneNumberC.text = data.Data?.NoTelp ?? '';
       passwordC.text = '';
       if (data.Data?.Role == "admin")
         selectedRole = "2";
@@ -345,15 +354,19 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         selectedStatus = "2";
     } else {
       updateV = true;
+      final p = context.read<DivisionProvider>();
+      await p.fetchDivision(withLoading: true);
     }
     notifyListeners();
   }
 
   Future<void> clearForm() async {
     emailC.clear();
+    phoneNumberC.clear();
     usernameC.clear();
     nameC.clear();
     usernameC.clear();
+    passwordC.clear();
     selectedDivision = null;
     selectedRole = null;
     selectedStatus = null;
@@ -411,6 +424,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   set radiusStatus(bool value) {
     this._radiusStatus = value;
     // notifyListeners();
+  }
+
+  refresh() {
+    notifyListeners();
   }
 
   Future<void> fetchUserDetail({required String id}) async {
@@ -591,7 +608,9 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       if (nameC.text.isEmpty) return false;
       if (selectedDivision == null) return false;
       if (usernameC.text.isEmpty) return false;
+      if (passwordC.text.isEmpty) return false;
       if (emailC.text.isEmpty) return false;
+      if (phoneNumberC.text.isEmpty) return false;
     } else {
       if (selectedDivision == null) return false;
       if (selectedRole == null) return false;
@@ -610,6 +629,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       'Name': nameC.text,
       'Username': usernameC.text,
       'Email': emailC.text,
+      // 'NoTelp': phoneNumberC.text,
       'DivisionId': selectedDivision ?? '',
       'RadiusStatus': '$radiusStatus',
     };

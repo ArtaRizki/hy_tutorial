@@ -31,6 +31,7 @@ class Constant {
   static Color tertiaryColor = Color(0xFF8CC6FF);
   static Color quarteryColor = Color(0xFFC5E2FF);
   static Color tableBlueColor = Color(0xFFE9F0FF);
+  static Color tableGrayColor = Color(0xFFFAFAFA);
   static Color darkGrayColor = Colors.grey.shade800;
   static Color grayColor = Colors.grey.shade600;
   static Color lightGrayColor = Colors.grey.shade400;
@@ -42,8 +43,10 @@ class Constant {
   static Color textColor2 = Color(0xFF535152);
   static Color textKomisiColor = Color(0xFFFFCB47);
   static Color textPriceColor = Color(0xFF3DA11A);
-  static Color backgroundColor = Color(0xFFF9F9F9);
+  static Color backgroundColor = Color(0xFFFAFBFD);
   static Color textColorBlack = Color(0xff1D273B);
+  static Color textColorBlack2 = Color(0xff171717);
+  static Color unselectedLabelColor = Color(0xff525252);
   static Color textColorWhite = Colors.white;
   static Color textColorBlue = Color(0xFF041E42);
   static Color timerColor = Color(0xFFE7B641);
@@ -183,7 +186,8 @@ class Constant {
     color: textColorBlack,
     fontSize: 14,
     fontWeight: medium,
-  );static TextStyle iBlackMedium16 = TextStyle(
+  );
+  static TextStyle iBlackMedium16 = TextStyle(
     fontFamily: 'Inter',
     color: textColorBlack,
     fontSize: 16,

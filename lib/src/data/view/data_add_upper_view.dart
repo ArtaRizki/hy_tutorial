@@ -6,7 +6,6 @@ import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/data/model/create_data_param.dart';
-import 'package:hy_tutorial/src/data/view/data_add_clutch_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/utils.dart';
@@ -608,8 +607,12 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(context, "Tambah Data Shaft",
-          color: Constant.primaryColor, foregroundColor: Colors.white),
+      appBar: CustomAppBar.appBar(
+        context,
+        "Tambah Data Shaft",
+        elevation: 1,
+        shadowColor: Colors.black54,
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
         child: Column(

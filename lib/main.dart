@@ -6,7 +6,7 @@ import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/auth/view/boarding_view.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
-import 'package:hy_tutorial/src/home/view/home_new_view.dart';
+import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
 import 'package:flutter/material.dart';
@@ -132,6 +132,7 @@ class MyApp extends StatelessWidget {
             // locale: context.locale,
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: [Locale('id', 'ID'), Locale('en')],

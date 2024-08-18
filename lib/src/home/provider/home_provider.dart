@@ -22,8 +22,6 @@ class HomeProvider extends BaseController with ChangeNotifier {
     'assets/icons/admin/ic-turbine.png',
   ];
 
-
-
   HomeModel homeModel = HomeModel();
   HomeModel get getHomeModel => this.homeModel;
   set setHomeModel(HomeModel homeModel) => this.homeModel = homeModel;
@@ -32,7 +30,7 @@ class HomeProvider extends BaseController with ChangeNotifier {
     homeModel = HomeModel();
     userListModel = UserListModel();
     await context.read<ProfileProvider>().fetchProfile(withLoading: false);
-    await context.read<HomeProvider>().fetchUserList(withLoading: false);
+    await fetchUserList(withLoading: false);
   }
 
   Future<void> fetchHome({bool withLoading = false}) async {
@@ -60,6 +58,7 @@ class HomeProvider extends BaseController with ChangeNotifier {
   Future<void> fetchUserList({bool withLoading = false}) async {
     if (withLoading) loading(true);
     userListModel = UserListModel();
+    notifyListeners();
     Map<String, String> param = {
       'Filter': 'Status',
       'FilterValue': '0',

@@ -1,13 +1,11 @@
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_button.dart';
-import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
 import 'package:hy_tutorial/src/auth/view/register_view.dart';
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/src/home/view/home_new_view.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
@@ -47,7 +45,7 @@ class LoginViewState extends BaseState<LoginView> {
               ),
               InkWell(
                 onTap: () {
-                  // CusNav.nPush(context, HomeNewView());
+                  // CusNav.nPush(context, HomeView());
                 },
                 child: Text(
                   "Masuk",

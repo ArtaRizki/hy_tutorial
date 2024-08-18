@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
 import '../../../common/base/base_state.dart';
-import '../../../common/helper/constant.dart';
 import '../../division/provider/division_provider.dart';
 import '../provider/profile_provider.dart';
 import '../../../common/component/custom_appbar.dart';
@@ -48,8 +47,12 @@ class _ProfileEditViewState extends BaseState<ProfileEditView> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar.appBar(context, "Edit Profile",
-          color: Constant.primaryColor, foregroundColor: Colors.white),
+      appBar: CustomAppBar.appBar(
+        context,
+        "Edit Profile",
+        elevation: 1,
+        shadowColor: Colors.black54,
+      ),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Column(children: [

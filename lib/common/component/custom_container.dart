@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/common/helper/constant.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CustomContainer {
@@ -195,6 +197,61 @@ class CustomContainer {
                   decoration: BoxDecoration(
                     color: Colors.grey,
                     borderRadius: BorderRadius.circular(22),
+                  ),
+                ),
+                SizedBox(height: 18),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [child],
+                ),
+              ],
+            ),
+          ),
+        ));
+      },
+    );
+  }
+
+  static showModalBottom3(
+      {required BuildContext context, required Widget child}) async {
+    return await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return SingleChildScrollView(
+            child: Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            padding: EdgeInsets.all(12),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(22),
+                topRight: Radius.circular(22),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 8),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          CusNav.nPop(context);
+                        },
+                        child: Icon(Icons.close),
+                      ),
+                      Constant.xSizedBox8,
+                      Text(
+                        'Tutup',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 18),

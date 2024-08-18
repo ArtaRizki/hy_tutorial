@@ -386,8 +386,8 @@ class DataAddViewState extends BaseState<DataAddView> {
       appBar: CustomAppBar.appBar(
         context,
         "Tambah Laporan",
-        color: Colors.white,
-        foregroundColor: Colors.black,
+        elevation: 1,
+        shadowColor: Colors.black54,
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),

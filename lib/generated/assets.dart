@@ -9,7 +9,8 @@ class Assets {
   static const String fontsInterBlack = 'assets/fonts/Inter-Black.ttf';
   static const String fontsInterBold = 'assets/fonts/Inter-Bold.ttf';
   static const String fontsInterExtraBold = 'assets/fonts/Inter-ExtraBold.ttf';
-  static const String fontsInterExtraLight = 'assets/fonts/Inter-ExtraLight.ttf';
+  static const String fontsInterExtraLight =
+      'assets/fonts/Inter-ExtraLight.ttf';
   static const String fontsInterLight = 'assets/fonts/Inter-Light.ttf';
   static const String fontsInterMedium = 'assets/fonts/Inter-Medium.ttf';
   static const String fontsInterRegular = 'assets/fonts/Inter-Regular.ttf';
@@ -34,7 +35,8 @@ class Assets {
   static const String iconsIcInfo = 'assets/icons/ic-info.png';
   static const String iconsIcInfoAkun = 'assets/icons/ic-info-akun.png';
   static const String iconsIcKeamananAkun = 'assets/icons/ic-keamanan-akun.png';
-  static const String iconsIcKebijakanPrivasi = 'assets/icons/ic-kebijakan-privasi.png';
+  static const String iconsIcKebijakanPrivasi =
+      'assets/icons/ic-kebijakan-privasi.png';
   static const String iconsIcLogin = 'assets/icons/ic-login.png';
   static const String iconsIcLogout = 'assets/icons/ic-logout.png';
   static const String iconsIcLogout2 = 'assets/icons/ic-logout2.png';
@@ -60,11 +62,13 @@ class Assets {
   static const String iconsIcUserGray = 'assets/icons/ic-user-gray.png';
   static const String iconsSearchNormal = 'assets/icons/search-normal.png';
   static const String imagesIconBimops = 'assets/images/icon-bimops.png';
-  static const String imagesIconPln = 'assets/images/icon-pln.png';
+  static const String imagesIconPln = 'assets/images/icon-apps.png';
   static const String imagesImgHomeTop = 'assets/images/img-home-top.png';
-  static const String imagesImgSplashscreen = 'assets/images/img_splashscreen.png';
+  static const String imagesImgSplashscreen =
+      'assets/images/img_splashscreen.png';
   static const String imagesImgSplashtop = 'assets/images/img_splashtop.png';
-  static const String imagesMainImageNotFound = 'assets/images/main-image-not-found.png';
+  static const String imagesMainImageNotFound =
+      'assets/images/main-image-not-found.png';
   static const String lottieDownloading = 'assets/lottie/downloading.json';
   static const String lottieFailed = 'assets/lottie/failed.json';
   static const String lottieLive = 'assets/lottie/live.json';
@@ -72,5 +76,4 @@ class Assets {
   static const String lottieSuccess2 = 'assets/lottie/success2.json';
   static const String translationsEn = 'assets/translations/en.json';
   static const String translationsIdID = 'assets/translations/id-ID.json';
-
 }

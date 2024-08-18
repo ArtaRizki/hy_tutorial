@@ -70,7 +70,7 @@ android {
         }
     }
 
-    flavorDimensions "app"
+    // flavorDimensions "app"
 
     // productFlavors {
     //     development {

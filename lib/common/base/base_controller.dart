@@ -9,7 +9,7 @@ import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/auth/provider/auth_provider.dart';
-import 'package:public_ip_address/public_ip_address.dart';
+// import 'package:public_ip_address/public_ip_address.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:provider/provider.dart';
@@ -61,7 +61,7 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
-    final ipv4 = await IpAddress().getIpv4();
+    // final ipv4 = await IpAddress().getIpv4();
     // h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
@@ -175,7 +175,7 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'keep-alive');
     h.putIfAbsent('Accept', () => 'application/json');
-    final ipv4 = await IpAddress().getIpv4();
+    // final ipv4 = await IpAddress().getIpv4();
     // h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
@@ -270,7 +270,7 @@ class BaseController<S extends BaseState> {
     } else {
       var req = http.MultipartRequest("POST", Uri.parse(url));
       h.putIfAbsent("Content-Type", () => 'multipart/form-data');
-      final ipv4 = await IpAddress().getIpv4();
+      // final ipv4 = await IpAddress().getIpv4();
       // h.putIfAbsent('X-Real-IP', () => ipv4);
       req.headers.addAll(h);
       if (body != null)
@@ -368,7 +368,7 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
-    final ipv4 = await IpAddress().getIpv4();
+    // final ipv4 = await IpAddress().getIpv4();
     // h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);
@@ -552,7 +552,7 @@ class BaseController<S extends BaseState> {
     Map<String, String> h = Map<String, String>();
     h.putIfAbsent('Connection', () => 'Keep-Alive');
     h.putIfAbsent('accept', () => 'application/json');
-    final ipv4 = await IpAddress().getIpv4();
+    // final ipv4 = await IpAddress().getIpv4();
     // h.putIfAbsent('X-Real-IP', () => ipv4);
     var token = await getToken();
     if (token != null) h.putIfAbsent('Authorization', () => 'Bearer ' + token);

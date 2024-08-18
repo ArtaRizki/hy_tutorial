@@ -33,6 +33,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
     notifyListeners();
   }
 
+  FocusNode searchN = FocusNode();
   TextEditingController searchC = TextEditingController();
 
   Duration duration = const Duration(seconds: 2);
@@ -73,7 +74,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
             searchOnStoppedTyping!.cancel();
           }
           searchOnStoppedTyping = Timer(duration, () {
-            fetchPlta(context);
+            pagingController.refresh();
           });
         },
       );
@@ -153,28 +154,18 @@ class PltaProvider extends BaseController with ChangeNotifier {
           'FilterValue': '1',
         };
         if (searchC.text.isNotEmpty) param.addAll({'Search': searchC.text});
+
         if (next != null && next != '') param.addAll({'Next': next ?? ''});
-        // log("PANGGIL");
         if (_pagingController.itemList?.length != 0) {
           await Future.delayed(Duration(seconds: 1));
         }
-        final response = await get(
-          url,
-          body: param,
-        );
+        final response = await get(url, body: param);
 
         if (response.statusCode == 201 || response.statusCode == 200) {
           final model = PltaListModel.fromJson(jsonDecode(response.body));
           final items = model.Data ?? [];
           List<PltaListModelData?> newItems;
           newItems = items;
-          // items.where((element) => element?.Status == 'active').toList();
-
-          // userModel = model;
-          // notifyListeners();
-
-          final previouslyFetchedWordCount =
-              _pagingController.itemList?.length ?? 0;
           pageSize = 10;
           log("ITEMS LENGTH : ${newItems.length}");
           final isLastPage = newItems.length < pageSize;
@@ -244,12 +235,14 @@ class PltaProvider extends BaseController with ChangeNotifier {
             : radiusStatusC.text = 'Tidak Aktif';
         radiusStatus = data.RadiusStatus ?? false;
         active = data.Status == true ? 'aktif' : 'non_aktif';
+        isActive = data.Status ?? false;
         log("DATA LAT : ${data.Lat}");
         log("DATA ONG : ${data.Long}");
         if (data.Lat != null && data.Long != null)
           coordinateC.text = '${data.Lat ?? 0}, ${data.Long ?? 0}';
         radiusC.text = '${data.Radius ?? 0}';
         radiusType = data.RadiusType ?? '';
+        radiusTypeC.text = data.RadiusType == 'meter' ? 'M' : 'KM';
         if (radiusType == '') radiusType = 'meter';
       }
     }
@@ -363,8 +356,12 @@ class PltaProvider extends BaseController with ChangeNotifier {
   String? get getActive => this.active;
   set setActive(String? active) => this.active = active;
 
+  bool _isActive = false;
+  bool get isActive => this._isActive;
+  set isActive(bool value) => this._isActive = value;
+
   TextEditingController radiusStatusC = TextEditingController();
-  bool _radiusStatus = true;
+  bool _radiusStatus = false;
   bool get radiusStatus => _radiusStatus;
   set radiusStatus(bool value) {
     this._radiusStatus = value;
@@ -373,7 +370,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
   TextEditingController coordinateC = TextEditingController();
   TextEditingController radiusC = TextEditingController();
-  String? radiusType;
+  TextEditingController radiusTypeC = TextEditingController();
+  String? radiusType = 'kilometer';
   String? get getRadiusType => this.radiusType;
   set setRadiusType(String? radiusType) => this.radiusType = radiusType;
 
@@ -400,7 +398,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
     totalUnitC.clear();
     coordinateC.clear();
     radiusStatus = false;
+    isActive = false;
     radiusType = null;
+    radiusTypeC.clear();
     pltaUnitList.clear();
     statusActive.clear();
     pltaUnitListName.clear();
@@ -523,7 +523,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       var split = coordinateC.text.split(',');
       Map<String, String> body = {
         'Name': nameC.text,
-        'Status': active == 'aktif' ? 'true' : 'false',
+        'Status': isActive == 'aktif' ? 'true' : 'false',
         'Lat': split[0].replaceAll(',', '').trim(),
         'Long': split[1].trim(),
         'RadiusStatus': radiusStatus == true ? 'true' : 'false',
@@ -607,7 +607,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       Navigator.pop(context);
       Navigator.pop(context);
       // Navigator.pushReplacement(context,
-      //     MaterialPageRoute(builder: ((context) => PltaAddView(id: pltaId))));
+      //     MaterialPageRoute(builder: ((context) => PLTAAddView(id: pltaId))));
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
