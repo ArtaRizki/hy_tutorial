@@ -523,7 +523,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       var split = coordinateC.text.split(',');
       Map<String, String> body = {
         'Name': nameC.text,
-        'Status': isActive == 'aktif' ? 'true' : 'false',
+        'Status': isActive == true ? 'true' : 'false',
         'Lat': split[0].replaceAll(',', '').trim(),
         'Long': split[1].trim(),
         'RadiusStatus': radiusStatus == true ? 'true' : 'false',
