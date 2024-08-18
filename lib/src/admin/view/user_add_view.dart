@@ -385,7 +385,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: widget.id != null
                   ? CustomButton.mainButton(
-                borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10),
                       contentPadding: EdgeInsets.symmetric(vertical: 0),
                       'Selanjutnya',
                       enabled: p.validateUserForm(),

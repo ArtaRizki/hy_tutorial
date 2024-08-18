@@ -270,6 +270,7 @@ class CustomTextField {
     bool? isDecimalFormatter,
     EdgeInsetsGeometry? padding,
     double? labelFontSize,
+    double? activeBorderWidth,
     bool readOnly = false,
     Color? suffixIconColor,
     FontWeight? labelFontWeight,
@@ -362,7 +363,7 @@ class CustomTextField {
               focusedBorder: OutlineInputBorder(
                 borderRadius: borderRadius ?? BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  width: 1,
+                  width: activeBorderWidth ?? 1,
                   color: activeBorderColor ?? Constant.primaryColor,
                   style: BorderStyle.solid,
                 ),

@@ -117,7 +117,10 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
 
     Widget search() => CustomTextField.borderTextField(
           controller: turbineP.turbineSearchC,
-          activeBorderColor: Constant.borderSearchColor,
+          activeBorderColor: tabController.index == 0
+              ? Constant.borderSearchColor
+              : Constant.primaryColor,
+          activeBorderWidth: tabController.index == 0 ? 0.5 : 1,
           focusNode: turbineP.turbineSearchN,
           required: false,
           readOnly: tabController.index == 0,
@@ -1045,12 +1048,13 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
 
     kontenUserReq() {
       return SizedBox(
-        height: userList == null && (userList ?? []).isEmpty
-            ? 275
-            : (100 +
-                ((userList?.length ?? 0) <= 3
-                    ? (userList?.length ?? 0) * 40
-                    : 220)),
+        height: 320,
+        // userList == null && (userList ?? []).isEmpty
+        // ? 275
+        // : (100 +
+        //     ((userList?.length ?? 0) <= 3
+        //         ? (userList?.length ?? 0) * 40
+        //         : 220)),
         child: Padding(
           padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
           child: CustomContainer.mainCard(

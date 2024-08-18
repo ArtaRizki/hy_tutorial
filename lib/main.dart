@@ -163,8 +163,7 @@ class MyApp extends StatelessWidget {
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  log("Handling a background message");
-  log(message.data.toString());
+  log("Handling a background message : z${message.data.toString()}");
 }
 
 Future<Response> WrapLoading<Response>(Future<Response> future) async {

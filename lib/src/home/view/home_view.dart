@@ -101,8 +101,13 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
 
     Widget search() => CustomTextField.borderTextField(
           controller: turbineP.turbineSearchC,
+          activeBorderColor: tabController.index == 0
+              ? Constant.borderSearchColor
+              : Constant.primaryColor,
+          activeBorderWidth: tabController.index == 0 ? 0.5 : 1,
           focusNode: turbineP.turbineSearchN,
           required: false,
+          readOnly: tabController.index == 0,
           hintText: "Cari Laporan",
           hintColor: Constant.textHintColor2,
           prefixIcon: Padding(
@@ -120,15 +125,8 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                   onTap: () {
                     turbineP.turbineSearchC.clear();
                     turbineP.turbineSearchN.unfocus();
-                    if (tabController.index == 0) {
-                      turbineP.next2 = null;
-                      pagingC2.refresh();
-                    } else {
-                      turbineP.next = null;
-                      pagingC.refresh();
-                    }
-
                     setState(() {});
+                    pagingC.refresh();
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -142,13 +140,8 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
               turbineP.searchOnStoppedTyping!.cancel();
             }
             turbineP.searchOnStoppedTyping = Timer(turbineP.duration, () async {
-              if (tabController.index == 0) {
-                turbineP.next2 = null;
-                pagingC2.refresh();
-              } else {
-                turbineP.next = null;
-                pagingC.refresh();
-              }
+              turbineP.next = null;
+              pagingC.refresh();
             });
           },
           onChange: (val) {
@@ -157,13 +150,8 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
               turbineP.searchOnStoppedTyping!.cancel();
             }
             turbineP.searchOnStoppedTyping = Timer(turbineP.duration, () async {
-              if (tabController.index == 0) {
-                turbineP.next2 = null;
-                pagingC2.refresh();
-              } else {
-                turbineP.next = null;
-                pagingC.refresh();
-              }
+              turbineP.next = null;
+              pagingC.refresh();
             });
           },
         );
@@ -289,6 +277,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
           isScrollable: false,
           onTap: (index) {
             setState(() {});
+            FocusManager.instance.primaryFocus?.unfocus();
           },
           padding: EdgeInsets.only(top: 8),
           labelPadding: EdgeInsets.zero,

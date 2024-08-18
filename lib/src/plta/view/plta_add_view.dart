@@ -61,22 +61,23 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
               labelText: "Nama PLTA",
               hintText: "Nama PLTA",
             ),
-            Constant.xSizedBox16,
-            CustomTextField.borderTextField(
-              required: false,
-              controller: p.totalUnitC,
-              textInputType: TextInputType.name,
-              labelText: "Jumlah Unit",
-              hintText: "0",
-              suffixIcon: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
-                child: Text(
-                  'Unit',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(color: Colors.black),
+            if (widget.id == null) Constant.xSizedBox16,
+            if (widget.id == null)
+              CustomTextField.borderTextField(
+                required: false,
+                controller: p.totalUnitC,
+                textInputType: TextInputType.name,
+                labelText: "Jumlah Unit",
+                hintText: "0",
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+                  child: Text(
+                    'Unit',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ),
-            ),
             Constant.xSizedBox16,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -430,65 +431,79 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                   Constant.xSizedBox24,
                   detailLokasi(),
                   Constant.xSizedBox16,
-                  if (widget.id != null) Constant.xSizedBox16,
+                  if (widget.id != null) Constant.xSizedBox8,
                   if (widget.id != null)
-                    Table(
-                      border: TableBorder.all(
-                          width: 0.5,
-                          color: Constant.borderSearchColor.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(5)),
-                      columnWidths: const <int, TableColumnWidth>{
-                        0: FlexColumnWidth(),
-                        // 0: IntrinsicColumnWidth(flex: 0.5),
-                        1: FlexColumnWidth(),
-                        2: FlexColumnWidth(),
-                        3: FlexColumnWidth(),
-                        4: FlexColumnWidth(),
-                      },
-                      defaultVerticalAlignment: TableCellVerticalAlignment.top,
-                      children: [title(), ...content()],
-                    ),
-                  Constant.xSizedBox8,
-                  if (widget.id != null)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Visibility(
-                          visible: p.pltaUnitListName.isEmpty,
-                          child: Expanded(
-                            child: Text(
-                              'Unit Anda kosong,\nsilahkan tambah unit',
-                              style: TextStyle(fontSize: 12),
-                            ),
+                    CustomContainer.mainCard(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "List Unit",
+                                style: Constant.iBlackMedium16
+                                    .copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 3),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: Constant.primaryColor),
+                                  borderRadius: BorderRadius.circular(7),
+                                ),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await context
+                                        .read<PltaProvider>()
+                                        .tambahUnit();
+                                    setState(() {});
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: 15,
+                                      ),
+                                      Text(
+                                        "Tambah",
+                                        style: Constant.iPrimaryMedium12,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                        ),
-                        Constant.xSizedBox8,
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: InkWell(
-                            onTap: () async {
-                              await context.read<PltaProvider>().tambahUnit();
-                              setState(() {});
+                          Divider(
+                            thickness: 0.5,
+                            color: Colors.grey.withOpacity(0.5),
+                          ),
+                          Table(
+                            border: TableBorder.all(
+                                width: 0.5,
+                                color:
+                                    Constant.borderSearchColor.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(5)),
+                            columnWidths: const <int, TableColumnWidth>{
+                              0: FlexColumnWidth(),
+                              // 0: IntrinsicColumnWidth(flex: 0.5),
+                              1: FlexColumnWidth(),
+                              2: FlexColumnWidth(),
+                              3: FlexColumnWidth(),
+                              4: FlexColumnWidth(),
                             },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                                border:
-                                    Border.all(color: Constant.primaryColor),
-                              ),
-                              child: Text(
-                                'Tambah Unit',
-                                style: TextStyle(
-                                    fontSize: 12, color: Constant.primaryColor),
-                              ),
-                            ),
+                            defaultVerticalAlignment:
+                                TableCellVerticalAlignment.top,
+                            children: [title(), ...content()],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   Constant.xSizedBox32,
                 ],
