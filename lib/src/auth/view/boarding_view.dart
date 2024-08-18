@@ -18,10 +18,10 @@ class _BoardingViewState extends State<BoardingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.fromLTRB(15, 40, 15, 40),
+        padding: EdgeInsets.fromLTRB(15, 40, 15, 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Image.asset(Assets.imagesImgSplashtop, scale: 1.5),
             SizedBox(height: 20),
