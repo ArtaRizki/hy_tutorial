@@ -59,10 +59,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
               ],
-              // readOnly: widget.id != null,
-              // enabled: !(widget.id != null),
-              readOnly: false,
-              enabled: true,
+              readOnly: widget.id != null,
+              enabled: !(widget.id != null),
+              // readOnly: false,
+              // enabled: true,
               labelText: "Nama",
               hintText: "Nama",
               onChange: (v) {
@@ -198,10 +198,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
               controller: p.emailC,
               labelText: "Email",
               hintText: "Email",
-              // readOnly: widget.id != null,
-              // enabled: !(widget.id != null),
-              readOnly: false,
-              enabled: true,
+              readOnly: widget.id != null,
+              enabled: !(widget.id != null),
+              // readOnly: false,
+              // enabled: true,
               onChange: (v) {
                 setState(() {});
               },
@@ -211,10 +211,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
               controller: p.phoneNumberC,
               labelText: "No. Telepon",
               hintText: "No. Telepon",
-              // readOnly: widget.id != null,
-              // enabled: !(widget.id != null),
-              readOnly: false,
-              enabled: true,
+              readOnly: widget.id != null,
+              enabled: !(widget.id != null),
+              // readOnly: false,
+              // enabled: true,
               onChange: (v) {
                 setState(() {});
               },
@@ -224,8 +224,8 @@ class _UserAddViewState extends BaseState<UserAddView> {
               controller: p.usernameC,
               labelText: "Username",
               hintText: "Username",
-              // readOnly: widget.id != null,
-              // enabled: !(widget.id != null),
+              readOnly: widget.id != null,
+              enabled: !(widget.id != null),
               onChange: (v) {
                 setState(() {});
               },
