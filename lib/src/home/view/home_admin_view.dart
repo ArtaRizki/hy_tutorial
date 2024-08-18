@@ -1093,7 +1093,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                 SizedBox(height: 10),
                 userList != null && userList.isEmpty
                     ? Padding(
-                        padding: const EdgeInsets.only(top: 24),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Center(
                             child: Text('Data tidak ditemukan',
                                 style: Constant.grayRegular13)),
