@@ -119,6 +119,15 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
               : InkWell(
                   onTap: () {
                     turbineP.turbineSearchC.clear();
+                    turbineP.turbineSearchN.unfocus();
+                    if (tabController.index == 0) {
+                      turbineP.next2 = null;
+                      pagingC2.refresh();
+                    } else {
+                      turbineP.next = null;
+                      pagingC.refresh();
+                    }
+
                     setState(() {});
                   },
                   child: Padding(
@@ -133,8 +142,13 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
               turbineP.searchOnStoppedTyping!.cancel();
             }
             turbineP.searchOnStoppedTyping = Timer(turbineP.duration, () async {
-              turbineP.next = null;
-              pagingC.refresh();
+              if (tabController.index == 0) {
+                turbineP.next2 = null;
+                pagingC2.refresh();
+              } else {
+                turbineP.next = null;
+                pagingC.refresh();
+              }
             });
           },
           onChange: (val) {
@@ -143,8 +157,13 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
               turbineP.searchOnStoppedTyping!.cancel();
             }
             turbineP.searchOnStoppedTyping = Timer(turbineP.duration, () async {
-              turbineP.next = null;
-              pagingC.refresh();
+              if (tabController.index == 0) {
+                turbineP.next2 = null;
+                pagingC2.refresh();
+              } else {
+                turbineP.next = null;
+                pagingC.refresh();
+              }
             });
           },
         );
