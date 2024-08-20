@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
@@ -24,10 +25,12 @@ import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class HomeAdminView extends StatefulWidget {
-  const HomeAdminView({super.key});
+  HomeAdminView({super.key, required this.jumpToProfile});
+  final VoidCallback jumpToProfile;
 
   @override
   State<HomeAdminView> createState() => _HomeAdminViewState();
@@ -36,14 +39,25 @@ class HomeAdminView extends StatefulWidget {
 class _HomeAdminViewState extends BaseState<HomeAdminView>
     with TickerProviderStateMixin {
   late TabController tabController;
+  late bool isSuperAdmin;
 
   @override
   void initState() {
+    getData();
+    super.initState();
+  }
+
+  getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
+    log("IS SUPER ADMIN : $isSuperAdmin");
+    setState(() {});
     tabController = TabController(length: 2, vsync: this);
     tabController.addListener(() {
       setState(() {});
     });
     final turbineP = context.read<TurbineProvider>();
+    // if (!isSuperAdmin) {
     if ((turbineP.pagingController.itemList ?? []).isEmpty) {
       turbineP.getTurbine();
     } else {
@@ -58,9 +72,8 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
       turbineP.next2 = null;
       turbineP.getTurbine2();
     }
-
+    // }
     context.read<HomeProvider>().getData(context);
-    super.initState();
   }
 
   @override
@@ -103,9 +116,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                         color: Colors.white)),
                 SizedBox(width: 15),
                 InkWell(
-                  onTap: () {
-                    CusNav.nPush(context, ProfileView());
-                  },
+                  onTap: widget.jumpToProfile,
                   child: Image.asset(Assets.iconsIcUser, scale: 5.2),
                 ),
               ],
@@ -302,7 +313,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
           tabAlignment: TabAlignment.fill,
           indicatorSize: TabBarIndicatorSize.label,
           unselectedLabelColor: Colors.black,
-          labelColor: Constant.primaryColor,
+          labelColor: Colors.black,
           indicatorColor: Constant.primaryColor,
           labelStyle: Constant.primaryTextStyle
               .copyWith(fontWeight: FontWeight.bold, fontSize: 14),

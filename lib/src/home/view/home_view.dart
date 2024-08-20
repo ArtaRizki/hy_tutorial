@@ -286,7 +286,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
           tabAlignment: TabAlignment.fill,
           indicatorSize: TabBarIndicatorSize.label,
           unselectedLabelColor: Colors.black,
-          labelColor: Constant.primaryColor,
+          labelColor: Colors.black,
           indicatorColor: Constant.primaryColor,
           labelStyle: Constant.primaryTextStyle
               .copyWith(fontWeight: FontWeight.bold, fontSize: 14),
@@ -723,14 +723,14 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 2,
+              flex: 3,
               child: SizedBox(
                 width: double.infinity,
                 child: Stack(
                   children: [
                     headKonten(),
                     Positioned(
-                      bottom: 20,
+                      bottom: 0,
                       right: 0,
                       left: 0,
                       child: CustomContainer.mainCard(
@@ -789,9 +789,9 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
               ),
             ),
             Expanded(
-              flex: 6,
+              flex: 7,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 8),
                 child: CustomContainer.mainCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

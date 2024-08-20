@@ -16,6 +16,7 @@ import 'package:hy_tutorial/src/home/provider/home_provider.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/component/custom_appbar.dart';
 
 class UserManageView extends StatefulWidget {
@@ -28,6 +29,7 @@ class UserManageView extends StatefulWidget {
 class _UserManageViewState extends BaseState<UserManageView>
     with TickerProviderStateMixin {
   late TabController tabController;
+  late bool isSuperAdmin;
 
   @override
   void initState() {
@@ -36,28 +38,59 @@ class _UserManageViewState extends BaseState<UserManageView>
   }
 
   getData() async {
-    tabController = TabController(length: 2, vsync: this);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
+    log("IS SUPER ADMIN : $isSuperAdmin");
+    setState(() {});
+    tabController = TabController(length: isSuperAdmin ? 3 : 2, vsync: this);
     tabController.addListener(() {
       log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
     });
 
     final userManageP = context.read<UserManageProvider>();
-    if ((userManageP.pagingController.itemList ?? []).isEmpty) {
-      userManageP.getUserList();
+    if (isSuperAdmin == false) {
+      if ((userManageP.pagingController.itemList ?? []).isEmpty) {
+        userManageP.getUserList();
+      } else {
+        userManageP.pagingController.dispose();
+        userManageP.next = null;
+        userManageP.getUserList();
+        setState(() {});
+      }
+      if ((userManageP.pagingController2.itemList ?? []).isEmpty) {
+        userManageP.getUserList2();
+      } else {
+        userManageP.pagingController2.dispose();
+        userManageP.next2 = null;
+        userManageP.getUserList2();
+        setState(() {});
+      }
     } else {
-      userManageP.pagingController.dispose();
-      userManageP.next = null;
-      userManageP.getUserList();
-      setState(() {});
-    }
-    if ((userManageP.pagingController2.itemList ?? []).isEmpty) {
-      userManageP.getUserList2();
-    } else {
-      userManageP.pagingController2.dispose();
-      userManageP.next2 = null;
-      userManageP.getUserList2();
-      setState(() {});
+      if ((userManageP.pagingController3.itemList ?? []).isEmpty) {
+        userManageP.getUserList3();
+      } else {
+        userManageP.pagingController3.dispose();
+        userManageP.next3 = null;
+        userManageP.getUserList3();
+        setState(() {});
+      }
+      if ((userManageP.pagingController4.itemList ?? []).isEmpty) {
+        userManageP.getUserList4();
+      } else {
+        userManageP.pagingController4.dispose();
+        userManageP.next4 = null;
+        userManageP.getUserList4();
+        setState(() {});
+      }
+      if ((userManageP.pagingControllerAdmin.itemList ?? []).isEmpty) {
+        userManageP.getUserListAdmin();
+      } else {
+        userManageP.pagingControllerAdmin.dispose();
+        userManageP.nextAdmin = null;
+        userManageP.getUserListAdmin();
+        setState(() {});
+      }
     }
   }
 
@@ -67,13 +100,147 @@ class _UserManageViewState extends BaseState<UserManageView>
 
     final pagingC = context.watch<UserManageProvider>().pagingController;
     final pagingC2 = context.watch<UserManageProvider>().pagingController2;
+    final pagingC3 = context.watch<UserManageProvider>().pagingController3;
+    final pagingC4 = context.watch<UserManageProvider>().pagingController4;
+    final pagingCAdmin =
+        context.watch<UserManageProvider>().pagingControllerAdmin;
+
+    TextEditingController getC() {
+      final i = tabController.index;
+      if (isSuperAdmin) {
+        if (i == 0) return userManageP.userSearchC3;
+        if (i == 1) return userManageP.userSearchC4;
+        if (i == 2) return userManageP.userSearchCAdmin;
+      } else {
+        if (i == 0) return userManageP.userSearchC2;
+        if (i == 1) return userManageP.userSearchC;
+      }
+      return TextEditingController();
+    }
+
+    FocusNode getN() {
+      final i = tabController.index;
+      if (isSuperAdmin) {
+        if (i == 0) return userManageP.userN3;
+        if (i == 1) return userManageP.userN4;
+        if (i == 2) return userManageP.userNAdmin;
+      } else {
+        if (i == 0) return userManageP.userN2;
+        if (i == 1) return userManageP.userN;
+      }
+      return FocusNode();
+    }
+
+    bool getSuffixCheck() {
+      final i = tabController.index;
+      if (isSuperAdmin) {
+        if (i == 0) return userManageP.userSearchC3.text.isEmpty;
+        if (i == 1) return userManageP.userSearchC4.text.isEmpty;
+        if (i == 2) return userManageP.userSearchCAdmin.text.isEmpty;
+      } else {
+        if (i == 0) return userManageP.userSearchC2.text.isEmpty;
+        if (i == 1) return userManageP.userSearchC.text.isEmpty;
+      }
+      return true;
+    }
+
+    void Function()? getOnTap() {
+      final i = tabController.index;
+      if (isSuperAdmin) {
+        if (i == 0) {
+          userManageP.userSearchC3.clear();
+          userManageP.userN3.unfocus();
+          pagingC3.refresh();
+        }
+        if (i == 1) {
+          userManageP.userSearchC4.clear();
+          userManageP.userN4.unfocus();
+          pagingC4.refresh();
+        }
+        if (i == 2) {
+          userManageP.userSearchCAdmin.clear();
+          userManageP.userNAdmin.unfocus();
+          pagingCAdmin.refresh();
+        }
+      } else {
+        if (i == 0) {
+          userManageP.userSearchC2.clear();
+          userManageP.userN2.unfocus();
+          pagingC2.refresh();
+        }
+
+        if (i == 1) {
+          userManageP.userSearchC.clear();
+          userManageP.userN.unfocus();
+          pagingC.refresh();
+        }
+      }
+
+      return () {};
+    }
+
+    void Function()? getOnSubmitted() {
+      final i = tabController.index;
+      if (isSuperAdmin) {
+        if (i == 0) {
+          if (userManageP.searchOnStoppedTyping3 != null) {
+            userManageP.searchOnStoppedTyping3!.cancel();
+          }
+          userManageP.searchOnStoppedTyping3 =
+              Timer(userManageP.duration3, () async {
+            userManageP.next3 = null;
+            pagingC3.refresh();
+          });
+        }
+        if (i == 1) {
+          if (userManageP.searchOnStoppedTyping4 != null) {
+            userManageP.searchOnStoppedTyping4!.cancel();
+          }
+          userManageP.searchOnStoppedTyping4 =
+              Timer(userManageP.duration4, () async {
+            userManageP.next4 = null;
+            pagingC4.refresh();
+          });
+        }
+        if (i == 2) {
+          if (userManageP.searchOnStoppedTypingAdmin != null) {
+            userManageP.searchOnStoppedTypingAdmin!.cancel();
+          }
+          userManageP.searchOnStoppedTypingAdmin =
+              Timer(userManageP.durationAdmin, () async {
+            userManageP.nextAdmin = null;
+            pagingCAdmin.refresh();
+          });
+        }
+      } else {
+        if (i == 0) {
+          if (userManageP.searchOnStoppedTyping2 != null) {
+            userManageP.searchOnStoppedTyping2!.cancel();
+          }
+          userManageP.searchOnStoppedTyping2 =
+              Timer(userManageP.duration2, () async {
+            userManageP.next2 = null;
+            pagingC2.refresh();
+          });
+        }
+        if (i == 1) {
+          if (userManageP.searchOnStoppedTyping != null) {
+            userManageP.searchOnStoppedTyping!.cancel();
+          }
+          userManageP.searchOnStoppedTyping =
+              Timer(userManageP.duration, () async {
+            userManageP.next = null;
+            pagingC.refresh();
+          });
+        }
+      }
+
+      return () {};
+    }
 
     Widget search() => CustomTextField.borderTextField(
-          controller: tabController.index == 0
-              ? userManageP.userSearchC2
-              : userManageP.userSearchC,
-          focusNode:
-              tabController.index == 0 ? userManageP.userN2 : userManageP.userN,
+          controller: getC(),
+          focusNode: getN(),
           required: false,
           hintText: "Cari User",
           hintColor: Constant.textHintColor2,
@@ -86,21 +253,11 @@ class _UserManageViewState extends BaseState<UserManageView>
               height: 5,
             ),
           ),
-          suffixIcon: (tabController.index == 0
-                  ? userManageP.userSearchC2.text.isEmpty
-                  : userManageP.userSearchC.text.isEmpty)
+          suffixIcon: getSuffixCheck()
               ? null
               : InkWell(
                   onTap: () async {
-                    if (tabController.index == 0) {
-                      userManageP.userSearchC2.clear();
-                      userManageP.userN2.unfocus();
-                      pagingC2.refresh();
-                    } else {
-                      userManageP.userSearchC.clear();
-                      userManageP.userN.unfocus();
-                      pagingC.refresh();
-                    }
+                    await getOnTap();
                     setState(() {});
                   },
                   child: Padding(
@@ -111,36 +268,11 @@ class _UserManageViewState extends BaseState<UserManageView>
           onEditingComplete: () {
             setState(() {});
             FocusManager.instance.primaryFocus?.unfocus();
-            if (tabController.index == 0) {
-              if (userManageP.searchOnStoppedTyping2 != null) {
-                userManageP.searchOnStoppedTyping2!.cancel();
-              }
-              userManageP.searchOnStoppedTyping2 =
-                  Timer(userManageP.duration2, () async {
-                userManageP.next2 = null;
-                pagingC2.refresh();
-              });
-            } else {
-              if (userManageP.searchOnStoppedTyping != null) {
-                userManageP.searchOnStoppedTyping!.cancel();
-              }
-              userManageP.searchOnStoppedTyping =
-                  Timer(userManageP.duration, () async {
-                userManageP.next = null;
-                pagingC.refresh();
-              });
-            }
+            getOnSubmitted();
           },
           onChange: (val) {
             setState(() {});
-            if (userManageP.searchOnStoppedTyping != null) {
-              userManageP.searchOnStoppedTyping!.cancel();
-            }
-            userManageP.searchOnStoppedTyping =
-                Timer(userManageP.duration, () async {
-              userManageP.next = null;
-              pagingC.refresh();
-            });
+            getOnSubmitted();
           },
         );
 
@@ -179,45 +311,94 @@ class _UserManageViewState extends BaseState<UserManageView>
 
     Widget toggleTab() {
       return TabBar(
-        isScrollable: false,
+        isScrollable: isSuperAdmin ? true : false,
         controller: tabController,
-        tabAlignment: TabAlignment.fill,
+        tabAlignment: isSuperAdmin ? TabAlignment.center : TabAlignment.fill,
         indicatorSize: TabBarIndicatorSize.tab,
         unselectedLabelColor: Constant.grayColor,
-        labelColor: Constant.primaryColor,
+        labelColor: Colors.black,
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
         indicatorColor: Constant.primaryColor,
-        tabs: [
-          _buildTab(
-            "User Request",
-            (pagingC2.itemList?.length ?? 0) == 0
-                ? SizedBox()
-                : CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 10,
-                    child: Center(
-                      child: Text(
-                        '${pagingC2.itemList?.length ?? 0}',
-                        style: Constant.blackRegular14,
-                      ),
-                    ),
-                  ),
-          ),
-          _buildTab(
-              "User Aktif",
-              (pagingC.itemList?.length ?? 0) == 0
-                  ? SizedBox()
-                  : CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 10,
-                      child: Center(
-                        child: Text(
-                          '${pagingC.itemList?.length ?? 0}',
-                          style: Constant.blackRegular14,
+        tabs: isSuperAdmin
+            ? [
+                _buildTab(
+                  "User Request",
+                  (pagingC3.itemList?.length ?? 0) == 0
+                      ? SizedBox()
+                      : CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 10,
+                          child: Center(
+                            child: Text(
+                              '${pagingC3.itemList?.length ?? 0}',
+                              style: Constant.blackRegular14,
+                            ),
+                          ),
                         ),
-                      ),
-                    )),
-        ],
+                ),
+                _buildTab(
+                  "User",
+                  (pagingC4.itemList?.length ?? 0) == 0
+                      ? SizedBox()
+                      : CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 10,
+                          child: Center(
+                            child: Text(
+                              '${pagingC4.itemList?.length ?? 0}',
+                              style: Constant.blackRegular14,
+                            ),
+                          ),
+                        ),
+                ),
+                _buildTab(
+                  "Admin",
+                  (pagingCAdmin.itemList?.length ?? 0) == 0
+                      ? SizedBox()
+                      : CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 10,
+                          child: Center(
+                            child: Text(
+                              '${pagingCAdmin.itemList?.length ?? 0}',
+                              style: Constant.blackRegular14,
+                            ),
+                          ),
+                        ),
+                ),
+              ]
+            : [
+                _buildTab(
+                  "User Request",
+                  (pagingC2.itemList?.length ?? 0) == 0
+                      ? SizedBox()
+                      : CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 10,
+                          child: Center(
+                            child: Text(
+                              '${pagingC2.itemList?.length ?? 0}',
+                              style: Constant.blackRegular14,
+                            ),
+                          ),
+                        ),
+                ),
+                _buildTab(
+                  "User Aktif",
+                  (pagingC.itemList?.length ?? 0) == 0
+                      ? SizedBox()
+                      : CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 10,
+                          child: Center(
+                            child: Text(
+                              '${pagingC.itemList?.length ?? 0}',
+                              style: Constant.blackRegular14,
+                            ),
+                          ),
+                        ),
+                ),
+              ],
       );
     }
 
@@ -304,6 +485,324 @@ class _UserManageViewState extends BaseState<UserManageView>
                   value: userManageP.isFetching2 == true
                       ? null
                       : userManageP.isFetching2,
+                  child: Container(
+                    width: 60,
+                    height: 30,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF19B76E),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: Text(
+                      "Terima",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget itemShimmer3() {
+      return Column(
+        children: [
+          Constant.xSizedBox12,
+          CustomContainer.mainCard(
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            isShadow: false,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Skeleton<bool>(
+                    width: 40,
+                    height: 40,
+                    isCircle: true,
+                    value: userManageP.isFetching3 == true
+                        ? null
+                        : userManageP.isFetching3,
+                    child: Image.asset(Assets.iconsIcUser),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 12,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Skeleton<bool>(
+                        value: userManageP.isFetching3 == true
+                            ? null
+                            : userManageP.isFetching3,
+                        width: 80,
+                        height: 15,
+                        child: Text(
+                          'Namaaaaaaaaa',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                      Skeleton<bool>(
+                        value: userManageP.isFetching3 == true
+                            ? null
+                            : userManageP.isFetching3,
+                        width: 60,
+                        height: 12,
+                        child: Text(
+                          'Divisiiiiiiiii -',
+                          style: TextStyle(
+                            color: Constant.textHintColor2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Skeleton<bool>(
+                  value: userManageP.isFetching3 == true
+                      ? null
+                      : userManageP.isFetching3,
+                  width: 30,
+                  height: 30,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                        border: Border.all(width: 1, color: Colors.red)),
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 4),
+                Skeleton<bool>(
+                  width: 55,
+                  height: 30,
+                  value: userManageP.isFetching3 == true
+                      ? null
+                      : userManageP.isFetching3,
+                  child: Container(
+                    width: 60,
+                    height: 30,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF19B76E),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: Text(
+                      "Terima",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget itemShimmer4() {
+      return Column(
+        children: [
+          Constant.xSizedBox12,
+          CustomContainer.mainCard(
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            isShadow: false,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Skeleton<bool>(
+                    width: 40,
+                    height: 40,
+                    isCircle: true,
+                    value: userManageP.isFetchingAdmin == true
+                        ? null
+                        : userManageP.isFetching4,
+                    child: Image.asset(Assets.iconsIcUser),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 12,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Skeleton<bool>(
+                        value: userManageP.isFetching4 == true
+                            ? null
+                            : userManageP.isFetching4,
+                        width: 80,
+                        height: 15,
+                        child: Text(
+                          'Namaaaaaaaaa',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                      Skeleton<bool>(
+                        value: userManageP.isFetching4 == true
+                            ? null
+                            : userManageP.isFetching4,
+                        width: 60,
+                        height: 12,
+                        child: Text(
+                          'Divisiiiiiiiii -',
+                          style: TextStyle(
+                            color: Constant.textHintColor2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Skeleton<bool>(
+                  value: userManageP.isFetching4 == true
+                      ? null
+                      : userManageP.isFetching4,
+                  width: 30,
+                  height: 30,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                        border: Border.all(width: 1, color: Colors.red)),
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 4),
+                Skeleton<bool>(
+                  width: 55,
+                  height: 30,
+                  value: userManageP.isFetching4 == true
+                      ? null
+                      : userManageP.isFetching4,
+                  child: Container(
+                    width: 60,
+                    height: 30,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF19B76E),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: Text(
+                      "Terima",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget itemShimmerAdmin() {
+      return Column(
+        children: [
+          Constant.xSizedBox12,
+          CustomContainer.mainCard(
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            isShadow: false,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Skeleton<bool>(
+                    width: 40,
+                    height: 40,
+                    isCircle: true,
+                    value: userManageP.isFetchingAdmin == true
+                        ? null
+                        : userManageP.isFetchingAdmin,
+                    child: Image.asset(Assets.iconsIcUser),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 12,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Skeleton<bool>(
+                        value: userManageP.isFetchingAdmin == true
+                            ? null
+                            : userManageP.isFetchingAdmin,
+                        width: 80,
+                        height: 15,
+                        child: Text(
+                          'Namaaaaaaaaa',
+                          style: Constant.iPrimaryMedium8
+                              .copyWith(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                      Skeleton<bool>(
+                        value: userManageP.isFetchingAdmin == true
+                            ? null
+                            : userManageP.isFetchingAdmin,
+                        width: 60,
+                        height: 12,
+                        child: Text(
+                          'Divisiiiiiiiii -',
+                          style: TextStyle(
+                            color: Constant.textHintColor2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Skeleton<bool>(
+                  value: userManageP.isFetchingAdmin == true
+                      ? null
+                      : userManageP.isFetchingAdmin,
+                  width: 30,
+                  height: 30,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                        border: Border.all(width: 1, color: Colors.red)),
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 4),
+                Skeleton<bool>(
+                  width: 55,
+                  height: 30,
+                  value: userManageP.isFetchingAdmin == true
+                      ? null
+                      : userManageP.isFetchingAdmin,
                   child: Container(
                     width: 60,
                     height: 30,
@@ -425,6 +924,36 @@ class _UserManageViewState extends BaseState<UserManageView>
       );
     }
 
+    Widget bodyUserListShimmer3() {
+      return Column(
+        children: [
+          itemShimmer3(),
+          itemShimmer3(),
+          itemShimmer3(),
+        ],
+      );
+    }
+
+    Widget bodyUserListShimmer4() {
+      return Column(
+        children: [
+          itemShimmer4(),
+          itemShimmer4(),
+          itemShimmer4(),
+        ],
+      );
+    }
+
+    Widget bodyUserListShimmerAdmin() {
+      return Column(
+        children: [
+          itemShimmerAdmin(),
+          itemShimmerAdmin(),
+          itemShimmerAdmin(),
+        ],
+      );
+    }
+
     Widget noData() {
       return ListView(shrinkWrap: true, children: [
         Padding(
@@ -477,6 +1006,537 @@ class _UserManageViewState extends BaseState<UserManageView>
                         await CusNav.nPush(
                             context, UserAddView(id: item.Id ?? ''));
                         pagingC2.refresh();
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          CustomContainer.mainCard(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: Colors.white,
+                                      image: DecorationImage(
+                                        image: AssetImage(Assets.iconsIcUser),
+                                        scale: 6,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Expanded(
+                                  flex: 6,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(item.Name ?? 'Nama -',
+                                          style: Constant.iBlackMedium14),
+                                      Text(item.Division ?? 'Divisi -',
+                                          style: Constant.blackRegular12),
+                                    ],
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menolak User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '2';
+                                            await p.updateUser(
+                                              context,
+                                              id: item.Id ?? '',
+                                              fromHome: true,
+                                            );
+
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
+                                  child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          border: Border.all(
+                                              width: 1, color: Colors.red)),
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 20,
+                                        color: Colors.red,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menerima User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '1';
+                                            await p.updateUser(
+                                              context,
+                                              id: item.Id ?? '',
+                                              fromHome: true,
+                                            );
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
+                                  child: Container(
+                                    width: 60,
+                                    padding: EdgeInsets.all(5),
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF19B76E),
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    child: Text(
+                                      "Terima",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget bodyUserRequestSuper() {
+      return RefreshIndicator(
+        onRefresh: () async {
+          userManageP.next3 = null;
+          if ((userManageP.pagingController3.itemList ?? []).isEmpty) {
+            userManageP.pagingController3.refresh();
+          } else {
+            userManageP.next3 = null;
+            userManageP.pagingController3.refresh();
+          }
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: PagedListView.separated(
+                pagingController: pagingC3,
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                shrinkWrap: true,
+                physics: AlwaysScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => SizedBox(height: 8),
+                builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
+                  firstPageProgressIndicatorBuilder: (_) =>
+                      bodyUserListShimmer3(),
+                  firstPageErrorIndicatorBuilder: (_) => failedData(),
+                  newPageProgressIndicatorBuilder: (_) =>
+                      bodyUserListShimmer3(),
+                  newPageErrorIndicatorBuilder: (_) => failedData(),
+                  noItemsFoundIndicatorBuilder: (_) => noData(),
+                  itemBuilder: (context, item, index) {
+                    return InkWell(
+                      onTap: () async {
+                        await CusNav.nPush(
+                            context, UserAddView(id: item.Id ?? ''));
+                        pagingC3.refresh();
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          CustomContainer.mainCard(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: Colors.white,
+                                      image: DecorationImage(
+                                        image: AssetImage(Assets.iconsIcUser),
+                                        scale: 6,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Expanded(
+                                  flex: 6,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(item.Name ?? 'Nama -',
+                                          style: Constant.iBlackMedium14),
+                                      Text(item.Division ?? 'Divisi -',
+                                          style: Constant.blackRegular12),
+                                    ],
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menolak User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '2';
+                                            await p.updateUser(
+                                              context,
+                                              id: item.Id ?? '',
+                                              fromHome: true,
+                                            );
+
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
+                                  child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          border: Border.all(
+                                              width: 1, color: Colors.red)),
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 20,
+                                        color: Colors.red,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menerima User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '1';
+                                            await p.updateUser(
+                                              context,
+                                              id: item.Id ?? '',
+                                              fromHome: true,
+                                            );
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
+                                  child: Container(
+                                    width: 60,
+                                    padding: EdgeInsets.all(5),
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF19B76E),
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    child: Text(
+                                      "Terima",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget bodyUserAllSuper() {
+      return RefreshIndicator(
+        onRefresh: () async {
+          userManageP.next4 = null;
+          if ((userManageP.pagingController4.itemList ?? []).isEmpty) {
+            userManageP.pagingController4.refresh();
+          } else {
+            userManageP.next4 = null;
+            userManageP.pagingController4.refresh();
+          }
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: PagedListView.separated(
+                pagingController: pagingC4,
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                shrinkWrap: true,
+                physics: AlwaysScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => SizedBox(height: 8),
+                builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
+                  firstPageProgressIndicatorBuilder: (_) =>
+                      bodyUserListShimmer4(),
+                  firstPageErrorIndicatorBuilder: (_) => failedData(),
+                  newPageProgressIndicatorBuilder: (_) =>
+                      bodyUserListShimmer4(),
+                  newPageErrorIndicatorBuilder: (_) => failedData(),
+                  noItemsFoundIndicatorBuilder: (_) => noData(),
+                  itemBuilder: (context, item, index) {
+                    return InkWell(
+                      onTap: () async {
+                        await CusNav.nPush(
+                            context, UserAddView(id: item.Id ?? ''));
+                        pagingC4.refresh();
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          CustomContainer.mainCard(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: Colors.white,
+                                      image: DecorationImage(
+                                        image: AssetImage(Assets.iconsIcUser),
+                                        scale: 6,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Expanded(
+                                  flex: 6,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(item.Name ?? 'Nama -',
+                                          style: Constant.iBlackMedium14),
+                                      Text(item.Division ?? 'Divisi -',
+                                          style: Constant.blackRegular12),
+                                    ],
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menolak User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '2';
+                                            await p.updateUser(
+                                              context,
+                                              id: item.Id ?? '',
+                                              fromHome: true,
+                                            );
+
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
+                                  child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          border: Border.all(
+                                              width: 1, color: Colors.red)),
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 20,
+                                        color: Colors.red,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await Utils.showYesNoDialog(
+                                        context: context,
+                                        title: "Konfirmasi",
+                                        desc:
+                                            "Apakah Anda Yakin Menerima User Ini?",
+                                        yesCallback: () async {
+                                          CusNav.nPop(context);
+                                          final p = context
+                                              .read<UserManageProvider>();
+                                          handleTap(() async {
+                                            p.selectedStatus = '1';
+                                            await p.updateUser(
+                                              context,
+                                              id: item.Id ?? '',
+                                              fromHome: true,
+                                            );
+                                            p.selectedStatus = null;
+
+                                            await context
+                                                .read<HomeProvider>()
+                                                .getData(context);
+                                            ;
+                                          });
+                                        },
+                                        noCallback: () => CusNav.nPop(context));
+                                  },
+                                  child: Container(
+                                    width: 60,
+                                    padding: EdgeInsets.all(5),
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF19B76E),
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    child: Text(
+                                      "Terima",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget bodyAdminAllSuper() {
+      return RefreshIndicator(
+        onRefresh: () async {
+          userManageP.nextAdmin = null;
+          if ((userManageP.pagingControllerAdmin.itemList ?? []).isEmpty) {
+            userManageP.pagingControllerAdmin.refresh();
+          } else {
+            userManageP.nextAdmin = null;
+            userManageP.pagingControllerAdmin.refresh();
+          }
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: PagedListView.separated(
+                pagingController: pagingCAdmin,
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                shrinkWrap: true,
+                physics: AlwaysScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => SizedBox(height: 8),
+                builderDelegate: PagedChildBuilderDelegate<UserListModelData>(
+                  firstPageProgressIndicatorBuilder: (_) =>
+                      bodyUserListShimmerAdmin(),
+                  firstPageErrorIndicatorBuilder: (_) => failedData(),
+                  newPageProgressIndicatorBuilder: (_) =>
+                      bodyUserListShimmerAdmin(),
+                  newPageErrorIndicatorBuilder: (_) => failedData(),
+                  noItemsFoundIndicatorBuilder: (_) => noData(),
+                  itemBuilder: (context, item, index) {
+                    return InkWell(
+                      onTap: () async {
+                        await CusNav.nPush(
+                            context, UserAddView(id: item.Id ?? ''));
+                        pagingCAdmin.refresh();
                       },
                       child: Column(
                         children: [
@@ -764,10 +1824,16 @@ class _UserManageViewState extends BaseState<UserManageView>
                 child: TabBarView(
                   // physics: NeverScrollableScrollPhysics(),
                   controller: tabController,
-                  children: [
-                    bodyUserRequest(),
-                    bodyUserAktif(),
-                  ],
+                  children: isSuperAdmin
+                      ? [
+                          bodyUserRequestSuper(),
+                          bodyUserAllSuper(),
+                          bodyAdminAllSuper(),
+                        ]
+                      : [
+                          bodyUserRequest(),
+                          bodyUserAktif(),
+                        ],
                 ),
               ),
             ],

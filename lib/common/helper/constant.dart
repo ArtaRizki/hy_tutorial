@@ -490,6 +490,7 @@ class Constant {
   static const String kSetPrefName = "name";
   static const String kSetPrefCompany = "company";
   static const String kSetPrefIsAdmin = "is_admin";
+  static const String kSetPrefIsSuperAdmin = "is_super_admin";
   static const String kSetPrefEmail = "email";
   static const String kSetPrefPhone = "phone";
   static const String kSetPrefVerified = "verified";

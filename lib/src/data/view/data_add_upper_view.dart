@@ -478,7 +478,7 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
       tabAlignment: TabAlignment.fill,
       indicatorSize: TabBarIndicatorSize.tab,
       unselectedLabelColor: Constant.grayColor,
-      labelColor: Constant.primaryColor,
+      labelColor: Colors.black,
       unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
       indicatorColor: Constant.primaryColor,
       tabs: [

@@ -279,11 +279,7 @@ class _MainHomeState extends State<MainHome> {
               child: CircleAvatar(
                 radius: 60,
                 backgroundColor: Constant.primaryColor,
-                child: Image.asset(
-                  'assets/icons/ic-button.png',
-                  width: 40,
-                  height: 40,
-                ),
+                child: Image.asset(Assets.iconsIcButton, width: 40, height: 40),
               ),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -302,26 +298,19 @@ class _MainHomeState extends State<MainHome> {
               CustomAlert.showSnackBar(
                   context, 'Tekan 2 kali untuk keluar aplikasi', false);
               return false;
-            } else {
-              return true;
             }
           }
           // kalau sudah ada api maka muncul konfirm exit dua kali
           return true;
         },
         child: [
-          // HomeAdminView(
-          //   jumpToProfile: () => setState(() => currentIndex = 3),
-          //   jumpToManageUsers: () async {
-          //     currentIndex = 1;
-          //     //await CusNav.nPush(context, UserManageView());
-          //     setState(() {
-          //       currentIndex = 1;
-          //     });
-          //     await getData();
-          //   },
-          // ),
-          HomeAdminView(),
+          HomeAdminView(
+            jumpToProfile: () {
+              setState(() {
+                currentIndex = 4;
+              });
+            },
+          ),
           UserManageView(),
           SizedBox(),
           DaftarPLTANewView(),

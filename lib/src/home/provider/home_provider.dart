@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:hy_tutorial/common/base/base_controller.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
@@ -8,6 +9,7 @@ import 'package:hy_tutorial/src/home/model/home_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/src/profile/provider/profile_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeProvider extends BaseController with ChangeNotifier {
   final List<String> staticArray = [
@@ -29,13 +31,14 @@ class HomeProvider extends BaseController with ChangeNotifier {
 
   DashboardAdminModel dashboardAdminModel = DashboardAdminModel();
   DashboardAdminModel get getDashboardAdminModel => this.dashboardAdminModel;
-  set setDashboardAdminModel(DashboardAdminModel dashboardAdminModel) => this.dashboardAdminModel = dashboardAdminModel;
+  set setDashboardAdminModel(DashboardAdminModel dashboardAdminModel) =>
+      this.dashboardAdminModel = dashboardAdminModel;
 
   getData(BuildContext context) async {
     homeModel = HomeModel();
     dashboardAdminModel = DashboardAdminModel();
     userListModel = UserListModel();
-    await fetcDashboard(withLoading: false);
+    await fetchDashboard(withLoading: false);
     await context.read<ProfileProvider>().fetchProfile(withLoading: false);
     await fetchUserList(withLoading: false);
   }
@@ -58,14 +61,14 @@ class HomeProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  Future<void> fetcDashboard({bool withLoading = false}) async {
+  Future<void> fetchDashboard({bool withLoading = false}) async {
     if (withLoading) loading(true);
 
-    final response =
-    await get(Constant.BASE_API_FULL + '/dashboard');
+    final response = await get(Constant.BASE_API_FULL + '/dashboard');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      dashboardAdminModel = DashboardAdminModel.fromJson(jsonDecode(response.body));
+      dashboardAdminModel =
+          DashboardAdminModel.fromJson(jsonDecode(response.body));
 
       notifyListeners();
       if (withLoading) loading(false);
@@ -76,12 +79,14 @@ class HomeProvider extends BaseController with ChangeNotifier {
     }
   }
 
-
   UserListModel _userListModel = UserListModel();
   UserListModel get userListModel => this._userListModel;
   set userListModel(UserListModel value) => this._userListModel = value;
 
   Future<void> fetchUserList({bool withLoading = false}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
+    log("IS SUPER ADMIN : $isSuperAdmin");
     if (withLoading) loading(true);
     userListModel = UserListModel();
     notifyListeners();
@@ -89,8 +94,9 @@ class HomeProvider extends BaseController with ChangeNotifier {
       'Filter': 'Status',
       'FilterValue': '0',
     };
-    final response =
-        await get(Constant.BASE_API_FULL + '/admin/users', body: param);
+    final response = await get(
+        Constant.BASE_API_FULL + '/${isSuperAdmin ? 'super' : 'admin'}/users',
+        body: param);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       UserListModel model = UserListModel.fromJson(jsonDecode(response.body));

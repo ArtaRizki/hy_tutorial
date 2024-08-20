@@ -82,7 +82,7 @@ class LoginViewState extends BaseState<LoginView> {
                     },
                     labelFontSize: 20,
                     labelFontWeight: FontWeight.bold,
-                    labelColor: Constant.primaryColor,
+                    labelColor: Colors.black,
                     borderColor: Constant.grayColor.withOpacity(0.5),
                   ),
                   SizedBox(height: 10),
@@ -103,7 +103,7 @@ class LoginViewState extends BaseState<LoginView> {
                     },
                     labelFontSize: 20,
                     labelFontWeight: FontWeight.bold,
-                    labelColor: Constant.primaryColor,
+                    labelColor: Colors.black,
                     borderColor: Constant.grayColor.withOpacity(0.5),
                     obscureText: authP.obscurePass,
                     onEditingComplete: () async {

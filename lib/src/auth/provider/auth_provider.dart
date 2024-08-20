@@ -136,6 +136,8 @@ class AuthProvider extends BaseController with ChangeNotifier {
         await prefs.setString(Constant.kSetPrefName, model.Data?.Name ?? '');
         await prefs.setBool(Constant.kSetPrefIsAdmin,
             roles == 'admin' || roles == 'main' ? true : false);
+        await prefs.setBool(
+            Constant.kSetPrefIsSuperAdmin, roles == 'main' ? true : false);
 
         if (roles == 'admin' || roles == 'main') {
           CusNav.nPushAndRemoveUntil(context, MainHome(), arguments: true);

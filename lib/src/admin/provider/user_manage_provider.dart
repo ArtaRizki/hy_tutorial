@@ -45,6 +45,36 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     this._pagingController2 = value;
   }
 
+  PagingController<int, UserListModelData> _pagingController3 =
+      PagingController(firstPageKey: 1);
+
+  PagingController<int, UserListModelData> get pagingController3 =>
+      this._pagingController3;
+
+  set pagingController3(PagingController<int, UserListModelData> value) {
+    this._pagingController3 = value;
+  }
+
+  PagingController<int, UserListModelData> _pagingController4 =
+      PagingController(firstPageKey: 1);
+
+  PagingController<int, UserListModelData> get pagingController4 =>
+      this._pagingController4;
+
+  set pagingController4(PagingController<int, UserListModelData> value) {
+    this._pagingController4 = value;
+  }
+
+  PagingController<int, UserListModelData> _pagingControllerAdmin =
+      PagingController(firstPageKey: 1);
+
+  PagingController<int, UserListModelData> get pagingControllerAdmin =>
+      this._pagingControllerAdmin;
+
+  set pagingControllerAdmin(PagingController<int, UserListModelData> value) {
+    this._pagingControllerAdmin = value;
+  }
+
   Duration duration = const Duration(seconds: 2);
   Timer? _searchOnStoppedTyping;
   Timer? get searchOnStoppedTyping => this._searchOnStoppedTyping;
@@ -63,6 +93,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   TextEditingController userSearchC = TextEditingController();
   FocusNode userN = FocusNode();
+
   Duration duration2 = const Duration(seconds: 2);
   Timer? _searchOnStoppedTyping2;
   Timer? get searchOnStoppedTyping2 => this._searchOnStoppedTyping2;
@@ -81,6 +112,63 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   TextEditingController userSearchC2 = TextEditingController();
   FocusNode userN2 = FocusNode();
+
+  Duration duration3 = const Duration(seconds: 2);
+  Timer? _searchOnStoppedTyping3;
+  Timer? get searchOnStoppedTyping3 => this._searchOnStoppedTyping3;
+
+  set searchOnStoppedTyping3(Timer? value) {
+    this._searchOnStoppedTyping3 = value;
+    notifyListeners();
+  }
+
+  bool _isFetching3 = false;
+  bool get isFetching3 => this._isFetching3;
+
+  set isFetching3(bool value) {
+    this._isFetching3 = value;
+  }
+
+  TextEditingController userSearchC3 = TextEditingController();
+  FocusNode userN3 = FocusNode();
+
+  Duration duration4 = const Duration(seconds: 2);
+  Timer? _searchOnStoppedTyping4;
+  Timer? get searchOnStoppedTyping4 => this._searchOnStoppedTyping4;
+
+  set searchOnStoppedTyping4(Timer? value) {
+    this._searchOnStoppedTyping4 = value;
+    notifyListeners();
+  }
+
+  bool _isFetching4 = false;
+  bool get isFetching4 => this._isFetching4;
+
+  set isFetching4(bool value) {
+    this._isFetching4 = value;
+  }
+
+  TextEditingController userSearchC4 = TextEditingController();
+  FocusNode userN4 = FocusNode();
+
+  Duration durationAdmin = const Duration(seconds: 2);
+  Timer? _searchOnStoppedTypingAdmin;
+  Timer? get searchOnStoppedTypingAdmin => this._searchOnStoppedTypingAdmin;
+
+  set searchOnStoppedTypingAdmin(Timer? value) {
+    this._searchOnStoppedTypingAdmin = value;
+    notifyListeners();
+  }
+
+  bool _isFetchingAdmin = false;
+  bool get isFetchingAdmin => this._isFetchingAdmin;
+
+  set isFetchingAdmin(bool value) {
+    this._isFetchingAdmin = value;
+  }
+
+  TextEditingController userSearchCAdmin = TextEditingController();
+  FocusNode userNAdmin = FocusNode();
 
   bool _ascending = false;
   bool get ascending => this._ascending;
@@ -128,8 +216,80 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _ascending3 = false;
+  bool get ascending3 => this._ascending3;
+  set ascending3(bool value) => this._ascending3 = value;
+  bool _descending3 = false;
+  bool get descending3 => this._descending3;
+  set descending3(bool value) => this._descending3 = value;
+
+  bool _createdAt3 = false;
+  bool get createdAt3 => this._createdAt3;
+  set createdAt3(bool value) => this._createdAt3 = value;
+  bool _username3 = false;
+  bool get username3 => this._username3;
+  set username3(bool value) => this._username3 = value;
+
+  int pageSize3 = 0;
+
+  get getPageSize3 => this.pageSize3;
+
+  set setPageSize3(pageSize) {
+    this.pageSize3 = pageSize;
+    notifyListeners();
+  }
+
+  bool _ascending4 = false;
+  bool get ascending4 => this._ascending4;
+  set ascending4(bool value) => this._ascending4 = value;
+  bool _descending4 = false;
+  bool get descending4 => this._descending4;
+  set descending4(bool value) => this._descending4 = value;
+
+  bool _createdAt4 = false;
+  bool get createdAt4 => this._createdAt4;
+  set createdAt4(bool value) => this._createdAt4 = value;
+  bool _username4 = false;
+  bool get username4 => this._username4;
+  set username4(bool value) => this._username4 = value;
+
+  int pageSize4 = 0;
+
+  get getPageSize4 => this.pageSize4;
+
+  set setPageSize4(pageSize) {
+    this.pageSize4 = pageSize;
+    notifyListeners();
+  }
+
+  bool _ascendingAdmin = false;
+  bool get ascendingAdmin => this._ascendingAdmin;
+  set ascendingAdmin(bool value) => this._ascendingAdmin = value;
+  bool _descendingAdmin = false;
+  bool get descendingAdmin => this._descendingAdmin;
+  set descendingAdmin(bool value) => this._descendingAdmin = value;
+
+  bool _createdAtAdmin = false;
+  bool get createdAtAdmin => this._createdAtAdmin;
+  set createdAtAdmin(bool value) => this._createdAtAdmin = value;
+  bool _usernameAdmin = false;
+  bool get usernameAdmin => this._usernameAdmin;
+  set usernameAdmin(bool value) => this._usernameAdmin = value;
+
+  int pageSizeAdmin = 0;
+
+  get getPageSizeAdmin => this.pageSizeAdmin;
+
+  set setPageSizeAdmin(pageSize) {
+    this.pageSizeAdmin = pageSize;
+    notifyListeners();
+  }
+
   String? next;
   String? next2;
+  String? next3;
+  String? next4;
+  String? nextAdmin;
 
   Future<void> getUserList() async {
     pagingController = PagingController(firstPageKey: 1)
@@ -162,6 +322,69 @@ class UserManageProvider extends BaseController with ChangeNotifier {
             log("ERROR EXPIRED TOKEN");
             next2 = null;
             pagingController2.refresh();
+          } else {
+            BuildContext? context =
+                NavigationService.navigatorKey.currentContext;
+            if (context != null)
+              CustomAlert.showSnackBar(
+                  context, 'Gagal Mendapatkan Data User', true);
+          }
+        });
+      });
+  }
+
+  Future<void> getUserList3() async {
+    pagingController3 = PagingController(firstPageKey: 1)
+      ..addPageRequestListener((pageKey) async {
+        log("GET USER 3");
+        await fetchUser3(page: pageKey).onError((error, stackTrace) {
+          isFetching3 = false;
+          if (error.toString().contains('expired token')) {
+            log("ERROR EXPIRED TOKEN");
+            next3 = null;
+            pagingController3.refresh();
+          } else {
+            BuildContext? context =
+                NavigationService.navigatorKey.currentContext;
+            if (context != null)
+              CustomAlert.showSnackBar(
+                  context, 'Gagal Mendapatkan Data User', true);
+          }
+        });
+      });
+  }
+
+  Future<void> getUserList4() async {
+    pagingController4 = PagingController(firstPageKey: 1)
+      ..addPageRequestListener((pageKey) async {
+        log("GET USER 4");
+        await fetchUser4(page: pageKey).onError((error, stackTrace) {
+          isFetching4 = false;
+          if (error.toString().contains('expired token')) {
+            log("ERROR EXPIRED TOKEN");
+            next4 = null;
+            pagingController4.refresh();
+          } else {
+            BuildContext? context =
+                NavigationService.navigatorKey.currentContext;
+            if (context != null)
+              CustomAlert.showSnackBar(
+                  context, 'Gagal Mendapatkan Data User', true);
+          }
+        });
+      });
+  }
+
+  Future<void> getUserListAdmin() async {
+    pagingControllerAdmin = PagingController(firstPageKey: 1)
+      ..addPageRequestListener((pageKey) async {
+        log("GET USER ADMIN");
+        await fetchUserAdmin(page: pageKey).onError((error, stackTrace) {
+          isFetchingAdmin = false;
+          if (error.toString().contains('expired token')) {
+            log("ERROR EXPIRED TOKEN");
+            nextAdmin = null;
+            pagingControllerAdmin.refresh();
           } else {
             BuildContext? context =
                 NavigationService.navigatorKey.currentContext;
@@ -315,6 +538,211 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     }
   }
 
+  Future<void> fetchUser3({
+    bool withLoading = false,
+    required int page,
+    String keyword = "",
+  }) async {
+    try {
+      if (!isFetching3) {
+        isFetching3 = true;
+        if (withLoading) loading(true);
+        String url = Constant.BASE_API_FULL + '/super/users';
+        Map<String, String> param = {
+          'Filter': 'Status',
+          'FilterValue': '0',
+        };
+        if (userSearchC3.text.isNotEmpty)
+          param.addAll({'Search': userSearchC3.text});
+
+        if (next3 != null && next3 != '') param.addAll({'Next': next3 ?? ''});
+        if (_pagingController3.itemList?.length != 0) {
+          await Future.delayed(Duration(seconds: 1));
+        }
+        final response = await get(url, body: param);
+
+        if (response.statusCode == 201 || response.statusCode == 200) {
+          final model = UserListModel.fromJson(jsonDecode(response.body));
+          final items = model.Data ?? [];
+          List<UserListModelData?> newItems;
+          newItems = items;
+          pageSize3 = 10;
+          log("ITEMS LENGTH : ${newItems.length}");
+          final isLastPage = newItems.length < pageSize3;
+
+          if (isLastPage || (model.Meta?.Next ?? '') == '') {
+            next3 = null;
+            pagingController3
+                .appendLastPage(newItems as List<UserListModelData>);
+          } else {
+            final nextPageKey = page += 1;
+            if (model.Meta?.Next != null && model.Meta?.Next != '')
+              next3 = model.Meta?.Next ?? '';
+            pagingController3.appendPage(
+                newItems as List<UserListModelData>, nextPageKey);
+          }
+
+          notifyListeners();
+          if (withLoading) loading(false);
+          isFetching3 = false;
+        } else {
+          log("MASUK ELSE");
+          loading(false);
+          isFetching3 = false;
+          final message = jsonDecode(response.body)["Message"];
+          throw Exception(message);
+        }
+      }
+    } catch (e) {
+      log("MASUK ELSE CATCH $e");
+      loading(false);
+      isFetching2 = false;
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> fetchUser4({
+    bool withLoading = false,
+    required int page,
+    String keyword = "",
+  }) async {
+    try {
+      if (!isFetching4) {
+        isFetching4 = true;
+        if (withLoading) loading(true);
+        String url = Constant.BASE_API_FULL + '/super/users';
+        Map<String, String> param = {
+          'Filter': 'Role',
+          'FilterValue': '3',
+        };
+        if (userSearchC4.text.isNotEmpty)
+          param.addAll({'Search': userSearchC4.text});
+
+        if (next4 != null && next4 != '') param.addAll({'Next': next4 ?? ''});
+        if (_pagingController4.itemList?.length != 0) {
+          await Future.delayed(Duration(seconds: 1));
+        }
+        final response = await get(url, body: param);
+
+        if (response.statusCode == 201 || response.statusCode == 200) {
+          final model = UserListModel.fromJson(jsonDecode(response.body));
+          final items = model.Data ?? [];
+          List<UserListModelData?> newItems;
+          newItems = items;
+          pageSize4 = 10;
+          log("ITEMS LENGTH : ${newItems.length}");
+          final isLastPage = newItems.length < pageSize4;
+
+          if (isLastPage || (model.Meta?.Next ?? '') == '') {
+            next4 = null;
+            pagingController4
+                .appendLastPage(newItems as List<UserListModelData>);
+          } else {
+            final nextPageKey = page += 1;
+            if (model.Meta?.Next != null && model.Meta?.Next != '')
+              next4 = model.Meta?.Next ?? '';
+            pagingController4.appendPage(
+                newItems as List<UserListModelData>, nextPageKey);
+          }
+
+          notifyListeners();
+          if (withLoading) loading(false);
+          isFetching4 = false;
+        } else {
+          log("MASUK ELSE");
+          loading(false);
+          isFetching4 = false;
+          final message = jsonDecode(response.body)["Message"];
+          throw Exception(message);
+        }
+      }
+    } catch (e) {
+      log("MASUK ELSE CATCH $e");
+      loading(false);
+      isFetching2 = false;
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> fetchUserAdmin({
+    bool withLoading = false,
+    required int page,
+    String keyword = "",
+  }) async {
+    try {
+      if (!isFetchingAdmin) {
+        isFetchingAdmin = true;
+        if (withLoading) loading(true);
+        String url = Constant.BASE_API_FULL + '/super/users';
+        Map<String, String> param = {
+          'Filter': 'Role',
+          'FilterValue': '2',
+        };
+        if (userSearchCAdmin.text.isNotEmpty)
+          param.addAll({'Search': userSearchCAdmin.text});
+        if (ascendingAdmin) {
+          param.remove('SortOrder');
+          param.addAll({'SortOrder': 'ASC'});
+        }
+        if (descendingAdmin) {
+          param.remove('SortOrder');
+          param.addAll({'SortOrder': 'DESC'});
+        }
+        if (usernameAdmin) {
+          param.remove('SortBy');
+          param.addAll({'SortBy': 'Username'});
+        }
+        if (createdAtAdmin) {
+          param.remove('SortBy');
+          param.addAll({'SortBy': 'CreatedAt'});
+        }
+        if (nextAdmin != null && nextAdmin != '')
+          param.addAll({'Next': nextAdmin ?? ''});
+        if (_pagingControllerAdmin.itemList?.length != 0) {
+          await Future.delayed(Duration(seconds: 1));
+        }
+        final response = await get(url, body: param);
+
+        if (response.statusCode == 201 || response.statusCode == 200) {
+          final model = UserListModel.fromJson(jsonDecode(response.body));
+          final items = model.Data ?? [];
+          List<UserListModelData?> newItems;
+          newItems = items;
+          pageSizeAdmin = 10;
+          log("ITEMS LENGTH : ${newItems.length}");
+          final isLastPage = newItems.length < pageSizeAdmin;
+
+          if (isLastPage || (model.Meta?.Next ?? '') == '') {
+            nextAdmin = null;
+            pagingControllerAdmin
+                .appendLastPage(newItems as List<UserListModelData>);
+          } else {
+            final nextPageKey = page += 1;
+            if (model.Meta?.Next != null && model.Meta?.Next != '')
+              nextAdmin = model.Meta?.Next ?? '';
+            pagingControllerAdmin.appendPage(
+                newItems as List<UserListModelData>, nextPageKey);
+          }
+
+          notifyListeners();
+          if (withLoading) loading(false);
+          isFetchingAdmin = false;
+        } else {
+          log("MASUK ELSE");
+          loading(false);
+          isFetchingAdmin = false;
+          final message = jsonDecode(response.body)["Message"];
+          throw Exception(message);
+        }
+      }
+    } catch (e) {
+      log("MASUK ELSE CATCH $e");
+      loading(false);
+      isFetchingAdmin = false;
+      throw Exception(e.toString());
+    }
+  }
+
   TextEditingController emailC = TextEditingController();
   TextEditingController nameC = TextEditingController();
   TextEditingController nipC = TextEditingController();
@@ -432,7 +860,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   Future<void> fetchUserDetail({required String id}) async {
     loading(true);
-    final response = await get(Constant.BASE_API_FULL + '/admin/users/$id');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
+    final response = await get(Constant.BASE_API_FULL +
+        '/${isSuperAdmin ? 'super' : 'admin'}/users/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = UserDetailModel.fromJson(jsonDecode(response.body));
@@ -623,6 +1054,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     loading(true);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
     if (selectedDivision == null) throw 'Pilih Divisi Terlebih Dahulu';
     FocusManager.instance.primaryFocus?.unfocus();
     Map<String, String> param = {
@@ -633,8 +1065,12 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       'DivisionId': selectedDivision ?? '',
       'RadiusStatus': '$radiusStatus',
     };
-    final response =
-        await post(Constant.BASE_API_FULL + '/admin/users', body: param);
+    if (isSuperAdmin && selectedRole != null)
+      param.addAll({'Role': selectedRole ?? ''});
+
+    final response = await post(
+        Constant.BASE_API_FULL + '/${isSuperAdmin ? 'super' : 'admin'}/users',
+        body: param);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
@@ -660,14 +1096,21 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     loading(true);
     FocusManager.instance.primaryFocus?.unfocus();
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final isSuperAdmin =
+        await prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
     Map<String, String> param = {'RadiusStatus': '$radiusStatus'};
-    if (selectedRole != null) param.addAll({'Role': selectedRole ?? ''});
+    // if (selectedRole != null) param.addAll({'Role': selectedRole ?? ''});
+
+    if (isSuperAdmin && selectedRole != null)
+      param.addAll({'Role': selectedRole ?? ''});
     if (selectedDivision != null)
       param.addAll({'DivisionId': selectedDivision ?? ''});
     if (selectedStatus != null) param.addAll({'Status': selectedStatus ?? ''});
 
-    final response =
-        await put(Constant.BASE_API_FULL + '/admin/users/$id', body: param);
+    final response = await put(
+        Constant.BASE_API_FULL +
+            '/${isSuperAdmin ? 'super' : 'admin'}/users/$id',
+        body: param);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
@@ -696,7 +1139,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   Future<void> deleteUser(BuildContext context, {required String id}) async {
     loading(true);
-    final response = await delete(Constant.BASE_API_FULL + '/admin/users/$id');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
+    final response = await delete(Constant.BASE_API_FULL +
+        '/${isSuperAdmin ? 'super' : 'admin'}/users/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
