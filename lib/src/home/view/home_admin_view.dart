@@ -94,26 +94,27 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
         decoration: BoxDecoration(
           image: DecorationImage(
             alignment: Alignment.topCenter,
-            image: AssetImage(Assets.imagesImgHomeTop),
-            fit: BoxFit.fitWidth,
+            image: AssetImage(Assets.imagesImgHomeTopUser),
+            fit: BoxFit.cover,
           ),
         ),
-        // height: 128,
+        height: 139,
         width: double.infinity,
         padding: EdgeInsets.fromLTRB(20, 35, 20, 15),
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CircleAvatar(
-                    backgroundColor: Colors.white.withOpacity(0.3),
-                    child: Icon(Icons.notifications_outlined,
-                        color: Colors.white)),
-                SizedBox(width: 15),
+                Image.asset(Assets.imagesImgPlnHome),
                 InkWell(
                   onTap: widget.jumpToProfile,
-                  child: Image.asset(Assets.iconsIcUser, scale: 5.2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                        shape: BoxShape.circle),
+                    child: Image.asset(Assets.iconsIcUser, scale: 7),
+                  ),
                 ),
               ],
             ),
@@ -223,9 +224,9 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                     ),
                   ),
                   controller: turbineP.dateRangePickerController,
-                  showActionButtons: true,
-                  cancelText: 'Batal',
-                  confirmText: 'Konfirmasi',
+                  showActionButtons: false,
+                  // cancelText: 'Batal',
+                  // confirmText: 'Konfirmasi',
                   view: DateRangePickerView.month,
                   backgroundColor: Colors.white,
                   monthViewSettings: DateRangePickerMonthViewSettings(
@@ -238,18 +239,18 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                           backgroundColor: Colors.white)),
                   initialSelectedRange:
                       PickerDateRange(turbineP.startDate, turbineP.endDate),
-                  onCancel: () async {
-                    await turbineP.setStartDate(null);
-                    await turbineP.setEndDate(null);
-                    await turbineP.clearData();
-                    sheetState(() {});
-                    setState(() {});
-                  },
-                  onSubmit: (p0) {
-                    CusNav.nPop(context);
-                    turbineP.next = null;
-                    pagingC.refresh();
-                  },
+                  // onCancel: () async {
+                  //   await turbineP.setStartDate(null);
+                  //   await turbineP.setEndDate(null);
+                  //   await turbineP.clearData();
+                  //   sheetState(() {});
+                  //   setState(() {});
+                  // },
+                  // onSubmit: (p0) {
+                  //   CusNav.nPop(context);
+                  //   turbineP.next = null;
+                  //   pagingC.refresh();
+                  // },
                   onSelectionChanged:
                       (dateRangePickerSelectionChangedArgs) async {
                     if (dateRangePickerSelectionChangedArgs.value
@@ -260,6 +261,9 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                           dateRangePickerSelectionChangedArgs.value.endDate);
                       sheetState(() {});
                       setState(() {});
+
+                      turbineP.next = null;
+                      pagingC.refresh();
                     }
                   },
                   selectionMode: DateRangePickerSelectionMode.range,
@@ -1157,7 +1161,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                         onTap: () async {
                           if (tabController.index == 1)
                             CustomContainer.showModalBottomScroll(
-                              initialChildSize: 0.8,
+                              initialChildSize: 0.75,
                               context: context,
                               child: filterAllWidget(),
                             );

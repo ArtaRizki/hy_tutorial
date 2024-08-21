@@ -55,7 +55,7 @@ class _TurbineViewState extends BaseState<TurbineView> {
           controller: turbineP.turbineSearchC,
           focusNode: turbineP.turbineSearchN,
           required: false,
-          hintText: "Cari User",
+          hintText: "Cari Laporan",
           hintColor: Constant.textHintColor2,
           prefixIcon: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -483,7 +483,7 @@ class _TurbineViewState extends BaseState<TurbineView> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: CustomAppBar.appBar(context, "Daftar Laporan",
-            isLeading: false,
+            isLeading: true,
             action: [
               InkWell(
                 onTap: () async {
@@ -530,7 +530,7 @@ class _TurbineViewState extends BaseState<TurbineView> {
                 ],
               ),
             ),
-            titleSpacing: 20,
+            // titleSpacing: 20,
             color: Colors.white,
             foregroundColor: Constant.primaryColor),
         body: SafeArea(

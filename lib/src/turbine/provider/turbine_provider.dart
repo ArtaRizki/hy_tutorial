@@ -127,7 +127,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
     if (date != null)
       startDateC.text =
           DateFormat("yyyy-MM-dd").format(date ?? DateTime.now()).toString();
-    notifyListeners();
+    // notifyListeners();
     log("START DATE : ${_startDate}");
   }
 
@@ -140,7 +140,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
     if (date != null)
       endDateC.text =
           DateFormat("yyyy-MM-dd").format(date ?? DateTime.now()).toString();
-    notifyListeners();
+    // notifyListeners();
     log("END DATE : ${_endDate}");
   }
 

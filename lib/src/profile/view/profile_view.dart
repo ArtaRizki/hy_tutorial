@@ -293,66 +293,6 @@ class _ProfileViewState extends BaseState<ProfileView> {
                             Row(
                               children: [
                                 SizedBox(width: 5),
-                                Image.asset(Assets.iconsIcKebijakanPrivasi,
-                                    scale: 4),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  flex: 6,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Kebijakan Privasi",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      SizedBox(height: 4),
-                                      Text(
-                                        "Pelajari kebijakan privasi aplikasi",
-                                        style: TextStyle(
-                                            color: Color(0xff525252),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.grey,
-                                  size: 15,
-                                ),
-                                Constant.xSizedBox4,
-                              ],
-                            ),
-                            SizedBox(height: 8),
-                          ],
-                        ),
-                      ),
-                      Constant.xSizedBox12,
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 18),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Color(0XFFE5E5E5),
-                            width: 1,
-                          ),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Constant.xSizedBox4,
-                            Row(
-                              children: [
-                                SizedBox(width: 5),
                                 Image.asset(Assets.iconsIcAbout, scale: 4),
                                 SizedBox(width: 8),
                                 Expanded(

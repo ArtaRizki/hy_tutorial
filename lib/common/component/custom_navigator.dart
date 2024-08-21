@@ -9,7 +9,8 @@ class CusNav {
           reverseTransitionDuration: Duration.zero));
 
   static nPushAndRemoveUntil(BuildContext context, Widget page,
-          {Object? arguments}) =>
+          {Object? arguments,
+          bool Function(Route<dynamic> predicate)? predicate}) =>
       Navigator.pushAndRemoveUntil(
           context,
           PageRouteBuilder(
@@ -19,7 +20,11 @@ class CusNav {
               pageBuilder: ((context, animation, secondaryAnimation) => page),
               transitionDuration: const Duration(seconds: 0),
               reverseTransitionDuration: Duration.zero),
-          (route) => false);
+          predicate ?? (route) => false);
+  static nPopUntil(BuildContext context,
+          {Object? arguments,
+          bool Function(Route<dynamic> predicate)? predicate}) =>
+      Navigator.popUntil(context, predicate ?? (route) => false);
 
   static nPushReplace(BuildContext context, Widget page) =>
       Navigator.pushReplacement(

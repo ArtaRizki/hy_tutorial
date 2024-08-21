@@ -6,6 +6,7 @@ import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/auth/view/boarding_view.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
+import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
 import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';

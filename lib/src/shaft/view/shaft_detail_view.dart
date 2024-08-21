@@ -901,31 +901,11 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
                       Row(
                         children: [
                           SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 40,
+                            height: 40,
                             child: status == true
-                                ? Container(
-                                    decoration:
-                                        BoxDecoration(color: Colors.white),
-                                    child: Image.asset(
-                                      width: 50,
-                                      height: 50,
-                                      'assets/icons/ic-smile.png',
-                                    ),
-                                  )
-                                : Container(
-                                    width: 52,
-                                    height: 52,
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle),
-                                    child: Image.asset(
-                                      width: 40,
-                                      height: 40,
-                                      'assets/icons/ic-sad.png',
-                                    ),
-                                  ),
+                                ? Image.asset(Assets.iconsIcSmile)
+                                : Image.asset(Assets.iconsIcSad),
                           ),
                           Constant.xSizedBox12,
                           Expanded(

@@ -6,4 +6,5 @@ Map<String, WidgetBuilder> get _routes => <String, WidgetBuilder>{
       '/login': (context) => LoginView(),
       '/home': (context) => MainHome(),
       '/new_home': (context) => HomeView(),
+      '/add_data': (context) => DataAddView(),
     };

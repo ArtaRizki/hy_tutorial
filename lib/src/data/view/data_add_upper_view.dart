@@ -481,6 +481,9 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
       labelColor: Colors.black,
       unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
       indicatorColor: Constant.primaryColor,
+      onTap: (value) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       tabs: [
         _buildTab("Upper"),
         _buildTab("Clutch"),

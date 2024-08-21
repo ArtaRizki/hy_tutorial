@@ -2,8 +2,15 @@ import 'dart:developer';
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
+import 'package:hy_tutorial/src/data/view/data_add_view.dart';
+import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
+import 'package:hy_tutorial/src/home/view/home_view.dart';
+import 'package:hy_tutorial/src/home/view/main_home.dart';
+import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_container.dart';
 import '../../../common/helper/constant.dart';
@@ -775,6 +782,74 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
         'Detail Laporan',
         color: Constant.primaryColor,
         foregroundColor: Colors.white,
+        leading: InkWell(
+          onTap: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+            if (isAdmin) {
+              await CusNav.nPopUntil(context,
+                  predicate: (route) => route is MainHome);
+              CusNav.nPush(context, TurbineView());
+            } else {
+              CusNav.nPushAndRemoveUntil(context, HomeView());
+            }
+          },
+          child: Icon(Icons.keyboard_arrow_left),
+        ),
+        action: [
+          InkWell(
+            onTap: () async {
+              Utils.showYesNoDialogWithWarning(
+                  context: context,
+                  title: "Konfirmasi Penghapusan",
+                  desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
+                  yesCallback: () async {
+                    Navigator.pop(context);
+                    await context
+                        .read<DataAddProvider>()
+                        .deleteTurbine(context, id: data?.id ?? "0");
+
+                    getData();
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    final isAdmin =
+                        prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+                    if (isAdmin) {
+                      await CusNav.nPopUntil(context,
+                          predicate: (route) => route is MainHome);
+                      CusNav.nPush(context, TurbineView());
+                    } else {
+                      CusNav.nPushAndRemoveUntil(context, HomeView());
+                    }
+                  },
+                  noCallback: () async {
+                    Navigator.pop(context);
+                  });
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 20),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Constant.redColor,
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    Icons.delete_forever_rounded,
+                    size: 15,
+                  ),
+                  Text(
+                    "Hapus",
+                    style:
+                        Constant.iPrimaryMedium12.copyWith(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       body: ListView(
         shrinkWrap: true,
@@ -854,31 +929,11 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
                       Row(
                         children: [
                           SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 40,
+                            height: 40,
                             child: status == true
-                                ? Container(
-                                    decoration:
-                                        BoxDecoration(color: Colors.white),
-                                    child: Image.asset(
-                                      width: 50,
-                                      height: 50,
-                                      'assets/icons/ic-smile.png',
-                                    ),
-                                  )
-                                : Container(
-                                    width: 52,
-                                    height: 52,
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle),
-                                    child: Image.asset(
-                                      width: 40,
-                                      height: 40,
-                                      'assets/icons/ic-sad.png',
-                                    ),
-                                  ),
+                                ? Image.asset(Assets.iconsIcSmile)
+                                : Image.asset(Assets.iconsIcSad),
                           ),
                           Constant.xSizedBox12,
                           Expanded(
