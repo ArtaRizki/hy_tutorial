@@ -37,6 +37,7 @@ class _MainHomeState extends State<MainHome> {
   @override
   void initState() {
     getData();
+    setPermission();
     super.initState();
   }
 
@@ -44,6 +45,13 @@ class _MainHomeState extends State<MainHome> {
   void didChangeDependencies() {
     getData();
     super.didChangeDependencies();
+  }
+
+  setPermission() async {
+    requestPermission(Permission.notification);
+    await requestPermission(Permission.storage);
+    await requestPermission(Permission.manageExternalStorage);
+    await requestPermission(Permission.photos);
   }
 
   getData() async {
@@ -61,10 +69,6 @@ class _MainHomeState extends State<MainHome> {
       log("NOTIF PERMANENTLY DENIED");
       await openAppSettings();
     }
-    requestPermission(Permission.notification);
-    await requestPermission(Permission.storage);
-    await requestPermission(Permission.manageExternalStorage);
-    await requestPermission(Permission.photos);
   }
 
   setIndex() {

@@ -303,6 +303,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
     bool back = false,
     bool withLoading = false,
   }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (withLoading) loading(true);
     PltaDetailModelData pltaDetailModelData =
         PltaDetailModelData(Units: pltaUnitList);
@@ -340,7 +341,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
       await Future.delayed(Duration(seconds: 2));
       next = null;
       if (!isEdit || back) {
-        Navigator.pop(context);
+        final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+        CusNav.nPushAndRemoveUntil(context, MainHome(index: 3),
+            arguments: isAdmin);
         clearForm();
       }
     } else {
@@ -555,7 +558,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
         if (back) {
           // Navigator.pop(context);
           final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
-          CusNav.nPushAndRemoveUntil(context, MainHome(index: 1),
+          CusNav.nPushAndRemoveUntil(context, MainHome(index: 3),
               arguments: isAdmin);
           clearForm();
         }

@@ -335,20 +335,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
                         desc:
                             "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
                         yesCallback: () async {
-                          Utils.showYesNoDialogWithWarning(
-                              context: context,
-                              title: "Konfirmasi Penghapusan",
-                              desc:
-                                  "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
-                              yesCallback: () async {
-                                Navigator.pop(context);
-                                await context
-                                    .read<UserManageProvider>()
-                                    .deleteUser(context, id: widget.id ?? "0");
-                              },
-                              noCallback: () async {
-                                Navigator.pop(context);
-                              });
+                          Navigator.pop(context);
+                          await context
+                              .read<UserManageProvider>()
+                              .deleteUser(context, id: widget.id ?? "0");
                         },
                         noCallback: () async {
                           Navigator.pop(context);

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
@@ -746,7 +747,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
         },
         child: SingleChildScrollView(
           child: SizedBox(
-            height: MediaQuery.of(context).size.height,
+            height: 100.h,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

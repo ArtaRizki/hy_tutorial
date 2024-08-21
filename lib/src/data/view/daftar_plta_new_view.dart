@@ -319,7 +319,13 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
               return InkWell(
                 onTap: () async {
                   await CusNav.nPush(context, PLTAAddView(id: item.Id ?? '0'));
-                  pagingC.refresh();
+                  pltaP.next = null;
+                  if ((pltaP.pagingController.itemList ?? []).isEmpty) {
+                    pltaP.pagingController.refresh();
+                  } else {
+                    pltaP.next = null;
+                    pltaP.pagingController.refresh();
+                  }
                 },
                 child: Column(
                   children: [
@@ -416,8 +422,15 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
                 borderRadius: BorderRadius.circular(7),
               ),
               child: InkWell(
-                onTap: () {
-                  CusNav.nPush(context, PLTAAddView());
+                onTap: () async {
+                  await CusNav.nPush(context, PLTAAddView());
+                  pltaP.next = null;
+                  if ((pltaP.pagingController.itemList ?? []).isEmpty) {
+                    pltaP.pagingController.refresh();
+                  } else {
+                    pltaP.next = null;
+                    pltaP.pagingController.refresh();
+                  }
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
