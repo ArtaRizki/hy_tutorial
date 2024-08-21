@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
+import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/utils.dart';
 import '../../../common/base/base_controller.dart';
@@ -12,6 +13,9 @@ import '../../../common/helper/constant.dart';
 import '../../../common/component/custom_textfield.dart';
 import '../model/profile_model.dart';
 import '../../division/model/divison_model.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 
 class ProfileProvider extends BaseController with ChangeNotifier {
   GlobalKey<FormState> userAddKey = GlobalKey<FormState>();
@@ -134,6 +138,8 @@ class ProfileProvider extends BaseController with ChangeNotifier {
 
   Future<void> updateProfile(BuildContext context) async {
     loading(true);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     FocusManager.instance.primaryFocus?.unfocus();
     if (usernameC.text.isEmpty) throw 'Harap Isi Username';
     if (nameC.text.isEmpty) throw 'Harap Isi Nama';
@@ -153,7 +159,14 @@ class ProfileProvider extends BaseController with ChangeNotifier {
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+      if (isAdmin) {
+        CusNav.nPushAndRemoveUntil(context, MainHome(index: 4),
+            arguments: isAdmin);
+      } else {
+        CusNav.nPop(context);
+      }
       clearForm();
     } else {
       final message = jsonDecode(response.body)["Message"];
@@ -189,6 +202,7 @@ class ProfileProvider extends BaseController with ChangeNotifier {
 
   Future<void> changePass(BuildContext context) async {
     loading(true);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     FocusManager.instance.primaryFocus?.unfocus();
     Map<String, String> param = {
       'Password': passwordC.text,
@@ -204,7 +218,14 @@ class ProfileProvider extends BaseController with ChangeNotifier {
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+      if (isAdmin) {
+        CusNav.nPushAndRemoveUntil(context, MainHome(index: 4),
+            arguments: isAdmin);
+      } else {
+        CusNav.nPop(context);
+      }
       clearForm();
     } else {
       final message = jsonDecode(response.body)["Message"];
