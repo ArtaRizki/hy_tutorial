@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
+import 'package:hy_tutorial/src/division/provider/division_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/utils.dart';
 import '../../../common/base/base_controller.dart';
@@ -17,11 +19,54 @@ class ProfileProvider extends BaseController with ChangeNotifier {
   TextEditingController nameC = TextEditingController();
   TextEditingController usernameC = TextEditingController();
   TextEditingController emailC = TextEditingController();
+  TextEditingController phoneNumberC = TextEditingController();
+  TextEditingController divisionC = TextEditingController();
+  TextEditingController passwordC = TextEditingController();
+  TextEditingController passwordConfirmationC = TextEditingController();
+
+  String? _selectedDivision;
+  String? get selectedDivision => this._selectedDivision;
+
+  set selectedDivision(String? value) {
+    this._selectedDivision = value;
+    // notifyListeners();
+  }
+
+  setData(BuildContext context) async {
+    final p = context.read<DivisionProvider>();
+    await p.fetchDivision(withLoading: true);
+    await fetchProfile();
+    final data = profileModel.Data;
+    if (data != null) {
+      nameC.text = data.Name ?? '';
+      usernameC.text = data.Username ?? '';
+      emailC.text = data.Email ?? '';
+      phoneNumberC.text = data.Phone ?? '';
+      final division = p.divisionModel.Data;
+      divisionC.text = data.Division ?? '';
+      selectedDivision =
+          division?.firstWhere((element) => element?.Name == data.Division)?.Id;
+      log("SELECTED DIVISION : $selectedDivision");
+    } else {
+      usernameC.text = '';
+      nameC.text = '';
+      emailC.text = '';
+      divisionC.text = '';
+      phoneNumberC.text = '';
+      selectedDivision = null;
+    }
+    notifyListeners();
+  }
 
   Future<void> clearForm() async {
-    nameC.clear();
-    usernameC.clear();
-    emailC.clear();
+    nameC.text = '';
+    usernameC.text = '';
+    phoneNumberC.text = '';
+    emailC.text = '';
+    divisionC.text = '';
+    passwordC.text = '';
+    passwordConfirmationC.text = '';
+    selectedDivision = null;
   }
 
   getData(BuildContext context) async {
@@ -82,6 +127,7 @@ class ProfileProvider extends BaseController with ChangeNotifier {
   bool validateEdit() {
     if (usernameC.text.isEmpty) return false;
     if (nameC.text.isEmpty) return false;
+    if (phoneNumberC.text.isEmpty) return false;
     if (emailC.text.isEmpty) return false;
     return true;
   }
@@ -96,9 +142,61 @@ class ProfileProvider extends BaseController with ChangeNotifier {
       'Name': nameC.text,
       'Username': usernameC.text,
       'Email': emailC.text,
+      'Phone': phoneNumberC.text,
     };
 
     final response = await put(Constant.BASE_API_FULL + '/my', body: param);
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      final model = BaseResponse.from(response);
+
+      loading(false);
+      await Utils.showSuccess(msg: model.message ?? "Sukses");
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pop(context);
+      clearForm();
+    } else {
+      final message = jsonDecode(response.body)["Message"];
+      loading(false);
+      throw Exception(message);
+    }
+  }
+
+  bool _obscurePass = true;
+
+  bool get obscurePass => this._obscurePass;
+
+  toggleObscurePass() {
+    this._obscurePass = !obscurePass;
+    notifyListeners();
+  }
+
+  bool _obscurePass2 = true;
+
+  bool get obscurePass2 => this._obscurePass2;
+
+  toggleObscurePass2() {
+    this._obscurePass2 = !obscurePass2;
+    notifyListeners();
+  }
+
+  bool validateChangingPass() {
+    if (passwordC.text.isEmpty) return false;
+    if (passwordConfirmationC.text.isEmpty) return false;
+    if (passwordC.text != passwordConfirmationC.text) return false;
+    return true;
+  }
+
+  Future<void> changePass(BuildContext context) async {
+    loading(true);
+    FocusManager.instance.primaryFocus?.unfocus();
+    Map<String, String> param = {
+      'Password': passwordC.text,
+      'PasswordConfirmation': passwordConfirmationC.text,
+    };
+
+    final response =
+        await post(Constant.BASE_API_FULL + '/my/change-password', body: param);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);

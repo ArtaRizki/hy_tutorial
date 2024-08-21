@@ -769,7 +769,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           ?.Id;
       usernameC.text = data.Data?.Username ?? '';
       emailC.text = data.Data?.Email ?? '';
-      phoneNumberC.text = data.Data?.Phone ?? '';
+      phoneNumberC.text = (data.Data?.Phone ?? '').replaceFirst('+', '');
       passwordC.text = '';
       if (data.Data?.Role == "admin")
         selectedRole = "2";

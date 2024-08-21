@@ -17,6 +17,7 @@ class ProfileModelData {
 
   String? Name;
   String? Username;
+  String? Phone;
   String? Email;
   String? Division;
   String? Role;
@@ -27,6 +28,7 @@ class ProfileModelData {
   ProfileModelData({
     this.Name,
     this.Username,
+    this.Phone,
     this.Email,
     this.Division,
     this.Role,
@@ -37,6 +39,7 @@ class ProfileModelData {
   ProfileModelData.fromJson(Map<String, dynamic> json) {
     Name = json['Name']?.toString();
     Username = json['Username']?.toString();
+    Phone = json['Phone']?.toString();
     Email = json['Email']?.toString();
     Division = json['Division']?.toString();
     Role = json['Role']?.toString();
@@ -48,6 +51,7 @@ class ProfileModelData {
     final data = <String, dynamic>{};
     data['Name'] = Name;
     data['Username'] = Username;
+    data['Phone'] = Phone;
     data['Email'] = Email;
     data['Division'] = Division;
     data['Role'] = Role;
@@ -92,7 +96,8 @@ class ProfileModel {
     Success = json['Success'];
     StatusCode = json['StatusCode']?.toInt();
     Message = json['Message']?.toString();
-    Data = (json['Data'] != null) ? ProfileModelData.fromJson(json['Data']) : null;
+    Data =
+        (json['Data'] != null) ? ProfileModelData.fromJson(json['Data']) : null;
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};

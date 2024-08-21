@@ -315,7 +315,12 @@ class _MainHomeState extends State<MainHome> {
           final isWarning =
               lastPressed == null || now.difference(lastPressed!) > maxDuration;
           if (currentIndex != 0) {
-            setState(() => currentIndex = 0);
+            if (FocusManager.instance.primaryFocus != null &&
+                FocusManager.instance.primaryFocus!.hasFocus) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            } else {
+              setState(() => currentIndex = 0);
+            }
             return false;
           } else {
             if (isWarning) {
