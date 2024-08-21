@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:hy_tutorial/common/base/base_response.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_dropdown.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/common/helper/download.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:powers/powers.dart';
@@ -1093,6 +1095,45 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
   }
 
+  Future<void> downloadTurbine(BuildContext context,
+      {required String id}) async {
+    try {
+      loading(true);
+      // requestPermission
+
+      final PermissionStatus status = await Permission.notification.request();
+      if (status.isGranted) {
+        // Notification permissions granted
+        log("NOTIF GRANTED");
+      } else if (status.isDenied) {
+        // Notification permissions denied
+        log("NOTIF DENIED");
+      } else if (status.isPermanentlyDenied && Platform.isAndroid) {
+        // Notification permissions permanently denied, open app settings
+        log("NOTIF PERMANENTLY DENIED");
+        await openAppSettings();
+      }
+      await requestPermission(Permission.notification);
+      await Permission.notification.request();
+      await requestPermission(Permission.notification);
+      await requestPermission(Permission.storage);
+      await requestPermission(Permission.manageExternalStorage);
+      await requestPermission(Permission.photos);
+      await downloadFile(
+        context,
+        Constant.BASE_API_FULL + '/turbines/$id/report',
+        filename: turbineDetailModel.data?.title ?? 'turbine',
+        openAfterDownload: true,
+        typeFile: 'pdf',
+      );
+      loading(false);
+    } catch (e) {
+      loading(false);
+      await Utils.showFailed(msg: e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
   Future<void> deleteTurbine(BuildContext context, {required String id}) async {
     loading(true);
     final response = await delete(Constant.BASE_API_FULL + '/turbines/$id');
@@ -1479,7 +1520,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     return [
       Text("Shaft", style: Constant.blackBold20),
       Constant.xSizedBox8,
-      Text("Masukan data shaft sesuai kolom", style: Constant.grayMedium),
+      Text("Masukkan data shaft sesuai kolom", style: Constant.grayMedium),
       Constant.xSizedBox16,
       CustomTextField.borderTextField(
         controller: genBearingKoplingC,
@@ -1490,7 +1531,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ],
         labelText: "Gen. Bearing-Kopling",
         hintText: "Gen. Bearing-Kopling",
-        onChange: onChangedBearingToCoupling,
+        onChanged: onChangedBearingToCoupling,
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
           child: Text(
@@ -1510,7 +1551,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ],
         labelText: "Kopling - Turbin",
         hintText: "Kopling - Turbin",
-        onChange: onChangedKoplingToTurbine,
+        onChanged: onChangedKoplingToTurbine,
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
           child: Text(
@@ -1550,7 +1591,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     return [
       Text("Detail Baut", style: Constant.blackBold20),
       Constant.xSizedBox8,
-      Text("Masukan detail baut", style: Constant.grayMedium),
+      Text("Masukkan detail baut", style: Constant.grayMedium),
       Constant.xSizedBox16,
       CustomDropdown.searchDropdown(
         required: false,
@@ -1606,7 +1647,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ],
         labelText: "Torsi Terkini",
         hintText: "Torsi Terkini",
-        onChange: onChangedCurrentTorque,
+        onChanged: onChangedCurrentTorque,
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
           child: Text(
@@ -1627,7 +1668,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         ],
         labelText: "Max Torsi",
         hintText: "Max Torsi",
-        onChange: onChangedMaxTorque,
+        onChanged: onChangedMaxTorque,
         suffixIcon: Padding(
           padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
           child: Text(
@@ -1744,19 +1785,19 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: dataUpperC[i - 1][0],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataUpperC[i - 1][1],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataUpperC[i - 1][2],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataUpperC[i - 1][3],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
         ]));
       }
@@ -1826,19 +1867,19 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: dataUpperC[i - 1][0],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataUpperC[i - 1][1],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataUpperC[i - 1][2],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataUpperC[i - 1][3],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
         ]));
       }
@@ -1875,7 +1916,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       children: [
         Text("Upper", style: Constant.blackBold20),
         Constant.xSizedBox8,
-        Text("Masukan data upper pada tabel", style: Constant.grayMedium),
+        Text("Masukkan data upper pada tabel", style: Constant.grayMedium),
         Constant.xSizedBox16,
         tableFormUpper(context),
         Constant.xSizedBox16,
@@ -1908,19 +1949,19 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: dataClutchC[i - 1][0],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataClutchC[i - 1][1],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataClutchC[i - 1][2],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataClutchC[i - 1][3],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
         ]));
       }
@@ -1990,19 +2031,19 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: dataClutchC[i - 1][0],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataClutchC[i - 1][1],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataClutchC[i - 1][2],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataClutchC[i - 1][3],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
         ]));
       }
@@ -2038,7 +2079,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       children: [
         Text("Clutch", style: Constant.blackBold20),
         Constant.xSizedBox8,
-        Text("Masukan data upper pada tabel", style: Constant.grayMedium),
+        Text("Masukkan data upper pada tabel", style: Constant.grayMedium),
         Constant.xSizedBox16,
         tableFormClutch(context),
         Constant.xSizedBox16,
@@ -2071,19 +2112,19 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: dataTurbineC[i - 1][0],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataTurbineC[i - 1][1],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataTurbineC[i - 1][2],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataTurbineC[i - 1][3],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
         ]));
       }
@@ -2153,19 +2194,19 @@ class DataAddProvider extends BaseController with ChangeNotifier {
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: dataTurbineC[i - 1][0],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataTurbineC[i - 1][1],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataTurbineC[i - 1][2],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
           CustomTextField.tableTextField(
             controller: dataTurbineC[i - 1][3],
-            onChange: (_) => notifyListeners(),
+            onChanged: (_) => notifyListeners(),
           ),
         ]));
       }
@@ -2201,7 +2242,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       children: [
         Text("Turbine", style: Constant.blackBold20),
         Constant.xSizedBox8,
-        Text("Masukan data upper pada tabel", style: Constant.grayMedium),
+        Text("Masukkan data upper pada tabel", style: Constant.grayMedium),
         Constant.xSizedBox16,
         tableFormTurbine(context),
         Constant.xSizedBox16,

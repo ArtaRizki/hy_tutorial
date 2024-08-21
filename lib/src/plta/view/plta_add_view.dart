@@ -132,7 +132,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
               controller: p.coordinateC,
               textInputType: TextInputType.name,
               labelText: "Titik Lokasi",
-              hintText: "Masukan latitude dan longtitude",
+              hintText: "Masukkan latitude dan longtitude",
             ),
             Constant.xSizedBox16,
             CustomTextField.borderTextField(
@@ -284,7 +284,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                   textInputType: TextInputType.name,
                   controller:
                       context.read<PltaProvider>().pltaUnitListName[index],
-                  onChange: (v) {
+                  onChanged: (v) {
                     context.read<PltaProvider>().setPltaUnitListName(index, v);
                     setState(() {});
                   },

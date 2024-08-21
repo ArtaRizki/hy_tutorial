@@ -21,6 +21,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
   late RegisterViewState registerViewState;
   TextEditingController nameC = TextEditingController();
   TextEditingController usernameC = TextEditingController();
+  TextEditingController phoneNumberC = TextEditingController();
   TextEditingController emailC = TextEditingController();
   TextEditingController passC = TextEditingController();
   TextEditingController passConfirmationC = TextEditingController();
@@ -38,7 +39,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
 
   set selectedDivision(value) {
     this._selectedDivision = value;
-    notifyListeners();
+    // notifyListeners();
   }
 
   //forgot
@@ -89,6 +90,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
   Future<void> clearRegisterForm() async {
     nameC.text = '';
     usernameC.text = '';
+    phoneNumberC.text = '';
     emailC.text = '';
     passC.text = '';
     passConfirmationC.text = '';
@@ -197,6 +199,7 @@ class AuthProvider extends BaseController with ChangeNotifier {
     if (nameC.text.isEmpty) return false;
     if (selectedDivision == null) return false;
     if (usernameC.text.isEmpty) return false;
+    if (phoneNumberC.text.isEmpty) return false;
     if (emailC.text.isEmpty) return false;
     if (passC.text.isEmpty) return false;
     if (passConfirmationC.text.isEmpty) return false;
@@ -207,20 +210,21 @@ class AuthProvider extends BaseController with ChangeNotifier {
   Future<void> register(BuildContext context) async {
     try {
       // validate
-      if (nameC.text.isEmpty) throw 'Harap isi username';
-      if (selectedDivision == null) throw 'Pilih divisi terlebih dahulu';
-      if (usernameC.text.isEmpty) throw 'Harap isi username';
-      if (emailC.text.isEmpty) throw 'Harap isi email';
-      if (passC.text.isEmpty) throw 'Harap isi password';
-      if (passConfirmationC.text.isEmpty) throw 'Harap isi konfirmasi password';
-      if (passC.text != passConfirmationC.text)
-        throw 'Password & konfirmasi password tidak sama';
+      // if (nameC.text.isEmpty) throw 'Harap isi username';
+      // if (selectedDivision == null) throw 'Pilih divisi terlebih dahulu';
+      // if (usernameC.text.isEmpty) throw 'Harap isi username';
+      // if (emailC.text.isEmpty) throw 'Harap isi email';
+      // if (passC.text.isEmpty) throw 'Harap isi password';
+      // if (passConfirmationC.text.isEmpty) throw 'Harap isi konfirmasi password';
+      // if (passC.text != passConfirmationC.text)
+      //   throw 'Password & konfirmasi password tidak sama';
 
       loading(true);
       FocusManager.instance.primaryFocus?.unfocus();
       Map<String, String> param = {
         'Name': nameC.text,
         'Username': usernameC.text,
+        'Phone': phoneNumberC.text.replaceFirst('08', '628'),
         'Email': emailC.text,
         'DivisionId': selectedDivision ?? '',
         'Password': passC.text,

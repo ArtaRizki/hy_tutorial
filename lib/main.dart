@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hy_tutorial/common/library/notification_manager.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/auth/view/boarding_view.dart';
@@ -53,10 +54,11 @@ void main() {
     });
 
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
+    NotificationManager().initNotification();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String initialRoute;
 
-    if (kDebugMode) {
+    if (kDebugMode) { 
       log("[Bearer Token]");
       log(prefs.getString(Constant.kSetPrefToken) ?? "");
       log("[/Bearer Token]");

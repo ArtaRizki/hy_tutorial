@@ -18,58 +18,73 @@ class _BoardingViewState extends State<BoardingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.fromLTRB(15, 40, 15, 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Image.asset(Assets.imagesImgSplashtop, scale: 1.5),
-            SizedBox(height: 20),
-            Text(
-              "Hello, Technician 👋",
-              style: Constant.blackBold16.copyWith(fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: 10),
-            Text("Selamat Datang di Hytutor Mobile"),
-            SizedBox(height: 30),
-            CustomButton.mainButton("Masuk dengan Akun",
-                color: Constant.primaryColor,
-                borderRadius: BorderRadius.circular(10),
-                contentPadding: EdgeInsets.all(10), () async {
-              CusNav.nPush(context, LoginView());
-            }),
-            SizedBox(height: 15),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: Container(
-                    color: Colors.grey.withOpacity(0.5),
-                    width: 94,
-                    height: 1,
-                  ),
+        padding: EdgeInsets.fromLTRB(15, 40, 15, 0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(height: 40),
+              Container(
+                width: 164,
+                height: 46,
+                child: Image.asset(
+                  'assets/images/img_splashscreen.png',
+                  width: 164,
+                  height: 46,
                 ),
-                SizedBox(width: 5),
-                Text("Belum memiliki akun?"),
-                SizedBox(width: 5),
-                Flexible(
-                  child: Container(
+              ),
+              SizedBox(height: 20),
+              Image.asset(Assets.imagesImgSplashtop),
+              SizedBox(height: 20),
+              Text(
+                "Hello, Technician 👋",
+                style:
+                    Constant.blackBold16.copyWith(fontWeight: FontWeight.w600),
+              ),
+              SizedBox(height: 8),
+              Text("Selamat Datang di Hytutor Mobile"),
+              SizedBox(height: 20),
+              CustomButton.mainButton("Masuk dengan Akun",
+                  color: Constant.primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  contentPadding: EdgeInsets.all(10), () async {
+                CusNav.nPush(context, LoginView());
+              }),
+              SizedBox(height: 15),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Container(
                       color: Colors.grey.withOpacity(0.5),
                       width: 94,
-                      height: 1),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            CustomButton.secondaryButton("Daftar Akun",
-                contentPadding: EdgeInsets.all(10),
-                borderColor: Constant.primaryColor,
-                textColor: Constant.primaryColor,
-                borderRadius: BorderRadius.circular(10), () async {
-              CusNav.nPush(context, RegisterView());
-            }),
-          ],
+                      height: 1,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text("Belum memiliki akun?"),
+                  SizedBox(width: 5),
+                  Flexible(
+                    child: Container(
+                        color: Colors.grey.withOpacity(0.5),
+                        width: 94,
+                        height: 1),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              CustomButton.secondaryButton("Daftar Akun",
+                  contentPadding: EdgeInsets.all(10),
+                  borderColor: Constant.primaryColor,
+                  textColor: Constant.primaryColor,
+                  borderRadius: BorderRadius.circular(10), () async {
+                CusNav.nPush(context, RegisterView());
+              }),
+              Constant.xSizedBox32,
+            ],
+          ),
         ),
       ),
     );

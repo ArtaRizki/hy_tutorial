@@ -69,7 +69,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
             height: 5,
           ),
         ),
-        onChange: (val) {
+        onChanged: (val) {
           if (searchOnStoppedTyping != null) {
             searchOnStoppedTyping!.cancel();
           }

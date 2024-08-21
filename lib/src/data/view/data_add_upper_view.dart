@@ -153,19 +153,19 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: p.dataUpperC[i - 1][0],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataUpperC[i - 1][1],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataUpperC[i - 1][2],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataUpperC[i - 1][3],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
         ]));
       }
@@ -236,19 +236,19 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: p.dataClutchC[i - 1][0],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataClutchC[i - 1][1],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataClutchC[i - 1][2],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataClutchC[i - 1][3],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
         ]));
       }
@@ -319,19 +319,19 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: p.dataTurbineC[i - 1][0],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataTurbineC[i - 1][1],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataTurbineC[i - 1][2],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataTurbineC[i - 1][3],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
         ]));
       }
@@ -360,19 +360,19 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: p.dataUpperC[i - 1][0],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataUpperC[i - 1][1],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataUpperC[i - 1][2],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataUpperC[i - 1][3],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
         ]));
       }
@@ -401,19 +401,19 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: p.dataClutchC[i - 1][0],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataClutchC[i - 1][1],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataClutchC[i - 1][2],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataClutchC[i - 1][3],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
         ]));
       }
@@ -442,19 +442,19 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
           Text('$i', textAlign: TextAlign.center),
           CustomTextField.tableTextField(
             controller: p.dataTurbineC[i - 1][0],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataTurbineC[i - 1][1],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataTurbineC[i - 1][2],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
           CustomTextField.tableTextField(
             controller: p.dataTurbineC[i - 1][3],
-            onChange: (_) => setState(() {}),
+            onChanged: (_) => setState(() {}),
           ),
         ]));
       }
@@ -523,7 +523,7 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
         children: [
           Text("Upper", style: Constant.blackBold20),
           Constant.xSizedBox8,
-          Text("Masukan data upper pada tabel", style: Constant.grayMedium),
+          Text("Masukkan data upper pada tabel", style: Constant.grayMedium),
           Constant.xSizedBox16,
           tableFormUpper(),
           Constant.xSizedBox16,
@@ -560,7 +560,7 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
         children: [
           Text("Clutch", style: Constant.blackBold20),
           Constant.xSizedBox8,
-          Text("Masukan data upper pada tabel", style: Constant.grayMedium),
+          Text("Masukkan data upper pada tabel", style: Constant.grayMedium),
           Constant.xSizedBox16,
           tableFormClutch(),
           Constant.xSizedBox16,
@@ -597,7 +597,7 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
         children: [
           Text("Turbine", style: Constant.blackBold20),
           Constant.xSizedBox8,
-          Text("Masukan data upper pada tabel", style: Constant.grayMedium),
+          Text("Masukkan data upper pada tabel", style: Constant.grayMedium),
           Constant.xSizedBox16,
           tableFormTurbine(),
           Constant.xSizedBox16,

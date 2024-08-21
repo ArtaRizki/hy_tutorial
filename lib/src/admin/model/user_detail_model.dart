@@ -21,6 +21,7 @@ class UserDetailModelData {
   String? Name;
   String? Username;
   String? Email;
+  String? Phone;
   String? Division;
   String? Role;
   String? Status;
@@ -33,6 +34,7 @@ class UserDetailModelData {
     this.Name,
     this.Username,
     this.Email,
+    this.Phone,
     this.Division,
     this.Role,
     this.Status,
@@ -45,6 +47,7 @@ class UserDetailModelData {
     Name = json['Name']?.toString();
     Username = json['Username']?.toString();
     Email = json['Email']?.toString();
+    Phone = json['Phone']?.toString();
     Division = json['Division']?.toString();
     Role = json['Role']?.toString();
     Status = json['Status']?.toString();
@@ -58,6 +61,7 @@ class UserDetailModelData {
     data['Name'] = Name;
     data['Username'] = Username;
     data['Email'] = Email;
+    data['Phone'] = Phone;
     data['Division'] = Division;
     data['Role'] = Role;
     data['Status'] = Status;

@@ -175,7 +175,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
   Future<void> getTurbine() async {
     pagingController = PagingController(firstPageKey: 1)
       ..addPageRequestListener((pageKey) async {
-        // log("GET TURBINE");
+        log("GET TURBINE1 ");
         await fetchTurbine(page: pageKey).onError((error, stackTrace) {
           if (error.toString().contains('expired token')) {
             log("ERROR EXPIRED TOKEN");
@@ -195,7 +195,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
   Future<void> getTurbine2() async {
     pagingController2 = PagingController(firstPageKey: 1)
       ..addPageRequestListener((pageKey) async {
-        // log("GET TURBINE");
+        log("GET TURBINE 2");
         await fetchTurbine2(page: pageKey).onError((error, stackTrace) {
           if (error.toString().contains('expired token')) {
             log("ERROR EXPIRED TOKEN");

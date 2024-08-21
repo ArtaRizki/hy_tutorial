@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
@@ -8,6 +10,7 @@ import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
+import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:hy_tutorial/src/shaft/view/shaft_detail_view.dart';
@@ -16,7 +19,9 @@ import 'package:hy_tutorial/src/turbine/model/turbine_model.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class HomeView extends StatefulWidget {
@@ -31,7 +36,15 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    getData();
+    super.initState();
+  }
+
+  getData() async {
     tabController = TabController(length: 2, vsync: this);
+    tabController.addListener(() {
+      setState(() {});
+    });
 
     final turbineP = context.read<TurbineProvider>();
     if ((turbineP.pagingController.itemList ?? []).isEmpty) {
@@ -48,7 +61,22 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
       turbineP.next2 = null;
       turbineP.getTurbine2();
     }
-    super.initState();
+    final PermissionStatus status = await Permission.notification.request();
+    if (status.isGranted) {
+      // Notification permissions granted
+      log("NOTIF GRANTED");
+    } else if (status.isDenied) {
+      // Notification permissions denied
+      log("NOTIF DENIED");
+    } else if (status.isPermanentlyDenied && Platform.isAndroid) {
+      // Notification permissions permanently denied, open app settings
+      log("NOTIF PERMANENTLY DENIED");
+      await openAppSettings();
+    }
+    requestPermission(Permission.notification);
+    await requestPermission(Permission.storage);
+    await requestPermission(Permission.manageExternalStorage);
+    await requestPermission(Permission.photos);
   }
 
   @override
@@ -69,30 +97,27 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
         decoration: BoxDecoration(
           image: DecorationImage(
             alignment: Alignment.topCenter,
-            image: AssetImage(Assets.imagesImgHomeTop),
-            fit: BoxFit.fitWidth,
+            image: AssetImage(Assets.imagesImgHomeTopUser),
+            fit: BoxFit.cover,
           ),
         ),
-        // height: 150,
+        height: 139,
         width: double.infinity,
-        padding: EdgeInsets.fromLTRB(20, 35, 20, 15),
-        child: Column(
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CircleAvatar(
-                    backgroundColor: Colors.white.withOpacity(0.3),
-                    child: Icon(Icons.notifications_outlined,
-                        color: Colors.white)),
-                SizedBox(width: 15),
-                InkWell(
-                  onTap: () {
-                    CusNav.nPush(context, ProfileView());
-                  },
-                  child: Image.asset(Assets.iconsIcUser, scale: 5.2),
-                ),
-              ],
+            Image.asset(Assets.imagesImgPlnHome),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white, width: 2),
+                  shape: BoxShape.circle),
+              child: InkWell(
+                onTap: () {
+                  CusNav.nPush(context, ProfileView());
+                },
+                child: Image.asset(Assets.iconsIcUser, scale: 7),
+              ),
             ),
           ],
         ),
@@ -144,7 +169,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
               pagingC.refresh();
             });
           },
-          onChange: (val) {
+          onChanged: (val) {
             setState(() {});
             if (turbineP.searchOnStoppedTyping != null) {
               turbineP.searchOnStoppedTyping!.cancel();
@@ -719,145 +744,141 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
             });
           }
         },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 3,
-              child: SizedBox(
-                width: double.infinity,
-                child: Stack(
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
                   children: [
                     headKonten(),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      left: 0,
-                      child: CustomContainer.mainCard(
-                        margin: EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () async {
-                                  turbineP.turbineSearchN.unfocus();
-                                  await CusNav.nPush(
-                                      context, DataAddView(isFromCenter: true));
-                                },
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      Assets.iconsIcAddData,
-                                      scale: 4,
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text("Add Data"),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 1,
-                              height: 45,
-                              color: Colors.grey.withOpacity(0.5),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () async {
-                                  turbineP.turbineSearchN.unfocus();
-                                  CusNav.nPush(context, ShaftLatestView());
-                                },
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      Assets.iconsIcDataTerakhir,
-                                      scale: 4,
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text("Data Terakhir"),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 7,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 8),
-                child: CustomContainer.mainCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Laporan",
-                        style: Constant.blackBold16
-                            .copyWith(fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
+                    CustomContainer.mainCard(
+                      height: 82,
+                      margin: EdgeInsets.fromLTRB(20, 100, 20, 0),
+                      padding: EdgeInsets.fromLTRB(12, 12, 12, 9),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Expanded(flex: 8, child: search()),
-                          SizedBox(width: 10),
                           Expanded(
-                            flex: 2,
                             child: InkWell(
                               onTap: () async {
-                                if (tabController.index == 1)
-                                  CustomContainer.showModalBottomScroll(
-                                    initialChildSize: 0.8,
-                                    context: context,
-                                    child: filterAllWidget(),
-                                  );
+                                turbineP.turbineSearchN.unfocus();
+                                await CusNav.nPush(
+                                    context, DataAddView(isFromCenter: true));
                               },
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                padding: EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 1,
-                                    color: Colors.grey.withOpacity(0.5),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    Assets.iconsIcAddData,
+                                    scale: 4,
                                   ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Icon(
-                                  Icons.filter_alt_outlined,
-                                  size: 25,
-                                  color: tabController.index == 0
-                                      ? Constant.textHintColor2
-                                      : null,
-                                ),
+                                  SizedBox(height: 4),
+                                  Text("Add Data"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 1,
+                            height: 45,
+                            color: Colors.grey.withOpacity(0.5),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () async {
+                                turbineP.turbineSearchN.unfocus();
+                                CusNav.nPush(context, ShaftLatestView());
+                              },
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    Assets.iconsIcDataTerakhir,
+                                    scale: 4,
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text("Data Terakhir"),
+                                ],
                               ),
                             ),
                           ),
                         ],
                       ),
-                      toggleTab(),
-                      SizedBox(height: 10),
-                      Expanded(
-                        child: TabBarView(
-                          physics: NeverScrollableScrollPhysics(),
-                          controller: tabController,
-                          children: [
-                            semingguTerakhir(),
-                            riwayat(),
-                          ],
-                        ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 8),
+                    child: CustomContainer.mainCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Laporan",
+                            style: Constant.blackBold16
+                                .copyWith(fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            height: 48,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(child: search()),
+                                SizedBox(width: 10),
+                                InkWell(
+                                  onTap: () async {
+                                    if (tabController.index == 1)
+                                      CustomContainer.showModalBottomScroll(
+                                        initialChildSize: 0.8,
+                                        context: context,
+                                        child: filterAllWidget(),
+                                      );
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    padding: EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                        color: Colors.grey.withOpacity(0.5),
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Icon(
+                                      Icons.filter_alt_outlined,
+                                      size: 25,
+                                      color: tabController.index == 0
+                                          ? Constant.textHintColor2
+                                          : null,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          toggleTab(),
+                          SizedBox(height: 10),
+                          Expanded(
+                            child: TabBarView(
+                              physics: NeverScrollableScrollPhysics(),
+                              controller: tabController,
+                              children: [
+                                semingguTerakhir(),
+                                riwayat(),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/base/base_response.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
+import 'package:hy_tutorial/src/admin/model/generate_password_model.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';
 import 'package:hy_tutorial/src/home/view/main_home.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -752,7 +753,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   //TextEditingController statusC = TextEditingController();
 
   setData(BuildContext context, String? id) async {
-    clearForm();
+    // await clearForm();
     updateV = false;
     if (id != null) {
       updateV = true;
@@ -768,7 +769,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           ?.Id;
       usernameC.text = data.Data?.Username ?? '';
       emailC.text = data.Data?.Email ?? '';
-      // phoneNumberC.text = data.Data?.NoTelp ?? '';
+      phoneNumberC.text = data.Data?.Phone ?? '';
       passwordC.text = '';
       if (data.Data?.Role == "admin")
         selectedRole = "2";
@@ -781,7 +782,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       else
         selectedStatus = "2";
     } else {
-      updateV = true;
+      updateV = false;
       final p = context.read<DivisionProvider>();
       await p.fetchDivision(withLoading: true);
     }
@@ -789,12 +790,12 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   }
 
   Future<void> clearForm() async {
-    emailC.clear();
-    phoneNumberC.clear();
-    usernameC.clear();
-    nameC.clear();
-    usernameC.clear();
-    passwordC.clear();
+    emailC.text = '';
+    phoneNumberC.text = '';
+    usernameC.text = '';
+    nameC.text = '';
+    usernameC.text = '';
+    passwordC.text = '';
     selectedDivision = null;
     selectedRole = null;
     selectedStatus = null;
@@ -897,7 +898,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         enabled: !isEdit,
         labelText: "Nama",
         hintText: "Nama",
-        onChange: (v) {
+        onChanged: (v) {
           setState();
         },
       ),
@@ -929,7 +930,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         hintText: "Username",
         readOnly: isEdit,
         enabled: !isEdit,
-        onChange: (v) {
+        onChanged: (v) {
           setState();
         },
       ),
@@ -940,7 +941,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         hintText: "Email",
         readOnly: isEdit,
         enabled: !isEdit,
-        onChange: (v) {
+        onChanged: (v) {
           setState();
         },
       ),
@@ -1061,7 +1062,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       'Name': nameC.text,
       'Username': usernameC.text,
       'Email': emailC.text,
-      // 'NoTelp': phoneNumberC.text,
+      'Phone': phoneNumberC.text.replaceFirst('08', '628'),
+      'Password': passwordC.text,
       'DivisionId': selectedDivision ?? '',
       'RadiusStatus': '$radiusStatus',
     };
@@ -1134,6 +1136,38 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
       throw Exception(message);
+    }
+  }
+
+  GeneratePasswordModel _generatePasswordModel = GeneratePasswordModel();
+  GeneratePasswordModel get generatePasswordModel =>
+      this._generatePasswordModel;
+  set generatePasswordModel(GeneratePasswordModel value) =>
+      this._generatePasswordModel = value;
+
+  Future<void> generatePass(BuildContext context, {required String id}) async {
+    loading(true);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
+    final response = await post(Constant.BASE_API_FULL +
+        '/${isSuperAdmin ? 'super' : 'admin'}/users/generate-password/$id');
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      generatePasswordModel =
+          GeneratePasswordModel.fromJson(jsonDecode(response.body));
+      passwordC.text = generatePasswordModel.Data?.Password ?? '';
+      notifyListeners();
+      loading(false);
+      await Utils.showSuccess(msg: generatePasswordModel.Message ?? "Sukses");
+      await Future.delayed(Duration(seconds: 2));
+      await Clipboard.setData(
+          ClipboardData(text: generatePasswordModel.Data?.Password ?? ''));
+      CustomAlert.showSnackBar(context, 'Password berhasil disalin', false);
+      // Navigator.pop(context);
+    } else {
+      final message = jsonDecode(response.body)["Message"];
+      loading(false);
+      return message;
     }
   }
 

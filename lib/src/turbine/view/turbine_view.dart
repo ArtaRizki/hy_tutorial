@@ -91,7 +91,7 @@ class _TurbineViewState extends BaseState<TurbineView> {
               pagingC.refresh();
             });
           },
-          onChange: (val) {
+          onChanged: (val) {
             setState(() {});
             if (turbineP.searchOnStoppedTyping != null) {
               turbineP.searchOnStoppedTyping!.cancel();

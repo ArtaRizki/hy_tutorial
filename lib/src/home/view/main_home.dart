@@ -1,7 +1,11 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
+import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
 import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
@@ -10,6 +14,7 @@ import 'package:hy_tutorial/src/home/model/home_model.dart';
 import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
 import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/helper/constant.dart';
@@ -44,6 +49,22 @@ class _MainHomeState extends State<MainHome> {
   getData() async {
     setIndex();
     setState(() {});
+    final PermissionStatus status = await Permission.notification.request();
+    if (status.isGranted) {
+      // Notification permissions granted
+      log("NOTIF GRANTED");
+    } else if (status.isDenied) {
+      // Notification permissions denied
+      log("NOTIF DENIED");
+    } else if (status.isPermanentlyDenied && Platform.isAndroid) {
+      // Notification permissions permanently denied, open app settings
+      log("NOTIF PERMANENTLY DENIED");
+      await openAppSettings();
+    }
+    requestPermission(Permission.notification);
+    await requestPermission(Permission.storage);
+    await requestPermission(Permission.manageExternalStorage);
+    await requestPermission(Permission.photos);
   }
 
   setIndex() {
@@ -279,7 +300,7 @@ class _MainHomeState extends State<MainHome> {
               child: CircleAvatar(
                 radius: 60,
                 backgroundColor: Constant.primaryColor,
-                child: Image.asset(Assets.iconsIcButton, width: 40, height: 40),
+                child: Image.asset(Assets.iconsIcButton, width: 35, height: 35),
               ),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

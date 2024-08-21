@@ -410,7 +410,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
                               try {
                                 await context.read<AuthProvider>().logout();
                                 Navigator.pushNamedAndRemoveUntil(
-                                    context, '/login', (route) => false);
+                                    context, '/boarding', (route) => false);
                               } catch (e) {
                                 Utils.showFailed(
                                     msg: e

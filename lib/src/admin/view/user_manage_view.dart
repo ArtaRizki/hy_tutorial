@@ -29,7 +29,7 @@ class UserManageView extends StatefulWidget {
 class _UserManageViewState extends BaseState<UserManageView>
     with TickerProviderStateMixin {
   late TabController tabController;
-  late bool isSuperAdmin;
+  bool? isSuperAdmin;
 
   @override
   void initState() {
@@ -42,7 +42,9 @@ class _UserManageViewState extends BaseState<UserManageView>
     isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
     log("IS SUPER ADMIN : $isSuperAdmin");
     setState(() {});
-    tabController = TabController(length: isSuperAdmin ? 3 : 2, vsync: this);
+    tabController = TabController(
+        length: isSuperAdmin == null ? 0 : ((isSuperAdmin ?? false) ? 3 : 2),
+        vsync: this);
     tabController.addListener(() {
       log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
@@ -106,8 +108,9 @@ class _UserManageViewState extends BaseState<UserManageView>
         context.watch<UserManageProvider>().pagingControllerAdmin;
 
     TextEditingController getC() {
+      if (isSuperAdmin == null) return TextEditingController();
       final i = tabController.index;
-      if (isSuperAdmin) {
+      if (isSuperAdmin == true) {
         if (i == 0) return userManageP.userSearchC3;
         if (i == 1) return userManageP.userSearchC4;
         if (i == 2) return userManageP.userSearchCAdmin;
@@ -119,8 +122,9 @@ class _UserManageViewState extends BaseState<UserManageView>
     }
 
     FocusNode getN() {
+      if (isSuperAdmin == null) return FocusNode();
       final i = tabController.index;
-      if (isSuperAdmin) {
+      if (isSuperAdmin == true) {
         if (i == 0) return userManageP.userN3;
         if (i == 1) return userManageP.userN4;
         if (i == 2) return userManageP.userNAdmin;
@@ -132,8 +136,9 @@ class _UserManageViewState extends BaseState<UserManageView>
     }
 
     bool getSuffixCheck() {
+      if (isSuperAdmin == null) return false;
       final i = tabController.index;
-      if (isSuperAdmin) {
+      if (isSuperAdmin == true) {
         if (i == 0) return userManageP.userSearchC3.text.isEmpty;
         if (i == 1) return userManageP.userSearchC4.text.isEmpty;
         if (i == 2) return userManageP.userSearchCAdmin.text.isEmpty;
@@ -145,8 +150,9 @@ class _UserManageViewState extends BaseState<UserManageView>
     }
 
     void Function()? getOnTap() {
+      if (isSuperAdmin == null) return () {};
       final i = tabController.index;
-      if (isSuperAdmin) {
+      if (isSuperAdmin == true) {
         if (i == 0) {
           userManageP.userSearchC3.clear();
           userManageP.userN3.unfocus();
@@ -180,8 +186,9 @@ class _UserManageViewState extends BaseState<UserManageView>
     }
 
     void Function()? getOnSubmitted() {
+      if (isSuperAdmin == null) return () {};
       final i = tabController.index;
-      if (isSuperAdmin) {
+      if (isSuperAdmin == true) {
         if (i == 0) {
           if (userManageP.searchOnStoppedTyping3 != null) {
             userManageP.searchOnStoppedTyping3!.cancel();
@@ -270,7 +277,7 @@ class _UserManageViewState extends BaseState<UserManageView>
             FocusManager.instance.primaryFocus?.unfocus();
             getOnSubmitted();
           },
-          onChange: (val) {
+          onChanged: (val) {
             setState(() {});
             getOnSubmitted();
           },
@@ -310,16 +317,18 @@ class _UserManageViewState extends BaseState<UserManageView>
     }
 
     Widget toggleTab() {
+      if (isSuperAdmin == null) return SizedBox();
       return TabBar(
-        isScrollable: isSuperAdmin ? true : false,
+        isScrollable: isSuperAdmin == true,
         controller: tabController,
-        tabAlignment: isSuperAdmin ? TabAlignment.center : TabAlignment.fill,
+        tabAlignment:
+            isSuperAdmin == true ? TabAlignment.center : TabAlignment.fill,
         indicatorSize: TabBarIndicatorSize.tab,
         unselectedLabelColor: Constant.grayColor,
         labelColor: Colors.black,
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
         indicatorColor: Constant.primaryColor,
-        tabs: isSuperAdmin
+        tabs: isSuperAdmin == true
             ? [
                 _buildTab(
                   "User Request",
@@ -1003,6 +1012,7 @@ class _UserManageViewState extends BaseState<UserManageView>
                   itemBuilder: (context, item, index) {
                     return InkWell(
                       onTap: () async {
+                        await context.read<UserManageProvider>().clearForm();
                         await CusNav.nPush(
                             context, UserAddView(id: item.Id ?? ''));
                         pagingC2.refresh();
@@ -1180,9 +1190,18 @@ class _UserManageViewState extends BaseState<UserManageView>
                   itemBuilder: (context, item, index) {
                     return InkWell(
                       onTap: () async {
+                        await context.read<UserManageProvider>().clearForm();
                         await CusNav.nPush(
                             context, UserAddView(id: item.Id ?? ''));
-                        pagingC3.refresh();
+
+                        userManageP.next3 = null;
+                        if ((userManageP.pagingController3.itemList ?? [])
+                            .isEmpty) {
+                          userManageP.pagingController3.refresh();
+                        } else {
+                          userManageP.next3 = null;
+                          userManageP.pagingController3.refresh();
+                        }
                       },
                       child: Column(
                         children: [
@@ -1286,11 +1305,7 @@ class _UserManageViewState extends BaseState<UserManageView>
                                               fromHome: true,
                                             );
                                             p.selectedStatus = null;
-
-                                            await context
-                                                .read<HomeProvider>()
-                                                .getData(context);
-                                            ;
+                                            pagingC3.refresh();
                                           });
                                         },
                                         noCallback: () => CusNav.nPop(context));
@@ -1357,9 +1372,18 @@ class _UserManageViewState extends BaseState<UserManageView>
                   itemBuilder: (context, item, index) {
                     return InkWell(
                       onTap: () async {
+                        await context.read<UserManageProvider>().clearForm();
                         await CusNav.nPush(
                             context, UserAddView(id: item.Id ?? ''));
-                        pagingC4.refresh();
+
+                        userManageP.next4 = null;
+                        if ((userManageP.pagingController4.itemList ?? [])
+                            .isEmpty) {
+                          userManageP.pagingController4.refresh();
+                        } else {
+                          userManageP.next4 = null;
+                          userManageP.pagingController4.refresh();
+                        }
                       },
                       child: Column(
                         children: [
@@ -1386,7 +1410,7 @@ class _UserManageViewState extends BaseState<UserManageView>
                                 ),
                                 SizedBox(width: 5),
                                 Expanded(
-                                  flex: 6,
+                                  flex: 8,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1398,94 +1422,12 @@ class _UserManageViewState extends BaseState<UserManageView>
                                     ],
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: () async {
-                                    await Utils.showYesNoDialog(
-                                        context: context,
-                                        title: "Konfirmasi",
-                                        desc:
-                                            "Apakah Anda Yakin Menolak User Ini?",
-                                        yesCallback: () async {
-                                          CusNav.nPop(context);
-                                          final p = context
-                                              .read<UserManageProvider>();
-                                          handleTap(() async {
-                                            p.selectedStatus = '2';
-                                            await p.updateUser(
-                                              context,
-                                              id: item.Id ?? '',
-                                              fromHome: true,
-                                            );
-
-                                            p.selectedStatus = null;
-
-                                            await context
-                                                .read<HomeProvider>()
-                                                .getData(context);
-                                            ;
-                                          });
-                                        },
-                                        noCallback: () => CusNav.nPop(context));
-                                  },
-                                  child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(7),
-                                          border: Border.all(
-                                              width: 1, color: Colors.red)),
-                                      child: Icon(
-                                        Icons.close,
-                                        size: 20,
-                                        color: Colors.red,
-                                      )),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    await Utils.showYesNoDialog(
-                                        context: context,
-                                        title: "Konfirmasi",
-                                        desc:
-                                            "Apakah Anda Yakin Menerima User Ini?",
-                                        yesCallback: () async {
-                                          CusNav.nPop(context);
-                                          final p = context
-                                              .read<UserManageProvider>();
-                                          handleTap(() async {
-                                            p.selectedStatus = '1';
-                                            await p.updateUser(
-                                              context,
-                                              id: item.Id ?? '',
-                                              fromHome: true,
-                                            );
-                                            p.selectedStatus = null;
-
-                                            await context
-                                                .read<HomeProvider>()
-                                                .getData(context);
-                                            ;
-                                          });
-                                        },
-                                        noCallback: () => CusNav.nPop(context));
-                                  },
-                                  child: Container(
-                                    width: 60,
-                                    padding: EdgeInsets.all(5),
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFF19B76E),
-                                      borderRadius: BorderRadius.circular(7),
-                                    ),
-                                    child: Text(
-                                      "Terima",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600),
-                                    ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.grey,
+                                    size: 20,
                                   ),
                                 ),
                               ],
@@ -1534,9 +1476,18 @@ class _UserManageViewState extends BaseState<UserManageView>
                   itemBuilder: (context, item, index) {
                     return InkWell(
                       onTap: () async {
+                        await context.read<UserManageProvider>().clearForm();
                         await CusNav.nPush(
                             context, UserAddView(id: item.Id ?? ''));
-                        pagingCAdmin.refresh();
+
+                        userManageP.nextAdmin = null;
+                        if ((userManageP.pagingControllerAdmin.itemList ?? [])
+                            .isEmpty) {
+                          userManageP.pagingControllerAdmin.refresh();
+                        } else {
+                          userManageP.nextAdmin = null;
+                          userManageP.pagingControllerAdmin.refresh();
+                        }
                       },
                       child: Column(
                         children: [
@@ -1563,7 +1514,7 @@ class _UserManageViewState extends BaseState<UserManageView>
                                 ),
                                 SizedBox(width: 5),
                                 Expanded(
-                                  flex: 6,
+                                  flex: 8,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1575,94 +1526,12 @@ class _UserManageViewState extends BaseState<UserManageView>
                                     ],
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: () async {
-                                    await Utils.showYesNoDialog(
-                                        context: context,
-                                        title: "Konfirmasi",
-                                        desc:
-                                            "Apakah Anda Yakin Menolak User Ini?",
-                                        yesCallback: () async {
-                                          CusNav.nPop(context);
-                                          final p = context
-                                              .read<UserManageProvider>();
-                                          handleTap(() async {
-                                            p.selectedStatus = '2';
-                                            await p.updateUser(
-                                              context,
-                                              id: item.Id ?? '',
-                                              fromHome: true,
-                                            );
-
-                                            p.selectedStatus = null;
-
-                                            await context
-                                                .read<HomeProvider>()
-                                                .getData(context);
-                                            ;
-                                          });
-                                        },
-                                        noCallback: () => CusNav.nPop(context));
-                                  },
-                                  child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(7),
-                                          border: Border.all(
-                                              width: 1, color: Colors.red)),
-                                      child: Icon(
-                                        Icons.close,
-                                        size: 20,
-                                        color: Colors.red,
-                                      )),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    await Utils.showYesNoDialog(
-                                        context: context,
-                                        title: "Konfirmasi",
-                                        desc:
-                                            "Apakah Anda Yakin Menerima User Ini?",
-                                        yesCallback: () async {
-                                          CusNav.nPop(context);
-                                          final p = context
-                                              .read<UserManageProvider>();
-                                          handleTap(() async {
-                                            p.selectedStatus = '1';
-                                            await p.updateUser(
-                                              context,
-                                              id: item.Id ?? '',
-                                              fromHome: true,
-                                            );
-                                            p.selectedStatus = null;
-
-                                            await context
-                                                .read<HomeProvider>()
-                                                .getData(context);
-                                            ;
-                                          });
-                                        },
-                                        noCallback: () => CusNav.nPop(context));
-                                  },
-                                  child: Container(
-                                    width: 60,
-                                    padding: EdgeInsets.all(5),
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFF19B76E),
-                                      borderRadius: BorderRadius.circular(7),
-                                    ),
-                                    child: Text(
-                                      "Terima",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600),
-                                    ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.grey,
+                                    size: 20,
                                   ),
                                 ),
                               ],
@@ -1710,6 +1579,7 @@ class _UserManageViewState extends BaseState<UserManageView>
                   itemBuilder: (context, item, index) {
                     return InkWell(
                       onTap: () async {
+                        await context.read<UserManageProvider>().clearForm();
                         await CusNav.nPush(
                             context, UserAddView(id: item.Id ?? ''));
                         pagingC.refresh();
@@ -1779,7 +1649,8 @@ class _UserManageViewState extends BaseState<UserManageView>
           isLeading: false,
           action: [
             InkWell(
-              onTap: () {
+              onTap: () async {
+                await context.read<UserManageProvider>().clearForm();
                 CusNav.nPush(context, UserAddView());
               },
               child: Container(
@@ -1821,20 +1692,22 @@ class _UserManageViewState extends BaseState<UserManageView>
               toggleTab(),
               SizedBox(height: 8),
               Expanded(
-                child: TabBarView(
-                  // physics: NeverScrollableScrollPhysics(),
-                  controller: tabController,
-                  children: isSuperAdmin
-                      ? [
-                          bodyUserRequestSuper(),
-                          bodyUserAllSuper(),
-                          bodyAdminAllSuper(),
-                        ]
-                      : [
-                          bodyUserRequest(),
-                          bodyUserAktif(),
-                        ],
-                ),
+                child: isSuperAdmin == null
+                    ? SizedBox()
+                    : TabBarView(
+                        // physics: NeverScrollableScrollPhysics(),
+                        controller: tabController,
+                        children: isSuperAdmin == true
+                            ? [
+                                bodyUserRequestSuper(),
+                                bodyUserAllSuper(),
+                                bodyAdminAllSuper(),
+                              ]
+                            : [
+                                bodyUserRequest(),
+                                bodyUserAktif(),
+                              ],
+                      ),
               ),
             ],
           ),

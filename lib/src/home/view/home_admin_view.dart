@@ -48,29 +48,25 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
   }
 
   getData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
-    log("IS SUPER ADMIN : $isSuperAdmin");
-    setState(() {});
     tabController = TabController(length: 2, vsync: this);
     tabController.addListener(() {
       setState(() {});
     });
     final turbineP = context.read<TurbineProvider>();
     // if (!isSuperAdmin) {
-    if ((turbineP.pagingController.itemList ?? []).isEmpty) {
-      turbineP.getTurbine();
-    } else {
-      turbineP.pagingController.dispose();
-      turbineP.next = null;
-      turbineP.getTurbine();
-    }
     if ((turbineP.pagingController2.itemList ?? []).isEmpty) {
       turbineP.getTurbine2();
     } else {
       turbineP.pagingController2.dispose();
       turbineP.next2 = null;
       turbineP.getTurbine2();
+    }
+    if ((turbineP.pagingController.itemList ?? []).isEmpty) {
+      turbineP.getTurbine();
+    } else {
+      turbineP.pagingController.dispose();
+      turbineP.next = null;
+      turbineP.getTurbine();
     }
     // }
     context.read<HomeProvider>().getData(context);
@@ -171,7 +167,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
               pagingC.refresh();
             });
           },
-          onChange: (val) {
+          onChanged: (val) {
             setState(() {});
             if (turbineP.searchOnStoppedTyping != null) {
               turbineP.searchOnStoppedTyping!.cancel();

@@ -1018,13 +1018,48 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  'Detail Data',
-                  style: TextStyle(
-                    color: Constant.textColorBlack2,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Detail Data',
+                      style: TextStyle(
+                        color: Constant.textColorBlack2,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 1, color: Constant.primaryColor),
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: InkWell(
+                        onTap: () async {
+                          await context
+                              .read<DataAddProvider>()
+                              .downloadTurbine(context, id: widget.id);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              Icons.save_alt_rounded,
+                              size: 15,
+                              color: Constant.primaryColor,
+                            ),
+                            Constant.xSizedBox4,
+                            Text(
+                              "Unduh",
+                              style: Constant.iPrimaryMedium12,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
                 Constant.xSizedBox12,
                 toggleTab1(),

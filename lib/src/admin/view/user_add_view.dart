@@ -3,12 +3,15 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_dropdown.dart';
 import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
+import 'package:hy_tutorial/src/auth/provider/change_password_provider.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/base/base_state.dart';
 import '../../division/provider/division_provider.dart';
 import '../provider/user_manage_provider.dart';
@@ -24,10 +27,17 @@ class UserAddView extends StatefulWidget {
 }
 
 class _UserAddViewState extends BaseState<UserAddView> {
+  bool? isSuperAdmin;
   @override
   void initState() {
-    context.read<UserManageProvider>().setData(context, widget.id);
+    getData();
     super.initState();
+  }
+
+  getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
+    context.read<UserManageProvider>().setData(context, widget.id);
   }
 
   @override
@@ -57,7 +67,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
               controller: p.nameC,
               textInputType: TextInputType.name,
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
               ],
               readOnly: widget.id != null,
               enabled: !(widget.id != null),
@@ -65,7 +75,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
               // enabled: true,
               labelText: "Nama",
               hintText: "Nama",
-              onChange: (v) {
+              onChanged: (v) {
                 setState(() {});
               },
             ),
@@ -91,31 +101,32 @@ class _UserAddViewState extends BaseState<UserAddView> {
                 setState(() {});
               },
             ),
-            CustomDropdown.normalDropdown(
-              //controller: roleC,
-              padding: EdgeInsets.only(top: 16),
-              iconPadding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-              contentPadding: EdgeInsets.all(2),
-              borderColor: Constant.primaryColor,
-              labelText: "Role",
-              selectedItem: p.selectedRole,
-              //selectedItem: selectedDivision,
-              hintText: "Role",
-              list: [
-                DropdownMenuItem(
-                  child: Text("Admin"),
-                  value: "2",
-                ),
-                DropdownMenuItem(
-                  child: Text("User"),
-                  value: "3",
-                ),
-              ],
-              onChanged: (val) {
-                p.selectedRole = val;
-                setState(() {});
-              },
-            ),
+            if (isSuperAdmin == true)
+              CustomDropdown.normalDropdown(
+                //controller: roleC,
+                padding: EdgeInsets.only(top: 16),
+                iconPadding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                contentPadding: EdgeInsets.all(2),
+                borderColor: Constant.primaryColor,
+                labelText: "Role",
+                selectedItem: p.selectedRole,
+                //selectedItem: selectedDivision,
+                hintText: "Role",
+                list: [
+                  DropdownMenuItem(
+                    child: Text("Admin"),
+                    value: "2",
+                  ),
+                  DropdownMenuItem(
+                    child: Text("User"),
+                    value: "3",
+                  ),
+                ],
+                onChanged: (val) {
+                  p.selectedRole = val;
+                  setState(() {});
+                },
+              ),
             CustomDropdown.normalDropdown(
               //controller: roleC,
               padding: EdgeInsets.only(top: 16),
@@ -202,7 +213,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
               enabled: !(widget.id != null),
               // readOnly: false,
               // enabled: true,
-              onChange: (v) {
+              onChanged: (v) {
                 setState(() {});
               },
             ),
@@ -215,7 +226,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
               enabled: !(widget.id != null),
               // readOnly: false,
               // enabled: true,
-              onChange: (v) {
+              onChanged: (v) {
                 setState(() {});
               },
             ),
@@ -226,7 +237,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
               hintText: "Username",
               readOnly: widget.id != null,
               enabled: !(widget.id != null),
-              onChange: (v) {
+              onChanged: (v) {
                 setState(() {});
               },
             ),
@@ -239,9 +250,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
                 hintText: "Password",
                 readOnly: widget.id != null,
                 enabled: !(widget.id != null),
-                onChange: (v) {
+                onChanged: (v) {
                   setState(() {});
                 },
+                obscureText: p.obscurePass,
                 suffixIcon: InkWell(
                   onTap: () => p.toggleObscurePass(),
                   child: Icon(
@@ -260,18 +272,25 @@ class _UserAddViewState extends BaseState<UserAddView> {
                 controller: p.passwordC,
                 labelText: "Password",
                 readOnly: true,
-
                 hintText: "Password",
                 // enabled: !(widget.id != null),
-                onChange: (v) {
+                onChanged: (v) {
                   setState(() {});
                 },
                 suffixIcon: GestureDetector(
                   onTap: () async {
-                    context.read<UserManageProvider>().passwordC.text =
-                        Random().nextInt(999999999).toString();
-                    context.read<UserManageProvider>().refresh();
-                    setState(() {});
+                    if (widget.id != null && p.passwordC.text.isEmpty) {
+                      context
+                          .read<UserManageProvider>()
+                          .generatePass(context, id: widget.id!);
+                      context.read<UserManageProvider>().refresh();
+                      setState(() {});
+                    } else {
+                      await Clipboard.setData(ClipboardData(
+                          text: p.generatePasswordModel.Data?.Password ?? ''));
+                      CustomAlert.showSnackBar(
+                          context, 'Password berhasil disalin', false);
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(24, 13, 24, 12),
@@ -283,7 +302,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
                       ),
                     ),
                     child: Text(
-                      'Buat',
+                      p.passwordC.text.isEmpty ? 'Buat' : 'Salin',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,

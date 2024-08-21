@@ -86,7 +86,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
               pagingC.refresh();
             });
           },
-          onChange: (val) {
+          onChanged: (val) {
             setState(() {});
             if (pltaP.searchOnStoppedTyping != null) {
               pltaP.searchOnStoppedTyping!.cancel();

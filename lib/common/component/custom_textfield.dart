@@ -18,7 +18,7 @@ class CustomTextField {
     bool? enableInteractiveSelection,
     FocusNode? focusNode,
     bool? isDecimalFormatter,
-    Function(String)? onChange,
+    Function(String)? onChanged,
     Function(String)? onFieldSubmitted,
     Function(String?)? onSaved,
     Function()? onEditingComplete,
@@ -97,8 +97,8 @@ class CustomTextField {
             return null;
           }),
       onChanged: (str) {
-        if (onChange != null) {
-          onChange(str);
+        if (onChanged != null) {
+          onChanged(str);
         }
       },
       onSaved: onSaved,
@@ -141,7 +141,7 @@ class CustomTextField {
     Function()? onEditingComplete,
     Function()? onTap,
     String? Function(String?)? validator,
-    Function(String)? onChange,
+    Function(String)? onChanged,
     bool required = true,
     List<TextInputFormatter>? inputFormatters,
     BorderRadius? borderRadius,
@@ -236,8 +236,8 @@ class CustomTextField {
             onEditingComplete: onEditingComplete,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: (str) {
-              if (onChange != null) {
-                onChange(str);
+              if (onChanged != null) {
+                onChanged(str);
               }
             },
             validator: validator ??
@@ -287,7 +287,7 @@ class CustomTextField {
     Function()? onEditingComplete,
     Function()? onTap,
     String? Function(String?)? validator,
-    Function(String)? onChange,
+    Function(String)? onChanged,
     Color? activeBorderColor,
     bool required = true,
     List<TextInputFormatter>? inputFormatters,
@@ -391,8 +391,8 @@ class CustomTextField {
             onEditingComplete: onEditingComplete,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: (str) {
-              if (onChange != null) {
-                onChange(str);
+              if (onChanged != null) {
+                onChanged(str);
               }
             },
             validator: validator ??
@@ -435,7 +435,7 @@ class CustomTextField {
     Function()? onEditingComplete,
     Function()? onTap,
     String? Function(String?)? validator,
-    Function(String)? onChange,
+    Function(String)? onChanged,
     Color? activeBorderColor,
     bool required = false,
     bool noBorder = false,
@@ -505,8 +505,8 @@ class CustomTextField {
       onEditingComplete: onEditingComplete,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       onChanged: (str) {
-        if (onChange != null) {
-          onChange(str);
+        if (onChanged != null) {
+          onChanged(str);
         }
       },
       validator: validator ??

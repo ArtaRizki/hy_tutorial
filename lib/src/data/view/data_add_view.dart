@@ -68,7 +68,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                 textInputType: TextInputType.name,
                 labelText: "Nama File",
                 hintText: "Nama File",
-                onChange: (p0) {
+                onChanged: (p0) {
                   setState(() {});
                 },
               ),
@@ -243,7 +243,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                 ],
                 labelText: "Torsi Terkini",
                 hintText: "Torsi Terkini",
-                onChange: p.onChangedCurrentTorque,
+                onChanged: p.onChangedCurrentTorque,
                 suffixIcon: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
                   child: Text(
@@ -264,7 +264,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                 ],
                 labelText: "Max Torsi",
                 hintText: "Max Torsi",
-                onChange: p.onChangedMaxTorque,
+                onChanged: p.onChangedMaxTorque,
                 suffixIcon: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
                   child: Text(
@@ -324,7 +324,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                 ],
                 labelText: "Gen. Bearing-Kopling",
                 hintText: "Gen. Bearing-Kopling",
-                onChange: p.onChangedBearingToCoupling,
+                onChanged: p.onChangedBearingToCoupling,
                 suffixIcon: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
                   child: Text(
@@ -344,7 +344,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                 ],
                 labelText: "Kopling - Turbin",
                 hintText: "Kopling - Turbin",
-                onChange: p.onChangedKoplingToTurbine,
+                onChanged: p.onChangedKoplingToTurbine,
                 suffixIcon: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
                   child: Text(

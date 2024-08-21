@@ -21,12 +21,15 @@ class RegisterView extends StatefulWidget {
 class RegisterViewState extends State<RegisterView> {
   @override
   void initState() {
-    context.read<DivisionProvider>().fetchDivision();
-    context.read<AuthProvider>().clearRegisterForm();
-
-    final authP = context.read<AuthProvider>();
-    authP.registerViewState = this;
+    getData();
     super.initState();
+  }
+
+  getData() async {
+    final authP = context.read<AuthProvider>();
+    authP.clearRegisterForm();
+    await context.read<DivisionProvider>().fetchDivision(withLoading: true);
+    authP.registerViewState = this;
   }
 
   @override
@@ -39,16 +42,19 @@ class RegisterViewState extends State<RegisterView> {
           padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(Assets.iconsIcAuth, scale: 3),
-              SizedBox(height: 15),
-              Text(
-                "Daftar",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 164,
+                  height: 46,
+                  child: Image.asset(
+                    'assets/images/img_splashscreen.png',
+                    width: 164,
+                    height: 46,
+                  ),
                 ),
               ),
               SizedBox(height: 20),
@@ -57,9 +63,26 @@ class RegisterViewState extends State<RegisterView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Email",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+                      "Daftar",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    CustomTextField.borderTextField(
+                      borderRadius: BorderRadius.circular(5),
+                      controller: authP.nameC,
+                      fillColor: Colors.white,
+                      hintColor: Constant.grayColor.withOpacity(0.5),
+                      hintText: "Masukkan nama",
+                      labelText: "Nama",
+                      labelColor: Colors.black,
+                      borderColor: Constant.grayColor.withOpacity(0.5),
+                      onChanged: (v) {
+                        setState(() {});
+                      },
                     ),
                     SizedBox(height: 10),
                     CustomTextField.borderTextField(
@@ -67,59 +90,52 @@ class RegisterViewState extends State<RegisterView> {
                       controller: authP.emailC,
                       fillColor: Colors.white,
                       hintColor: Constant.grayColor.withOpacity(0.5),
-                      hintText: "Masukan email",
-                      labelFontSize: 20,
-                      labelFontWeight: FontWeight.bold,
+                      hintText: "Masukkan email",
+                      labelText: "Email",
                       labelColor: Colors.black,
                       borderColor: Constant.grayColor.withOpacity(0.5),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Divisi",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(color: Colors.black, fontSize: 14),
-                    ),
-                    SizedBox(height: 10),
-                    CustomDropdown.searchDropdown(
-                      required: true,
-                      list: List.generate(
-                          division.divisionModel.Data?.length ?? 0,
-                          (index) =>
-                              division.divisionModel.Data?[index]?.Name ?? ""),
-                      onChanged: (val) {
-                        final p = context.read<AuthProvider>();
-                        String? selected = (division.divisionModel.Data ?? [])
-                            .firstWhere((element) => element?.Name == val)
-                            ?.Id;
-                        if (selected != null && val != null) {
-                          p.selectedDivision = selected;
-                          p.selectedDivisionC.text = val;
-                        }
+                      onChanged: (v) {
+                        setState(() {});
                       },
                     ),
                     SizedBox(height: 10),
-                    Text(
-                      "No. Telepon",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    CustomDropdown.normalDropdown(
+                      //controller: roleC,
+                      iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                      contentPadding: EdgeInsets.all(2),
+                      hintColor: Colors.black26,
+                      borderColor: Constant.primaryColor,
+                      labelText: "Divisi",
+                      //selectedItem: selectedRole,
+                      selectedItem: authP.selectedDivision,
+                      hintText: "Divisi",
+                      list: List.generate(
+                        division.divisionModel.Data?.length ?? 0,
+                        (index) => DropdownMenuItem(
+                            child: Text(
+                                division.divisionModel.Data?[index]?.Name ??
+                                    ""),
+                            value:
+                                division.divisionModel.Data?[index]?.Id ?? ""),
+                      ),
+                      onChanged: (val) {
+                        authP.selectedDivision = val;
+                        setState(() {});
+                      },
                     ),
                     SizedBox(height: 10),
                     CustomTextField.borderTextField(
                       borderRadius: BorderRadius.circular(5),
-                      controller: authP.nameC,
+                      controller: authP.phoneNumberC,
                       fillColor: Colors.white,
                       hintColor: Constant.grayColor.withOpacity(0.5),
-                      hintText: "Masukan nomor telepon",
-                      labelFontSize: 20,
-                      labelFontWeight: FontWeight.bold,
+                      hintText: "Masukkan nomor telepon",
+                      labelText: "No. Telepon",
                       labelColor: Colors.black,
                       borderColor: Constant.grayColor.withOpacity(0.5),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Username",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+                      onChanged: (v) {
+                        setState(() {});
+                      },
                     ),
                     SizedBox(height: 10),
                     CustomTextField.borderTextField(
@@ -127,17 +143,13 @@ class RegisterViewState extends State<RegisterView> {
                       controller: authP.usernameC,
                       fillColor: Colors.white,
                       hintColor: Constant.grayColor.withOpacity(0.5),
-                      hintText: "Masukan username",
-                      labelFontSize: 20,
-                      labelFontWeight: FontWeight.bold,
+                      hintText: "Masukkan username",
+                      labelText: "Username",
                       labelColor: Colors.black,
                       borderColor: Constant.grayColor.withOpacity(0.5),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Kata Sandi",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+                      onChanged: (v) {
+                        setState(() {});
+                      },
                     ),
                     SizedBox(height: 10),
                     CustomTextField.borderTextField(
@@ -146,13 +158,10 @@ class RegisterViewState extends State<RegisterView> {
                       fillColor: Colors.white,
                       hintColor: Constant.grayColor.withOpacity(0.5),
                       hintText: "Ketik Kata Sandi",
-                      labelFontSize: 20,
-                      labelFontWeight: FontWeight.bold,
+                      labelText: "Kata Sandi",
                       labelColor: Colors.black,
                       borderColor: Constant.grayColor.withOpacity(0.5),
                       obscureText: authP.obscurePass,
-                      onEditingComplete: () async =>
-                          await context.read<AuthProvider>().login(context),
                       suffixIcon: InkWell(
                         onTap: () => authP.toggleObscurePass(),
                         child: Icon(
@@ -162,12 +171,9 @@ class RegisterViewState extends State<RegisterView> {
                           color: Constant.primaryColor,
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Konfirmasi Kata Sandi",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+                      onChanged: (v) {
+                        setState(() {});
+                      },
                     ),
                     SizedBox(height: 10),
                     CustomTextField.borderTextField(
@@ -176,13 +182,14 @@ class RegisterViewState extends State<RegisterView> {
                       fillColor: Colors.white,
                       hintColor: Constant.grayColor.withOpacity(0.5),
                       hintText: "Ketik konfirmasi kata sandi",
-                      labelFontSize: 20,
-                      labelFontWeight: FontWeight.bold,
+                      labelText: "Konfirmasi Kata Sandi",
                       labelColor: Colors.black,
                       borderColor: Constant.grayColor.withOpacity(0.5),
                       obscureText: authP.obscurePass1,
-                      onEditingComplete: () async =>
-                          await context.read<AuthProvider>().login(context),
+                      onEditingComplete: () async {
+                        if (authP.validateRegister())
+                          await context.read<AuthProvider>().register(context);
+                      },
                       suffixIcon: InkWell(
                         onTap: () => authP.toggleObscurePass1(),
                         child: Icon(
@@ -192,6 +199,9 @@ class RegisterViewState extends State<RegisterView> {
                           color: Constant.primaryColor,
                         ),
                       ),
+                      onChanged: (v) {
+                        setState(() {});
+                      },
                     ),
                     SizedBox(height: 20),
                     CustomButton.mainButton(
@@ -229,6 +239,9 @@ class RegisterViewState extends State<RegisterView> {
                   ),
                 ],
               ),
+              SizedBox(height: 40),
+              Center(child: Image.asset(Assets.imagesImgBottom)),
+              SizedBox(height: 16),
             ],
           ),
         ),
