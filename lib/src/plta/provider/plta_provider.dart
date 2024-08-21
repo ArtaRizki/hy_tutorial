@@ -347,8 +347,12 @@ class PltaProvider extends BaseController with ChangeNotifier {
         clearForm();
       }
     } else {
-      final message = jsonDecode(response.body)["Message"];
+      final model = BaseResponse.from(response);
+
+      final message = model.message;
       if (withLoading) loading(false);
+      await Utils.showFailed(msg: model.message ?? "Gagal");
+      await Future.delayed(Duration(seconds: 2));
       throw Exception(message);
     }
   }
@@ -563,8 +567,12 @@ class PltaProvider extends BaseController with ChangeNotifier {
           clearForm();
         }
       } else {
-        final message = jsonDecode(response.body)["Message"];
+        final model = BaseResponse.from(response);
+
+        final message = model.message;
         if (withLoading) loading(false);
+        await Utils.showFailed(msg: model.message ?? "Gagal");
+        await Future.delayed(Duration(seconds: 2));
         throw Exception(message);
       }
     } catch (e) {
@@ -590,8 +598,12 @@ class PltaProvider extends BaseController with ChangeNotifier {
       next = null;
       Navigator.pop(context);
     } else {
-      final message = jsonDecode(response.body)["Message"];
+      final model = BaseResponse.from(response);
+
+      final message = model.message;
       loading(false);
+      await Utils.showFailed(msg: model.message ?? "Gagal");
+      await Future.delayed(Duration(seconds: 2));
       throw Exception(message);
     }
   }
@@ -612,8 +624,12 @@ class PltaProvider extends BaseController with ChangeNotifier {
       // Navigator.pushReplacement(context,
       //     MaterialPageRoute(builder: ((context) => PLTAAddView(id: pltaId))));
     } else {
-      final message = jsonDecode(response.body)["Message"];
+      final model = BaseResponse.from(response);
+
+      final message = model.message;
       loading(false);
+      await Utils.showFailed(msg: model.message ?? "Gagal");
+      await Future.delayed(Duration(seconds: 2));
       throw Exception(message);
     }
   }

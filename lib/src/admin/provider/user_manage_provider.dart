@@ -1087,8 +1087,12 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           arguments: isAdmin);
       clearForm();
     } else {
-      final message = jsonDecode(response.body)["Message"];
+      final model = BaseResponse.from(response);
+
+      final message = model.message;
       loading(false);
+      await Utils.showFailed(msg: model.message ?? "Gagal");
+      await Future.delayed(Duration(seconds: 2));
       throw Exception(message);
     }
   }
@@ -1133,8 +1137,12 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
       clearForm();
     } else {
-      final message = jsonDecode(response.body)["Message"];
+      final model = BaseResponse.from(response);
+
+      final message = model.message;
       loading(false);
+      await Utils.showFailed(msg: model.message ?? "Gagal");
+      await Future.delayed(Duration(seconds: 2));
       throw Exception(message);
     }
   }
@@ -1165,9 +1173,13 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       CustomAlert.showSnackBar(context, 'Password berhasil disalin', false);
       // Navigator.pop(context);
     } else {
-      final message = jsonDecode(response.body)["Message"];
+      final model = BaseResponse.from(response);
+
+      final message = model.message;
       loading(false);
-      return message;
+      await Utils.showFailed(msg: model.message ?? "Gagal");
+      await Future.delayed(Duration(seconds: 2));
+      throw Exception(message);
     }
   }
 
