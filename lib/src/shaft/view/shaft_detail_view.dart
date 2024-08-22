@@ -2,8 +2,10 @@ import 'dart:developer';
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
+import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
 import 'package:intl/intl.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_container.dart';
@@ -780,6 +782,7 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
       },
       child: Scaffold(
         appBar: CustomAppBar.appBar(
+          onBack: () => Navigator.pop(context, false),
           context,
           'Detail Laporan',
           color: Constant.primaryColor,
@@ -799,6 +802,7 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
       
                       getData();
                       Navigator.pop(context, true);
+                      CusNav.nPushReplace(context, TurbineView());
                     },
                     noCallback: () async {
                       Navigator.pop(context);

@@ -1004,7 +1004,8 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       if (response.success == true) {
         Utils.showSuccess(msg: response.message ?? "Sukses");
         await Future.delayed(Duration(seconds: 2));
-        CusNav.nPush(context, ShaftView());
+        CusNav.nPop(context);
+        CusNav.nPushReplace(context, ShaftView());
       } else {
         loading(false);
         Utils.showFailed(msg: response.message ?? '');
