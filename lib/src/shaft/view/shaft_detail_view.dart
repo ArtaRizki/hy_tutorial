@@ -3,6 +3,7 @@ import 'dart:developer';
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/generated/assets.dart';
+import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
 import 'package:intl/intl.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_container.dart';
@@ -772,293 +773,303 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
           ],
         );
 
-    return Scaffold(
-      appBar: CustomAppBar.appBar(
-        context,
-        'Detail Laporan',
-        color: Constant.primaryColor,
-        foregroundColor: Colors.white,
-        action: [
-          InkWell(
-            onTap: () async {
-              Utils.showYesNoDialogWithWarning(
-                  context: context,
-                  title: "Konfirmasi Penghapusan",
-                  desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
-                  yesCallback: () async {
-                    Navigator.pop(context);
-                    await context
-                        .read<DataAddProvider>()
-                        .deleteTurbine(context, id: data?.id ?? "0");
-
-                    getData();
-                    Navigator.pop(context, true);
-                  },
-                  noCallback: () async {
-                    Navigator.pop(context);
-                  });
-            },
-            child: Container(
-              margin: EdgeInsets.only(right: 20),
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Constant.redColor,
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(
-                    Icons.delete_forever_rounded,
-                    size: 15,
-                  ),
-                  Text(
-                    "Hapus",
-                    style:
-                        Constant.iPrimaryMedium12.copyWith(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: ListView(
-        shrinkWrap: true,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Constant.primaryColor,
-              image: DecorationImage(
-                alignment: Alignment.bottomCenter,
-                image: AssetImage(Assets.imagesImgHomeTop),
-                fit: BoxFit.fitWidth,
-              ),
-            ),
-            width: double.infinity,
-            padding: EdgeInsets.fromLTRB(20, 8, 20, 15),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, false);
+        return true;
+      },
+      child: Scaffold(
+        appBar: CustomAppBar.appBar(
+          context,
+          'Detail Laporan',
+          color: Constant.primaryColor,
+          foregroundColor: Colors.white,
+          action: [
+            InkWell(
+              onTap: () async {
+                Utils.showYesNoDialogWithWarning(
+                    context: context,
+                    title: "Konfirmasi Penghapusan",
+                    desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
+                    yesCallback: () async {
+                      Navigator.pop(context);
+                      await context
+                          .read<DataAddProvider>()
+                          .deleteTurbine(context, id: data?.id ?? "0");
+      
+                      getData();
+                      Navigator.pop(context, true);
+                    },
+                    noCallback: () async {
+                      Navigator.pop(context);
+                    });
+              },
+              child: Container(
+                margin: EdgeInsets.only(right: 20),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Constant.redColor,
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            data?.createdBy ?? '',
-                            style: Constant.iBlackMedium16.copyWith(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Constant.xSizedBox4,
-                          Text(
-                            data?.title ?? '',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
+                    Icon(
+                      Icons.delete_forever_rounded,
+                      size: 15,
                     ),
-                    Flexible(
-                      flex: 5,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 8),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.white24,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: Text(
-                            '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(d.turbineDetailModel.data?.createdAt ?? '${DateTime.now()}'))}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
+                    Text(
+                      "Hapus",
+                      style: Constant.iPrimaryMedium12
+                          .copyWith(color: Colors.white),
                     ),
                   ],
                 ),
-                CustomContainer.mainCard(
-                  margin: EdgeInsets.only(top: 16),
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                  color: Colors.white12,
-                  child: Column(
+              ),
+            ),
+          ],
+        ),
+        body: ListView(
+          shrinkWrap: true,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Constant.primaryColor,
+                image: DecorationImage(
+                  alignment: Alignment.bottomCenter,
+                  image: AssetImage(Assets.imagesImgHomeTop),
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+              width: double.infinity,
+              padding: EdgeInsets.fromLTRB(20, 8, 20, 15),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: status == true
-                                ? Image.asset(Assets.iconsIcSmile)
-                                : Image.asset(Assets.iconsIcSad),
-                          ),
-                          Constant.xSizedBox12,
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Total Run Out : ',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                Constant.xSizedBox4,
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      flex: 8,
-                                      child: Text(
-                                        '${totalCrockedness ?? 0}',
-                                        textAlign: TextAlign.left,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Constant.xSizedBox4,
-                                    Expanded(
-                                      flex: 4,
-                                      child: Text(
-                                        'X 0,01 mm',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Constant.xSizedBox16,
-          CustomContainer.mainCard(
-            margin: EdgeInsets.symmetric(horizontal: 16),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  tabController.index == 2 ? 'Grafik Resultan' : 'Grafik Shaft',
-                  style: TextStyle(
-                    color: Constant.textColorBlack2,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                Constant.xSizedBox12,
-                toggleTab(),
-                Container(
-                    child: tabController.index == 2
-                        ? UpperChartView()
-                        : tabController.index == 3
-                            ? BoltChartView()
-                            : SampleChartView(
-                                activeIndex: tabController.index,
-                                typePage: 'detail')),
-              ],
-            ),
-          ),
-          Constant.xSizedBox16,
-          CustomContainer.mainCard(
-            margin: EdgeInsets.symmetric(horizontal: 16),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Detail Data',
-                      style: TextStyle(
-                        color: Constant.textColorBlack2,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 1, color: Constant.primaryColor),
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      child: InkWell(
-                        onTap: () async {
-                          await context
-                              .read<DataAddProvider>()
-                              .downloadTurbine(context, id: widget.id);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Expanded(
+                        flex: 5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Icon(
-                              Icons.save_alt_rounded,
-                              size: 15,
-                              color: Constant.primaryColor,
+                            Text(
+                              data?.createdBy ?? '',
+                              style: Constant.iBlackMedium16.copyWith(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             Constant.xSizedBox4,
                             Text(
-                              "Unduh",
-                              style: Constant.iPrimaryMedium12,
+                              data?.title ?? '',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
                       ),
-                    )
-                  ],
-                ),
-                Constant.xSizedBox12,
-                toggleTab1(),
-                Constant.xSizedBox16,
-                Container(
-                  child: tabController1.index == 2
-                      ? turbineActive()
-                      : tabController1.index == 1
-                          ? clutchActive()
-                          : upperActive(),
-                ),
-                Constant.xSizedBox16,
-                acBdActive(),
-                Constant.xSizedBox18,
-              ],
+                      Flexible(
+                        flex: 5,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 8),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.white24,
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: Text(
+                              '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(d.turbineDetailModel.data?.createdAt ?? '${DateTime.now()}'))}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  CustomContainer.mainCard(
+                    margin: EdgeInsets.only(top: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                    color: Colors.white12,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: status == true
+                                  ? Image.asset(Assets.iconsIcSmile)
+                                  : Image.asset(Assets.iconsIcSad),
+                            ),
+                            Constant.xSizedBox12,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Total Run Out : ',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  Constant.xSizedBox4,
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        flex: 8,
+                                        child: Text(
+                                          '${totalCrockedness ?? 0}',
+                                          textAlign: TextAlign.left,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Constant.xSizedBox4,
+                                      Expanded(
+                                        flex: 4,
+                                        child: Text(
+                                          'X 0,01 mm',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Constant.xSizedBox16,
-        ],
+            Constant.xSizedBox16,
+            CustomContainer.mainCard(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    tabController.index == 2
+                        ? 'Grafik Resultan'
+                        : 'Grafik Shaft',
+                    style: TextStyle(
+                      color: Constant.textColorBlack2,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Constant.xSizedBox12,
+                  toggleTab(),
+                  Container(
+                      child: tabController.index == 2
+                          ? UpperChartView()
+                          : tabController.index == 3
+                              ? BoltChartView()
+                              : SampleChartView(
+                                  activeIndex: tabController.index,
+                                  typePage: 'detail')),
+                ],
+              ),
+            ),
+            Constant.xSizedBox16,
+            CustomContainer.mainCard(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Detail Data',
+                        style: TextStyle(
+                          color: Constant.textColorBlack2,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 1, color: Constant.primaryColor),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child: InkWell(
+                          onTap: () async {
+                            await context
+                                .read<DataAddProvider>()
+                                .downloadTurbine(context, id: widget.id);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(
+                                Icons.save_alt_rounded,
+                                size: 15,
+                                color: Constant.primaryColor,
+                              ),
+                              Constant.xSizedBox4,
+                              Text(
+                                "Unduh",
+                                style: Constant.iPrimaryMedium12,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Constant.xSizedBox12,
+                  toggleTab1(),
+                  Constant.xSizedBox16,
+                  Container(
+                    child: tabController1.index == 2
+                        ? turbineActive()
+                        : tabController1.index == 1
+                            ? clutchActive()
+                            : upperActive(),
+                  ),
+                  Constant.xSizedBox16,
+                  acBdActive(),
+                  Constant.xSizedBox18,
+                ],
+              ),
+            ),
+            Constant.xSizedBox16,
+          ],
+        ),
       ),
     );
   }

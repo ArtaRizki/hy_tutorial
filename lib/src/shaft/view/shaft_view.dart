@@ -787,8 +787,11 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
             if (isAdmin) {
-              await CusNav.nPopUntil(context,
-                  predicate: (route) => route is MainHome);
+              // await CusNav.nPopUntil(context,
+              //     predicate: (route) => route is MainHome);
+              //CusNav.nPop(context);
+              CusNav.nPop(context);
+              CusNav.nPop(context);
               CusNav.nPush(context, TurbineView());
             } else {
               CusNav.nPushAndRemoveUntil(context, HomeView());
