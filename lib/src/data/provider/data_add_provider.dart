@@ -1088,8 +1088,12 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       loading(false);
       return model;
     } else {
-      final message = BaseResponse.from(response).message;
+      final model = BaseResponse.from(response);
+
+      final message = model.message;
       loading(false);
+      await Utils.showFailed(msg: model.message ?? "Gagal");
+      await Future.delayed(Duration(seconds: 2));
       throw Exception(message);
       // return TurbineCreateModel();
     }

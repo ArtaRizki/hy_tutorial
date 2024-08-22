@@ -205,14 +205,14 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: 16),
                 Padding(
                   padding: EdgeInsets.only(bottom: 16),
                   child: Text(turbineP.startDate == null
                       ? 'Pilih Tanggal Awal'
                       : turbineP.endDate == null
                           ? 'Pilih Tanggal Akhir'
-                          : 'Silahkan Konfirmasi'),
+                          : 'Pilih Tanggal Akhir'),
                 ),
                 SfDateRangePicker(
                   monthCellStyle: DateRangePickerMonthCellStyle(),
@@ -226,9 +226,9 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                     ),
                   ),
                   controller: turbineP.dateRangePickerController,
-                  showActionButtons: true,
-                  cancelText: 'Batal',
-                  confirmText: 'Konfirmasi',
+                  showActionButtons: false,
+                  // cancelText: 'Batal',
+                  // confirmText: 'Konfirmasi',
                   view: DateRangePickerView.month,
                   backgroundColor: Colors.white,
                   monthViewSettings: DateRangePickerMonthViewSettings(
@@ -241,18 +241,18 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                           backgroundColor: Colors.white)),
                   initialSelectedRange:
                       PickerDateRange(turbineP.startDate, turbineP.endDate),
-                  onCancel: () async {
-                    await turbineP.setStartDate(null);
-                    await turbineP.setEndDate(null);
-                    await turbineP.clearData();
-                    sheetState(() {});
-                    setState(() {});
-                  },
-                  onSubmit: (p0) {
-                    CusNav.nPop(context);
-                    turbineP.next = null;
-                    pagingC.refresh();
-                  },
+                  // onCancel: () async {
+                  //   await turbineP.setStartDate(null);
+                  //   await turbineP.setEndDate(null);
+                  //   await turbineP.clearData();
+                  //   sheetState(() {});
+                  //   setState(() {});
+                  // },
+                  // onSubmit: (p0) {
+                  //   CusNav.nPop(context);
+                  //   turbineP.next = null;
+                  //   pagingC.refresh();
+                  // },
                   onSelectionChanged:
                       (dateRangePickerSelectionChangedArgs) async {
                     if (dateRangePickerSelectionChangedArgs.value
@@ -830,12 +830,17 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                                 SizedBox(width: 10),
                                 InkWell(
                                   onTap: () async {
-                                    if (tabController.index == 1)
-                                      CustomContainer.showModalBottomScroll(
-                                        initialChildSize: 0.8,
+                                    if (tabController.index == 1) {
+                                      await CustomContainer
+                                          .showModalBottomScroll(
+                                        initialChildSize: 0.72,
                                         context: context,
                                         child: filterAllWidget(),
                                       );
+
+                                      turbineP.next = null;
+                                      pagingC.refresh();
+                                    }
                                   },
                                   child: Container(
                                     height: 50,

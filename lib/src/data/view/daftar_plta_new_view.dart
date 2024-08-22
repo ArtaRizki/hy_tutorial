@@ -125,91 +125,6 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
       ]);
     }
 
-    Widget itemListShimmer2() {
-      return Container(
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.grey.withOpacity(0.5)),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Skeleton<bool>(
-                  width: 24,
-                  height: 10,
-                  value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                  child: Text('', style: Constant.blackRegular12),
-                ),
-                Skeleton<bool>(
-                  width: 48,
-                  height: 10,
-                  value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                  child: Text('', style: Constant.blackRegular12),
-                ),
-              ],
-            ),
-            SizedBox(height: 5),
-            Divider(
-              thickness: 0.5,
-              color: Colors.grey.withOpacity(0.5),
-            ),
-            SizedBox(height: 5),
-            Row(
-              children: [
-                Skeleton<bool>(
-                    width: 45,
-                    height: 45,
-                    value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                    child: Image.asset(Assets.iconsIcFile, scale: 3.5)),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Constant.xSizedBox4,
-                    Skeleton<bool>(
-                      width: 175,
-                      height: 17,
-                      value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                      child: Text(
-                        '',
-                        style: Constant.blackBold15,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Skeleton<bool>(
-                      width: 100,
-                      height: 12,
-                      value: pltaP.isFetching == true ? null : pltaP.isFetching,
-                      child: Text("-", style: Constant.grayRegular13),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Constant.xSizedBox8,
-          ],
-        ),
-      );
-    }
-
-    Widget listShimmer2() {
-      return Column(
-        children: [
-          itemListShimmer2(),
-          SizedBox(height: 20),
-          itemListShimmer2(),
-          SizedBox(height: 20),
-          itemListShimmer2(),
-          SizedBox(height: 20),
-        ],
-      );
-    }
-
     Widget itemShimmer3() {
       return CustomContainer.mainCard(
         margin: EdgeInsets.symmetric(horizontal: 10),
@@ -240,7 +155,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
                     height: 13,
                     value: pltaP.isFetching == true ? null : pltaP.isFetching,
                     child: Text(
-                      'Nama -',
+                      '',
                       style: Constant.iPrimaryMedium8
                           .copyWith(fontSize: 16, color: Colors.black),
                     ),
@@ -251,7 +166,7 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
                     height: 10,
                     value: pltaP.isFetching == true ? null : pltaP.isFetching,
                     child: Text(
-                      'Status -',
+                      '',
                       style: Constant.iPrimaryMedium8
                           .copyWith(fontSize: 14, color: Colors.black),
                     ),

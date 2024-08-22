@@ -203,14 +203,14 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                     ),
                   ],
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: 16),
                 Padding(
                   padding: EdgeInsets.only(bottom: 16),
                   child: Text(turbineP.startDate == null
                       ? 'Pilih Tanggal Awal'
                       : turbineP.endDate == null
                           ? 'Pilih Tanggal Akhir'
-                          : 'Silahkan Konfirmasi'),
+                          : 'Pilih Tanggal Akhir'),
                 ),
                 SfDateRangePicker(
                   monthCellStyle: DateRangePickerMonthCellStyle(),
@@ -261,9 +261,6 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                           dateRangePickerSelectionChangedArgs.value.endDate);
                       sheetState(() {});
                       setState(() {});
-
-                      turbineP.next = null;
-                      pagingC.refresh();
                     }
                   },
                   selectionMode: DateRangePickerSelectionMode.range,
@@ -1159,12 +1156,16 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                       flex: 2,
                       child: InkWell(
                         onTap: () async {
-                          if (tabController.index == 1)
-                            CustomContainer.showModalBottomScroll(
-                              initialChildSize: 0.75,
+                          if (tabController.index == 1) {
+                            await CustomContainer.showModalBottomScroll(
+                              initialChildSize: 0.72,
                               context: context,
                               child: filterAllWidget(),
                             );
+
+                            turbineP.next = null;
+                            pagingC.refresh();
+                          }
                         },
                         child: Container(
                           height: 50,
