@@ -45,7 +45,7 @@ class ProfileProvider extends BaseController with ChangeNotifier {
       nameC.text = data.Name ?? '';
       usernameC.text = data.Username ?? '';
       emailC.text = data.Email ?? '';
-      phoneNumberC.text = data.Phone ?? '';
+      phoneNumberC.text = (data.Phone ?? '').replaceFirst('+', '');
       final division = p.divisionModel.Data;
       divisionC.text = data.Division ?? '';
       selectedDivision =
@@ -148,7 +148,7 @@ class ProfileProvider extends BaseController with ChangeNotifier {
       'Name': nameC.text,
       'Username': usernameC.text,
       'Email': emailC.text,
-      'Phone': phoneNumberC.text,
+      'Phone': phoneNumberC.text.replaceFirst('08', '628'),
     };
 
     final response = await put(Constant.BASE_API_FULL + '/my', body: param);
@@ -169,8 +169,12 @@ class ProfileProvider extends BaseController with ChangeNotifier {
       }
       clearForm();
     } else {
-      final message = jsonDecode(response.body)["Message"];
+      final model = BaseResponse.from(response);
+
+      final message = model.message;
       loading(false);
+      await Utils.showFailed(msg: model.message ?? "Gagal");
+      await Future.delayed(Duration(seconds: 2));
       throw Exception(message);
     }
   }
@@ -228,8 +232,12 @@ class ProfileProvider extends BaseController with ChangeNotifier {
       }
       clearForm();
     } else {
-      final message = jsonDecode(response.body)["Message"];
+      final model = BaseResponse.from(response);
+
+      final message = model.message;
       loading(false);
+      await Utils.showFailed(msg: model.message ?? "Gagal");
+      await Future.delayed(Duration(seconds: 2));
       throw Exception(message);
     }
   }
