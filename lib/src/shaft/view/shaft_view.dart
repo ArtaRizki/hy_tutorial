@@ -791,8 +791,7 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
               //     predicate: (route) => route is MainHome);
               //CusNav.nPop(context);
               CusNav.nPop(context);
-              CusNav.nPop(context);
-              CusNav.nPush(context, TurbineView());
+              CusNav.nPushReplace(context, TurbineView());
             } else {
               CusNav.nPushAndRemoveUntil(context, HomeView());
             }
