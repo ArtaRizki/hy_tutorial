@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
@@ -48,6 +49,8 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
     });
 
     final turbineP = context.read<TurbineProvider>();
+    turbineP.clearData();
+    turbineP.turbineSearchC.clear();
     if ((turbineP.pagingController.itemList ?? []).isEmpty) {
       turbineP.getTurbine();
     } else {
@@ -212,7 +215,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                       ? 'Pilih Tanggal Awal'
                       : turbineP.endDate == null
                           ? 'Pilih Tanggal Akhir'
-                          : 'Pilih Tanggal Akhir'),
+                          : 'Silahkan Konfirmasi'),
                 ),
                 SfDateRangePicker(
                   monthCellStyle: DateRangePickerMonthCellStyle(),
@@ -267,19 +270,19 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                   },
                   selectionMode: DateRangePickerSelectionMode.range,
                 ),
-                // Constant.xSizedBox16,
-                // SizedBox(
-                //   height: 50,
-                //   child: CustomButton.mainButton(
-                //     "View Result",
-                //     () {
-                //       Navigator.pop(context);
-                //       turbineP.next2 = null;
-                //       pagingC2.refresh();
-                //     },
-                //     textStyle: TextStyle(fontSize: 14, color: Colors.white),
-                //   ),
-                // ),
+                Constant.xSizedBox16,
+                SizedBox(
+                  height: 50,
+                  child: CustomButton.mainButton(
+                    "Konfirmasi",
+                    () {
+                      CusNav.nPop(context);
+                      turbineP.next = null;
+                      pagingC.refresh();
+                    },
+                    textStyle: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                ),
               ],
             );
           },
@@ -833,7 +836,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                                     if (tabController.index == 1) {
                                       await CustomContainer
                                           .showModalBottomScroll(
-                                        initialChildSize: 0.72,
+                                        initialChildSize: 0.85,
                                         context: context,
                                         child: filterAllWidget(),
                                       );

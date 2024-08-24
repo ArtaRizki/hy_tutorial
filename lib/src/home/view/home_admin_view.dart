@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
+import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
+import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
@@ -24,6 +27,7 @@ import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -39,7 +43,6 @@ class HomeAdminView extends StatefulWidget {
 class _HomeAdminViewState extends BaseState<HomeAdminView>
     with TickerProviderStateMixin {
   late TabController tabController;
-  late bool isSuperAdmin;
 
   @override
   void initState() {
@@ -53,14 +56,8 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
       setState(() {});
     });
     final turbineP = context.read<TurbineProvider>();
-    // if (!isSuperAdmin) {
-    if ((turbineP.pagingController2.itemList ?? []).isEmpty) {
-      turbineP.getTurbine2();
-    } else {
-      turbineP.pagingController2.dispose();
-      turbineP.next2 = null;
-      turbineP.getTurbine2();
-    }
+    turbineP.clearData();
+    turbineP.turbineSearchC.clear();
     if ((turbineP.pagingController.itemList ?? []).isEmpty) {
       turbineP.getTurbine();
     } else {
@@ -68,8 +65,31 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
       turbineP.next = null;
       turbineP.getTurbine();
     }
-    // }
-    context.read<HomeProvider>().getData(context);
+    if ((turbineP.pagingController2.itemList ?? []).isEmpty) {
+      turbineP.getTurbine2();
+    } else {
+      turbineP.pagingController2.dispose();
+      turbineP.next2 = null;
+      turbineP.getTurbine2();
+    }
+    await context.read<HomeProvider>().getData(context);
+
+    final PermissionStatus status = await Permission.notification.request();
+    if (status.isGranted) {
+      // Notification permissions granted
+      log("NOTIF GRANTED");
+    } else if (status.isDenied) {
+      // Notification permissions denied
+      log("NOTIF DENIED");
+    } else if (status.isPermanentlyDenied && Platform.isAndroid) {
+      // Notification permissions permanently denied, open app settings
+      log("NOTIF PERMANENTLY DENIED");
+      await openAppSettings();
+    }
+    requestPermission(Permission.notification);
+    await requestPermission(Permission.storage);
+    await requestPermission(Permission.manageExternalStorage);
+    await requestPermission(Permission.photos);
   }
 
   @override
@@ -210,7 +230,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                       ? 'Pilih Tanggal Awal'
                       : turbineP.endDate == null
                           ? 'Pilih Tanggal Akhir'
-                          : 'Pilih Tanggal Akhir'),
+                          : 'Silahkan Konfirmasi'),
                 ),
                 SfDateRangePicker(
                   monthCellStyle: DateRangePickerMonthCellStyle(),
@@ -240,11 +260,11 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                   initialSelectedRange:
                       PickerDateRange(turbineP.startDate, turbineP.endDate),
                   // onCancel: () async {
-                  //   await turbineP.setStartDate(null);
-                  //   await turbineP.setEndDate(null);
-                  //   await turbineP.clearData();
-                  //   sheetState(() {});
-                  //   setState(() {});
+                  // await turbineP.setStartDate(null);
+                  // await turbineP.setEndDate(null);
+                  // await turbineP.clearData();
+                  // sheetState(() {});
+                  // setState(() {});
                   // },
                   // onSubmit: (p0) {
                   //   CusNav.nPop(context);
@@ -265,19 +285,19 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                   },
                   selectionMode: DateRangePickerSelectionMode.range,
                 ),
-                // Constant.xSizedBox16,
-                // SizedBox(
-                //   height: 50,
-                //   child: CustomButton.mainButton(
-                //     "View Result",
-                //     () {
-                //       Navigator.pop(context);
-                //       turbineP.next2 = null;
-                //       pagingC2.refresh();
-                //     },
-                //     textStyle: TextStyle(fontSize: 14, color: Colors.white),
-                //   ),
-                // ),
+                Constant.xSizedBox16,
+                SizedBox(
+                  height: 50,
+                  child: CustomButton.mainButton(
+                    "Konfirmasi",
+                    () {
+                      CusNav.nPop(context);
+                      turbineP.next = null;
+                      pagingC.refresh();
+                    },
+                    textStyle: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                ),
               ],
             );
           },
@@ -1158,7 +1178,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                         onTap: () async {
                           if (tabController.index == 1) {
                             await CustomContainer.showModalBottomScroll(
-                              initialChildSize: 0.72,
+                              initialChildSize: 0.85,
                               context: context,
                               child: filterAllWidget(),
                             );

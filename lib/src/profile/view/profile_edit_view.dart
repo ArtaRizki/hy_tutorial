@@ -213,7 +213,7 @@ class _ProfileEditViewState extends BaseState<ProfileEditView> {
       backgroundColor: Colors.white,
       appBar: CustomAppBar.appBar(
         context,
-        "Informasi Akun",
+        widget.isChangePass ? "Keamanan Akun" : "Informasi Akun",
         elevation: 1,
         shadowColor: Colors.black54,
       ),

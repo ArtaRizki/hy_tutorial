@@ -59,7 +59,7 @@ void main() {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String initialRoute;
 
-    if (kDebugMode) { 
+    if (kDebugMode) {
       log("[Bearer Token]");
       log(prefs.getString(Constant.kSetPrefToken) ?? "");
       log("[/Bearer Token]");

@@ -245,6 +245,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
         radiusTypeC.text = data.RadiusType == 'meter' ? 'M' : 'KM';
         if (radiusType == '') radiusType = 'meter';
       }
+    } else {
+      isActive = false;
+      active = 'non_aktif';
+      radiusStatus = false;
     }
     notifyListeners();
   }
@@ -302,6 +306,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
     bool isEdit = false,
     bool back = false,
     bool withLoading = false,
+    bool isPopup = true,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (withLoading) loading(true);
@@ -337,8 +342,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
       if (withLoading) loading(false);
-      await Utils.showSuccess(msg: model.message);
-      await Future.delayed(Duration(seconds: 2));
+      if (isPopup) {
+        await Utils.showSuccess(msg: model.message);
+        await Future.delayed(Duration(seconds: 2));
+      }
       next = null;
       if (!isEdit || back) {
         final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
@@ -516,6 +523,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
     bool back = false,
     String? pltaId,
     bool withLoading = true,
+    bool isPopup = true,
   }) async {
     try {
       if (withLoading) loading(true);
@@ -555,8 +563,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
           pltaDetailModel = PltaDetailModel.fromJson(jsonDecode(response.body));
           notifyListeners();
         }
-        await Utils.showSuccess(msg: model.message);
-        await Future.delayed(Duration(seconds: 2));
+        if (isPopup) {
+          await Utils.showSuccess(msg: model.message);
+          await Future.delayed(Duration(seconds: 2));
+        }
         next = null;
         if (withLoading) loading(false);
         if (back) {

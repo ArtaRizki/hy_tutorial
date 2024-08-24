@@ -39,7 +39,6 @@ class HomeProvider extends BaseController with ChangeNotifier {
     dashboardAdminModel = DashboardAdminModel();
     userListModel = UserListModel();
     await fetchDashboard(withLoading: false);
-    await context.read<ProfileProvider>().fetchProfile(withLoading: false);
     await fetchUserList(withLoading: false);
   }
 

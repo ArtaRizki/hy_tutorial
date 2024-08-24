@@ -532,6 +532,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                               isEdit: true,
                               back: false,
                               withLoading: false,
+                              isPopup: false,
                               pltaId: pltaDataP.Data?.Id ?? '',
                             );
                             await dataP.sendPltaUnit(context,

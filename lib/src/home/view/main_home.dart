@@ -7,6 +7,7 @@ import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
+import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
 import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
@@ -48,7 +49,7 @@ class _MainHomeState extends State<MainHome> {
   }
 
   setPermission() async {
-    requestPermission(Permission.notification);
+    await requestPermission(Permission.notification);
     await requestPermission(Permission.storage);
     await requestPermission(Permission.manageExternalStorage);
     await requestPermission(Permission.photos);
@@ -193,11 +194,16 @@ class _MainHomeState extends State<MainHome> {
           unselectedItemColor: Constant.textHintColor2,
           currentIndex: currentIndex,
           onTap: (index) async {
+            final turbineP = context.read<TurbineProvider>();
+            final pltaP = context.read<PltaProvider>();
+            pltaP.searchC.clear();
+            turbineP.clearData();
+            turbineP.turbineSearchC.clear();
+            FocusManager.instance.primaryFocus?.unfocus();
             if (index == 2) {
               await showSheet();
               setState(() => currentIndex = 0);
             } else {
-              final turbineP = context.read<TurbineProvider>();
               turbineP.setStartDate(null);
               turbineP.startDateC.clear();
               turbineP.setEndDate(null);

@@ -1219,7 +1219,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
               selectedPlta = v.Id ?? '0';
               pltaC.text = v.Name ?? '';
               loading(false);
-            } else if (distance >= (radius ?? 0) && configStatus == true) {
+            } else if (distance <= (radius ?? 0) && configStatus == true) {
               log("DALAM JANGKAUAN");
 
               selectedPltaModel = v;

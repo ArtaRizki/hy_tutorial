@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:hy_tutorial/common/base/base_state.dart';
+import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textField.dart';
@@ -34,8 +35,9 @@ class _TurbineViewState extends BaseState<TurbineView> {
 
   getData() async {
     final turbineP = context.read<TurbineProvider>();
-    turbineP.setStartDate(null);
-    turbineP.setEndDate(null);
+    turbineP.clearData();
+    turbineP.turbineSearchC.clear();
+    setState(() {});
     if ((turbineP.pagingController.itemList ?? []).isEmpty) {
       turbineP.getTurbine();
     } else {
@@ -148,9 +150,9 @@ class _TurbineViewState extends BaseState<TurbineView> {
                     ),
                   ),
                   controller: turbineP.dateRangePickerController,
-                  showActionButtons: true,
-                  cancelText: 'Batal',
-                  confirmText: 'Konfirmasi',
+                  showActionButtons: false,
+                  // cancelText: 'Batal',
+                  // confirmText: 'Konfirmasi',
                   view: DateRangePickerView.month,
                   backgroundColor: Colors.white,
                   monthViewSettings: DateRangePickerMonthViewSettings(
@@ -163,18 +165,18 @@ class _TurbineViewState extends BaseState<TurbineView> {
                           backgroundColor: Colors.white)),
                   initialSelectedRange:
                       PickerDateRange(turbineP.startDate, turbineP.endDate),
-                  onCancel: () async {
-                    await turbineP.setStartDate(null);
-                    await turbineP.setEndDate(null);
-                    await turbineP.clearData();
-                    sheetState(() {});
-                    setState(() {});
-                  },
-                  onSubmit: (p0) {
-                    CusNav.nPop(context);
-                    turbineP.next = null;
-                    context.read<TurbineProvider>().pagingController.refresh();
-                  },
+                  // onCancel: () async {
+                  // await turbineP.setStartDate(null);
+                  // await turbineP.setEndDate(null);
+                  // await turbineP.clearData();
+                  // sheetState(() {});
+                  // setState(() {});
+                  // },
+                  // onSubmit: (p0) {
+                  //   CusNav.nPop(context);
+                  //   turbineP.next = null;
+                  //   pagingC.refresh();
+                  // },
                   onSelectionChanged:
                       (dateRangePickerSelectionChangedArgs) async {
                     if (dateRangePickerSelectionChangedArgs.value
@@ -189,19 +191,19 @@ class _TurbineViewState extends BaseState<TurbineView> {
                   },
                   selectionMode: DateRangePickerSelectionMode.range,
                 ),
-                // Constant.xSizedBox16,
-                // SizedBox(
-                //   height: 50,
-                //   child: CustomButton.mainButton(
-                //     "View Result",
-                //     () {
-                //       Navigator.pop(context);
-                //       turbineP.next = null;
-                //       pagingC.refresh();
-                //     },
-                //     textStyle: TextStyle(fontSize: 14, color: Colors.white),
-                //   ),
-                // ),
+                Constant.xSizedBox16,
+                SizedBox(
+                  height: 50,
+                  child: CustomButton.mainButton(
+                    "Konfirmasi",
+                    () {
+                      CusNav.nPop(context);
+                      turbineP.next = null;
+                      pagingC.refresh();
+                    },
+                    textStyle: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                ),
               ],
             );
           },
@@ -220,11 +222,14 @@ class _TurbineViewState extends BaseState<TurbineView> {
               flex: 3,
               child: InkWell(
                 onTap: () async {
-                  CustomContainer.showModalBottomScroll(
-                    initialChildSize: 0.8,
+                  await CustomContainer.showModalBottomScroll(
+                    initialChildSize: 0.85,
                     context: context,
                     child: filterAllWidget(),
                   );
+
+                  turbineP.next = null;
+                  pagingC.refresh();
                 },
                 child: Container(
                   height: 50,

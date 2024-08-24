@@ -7,6 +7,7 @@ import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
 import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_container.dart';
 import '../../../common/helper/constant.dart';
@@ -30,6 +31,7 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
   int currentIndex = 0;
   late TabController tabController;
   late TabController tabController1;
+  bool isAdmin = false;
   @override
   void initState() {
     getData();
@@ -48,6 +50,10 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
       log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
     });
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+
     await p.fetchTurbineDetail(widget.id);
   }
 
@@ -788,49 +794,50 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
           color: Constant.primaryColor,
           foregroundColor: Colors.white,
           action: [
-            InkWell(
-              onTap: () async {
-                Utils.showYesNoDialogWithWarning(
-                    context: context,
-                    title: "Konfirmasi Penghapusan",
-                    desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
-                    yesCallback: () async {
-                      Navigator.pop(context);
-                      await context
-                          .read<DataAddProvider>()
-                          .deleteTurbine(context, id: data?.id ?? "0");
-      
-                      getData();
-                      Navigator.pop(context, true);
-                      CusNav.nPushReplace(context, TurbineView());
-                    },
-                    noCallback: () async {
-                      Navigator.pop(context);
-                    });
-              },
-              child: Container(
-                margin: EdgeInsets.only(right: 20),
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Constant.redColor,
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(
-                      Icons.delete_forever_rounded,
-                      size: 15,
-                    ),
-                    Text(
-                      "Hapus",
-                      style: Constant.iPrimaryMedium12
-                          .copyWith(color: Colors.white),
-                    ),
-                  ],
+            if (isAdmin)
+              InkWell(
+                onTap: () async {
+                  Utils.showYesNoDialogWithWarning(
+                      context: context,
+                      title: "Konfirmasi Penghapusan",
+                      desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
+                      yesCallback: () async {
+                        Navigator.pop(context);
+                        await context
+                            .read<DataAddProvider>()
+                            .deleteTurbine(context, id: data?.id ?? "0");
+
+                        getData();
+                        Navigator.pop(context, true);
+                        CusNav.nPushReplace(context, TurbineView());
+                      },
+                      noCallback: () async {
+                        Navigator.pop(context);
+                      });
+                },
+                child: Container(
+                  margin: EdgeInsets.only(right: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Constant.redColor,
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.delete_forever_rounded,
+                        size: 15,
+                      ),
+                      Text(
+                        "Hapus",
+                        style: Constant.iPrimaryMedium12
+                            .copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         body: ListView(

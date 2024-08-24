@@ -32,6 +32,8 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
   int currentIndex = 0;
   late TabController tabController;
   late TabController tabController1;
+  bool isAdmin = false;
+
   @override
   void initState() {
     getData();
@@ -50,6 +52,8 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
       log("INDEX ACTIVE : ${tabController.index}");
       setState(() {});
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
   }
 
   @override
@@ -805,59 +809,60 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
             child: Icon(Icons.keyboard_arrow_left),
           ),
           action: [
-            InkWell(
-              onTap: () async {
-                Utils.showYesNoDialogWithWarning(
-                    context: context,
-                    title: "Konfirmasi Penghapusan",
-                    desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
-                    yesCallback: () async {
-                      Navigator.pop(context);
-                      await context
-                          .read<DataAddProvider>()
-                          .deleteTurbine(context, id: data?.id ?? "0");
-      
-                      getData();
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      final isAdmin =
-                          prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
-                      if (isAdmin) {
-                        // await CusNav.nPopUntil(context,
-                        //     predicate: (route) => route is MainHome);
-                        CusNav.nPop(context);
-                        CusNav.nPush(context, TurbineView());
-                      } else {
-                        CusNav.nPushAndRemoveUntil(context, HomeView());
-                      }
-                    },
-                    noCallback: () async {
-                      Navigator.pop(context);
-                    });
-              },
-              child: Container(
-                margin: EdgeInsets.only(right: 20),
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Constant.redColor,
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(
-                      Icons.delete_forever_rounded,
-                      size: 15,
-                    ),
-                    Text(
-                      "Hapus",
-                      style:
-                          Constant.iPrimaryMedium12.copyWith(color: Colors.white),
-                    ),
-                  ],
+            if (isAdmin)
+              InkWell(
+                onTap: () async {
+                  Utils.showYesNoDialogWithWarning(
+                      context: context,
+                      title: "Konfirmasi Penghapusan",
+                      desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
+                      yesCallback: () async {
+                        Navigator.pop(context);
+                        await context
+                            .read<DataAddProvider>()
+                            .deleteTurbine(context, id: data?.id ?? "0");
+
+                        getData();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        final isAdmin =
+                            prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+                        if (isAdmin) {
+                          // await CusNav.nPopUntil(context,
+                          //     predicate: (route) => route is MainHome);
+                          CusNav.nPop(context);
+                          CusNav.nPush(context, TurbineView());
+                        } else {
+                          CusNav.nPushAndRemoveUntil(context, HomeView());
+                        }
+                      },
+                      noCallback: () async {
+                        Navigator.pop(context);
+                      });
+                },
+                child: Container(
+                  margin: EdgeInsets.only(right: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Constant.redColor,
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.delete_forever_rounded,
+                        size: 15,
+                      ),
+                      Text(
+                        "Hapus",
+                        style: Constant.iPrimaryMedium12
+                            .copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         body: ListView(
@@ -909,8 +914,8 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
                           alignment: Alignment.centerRight,
                           child: Container(
                             margin: EdgeInsets.only(top: 8),
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 2),
                             decoration: BoxDecoration(
                               color: Colors.white24,
                               borderRadius: BorderRadius.circular(24),
@@ -959,7 +964,8 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
                                   ),
                                   Constant.xSizedBox4,
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Expanded(
                                         flex: 8,
@@ -1008,7 +1014,9 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    tabController.index == 2 ? 'Grafik Resultan' : 'Grafik Shaft',
+                    tabController.index == 2
+                        ? 'Grafik Resultan'
+                        : 'Grafik Shaft',
                     style: TextStyle(
                       color: Constant.textColorBlack2,
                       fontWeight: FontWeight.bold,
@@ -1047,10 +1055,11 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                         decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 1, color: Constant.primaryColor),
+                          border: Border.all(
+                              width: 1, color: Constant.primaryColor),
                           borderRadius: BorderRadius.circular(7),
                         ),
                         child: InkWell(
@@ -1058,7 +1067,8 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
                             if (data?.id != null) {
                               await context
                                   .read<DataAddProvider>()
-                                  .downloadTurbine(context, id: data?.id ?? '-');
+                                  .downloadTurbine(context,
+                                      id: data?.id ?? '-');
                             } else {
                               await Utils.showFailed(
                                   msg: 'ID Laporan tidak diketahui');

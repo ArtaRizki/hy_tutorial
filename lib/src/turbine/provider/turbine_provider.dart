@@ -376,7 +376,7 @@ class TurbineProvider extends BaseController with ChangeNotifier {
     descending = false;
     towerName = false;
     createdAt = false;
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<TurbineCreateModel> fetchTurbineDetail(int id) async {
