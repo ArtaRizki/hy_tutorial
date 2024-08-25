@@ -1,30 +1,30 @@
 // To parse this JSON data, do
 //
-//     final turbineCreateModel = turbineCreateModelFromJson(jsonString);
+//     final turbineDataModel = turbineDataModelFromJson(jsonString);
 
 import 'dart:convert';
 
-TurbineCreateModel turbineCreateModelFromJson(String str) =>
-    TurbineCreateModel.fromJson(json.decode(str));
+TurbineDataModel turbineDataModelFromJson(String str) =>
+    TurbineDataModel.fromJson(json.decode(str));
 
-String? turbineCreateModelToJson(TurbineCreateModel data) =>
+String? turbineDataModelToJson(TurbineDataModel data) =>
     json.encode(data.toJson());
 
-class TurbineCreateModel {
+class TurbineDataModel {
   bool? success;
   int? statusCode;
   String? message;
   Data? data;
 
-  TurbineCreateModel({
+  TurbineDataModel({
     this.success,
     this.statusCode,
     this.message,
     this.data,
   });
 
-  factory TurbineCreateModel.fromJson(Map<String, dynamic> json) =>
-      TurbineCreateModel(
+  factory TurbineDataModel.fromJson(Map<String, dynamic> json) =>
+      TurbineDataModel(
         success: json["Success"],
         statusCode: json["StatusCode"],
         message: json["Message"],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 
 import '../helper/constant.dart';
 
@@ -28,7 +29,7 @@ class CustomAppBar {
       leading: isLeading
           ? leading ??
               IconButton(
-                  onPressed: onBack ?? () => Navigator.pop(context),
+                  onPressed: onBack ?? () => CusNav.nPop(context),
                   icon: Icon(Icons.keyboard_arrow_left))
           : null,
       title: Text(
@@ -83,7 +84,7 @@ class CustomAppBar {
       leading: isLeading
           ? leading ??
               IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => CusNav.nPop(context),
                   icon: Icon(Icons.keyboard_arrow_left))
           : null,
       title: title,

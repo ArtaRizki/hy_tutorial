@@ -19,7 +19,7 @@ import '../../../utils/utils.dart';
 import '../../shaft/view/shaft_view.dart';
 import '../model/create_data_param.dart';
 import '../../plta/model/plta_model.dart';
-import '../../turbine/model/turbine_create_model.dart';
+import '../../turbine/model/turbine_data_model.dart';
 import '../../../common/base/base_controller.dart';
 import '../../../common/helper/constant.dart';
 import '../../../common/component/custom_textfield.dart';
@@ -156,20 +156,20 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  TurbineCreateModel _turbineDetailModel = TurbineCreateModel();
-  TurbineCreateModel get turbineDetailModel => this._turbineDetailModel;
-  set turbineDetailModel(TurbineCreateModel value) =>
+  TurbineDataModel _turbineDetailModel = TurbineDataModel();
+  TurbineDataModel get turbineDetailModel => this._turbineDetailModel;
+  set turbineDetailModel(TurbineDataModel value) =>
       this._turbineDetailModel = value;
 
-  Future<TurbineCreateModel> fetchTurbineDetail(String id) async {
+  Future<TurbineDataModel> fetchTurbineDetail(String id) async {
     loading(true);
     try {
-      turbineDetailModel = TurbineCreateModel();
+      turbineDetailModel = TurbineDataModel();
       clearDetailData();
       final response = await get(Constant.BASE_API_FULL + '/turbines/$id');
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        final model = TurbineCreateModel.fromJson(jsonDecode(response.body));
+        final model = TurbineDataModel.fromJson(jsonDecode(response.body));
         turbineDetailModel = model;
         notifyListeners();
         setDataChartDetail();
@@ -178,29 +178,29 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       } else {
         final message = jsonDecode(response.body)["Message"];
         loading(false);
-        return TurbineCreateModel();
+        return TurbineDataModel();
         // throw Exception(message);
       }
     } catch (e) {
       loading(false);
       Utils.showFailed(msg: "Gagal Mendapatkan Data Turbine");
-      return TurbineCreateModel();
+      return TurbineDataModel();
     }
   }
 
-  TurbineCreateModel _turbineLatestModel = TurbineCreateModel();
-  TurbineCreateModel get turbineLatestModel => this._turbineLatestModel;
-  set turbineLatestModel(TurbineCreateModel value) =>
+  TurbineDataModel _turbineLatestModel = TurbineDataModel();
+  TurbineDataModel get turbineLatestModel => this._turbineLatestModel;
+  set turbineLatestModel(TurbineDataModel value) =>
       this._turbineLatestModel = value;
 
-  Future<TurbineCreateModel> fetchTurbineLatest() async {
+  Future<TurbineDataModel> fetchTurbineLatest() async {
     loading(true);
-    turbineLatestModel = TurbineCreateModel();
+    turbineLatestModel = TurbineDataModel();
     clearDetailData();
     final response = await get(Constant.BASE_API_FULL + '/turbines/latest');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = TurbineCreateModel.fromJson(jsonDecode(response.body));
+      final model = TurbineDataModel.fromJson(jsonDecode(response.body));
       turbineLatestModel = model;
       notifyListeners();
       setDataChartLatest();
@@ -209,15 +209,15 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
-      return TurbineCreateModel();
+      return TurbineDataModel();
       // throw Exception(message);
     }
   }
 
-  TurbineCreateModel _turbineCreateModel = TurbineCreateModel();
-  TurbineCreateModel get turbineCreateModel => this._turbineCreateModel;
-  set turbineCreateModel(TurbineCreateModel value) =>
-      this._turbineCreateModel = value;
+  TurbineDataModel _turbineDataModel = TurbineDataModel();
+  TurbineDataModel get turbineDataModel => this._turbineDataModel;
+  set turbineDataModel(TurbineDataModel value) =>
+      this._turbineDataModel = value;
 
   CreateDataParam? _createDataParam = CreateDataParam();
   CreateDataParam? get createDataParam => this._createDataParam;
@@ -416,17 +416,17 @@ class DataAddProvider extends BaseController with ChangeNotifier {
 
   setDataChart() {
     // AC
-    final acData = turbineCreateModel.data?.chart?.ac;
-    final acCrockness = turbineCreateModel.data?.acCrockedness;
-    final bdData = turbineCreateModel.data?.chart?.bd;
-    final bdCrockness = turbineCreateModel.data?.bdCrockedness;
-    final upperData = turbineCreateModel.data?.chart?.upper;
-    upperScale = turbineCreateModel.data?.chart?.upperScale?.abs();
-    final upperCrockness = turbineCreateModel.data?.totalCrockedness;
-    boltScale = turbineCreateModel.data?.torqueCalculation?.scale;
-    var boltsData = turbineCreateModel.data?.torqueCalculation?.details;
+    final acData = turbineDataModel.data?.chart?.ac;
+    final acCrockness = turbineDataModel.data?.acCrockedness;
+    final bdData = turbineDataModel.data?.chart?.bd;
+    final bdCrockness = turbineDataModel.data?.bdCrockedness;
+    final upperData = turbineDataModel.data?.chart?.upper;
+    upperScale = turbineDataModel.data?.chart?.upperScale?.abs();
+    final upperCrockness = turbineDataModel.data?.totalCrockedness;
+    boltScale = turbineDataModel.data?.torqueCalculation?.scale;
+    var boltsData = turbineDataModel.data?.torqueCalculation?.details;
     var torqueSuggestionsData =
-        turbineCreateModel.data?.torqueCalculation?.torqueSuggestions;
+        turbineDataModel.data?.torqueCalculation?.torqueSuggestions;
     if (acData != null && acData.upper != null)
       acUpperTemp = acData.upper!
           .split('|')
@@ -1023,7 +1023,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  Future<TurbineCreateModel> createTurbines() async {
+  Future<TurbineDataModel> createTurbines() async {
     loading(true);
     createDataParam = CreateDataParam(
         Title: titleC.text,
@@ -1078,12 +1078,12 @@ class DataAddProvider extends BaseController with ChangeNotifier {
         body: jsonDecode(param));
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      turbineCreateModel = TurbineCreateModel();
+      turbineDataModel = TurbineDataModel();
       clearDetailData();
       prefs.remove(Constant.kSetPrefParamCreateTurbine);
       createDataParam = CreateDataParam();
-      final model = TurbineCreateModel.fromJson(jsonDecode(response.body));
-      turbineCreateModel = model;
+      final model = TurbineDataModel.fromJson(jsonDecode(response.body));
+      turbineDataModel = model;
       notifyListeners();
       setDataChart();
       loading(false);
@@ -1096,7 +1096,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       await Utils.showFailed(msg: model.message ?? "Gagal");
       await Future.delayed(Duration(seconds: 2));
       throw Exception(message);
-      // return TurbineCreateModel();
+      // return TurbineDataModel();
     }
   }
 

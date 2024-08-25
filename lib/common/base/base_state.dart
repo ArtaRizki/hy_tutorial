@@ -3,6 +3,7 @@ import 'dart:async';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import '../library/firebase_manager.dart';
 import 'base_controller.dart';
@@ -19,7 +20,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
   }
 
   void pop() {
-    Navigator.pop(context);
+    CusNav.nPop(context);
   }
 
   @override

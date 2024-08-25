@@ -25,11 +25,11 @@ class _BoardingViewState extends State<BoardingView> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               SizedBox(height: 40),
-              Container(
+              SizedBox(
                 width: 164,
                 height: 46,
                 child: Image.asset(
-                  'assets/images/img_splashscreen.png',
+                  Assets.imagesImgSplashscreen,
                   width: 164,
                   height: 46,
                 ),

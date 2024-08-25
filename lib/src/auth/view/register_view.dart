@@ -47,11 +47,11 @@ class RegisterViewState extends State<RegisterView> {
               SizedBox(height: 20),
               Align(
                 alignment: Alignment.center,
-                child: Container(
+                child: SizedBox(
                   width: 164,
                   height: 46,
                   child: Image.asset(
-                    'assets/images/img_splashscreen.png',
+                    Assets.imagesImgSplashscreen,
                     width: 164,
                     height: 46,
                   ),

@@ -999,14 +999,13 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
                   ),
                   Constant.xSizedBox12,
                   toggleTab(),
-                  Container(
-                      child: tabController.index == 2
-                          ? UpperChartView()
-                          : tabController.index == 3
-                              ? BoltChartView()
-                              : SampleChartView(
-                                  activeIndex: tabController.index,
-                                  typePage: 'detail')),
+                  tabController.index == 2
+                      ? UpperChartView()
+                      : tabController.index == 3
+                          ? BoltChartView()
+                          : SampleChartView(
+                              activeIndex: tabController.index,
+                              typePage: 'detail'),
                 ],
               ),
             ),
@@ -1064,13 +1063,11 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
                   Constant.xSizedBox12,
                   toggleTab1(),
                   Constant.xSizedBox16,
-                  Container(
-                    child: tabController1.index == 2
-                        ? turbineActive()
-                        : tabController1.index == 1
-                            ? clutchActive()
-                            : upperActive(),
-                  ),
+                  tabController1.index == 2
+                      ? turbineActive()
+                      : tabController1.index == 1
+                          ? clutchActive()
+                          : upperActive(),
                   Constant.xSizedBox16,
                   acBdActive(),
                   Constant.xSizedBox18,

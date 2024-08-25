@@ -51,255 +51,211 @@ class DataAddViewState extends BaseState<DataAddView> {
 
     Widget detailUnit() {
       return CustomContainer.mainCard(
-          margin: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Detail Unit", style: Constant.iBlackMedium16),
-              Constant.xSizedBox8,
-              Divider(
-                thickness: 0.5,
-                color: Colors.grey.withOpacity(0.5),
+        margin: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Detail Unit", style: Constant.iBlackMedium16),
+            Constant.xSizedBox8,
+            Divider(
+              thickness: 0.5,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            Constant.xSizedBox8,
+            CustomTextField.borderTextField(
+              required: false,
+              controller: p.titleC,
+              textInputType: TextInputType.name,
+              labelText: "Nama File",
+              hintText: "Nama File",
+              onChanged: (p0) {
+                setState(() {});
+              },
+            ),
+            Constant.xSizedBox16,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: [
+                  Text(
+                    "Nama PLTA",
+                    style: Constant.primaryTextStyle
+                        .copyWith(fontSize: 14, fontWeight: Constant.medium),
+                  ),
+                ],
               ),
-              Constant.xSizedBox8,
-              CustomTextField.borderTextField(
-                required: false,
-                controller: p.titleC,
-                textInputType: TextInputType.name,
-                labelText: "Nama File",
-                hintText: "Nama File",
-                onChanged: (p0) {
+            ),
+            DropDownSearchField<PltaModelData?>(
+              displayAllSuggestionWhenTap: true,
+              textFieldConfiguration: TextFieldConfiguration(
+                controller: p.pltaC,
+                autofocus: false,
+                onChanged: (value) {
                   setState(() {});
                 },
-              ),
-              Constant.xSizedBox16,
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  children: [
-                    Text(
-                      "Nama PLTA",
-                      style: Constant.primaryTextStyle
-                          .copyWith(fontSize: 14, fontWeight: Constant.medium),
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.zero,
+                  hintText: "Pilih PLTA",
+                  isDense: false,
+                  hintStyle: TextStyle(color: Constant.textHintColor2),
+                  filled: true,
+                  enabled: true,
+                  fillColor: Colors.white,
+                  suffixIconColor: Constant.grayColor,
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      if (p.pltaC.text.isNotEmpty) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        p.pltaC.text = '';
+                        p.selectedPlta = null;
+                        setState(() {});
+                      }
+                    },
+                    child: Icon(
+                      p.pltaC.text.isEmpty
+                          ? Icons.keyboard_arrow_down
+                          : Icons.close,
+                      size: 24,
                     ),
-                  ],
-                ),
-              ),
-              // if ((pltaList ?? []).isNotEmpty)
-              DropDownSearchField<PltaModelData?>(
-                displayAllSuggestionWhenTap: true,
-                textFieldConfiguration: TextFieldConfiguration(
-                  controller: p.pltaC,
-                  autofocus: false,
-                  // style: DefaultTextStyle.of(context).style.copyWith(
-                  //   fontStyle: FontStyle.italic
-                  // ),
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.zero,
-                    hintText: "Pilih PLTA",
-                    isDense: false,
-                    hintStyle: TextStyle(color: Constant.textHintColor2),
-                    filled: true,
-                    enabled: true,
-                    fillColor: Colors.white,
-                    suffixIconColor: Constant.grayColor,
-                    suffixIcon: InkWell(
-                      onTap: () {
-                        if (p.pltaC.text.isNotEmpty) {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          p.pltaC.text = '';
-                          p.selectedPlta = null;
-                          setState(() {});
-                        }
-                      },
-                      child: Icon(
-                        p.pltaC.text.isEmpty
-                            ? Icons.keyboard_arrow_down
-                            : Icons.close,
-                        size: 24,
-                      ),
+                  ),
+                  hoverColor: Constant.primaryColor,
+                  focusColor: Constant.primaryColor,
+                  prefix: SizedBox(width: 12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      width: 0.5,
+                      color: Constant.borderSearchColor,
+                      style: BorderStyle.solid,
                     ),
-                    hoverColor: Constant.primaryColor,
-                    focusColor: Constant.primaryColor,
-                    prefix: SizedBox(width: 12),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 0.5,
-                        color: Constant.borderSearchColor,
-                        style: BorderStyle.solid,
-                      ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      width: 0.5,
+                      color: Constant.borderSearchColor,
+                      style: BorderStyle.solid,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 0.5,
-                        color: Constant.borderSearchColor,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Constant.primaryColor,
-                        style: BorderStyle.solid,
-                      ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      width: 1,
+                      color: Constant.primaryColor,
+                      style: BorderStyle.solid,
                     ),
                   ),
                 ),
-                onSuggestionSelected: p.onChangedPLTA2,
-                suggestionsCallback: (pattern) async =>
-                    await p.searchPlta(pattern),
-                itemBuilder: (context, suggestion) =>
-                    ListTile(title: Text(suggestion?.Name ?? '')),
               ),
-              Constant.xSizedBox16,
-              // CustomDropdown.searchDropdown(
-              //   controller: pltaC,
-              //   iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-              //   contentPadding: EdgeInsets.all(2),
-              //   padding: EdgeInsets.zero,
-              //   borderColor: Constant.primaryColor,
-              //   labelText: 'Nama PLTA',
-              //   selectedItem: selectedPlta,
-              //   hintText: "Pilih PLTA",
-              //   list: (pltaList ?? []).map((e) => e?.Name ?? '').toList(),
-              //   onChanged: onChangedPLTA,
-              // ),
-              // Constant.xSizedBox16,
-            ],
-          ));
+              onSuggestionSelected: p.onChangedPLTA2,
+              suggestionsCallback: (pattern) async =>
+                  await p.searchPlta(pattern),
+              itemBuilder: (context, suggestion) =>
+                  ListTile(title: Text(suggestion?.Name ?? '')),
+            ),
+            Constant.xSizedBox16,
+          ],
+        ),
+      );
     }
 
     Widget detailBaut() {
       return CustomContainer.mainCard(
-          margin: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Detail Baut", style: Constant.iBlackMedium16),
-              Constant.xSizedBox8,
-              Divider(
-                thickness: 0.5,
-                color: Colors.grey.withOpacity(0.5),
-              ),
-              Constant.xSizedBox8,
-              CustomDropdown.searchDropdown(
-                required: false,
-                controller: p.boltQtyC,
-                iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                contentPadding: EdgeInsets.all(2),
-                borderColor: Constant.primaryColor,
-                labelText: "Jumlah Baut",
-                hintText: "Jumlah Baut",
-                selectedItem: p.selectedBolt,
-                // suffixIcon: Padding(
-                //   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                //   child: Text(
-                //     'Bolt',
-                //     textAlign: TextAlign.right,
-                //     style: TextStyle(
-                //         color: Constant.redColor, fontWeight: FontWeight.w400),
-                //   ),
-                // ),
-                list: p.boltList.map((e) => e).toList(),
-                onChanged: (val) {
-                  p.selectedBolt = val;
-                  // notifyListeners();
-                },
-              ),
-              // CustomTextField.borderTextField(
-              //   required: false,
-              //   controller: boltQtyC,
-              //   textInputType: TextInputType.number,
-              //   inputFormatters: [
-              //     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
-              //     FilteringTextInputFormatter.digitsOnly
-              //   ],
-              //   labelText: "Jumlah Baut",
-              //   hintText: "Jumlah Baut",
-              //   suffixIcon: Padding(
-              //     padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
-              //     child: Text(
-              //       'Bolt',
-              //       textAlign: TextAlign.right,
-              //       style: TextStyle(color: Constant.redColor),
-              //     ),
-              //   ),
-              // ),
-              Constant.xSizedBox16,
-              CustomTextField.borderTextField(
-                required: false,
-                controller: p.currentTorqueC,
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                labelText: "Torsi Terkini",
-                hintText: "Torsi Terkini",
-                onChanged: p.onChangedCurrentTorque,
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
-                  child: Text(
-                    'BAR/Psi/Nm',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(color: Colors.black),
-                  ),
+        margin: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Detail Baut", style: Constant.iBlackMedium16),
+            Constant.xSizedBox8,
+            Divider(
+              thickness: 0.5,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            Constant.xSizedBox8,
+            CustomDropdown.searchDropdown(
+              required: false,
+              controller: p.boltQtyC,
+              iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+              contentPadding: EdgeInsets.all(2),
+              borderColor: Constant.primaryColor,
+              labelText: "Jumlah Baut",
+              hintText: "Jumlah Baut",
+              selectedItem: p.selectedBolt,
+              list: p.boltList.map((e) => e).toList(),
+              onChanged: (val) {
+                p.selectedBolt = val;
+              },
+            ),
+            Constant.xSizedBox16,
+            CustomTextField.borderTextField(
+              required: false,
+              controller: p.currentTorqueC,
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
+                FilteringTextInputFormatter.digitsOnly
+              ],
+              labelText: "Torsi Terkini",
+              hintText: "Torsi Terkini",
+              onChanged: p.onChangedCurrentTorque,
+              suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+                child: Text(
+                  'BAR/Psi/Nm',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
-              Constant.xSizedBox16,
-              CustomTextField.borderTextField(
-                required: false,
-                controller: p.maxTorqueC,
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                labelText: "Max Torsi",
-                hintText: "Max Torsi",
-                onChanged: p.onChangedMaxTorque,
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
-                  child: Text(
-                    'BAR/Psi/Nm',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(color: Colors.black),
-                  ),
+            ),
+            Constant.xSizedBox16,
+            CustomTextField.borderTextField(
+              required: false,
+              controller: p.maxTorqueC,
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
+                FilteringTextInputFormatter.digitsOnly
+              ],
+              labelText: "Max Torsi",
+              hintText: "Max Torsi",
+              onChanged: p.onChangedMaxTorque,
+              suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+                child: Text(
+                  'BAR/Psi/Nm',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
-              Constant.xSizedBox16,
-              CustomTextField.borderTextField(
-                required: false,
-                readOnly: true,
-                enabled: false,
-                controller: p.differenceQtyC,
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                labelText: "Jumlah Selisih",
-                hintText: "Jumlah Selisih",
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
-                  child: Text(
-                    'BAR/Psi/Nm',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(color: Colors.black),
-                  ),
+            ),
+            Constant.xSizedBox16,
+            CustomTextField.borderTextField(
+              required: false,
+              readOnly: true,
+              enabled: false,
+              controller: p.differenceQtyC,
+              textInputType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
+                FilteringTextInputFormatter.digitsOnly
+              ],
+              labelText: "Jumlah Selisih",
+              hintText: "Jumlah Selisih",
+              suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
+                child: Text(
+                  'BAR/Psi/Nm',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
-              Constant.xSizedBox16,
-            ],
-          ));
+            ),
+            Constant.xSizedBox16,
+          ],
+        ),
+      );
     }
 
     Widget detailShaft() {
@@ -398,56 +354,53 @@ class DataAddViewState extends BaseState<DataAddView> {
         elevation: 1,
         shadowColor: Colors.black54,
       ),
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: [
-                  Constant.xSizedBox12,
-                  detailUnit(),
-                  Constant.xSizedBox16,
-                  detailBaut(),
-                  Constant.xSizedBox16,
-                  detailShaft(),
-                  Constant.xSizedBox24,
-                ],
-              ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: [
+                Constant.xSizedBox12,
+                detailUnit(),
+                Constant.xSizedBox16,
+                detailBaut(),
+                Constant.xSizedBox16,
+                detailShaft(),
+                Constant.xSizedBox24,
+              ],
             ),
-            CustomContainer.mainCard(
-              radiusBorder: 0,
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-              color: Colors.white,
-              child: CustomButton.mainButton(
-                borderRadius: BorderRadius.circular(10),
-                contentPadding: EdgeInsets.symmetric(vertical: 5),
-                'Selanjutnya',
-                () {
-                  if (p.validatePage1()) {
-                    final dataP = context.read<DataAddProvider>();
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    String? msg;
-                    if (dataP.selectedBolt == null)
-                      msg = 'Harap Pilih Jumlah Baut';
-                    if (dataP.selectedPlta == null) msg = 'Harap Pilih PLTA';
-                    if (dataP.genBearingKoplingC.text.isEmpty)
-                      msg = 'Harap Isi Gen Bearing Kopling';
-                    if (dataP.koplingTurbinC.text.isEmpty)
-                      msg = 'Harap Isi Kopling Turbin';
-                    if (msg != null) {
-                      Utils.showFailed(msg: msg);
-                      return;
-                    } else {
-                      CusNav.nPush(context, DataAddTableView());
-                    }
+          ),
+          CustomContainer.mainCard(
+            radiusBorder: 0,
+            padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+            color: Colors.white,
+            child: CustomButton.mainButton(
+              borderRadius: BorderRadius.circular(10),
+              contentPadding: EdgeInsets.symmetric(vertical: 5),
+              'Selanjutnya',
+              () {
+                if (p.validatePage1()) {
+                  final dataP = context.read<DataAddProvider>();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  String? msg;
+                  if (dataP.selectedBolt == null)
+                    msg = 'Harap Pilih Jumlah Baut';
+                  if (dataP.selectedPlta == null) msg = 'Harap Pilih PLTA';
+                  if (dataP.genBearingKoplingC.text.isEmpty)
+                    msg = 'Harap Isi Gen Bearing Kopling';
+                  if (dataP.koplingTurbinC.text.isEmpty)
+                    msg = 'Harap Isi Kopling Turbin';
+                  if (msg != null) {
+                    Utils.showFailed(msg: msg);
+                    return;
+                  } else {
+                    CusNav.nPush(context, DataAddTableView());
                   }
-                },
-                enabled: p.validatePage1(),
-              ),
+                }
+              },
+              enabled: p.validatePage1(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

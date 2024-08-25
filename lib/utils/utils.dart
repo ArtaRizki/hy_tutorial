@@ -164,16 +164,13 @@ class Utils {
     EasyLoading.instance
       ..successWidget = Column(
         children: [
-          Container(
-            // margin: EdgeInsets.symmetric(vertical: 24),
-            child: Transform.scale(
-              scale: 1.2,
-              child: Lottie.asset(
-                'assets/lottie/success2.json',
-                repeat: false,
-                width: 100,
-                height: 100,
-              ),
+          Transform.scale(
+            scale: 1.2,
+            child: Lottie.asset(
+              'assets/lottie/success2.json',
+              repeat: false,
+              width: 100,
+              height: 100,
             ),
           ),
           Text("Sukses",
@@ -204,16 +201,13 @@ class Utils {
     EasyLoading.instance
       ..errorWidget = Column(
         children: [
-          Container(
-            // margin: EdgeInsets.symmetric(vertical: 24),
-            child: Transform.scale(
-              scale: 1.2,
-              child: Lottie.asset(
-                'assets/lottie/failed.json',
-                repeat: false,
-                width: 100,
-                height: 100,
-              ),
+          Transform.scale(
+            scale: 1.2,
+            child: Lottie.asset(
+              'assets/lottie/failed.json',
+              repeat: false,
+              width: 100,
+              height: 100,
             ),
           ),
           Text("Gagal",
@@ -437,7 +431,7 @@ class Utils {
       onPressed: () {
         return onClick();
       },
-      child: Container(
+      child: Padding(
         padding: EdgeInsets.all(12),
         child: Text(
           str,
@@ -502,99 +496,6 @@ class Utils {
           ),
         ),
       ),
-    );
-  }
-
-  static Future showPaketUmrohHajiChoiceDialog({
-    required BuildContext context,
-    List<Widget>? actions,
-    required VoidCallback umrohCallback,
-    required VoidCallback hajiCallback,
-  }) {
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-        actionsPadding: EdgeInsets.fromLTRB(20, 4, 20, 20),
-        contentPadding: EdgeInsets.fromLTRB(20, 5, 20, 20),
-        title: Center(
-          child: Text(
-            "Pilih Paket",
-            style: Constant.primaryTextStyle.copyWith(
-              fontWeight: Constant.bold,
-            ),
-          ),
-        ),
-        content: Material.Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Pilih paket Anda",
-                style: Constant.primaryTextStyle.copyWith(fontSize: 14)),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                InkWell(
-                  child: Column(
-                    children: [
-                      Container(
-                          child: Image.asset(
-                        'assets/icons/Paket Umroh_1.png',
-                        width: 60,
-                      )),
-                      SizedBox(height: 8),
-                      Text(
-                        'Paket Umroh',
-                        style: Constant.primaryTextStyle.copyWith(
-                            fontSize: 12, fontWeight: Constant.semibold),
-                      )
-                    ],
-                  ),
-                  onTap: umrohCallback,
-                ),
-                InkWell(
-                  child: Column(
-                    children: [
-                      Container(
-                          child: Image.asset(
-                        'assets/icons/Paket haji_1.png',
-                        width: 60,
-                      )),
-                      SizedBox(height: 8),
-                      Text(
-                        'Paket Haji',
-                        style: Constant.primaryTextStyle.copyWith(
-                            fontSize: 12, fontWeight: Constant.semibold),
-                      )
-                    ],
-                  ),
-                  onTap: hajiCallback,
-                ),
-              ],
-            )
-          ],
-        ),
-        actions: []
-        // [
-        //   Row(
-        //     children: [
-        //       Expanded(
-        //         flex: 5,
-        //           child: CustomButton.mainButton(
-        //               "Paket Umroh", umrohCallback, fontSize: 12)),
-        //       SizedBox(width: 10),
-        //       Expanded(
-        //         flex: 5,
-        //           child: CustomButton.mainButton("Paket Haji", hajiCallback)),
-        //     ],
-        //   ),
-        // ],
-        );
-
-    // show the dialog
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 

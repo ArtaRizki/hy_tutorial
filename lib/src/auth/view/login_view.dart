@@ -1,6 +1,7 @@
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_button.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textField.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
@@ -40,11 +41,11 @@ class LoginViewState extends BaseState<LoginView> {
               SizedBox(height: 20),
               Align(
                 alignment: Alignment.center,
-                child: Container(
+                child: SizedBox(
                   width: 164,
                   height: 46,
                   child: Image.asset(
-                    'assets/images/img_splashscreen.png',
+                    Assets.imagesImgSplashscreen,
                     width: 164,
                     height: 46,
                   ),
@@ -150,16 +151,9 @@ class LoginViewState extends BaseState<LoginView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Belum Punya akun?"),
-                  SizedBox(
-                    width: 5,
-                  ),
+                  SizedBox(width: 5),
                   InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RegisterView()));
-                    },
+                    onTap: () => CusNav.nPush(context, RegisterView()),
                     child: Text(
                       "Daftar",
                       style: TextStyle(

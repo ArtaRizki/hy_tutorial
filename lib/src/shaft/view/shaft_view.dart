@@ -54,31 +54,30 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final d = context.watch<DataAddProvider>();
-    final data = context.watch<DataAddProvider>().turbineCreateModel.data;
-    final shaft =
-        context.watch<DataAddProvider>().turbineCreateModel.data?.shaft;
+    final data = context.watch<DataAddProvider>().turbineDataModel.data;
+    final shaft = context.watch<DataAddProvider>().turbineDataModel.data?.shaft;
     final status =
-        context.watch<DataAddProvider>().turbineCreateModel.data?.status;
+        context.watch<DataAddProvider>().turbineDataModel.data?.status;
     final totalCrockedness = context
         .watch<DataAddProvider>()
-        .turbineCreateModel
+        .turbineDataModel
         .data
         ?.totalCrockedness;
     final upperData = context
         .watch<DataAddProvider>()
-        .turbineCreateModel
+        .turbineDataModel
         .data
         ?.detailData
         ?.upper;
     final clutchData = context
         .watch<DataAddProvider>()
-        .turbineCreateModel
+        .turbineDataModel
         .data
         ?.detailData
         ?.clutch;
     final turbineData = context
         .watch<DataAddProvider>()
-        .turbineCreateModel
+        .turbineDataModel
         .data
         ?.detailData
         ?.turbine;
@@ -916,7 +915,7 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
                               borderRadius: BorderRadius.circular(24),
                             ),
                             child: Text(
-                              '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(d.turbineCreateModel.data?.createdAt ?? '${DateTime.now()}'))}',
+                              '${DateFormat('dd/MM/yyyy  |  HH : mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(d.turbineDataModel.data?.createdAt ?? '${DateTime.now()}'))}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
@@ -1020,14 +1019,13 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
                   ),
                   Constant.xSizedBox12,
                   toggleTab(),
-                  Container(
-                      child: tabController.index == 2
-                          ? UpperChartView()
-                          : tabController.index == 3
-                              ? BoltChartView()
-                              : SampleChartView(
-                                  activeIndex: tabController.index,
-                                  typePage: 'detail')),
+                  tabController.index == 2
+                      ? UpperChartView()
+                      : tabController.index == 3
+                          ? BoltChartView()
+                          : SampleChartView(
+                              activeIndex: tabController.index,
+                              typePage: 'detail'),
                 ],
               ),
             ),
@@ -1091,13 +1089,11 @@ class _ShaftViewState extends State<ShaftView> with TickerProviderStateMixin {
                   Constant.xSizedBox12,
                   toggleTab1(),
                   Constant.xSizedBox16,
-                  Container(
-                    child: tabController1.index == 2
-                        ? turbineActive()
-                        : tabController1.index == 1
-                            ? clutchActive()
-                            : upperActive(),
-                  ),
+                  tabController1.index == 2
+                      ? turbineActive()
+                      : tabController1.index == 1
+                          ? clutchActive()
+                          : upperActive(),
                   Constant.xSizedBox16,
                   acBdActive(),
                   Constant.xSizedBox18,

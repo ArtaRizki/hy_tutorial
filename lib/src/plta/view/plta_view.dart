@@ -379,8 +379,8 @@ class _DaftarPLTANewViewState extends BaseState<DaftarPLTANewView> {
           ),
           color: Colors.white,
           foregroundColor: Constant.primaryColor),
-      body: Container(
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 50), child: kontenPLTA()),
+      body: Padding(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 50), child: kontenPLTA()),
     );
   }
 }

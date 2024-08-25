@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hy_tutorial/generated/assets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../common/helper/constant.dart';
 
@@ -44,37 +45,19 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Constant.primaryColor,
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Colors.transparent,
+        color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 200,
-              height: 200,
-              child: Image.asset(
-                'assets/images/img_splashscreen.png',
+            SizedBox(
                 width: 200,
                 height: 200,
-              ),
-            ),
-            // SizedBox(height: 180),
-            // Column(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     Text("App Name: ${AppConfig.shared.appName}"),
-            //     Text("Base URL: ${AppConfig.shared.baseUrl}"),
-            //     Text("Flavor: ${AppConfig.shared.flavor}"),
-            //     Container(
-            //         color: const Color.fromARGB(255, 156, 154, 157),
-            //         width: 70,
-            //         height: 70),
-            //     Constant.xSizedBox24,
-            //   ],
-            // )
+                child: Image.asset(Assets.imagesImgSplashscreen,
+                    width: 200, height: 200))
           ],
         ),
       ),

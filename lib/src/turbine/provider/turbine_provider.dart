@@ -9,7 +9,7 @@ import '../../../common/base/base_controller.dart';
 import '../../../common/component/custom_alert.dart';
 import '../../../common/helper/constant.dart';
 import '../../../main.dart';
-import '../model/turbine_create_model.dart';
+import '../model/turbine_data_model.dart';
 import '../model/turbine_model.dart';
 
 class TurbineProvider extends BaseController with ChangeNotifier {
@@ -379,34 +379,34 @@ class TurbineProvider extends BaseController with ChangeNotifier {
     // notifyListeners();
   }
 
-  Future<TurbineCreateModel> fetchTurbineDetail(int id) async {
+  Future<TurbineDataModel> fetchTurbineDetail(int id) async {
     loading(true);
     final response = await get(Constant.BASE_API_FULL + '/turbines/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = TurbineCreateModel.fromJson(jsonDecode(response.body));
+      final model = TurbineDataModel.fromJson(jsonDecode(response.body));
       loading(false);
       return model;
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
-      return TurbineCreateModel();
+      return TurbineDataModel();
       // throw Exception(message);
     }
   }
 
-  Future<TurbineCreateModel> createTurbine() async {
+  Future<TurbineDataModel> createTurbine() async {
     loading(true);
     final response = await post(Constant.BASE_API_FULL + '/turbines');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      final model = TurbineCreateModel.fromJson(jsonDecode(response.body));
+      final model = TurbineDataModel.fromJson(jsonDecode(response.body));
       loading(false);
       return model;
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);
-      return TurbineCreateModel();
+      return TurbineDataModel();
       // throw Exception(message);
     }
   }

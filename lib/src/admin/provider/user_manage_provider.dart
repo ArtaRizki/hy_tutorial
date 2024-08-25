@@ -1015,7 +1015,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        suffixIcon: Container(
+        suffixIcon: SizedBox(
           width: 25,
           height: 25,
           child: FittedBox(
@@ -1082,7 +1082,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       await Future.delayed(Duration(seconds: 2));
       final isAdmin = await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
 
-      // Navigator.pop(context);
+      // CusNav.nPop(context);
       CusNav.nPushAndRemoveUntil(context, MainHome(index: 1),
           arguments: isAdmin);
       clearForm();
@@ -1125,8 +1125,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
       if (!fromHome) {
-        Navigator.pop(context);
-        Navigator.pop(context);
+        CusNav.nPop(context);
+        CusNav.nPop(context);
         next = null;
         next2 = null;
         notifyListeners();
@@ -1171,7 +1171,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       await Clipboard.setData(
           ClipboardData(text: generatePasswordModel.Data?.Password ?? ''));
       CustomAlert.showSnackBar(context, 'Password berhasil disalin', false);
-      // Navigator.pop(context);
+      // CusNav.nPop(context);
     } else {
       final model = BaseResponse.from(response);
 
@@ -1195,7 +1195,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       loading(false);
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
-      Navigator.pop(context);
+      CusNav.nPop(context);
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);

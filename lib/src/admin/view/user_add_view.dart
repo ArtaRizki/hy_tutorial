@@ -1,10 +1,10 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_dropdown.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/utils/utils.dart';
@@ -164,7 +164,7 @@ class _UserAddViewState extends BaseState<UserAddView> {
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
               },
-              suffixIcon: Container(
+              suffixIcon: SizedBox(
                 width: 25,
                 height: 25,
                 child: FittedBox(
@@ -333,13 +333,13 @@ class _UserAddViewState extends BaseState<UserAddView> {
                         desc:
                             "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
                         yesCallback: () async {
-                          Navigator.pop(context);
+                          CusNav.nPop(context);
                           await context
                               .read<UserManageProvider>()
                               .deleteUser(context, id: widget.id ?? "0");
                         },
                         noCallback: () async {
-                          Navigator.pop(context);
+                          CusNav.nPop(context);
                         });
                   },
                   child: Container(
@@ -405,11 +405,11 @@ class _UserAddViewState extends BaseState<UserAddView> {
                               title: "Konfirmasi",
                               desc: "Apakah Data Anda Sudah Benar?",
                               yesCallback: () => handleTap(() async {
-                                    Navigator.pop(context);
+                                    CusNav.nPop(context);
                                     dataP.updateUser(context,
                                         id: p.userDetailModel.Data?.Id ?? "");
                                   }),
-                              noCallback: () => Navigator.pop(context));
+                              noCallback: () => CusNav.nPop(context));
                         }
                       },
                     )
@@ -425,10 +425,10 @@ class _UserAddViewState extends BaseState<UserAddView> {
                               title: "Konfirmasi",
                               desc: "Apakah Data Anda Sudah Benar?",
                               yesCallback: () => handleTap(() async {
-                                    Navigator.pop(context);
+                                    CusNav.nPop(context);
                                     dataP.addUser(context);
                                   }),
-                              noCallback: () => Navigator.pop(context));
+                              noCallback: () => CusNav.nPop(context));
                         }
                       },
                     ),

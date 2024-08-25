@@ -178,15 +178,12 @@ class _MainHomeState extends State<MainHome> {
         shape: CircularNotchedRectangle(),
         surfaceTintColor: Colors.transparent,
         notchMargin: 5,
-        // padding: EdgeInsets.only(top: 5),
         elevation: 100,
-        // color: Colors.white,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         padding: EdgeInsets.only(top: 2),
         shadowColor: Colors.black,
         height: kBottomNavigationBarHeight + 15,
         child: BottomNavigationBar(
-          // backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
           elevation: 100,
           backgroundColor: Colors.white,
           selectedFontSize: 13,
@@ -224,68 +221,82 @@ class _MainHomeState extends State<MainHome> {
               TextStyle(fontSize: 12, color: Constant.textHintColor2),
           items: [
             BottomNavigationBarItem(
-              icon: Container(
+              icon: Padding(
                 padding: EdgeInsets.only(bottom: 4),
-                width: 24,
-                height: 24,
-                child: FittedBox(
-                  child: Image.asset(
-                    currentIndex == 0
-                        ? Assets.iconsIcHomeBlue
-                        : Assets.iconsIcHome,
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: FittedBox(
+                    child: Image.asset(
+                      currentIndex == 0
+                          ? Assets.iconsIcHomeBlue
+                          : Assets.iconsIcHome,
+                    ),
                   ),
                 ),
               ),
               label: 'Beranda',
             ),
             BottomNavigationBarItem(
-              icon: Container(
+              icon: Padding(
                 padding: EdgeInsets.only(bottom: 4),
-                width: 24,
-                height: 24,
-                child: FittedBox(
-                  child: Image.asset(
-                    currentIndex == 1
-                        ? Assets.iconsIcUserBlue
-                        : Assets.iconsIcUserGray,
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: FittedBox(
+                    child: Image.asset(
+                      currentIndex == 1
+                          ? Assets.iconsIcUserBlue
+                          : Assets.iconsIcUserGray,
+                    ),
                   ),
                 ),
               ),
               label: 'User',
             ),
             BottomNavigationBarItem(
-              icon: Container(
+              icon: Padding(
                 padding: EdgeInsets.only(bottom: 4),
-                width: 24,
-                height: 24,
-                child: FittedBox(),
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: FittedBox(),
+                ),
               ),
               label: 'Laporan',
             ),
             BottomNavigationBarItem(
-              icon: Container(
-                  padding: EdgeInsets.only(bottom: 4),
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: SizedBox(
                   width: 24,
                   height: 24,
                   child: FittedBox(
-                      child: Image.asset(
-                    currentIndex == 3
-                        ? Assets.iconsIcPltaBlue
-                        : Assets.iconsIcPlta,
-                  ))),
+                    child: Image.asset(
+                      currentIndex == 3
+                          ? Assets.iconsIcPltaBlue
+                          : Assets.iconsIcPlta,
+                    ),
+                  ),
+                ),
+              ),
               label: 'PLTA',
             ),
             BottomNavigationBarItem(
-              icon: Container(
-                  padding: EdgeInsets.only(bottom: 4),
+              icon: Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: SizedBox(
                   width: 24,
                   height: 24,
                   child: FittedBox(
-                      child: Image.asset(
-                    currentIndex == 4
-                        ? Assets.iconsIcProfilBlue
-                        : Assets.iconsIcProfile,
-                  ))),
+                    child: Image.asset(
+                      currentIndex == 4
+                          ? Assets.iconsIcProfilBlue
+                          : Assets.iconsIcProfile,
+                    ),
+                  ),
+                ),
+              ),
               label: 'Profile',
             ),
           ],

@@ -1,4 +1,3 @@
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -267,7 +266,7 @@ class _Chart extends StatelessWidget {
 
     int getScale() {
       if (typePage == 'create') {
-        final shaftData = d.turbineCreateModel.data?.shaft;
+        final shaftData = d.turbineDataModel.data?.shaft;
         int? biggest = shaftData?.genBearingToCoupling;
         if ((biggest ?? 0) < (shaftData?.couplingToTurbine ?? 0))
           biggest = shaftData?.couplingToTurbine ?? 0;

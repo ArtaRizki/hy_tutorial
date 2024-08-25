@@ -305,7 +305,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (p.statusActive.isNotEmpty)
-                    Container(
+                    SizedBox(
                       width: 25,
                       height: 25,
                       child: FittedBox(
@@ -322,7 +322,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                             }),
                       ),
                     ),
-                  Container(
+                  SizedBox(
                     width: 35,
                     height: 35,
                     child: FittedBox(
@@ -419,7 +419,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
           ),
         ],
       ),
-      body: Container(
+      body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: Column(
           children: [
