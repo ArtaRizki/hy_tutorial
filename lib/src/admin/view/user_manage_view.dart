@@ -1688,7 +1688,6 @@ class _UserManageViewState extends BaseState<UserManageView>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               headKonten(),
-              SizedBox(height: 5),
               toggleTab(),
               SizedBox(height: 8),
               Expanded(
