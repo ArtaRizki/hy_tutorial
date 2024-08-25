@@ -16,13 +16,9 @@ import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
-import 'package:hy_tutorial/src/plta/view/plta_view.dart';
-import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/home/provider/home_provider.dart';
 import 'package:hy_tutorial/src/profile/provider/profile_provider.dart';
-import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:hy_tutorial/src/shaft/view/shaft_detail_view.dart';
-import 'package:hy_tutorial/src/shaft/view/shaft_latest_view.dart';
 import 'package:hy_tutorial/src/turbine/model/turbine_model.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
 import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
@@ -31,7 +27,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class HomeAdminView extends StatefulWidget {

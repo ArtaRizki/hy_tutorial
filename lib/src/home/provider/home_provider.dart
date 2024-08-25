@@ -7,8 +7,6 @@ import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/home/model/dashboard_admin_model.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
 import 'package:flutter/material.dart';
-import 'package:hy_tutorial/src/profile/provider/profile_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeProvider extends BaseController with ChangeNotifier {

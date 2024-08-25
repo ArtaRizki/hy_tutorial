@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
-import 'package:hy_tutorial/common/component/custom_appbar.dart';
 import 'package:hy_tutorial/common/component/skeleton.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
-import 'package:hy_tutorial/src/home/view/home_admin_view.dart';
-import 'package:hy_tutorial/src/home/view/home_view.dart';
 import 'package:hy_tutorial/src/profile/model/profile_model.dart';
 import 'package:hy_tutorial/src/profile/view/profile_edit_view.dart';
 import 'package:provider/provider.dart';

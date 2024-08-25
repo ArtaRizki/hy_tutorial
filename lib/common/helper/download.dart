@@ -104,7 +104,7 @@ downloadFile(
         if (!dExists) {
           Directory("${d.path}/hy_tutorial").createSync();
         }
-        File f = await File(d!.path + "/hy_tutorial/$filename.$typeFile")
+        File f = await File(d.path + "/hy_tutorial/$filename.$typeFile")
             .writeAsBytes(bytes);
         FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
             FlutterLocalNotificationsPlugin();

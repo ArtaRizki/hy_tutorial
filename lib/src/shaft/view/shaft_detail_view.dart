@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
-import 'package:hy_tutorial/src/plta/view/plta_view.dart';
 import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
