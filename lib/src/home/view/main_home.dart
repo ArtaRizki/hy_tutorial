@@ -346,6 +346,11 @@ class _MainHomeState extends State<MainHome> {
                 currentIndex = 4;
               });
             },
+            jumpToPlta: () {
+              setState(() {
+                currentIndex = 3;
+              });
+            },
           ),
           UserManageView(),
           SizedBox(),

@@ -16,6 +16,7 @@ import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
+import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/home/provider/home_provider.dart';
 import 'package:hy_tutorial/src/profile/provider/profile_provider.dart';
@@ -24,6 +25,7 @@ import 'package:hy_tutorial/src/shaft/view/shaft_detail_view.dart';
 import 'package:hy_tutorial/src/shaft/view/shaft_latest_view.dart';
 import 'package:hy_tutorial/src/turbine/model/turbine_model.dart';
 import 'package:hy_tutorial/src/turbine/provider/turbine_provider.dart';
+import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
@@ -33,8 +35,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class HomeAdminView extends StatefulWidget {
-  HomeAdminView({super.key, required this.jumpToProfile});
+  HomeAdminView(
+      {super.key, required this.jumpToProfile, required this.jumpToPlta});
   final VoidCallback jumpToProfile;
+  final VoidCallback jumpToPlta;
 
   @override
   State<HomeAdminView> createState() => _HomeAdminViewState();
@@ -765,9 +769,9 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                     Expanded(
                       child: InkWell(
                         onTap: () async {
-                          turbineP.turbineSearchN.unfocus();
-                          await CusNav.nPush(
-                              context, DataAddView(isFromCenter: true));
+                          // turbineP.turbineSearchN.unfocus();
+                          // await CusNav.nPush(
+                          //     context, DataAddView(isFromCenter: true));
                         },
                         child: Column(
                           children: [
@@ -790,7 +794,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                       child: InkWell(
                         onTap: () async {
                           turbineP.turbineSearchN.unfocus();
-                          CusNav.nPush(context, ShaftLatestView());
+                          widget.jumpToPlta();
                         },
                         child: Column(
                           children: [
@@ -813,7 +817,7 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                       child: InkWell(
                         onTap: () async {
                           turbineP.turbineSearchN.unfocus();
-                          CusNav.nPush(context, ShaftLatestView());
+                          CusNav.nPush(context, TurbineView());
                         },
                         child: Column(
                           children: [
