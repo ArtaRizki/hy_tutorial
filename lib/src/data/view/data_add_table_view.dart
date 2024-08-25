@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/src/data/model/create_data_param.dart';
@@ -13,14 +14,14 @@ import '../provider/data_add_provider.dart';
 import '../../../common/component/custom_appbar.dart';
 import '../../../common/component/custom_button.dart';
 
-class DataAddUpperView extends StatefulWidget {
-  const DataAddUpperView({super.key});
+class DataAddTableView extends StatefulWidget {
+  const DataAddTableView({super.key});
 
   @override
-  State<DataAddUpperView> createState() => _DataAddUpperViewState();
+  State<DataAddTableView> createState() => _DataAddTableViewState();
 }
 
-class _DataAddUpperViewState extends BaseState<DataAddUpperView>
+class _DataAddTableViewState extends BaseState<DataAddTableView>
     with TickerProviderStateMixin {
   late TabController tabController;
   @override
@@ -643,10 +644,10 @@ class _DataAddUpperViewState extends BaseState<DataAddUpperView>
                       title: "Konfirmasi",
                       desc: "Apakah Data Anda Sudah Benar?",
                       yesCallback: () => handleTap(() async {
-                        Navigator.pop(context);
+                        CusNav.nPop(context);
                         p.sendCreateTurbines(context);
                       }),
-                      noCallback: () => Navigator.pop(context),
+                      noCallback: () => CusNav.nPop(context),
                     );
                   }
                 },

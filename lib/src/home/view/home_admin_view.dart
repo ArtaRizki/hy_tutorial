@@ -16,7 +16,7 @@ import 'package:hy_tutorial/src/admin/model/user_list_model.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/admin/view/user_add_view.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
-import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
+import 'package:hy_tutorial/src/plta/view/plta_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/home/provider/home_provider.dart';
 import 'package:hy_tutorial/src/profile/provider/profile_provider.dart';
@@ -489,9 +489,12 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                   turbineP.turbineSearchC.clear();
                   final f = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ShaftDetailView(id: item.Id ?? '')));
+                      PageRouteBuilder(
+                          pageBuilder:
+                              ((context, animation, secondaryAnimation) =>
+                                  ShaftDetailView(id: item.Id ?? '')),
+                          transitionDuration: const Duration(seconds: 0),
+                          reverseTransitionDuration: Duration.zero));
                   if (f != null) {
                     turbineP.next2 = null;
                     pagingC2.refresh();
@@ -680,9 +683,12 @@ class _HomeAdminViewState extends BaseState<HomeAdminView>
                   turbineP.turbineSearchC.clear();
                   final f = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ShaftDetailView(id: item.Id ?? '')));
+                      PageRouteBuilder(
+                          pageBuilder:
+                              ((context, animation, secondaryAnimation) =>
+                                  ShaftDetailView(id: item.Id ?? '')),
+                          transitionDuration: const Duration(seconds: 0),
+                          reverseTransitionDuration: Duration.zero));
                   if (f != null) {
                     turbineP.next = null;
                     pagingC.refresh();

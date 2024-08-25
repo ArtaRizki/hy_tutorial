@@ -344,7 +344,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
                             title: "Konfirmasi",
                             desc: "Apakah Anda Yakin Ingin Keluar?",
                             yesCallback: () => handleTap(() async {
-                              Navigator.pop(context);
+                              CusNav.nPop(context);
                               try {
                                 await context.read<AuthProvider>().logout();
                                 Navigator.pushNamedAndRemoveUntil(
@@ -359,7 +359,7 @@ class _ProfileViewState extends BaseState<ProfileView> {
                                         : "$e");
                               }
                             }),
-                            noCallback: () => Navigator.pop(context),
+                            noCallback: () => CusNav.nPop(context),
                           );
                         },
                         child: Container(

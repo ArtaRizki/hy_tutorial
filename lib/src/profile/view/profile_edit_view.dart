@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_dropdown.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/utils/utils.dart';
@@ -255,11 +256,11 @@ class _ProfileEditViewState extends BaseState<ProfileEditView> {
                             title: "Konfirmasi",
                             desc: "Apakah Data Anda Sudah Benar?",
                             yesCallback: () => handleTap(() async {
-                                  Navigator.pop(context);
+                                  CusNav.nPop(context);
 
                                   dataP.updateProfile(context);
                                 }),
-                            noCallback: () => Navigator.pop(context));
+                            noCallback: () => CusNav.nPop(context));
                       }
                     } else {
                       final dataP = context.read<ProfileProvider>();
@@ -282,10 +283,10 @@ class _ProfileEditViewState extends BaseState<ProfileEditView> {
                             title: "Konfirmasi",
                             desc: "Apakah Data Anda Sudah Benar?",
                             yesCallback: () => handleTap(() async {
-                                  Navigator.pop(context);
+                                  CusNav.nPop(context);
                                   dataP.changePass(context);
                                 }),
-                            noCallback: () => Navigator.pop(context));
+                            noCallback: () => CusNav.nPop(context));
                       }
                     }
                   },

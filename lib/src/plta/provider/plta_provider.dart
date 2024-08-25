@@ -570,7 +570,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
         next = null;
         if (withLoading) loading(false);
         if (back) {
-          // Navigator.pop(context);
+          // CusNav.nPop(context);
           final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
           CusNav.nPushAndRemoveUntil(context, MainHome(index: 3),
               arguments: isAdmin);
@@ -606,7 +606,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       await Future.delayed(Duration(seconds: 2));
       final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
       next = null;
-      Navigator.pop(context);
+      CusNav.nPop(context);
     } else {
       final model = BaseResponse.from(response);
 
@@ -629,8 +629,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
       next = null;
       await Utils.showSuccess(msg: model.message ?? "Sukses");
       await Future.delayed(Duration(seconds: 2));
-      Navigator.pop(context);
-      Navigator.pop(context);
+      CusNav.nPop(context);
+      CusNav.nPop(context);
       // Navigator.pushReplacement(context,
       //     MaterialPageRoute(builder: ((context) => PLTAAddView(id: pltaId))));
     } else {

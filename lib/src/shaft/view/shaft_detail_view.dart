@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/generated/assets.dart';
-import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
+import 'package:hy_tutorial/src/plta/view/plta_view.dart';
 import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -783,12 +783,12 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context, false);
+        CusNav.nPop(context, false);
         return true;
       },
       child: Scaffold(
         appBar: CustomAppBar.appBar(
-          onBack: () => Navigator.pop(context, false),
+          onBack: () => CusNav.nPop(context, false),
           context,
           'Detail Laporan',
           color: Constant.primaryColor,
@@ -802,17 +802,17 @@ class _ShaftDetailViewState extends State<ShaftDetailView>
                       title: "Konfirmasi Penghapusan",
                       desc: "Apakah anda yakin ingin\nmenghapus turbine ini?",
                       yesCallback: () async {
-                        Navigator.pop(context);
+                        CusNav.nPop(context);
                         await context
                             .read<DataAddProvider>()
                             .deleteTurbine(context, id: data?.id ?? "0");
 
                         getData();
-                        Navigator.pop(context, true);
+                        CusNav.nPop(context, true);
                         CusNav.nPushReplace(context, TurbineView());
                       },
                       noCallback: () async {
-                        Navigator.pop(context);
+                        CusNav.nPop(context);
                       });
                 },
                 child: Container(

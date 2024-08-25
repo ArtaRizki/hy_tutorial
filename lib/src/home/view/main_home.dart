@@ -9,7 +9,7 @@ import 'package:hy_tutorial/main.dart';
 import 'package:hy_tutorial/src/admin/view/user_manage_view.dart';
 import 'package:hy_tutorial/src/plta/provider/plta_provider.dart';
 import 'package:hy_tutorial/src/turbine/view/turbine_view.dart';
-import 'package:hy_tutorial/src/data/view/daftar_plta_new_view.dart';
+import 'package:hy_tutorial/src/plta/view/plta_view.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/home/model/home_model.dart';
 import 'package:hy_tutorial/src/home/view/home_admin_view.dart';

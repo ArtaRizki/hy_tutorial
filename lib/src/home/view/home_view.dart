@@ -470,9 +470,12 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                   turbineP.turbineSearchC.clear();
                   final f = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ShaftDetailView(id: item.Id ?? '')));
+                      PageRouteBuilder(
+                          pageBuilder:
+                              ((context, animation, secondaryAnimation) =>
+                                  ShaftDetailView(id: item.Id ?? '')),
+                          transitionDuration: const Duration(seconds: 0),
+                          reverseTransitionDuration: Duration.zero));
                   if (f != null) {
                     turbineP.next2 = null;
                     pagingC2.refresh();
@@ -661,9 +664,12 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                   turbineP.turbineSearchC.clear();
                   final f = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ShaftDetailView(id: item.Id ?? '')));
+                      PageRouteBuilder(
+                          pageBuilder:
+                              ((context, animation, secondaryAnimation) =>
+                                  ShaftDetailView(id: item.Id ?? '')),
+                          transitionDuration: const Duration(seconds: 0),
+                          reverseTransitionDuration: Duration.zero));
                   if (f != null) {
                     turbineP.next = null;
                     pagingC.refresh();

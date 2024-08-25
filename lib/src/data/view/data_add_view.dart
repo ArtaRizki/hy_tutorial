@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_container.dart';
 import 'package:hy_tutorial/common/component/custom_dropdown.dart';
+import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/component/custom_textfield.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
-import 'package:hy_tutorial/src/data/view/data_add_upper_view.dart';
+import 'package:hy_tutorial/src/data/view/data_add_table_view.dart';
 import 'package:hy_tutorial/src/plta/model/plta_model.dart';
 import 'package:hy_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -438,10 +439,7 @@ class DataAddViewState extends BaseState<DataAddView> {
                       Utils.showFailed(msg: msg);
                       return;
                     } else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (c) => DataAddUpperView()));
+                      CusNav.nPush(context, DataAddTableView());
                     }
                   }
                 },

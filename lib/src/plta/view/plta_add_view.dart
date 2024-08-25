@@ -351,7 +351,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                                 }
                               },
                               noCallback: () async {
-                                Navigator.pop(context);
+                                CusNav.nPop(context);
                               });
                         },
                         icon: Icon(
@@ -384,13 +384,13 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                   title: "Konfirmasi Penghapusan",
                   desc: "Apakah anda yakin ingin\nmenghapus user yang dipilih?",
                   yesCallback: () async {
-                    Navigator.pop(context);
+                    CusNav.nPop(context);
                     await context
                         .read<PltaProvider>()
                         .deletePlta(context, id: widget.id ?? "0");
                   },
                   noCallback: () async {
-                    Navigator.pop(context);
+                    CusNav.nPop(context);
                   });
             },
             child: Container(
@@ -524,7 +524,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                       desc: "Apakah Data Anda Sudah Benar?",
                       yesCallback: () => handleTap(
                         () async {
-                          Navigator.pop(context);
+                          CusNav.nPop(context);
                           Utils.showLoading();
                           if (widget.id != null) {
                             await p.sendPlta(
@@ -551,7 +551,7 @@ class _PLTAAddViewState extends BaseState<PLTAAddView> {
                           Utils.dismissLoading();
                         },
                       ),
-                      noCallback: () => Navigator.pop(context),
+                      noCallback: () => CusNav.nPop(context),
                     );
                   }
                 },
