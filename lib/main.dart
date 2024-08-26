@@ -128,7 +128,7 @@ class MyApp extends StatelessWidget {
                 create: (context) => HomeProvider()),
           ],
           child: MaterialApp(
-            title: 'HY TUTORIAL',
+            title: 'Hytutorial',
             restorationScopeId: 'root',
             // localizationsDelegates: context.localizationDelegates,
             // supportedLocales: context.supportedLocales,

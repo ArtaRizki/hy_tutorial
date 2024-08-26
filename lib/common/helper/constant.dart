@@ -16,7 +16,7 @@ class Constant {
   static const String BASE_API_FULL = "http://${DOMAIN}/v1";
   static const String BASE_API_FULL2 = "http://${DOMAIN2}/v1";
   static const String BASE_API_FULL3 = "http://${DOMAIN}";
-  static const String APP_NAME = "HY TUTORIAL";
+  static const String APP_NAME = "Hytutorial";
 
   /// COlORS
   ///

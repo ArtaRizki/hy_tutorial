@@ -68,7 +68,7 @@ class XenoLog {
   String webHookURL = "";
   String emailAddress = "";
 
-  String projectNameDef = "HY TUTORIAL";
+  String projectNameDef = "Hytutorial";
   XenoLogType logTypeDef = XenoLogType.Database;
   // Endpoint Dev
   String setDatabaseURLDef = 'http://47.74.214.215:82/mg-log/log/ceklog?';

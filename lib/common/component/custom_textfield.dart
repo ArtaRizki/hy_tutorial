@@ -73,7 +73,7 @@ class CustomTextField {
       obscureText: obscureText ?? false,
       controller: controller,
       keyboardType: textInputType ?? TextInputType.text,
-      enabled: enabled ?? true,
+      enabled: enabled,
       enableInteractiveSelection: enableInteractiveSelection ?? true,
       onTap: onTap,
       // will disable paste operation

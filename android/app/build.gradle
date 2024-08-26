@@ -76,13 +76,13 @@ android {
     // productFlavors {
     //     development {
     //         dimension "app"
-    //         resValue "string", "app_name", "HY TUTORIAL DEV"
+    //         resValue "string", "app_name", "Hytutorial DEV"
     //         // applicationIdSuffix ".dev"
     //         versionNameSuffix "-dev"
     //     }
     //     production {
     //         dimension "app"
-    //         resValue "string", "app_name", "HY TUTORIAL"
+    //         resValue "string", "app_name", "Hytutorial"
     //     }
     // }
 }

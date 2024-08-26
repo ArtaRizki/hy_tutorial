@@ -24,7 +24,7 @@ class NotificationManager {
   Function(Map)? listener;
 
   NotificationDetails notifDetail = NotificationDetails(
-    android: AndroidNotificationDetails("HY TUTORIAL", "HY TUTORIAL",
+    android: AndroidNotificationDetails("Hytutorial", "Hytutorial",
         priority: Priority.max,
         playSound: true,
         importance: Importance.max,
@@ -38,7 +38,7 @@ class NotificationManager {
 
   void initNotification() async {
     const AndroidNotificationChannel androidChannel =
-        AndroidNotificationChannel('HY TUTORIAL', 'HY TUTORIAL',
+        AndroidNotificationChannel('Hytutorial', 'Hytutorial',
             importance: Importance.high,
             enableVibration: true,
             playSound: true);
@@ -112,7 +112,7 @@ class NotificationManager {
       try {
         flutterLocalNotificationsPlugin.show(
           0,
-          event.notification?.title ?? 'HY TUTORIAL',
+          event.notification?.title ?? 'Hytutorial',
           event.notification?.body ?? 'Notifikasi Baru',
           notifDetail,
           payload: jsonEncode(message),
@@ -235,14 +235,14 @@ class NotificationManager {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
-      'HY TUTORIAL',
+      'Hytutorial',
       tag,
       alarmDate,
       const NotificationDetails(
         android: AndroidNotificationDetails(
           '1',
-          'HY TUTORIAL',
-          channelDescription: 'HY TUTORIAL',
+          'Hytutorial',
+          channelDescription: 'Hytutorial',
           priority: Priority.max,
           playSound: true,
         ),

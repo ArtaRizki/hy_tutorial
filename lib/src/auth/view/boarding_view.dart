@@ -43,7 +43,7 @@ class _BoardingViewState extends State<BoardingView> {
                     Constant.blackBold16.copyWith(fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 8),
-              Text("Selamat Datang di Hytutor Mobile"),
+              Text("Selamat Datang di Hytutorial Mobile"),
               SizedBox(height: 20),
               CustomButton.mainButton("Masuk dengan Akun",
                   color: Constant.primaryColor,

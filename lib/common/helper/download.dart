@@ -25,7 +25,7 @@ final InitializationSettings initializationSettings = InitializationSettings(
 );
 
 final NotificationDetails notificationDetails = NotificationDetails(
-  android: AndroidNotificationDetails("HY TUTORIAL", "HY TUTORIAL",
+  android: AndroidNotificationDetails("Hytutorial", "Hytutorial",
       priority: Priority.max,
       playSound: true,
       enableVibration: true,
