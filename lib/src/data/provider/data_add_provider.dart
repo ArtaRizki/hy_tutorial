@@ -1134,7 +1134,7 @@ class DataAddProvider extends BaseController with ChangeNotifier {
       loading(false);
     } catch (e) {
       loading(false);
-      await Utils.showFailed(msg: e.toString());
+      await Utils.showFailed(msg: 'Gagal Mengunduh Laporan');
       throw Exception(e.toString());
     }
   }
