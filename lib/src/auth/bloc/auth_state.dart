@@ -1,10 +1,21 @@
 part of 'auth_bloc.dart';
 
-sealed class AuthState extends Equatable {
-  const AuthState();
+final class AuthState extends Equatable {
+  final String username;
+  final String password;
+
+  const AuthState({this.username = '', this.password = ''});
+
+  AuthState copyWith({
+    String? username,
+    String? password,
+  }) =>
+      AuthState(
+          username: username ?? this.username,
+          password: password ?? this.password);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [username, password];
 }
 
 final class AuthInitial extends AuthState {}

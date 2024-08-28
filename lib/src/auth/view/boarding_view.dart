@@ -4,6 +4,7 @@ import 'package:hy_tutorial/common/component/custom_navigator.dart';
 import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
+import 'package:hy_tutorial/src/auth/view/login_view2.dart';
 import 'package:hy_tutorial/src/auth/view/register_view.dart';
 
 class BoardingView extends StatefulWidget {
@@ -49,7 +50,7 @@ class _BoardingViewState extends State<BoardingView> {
                   color: Constant.primaryColor,
                   borderRadius: BorderRadius.circular(10),
                   contentPadding: EdgeInsets.all(10), () async {
-                CusNav.nPush(context, LoginView());
+                CusNav.nPush(context, LoginView2());
               }),
               SizedBox(height: 15),
               Row(

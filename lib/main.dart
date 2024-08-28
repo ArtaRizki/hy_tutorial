@@ -5,6 +5,7 @@ import 'package:hy_tutorial/common/library/notification_manager.dart';
 import 'package:hy_tutorial/src/admin/provider/user_manage_provider.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/auth/view/boarding_view.dart';
+import 'package:hy_tutorial/src/auth/view/login_view2.dart';
 import 'package:hy_tutorial/src/data/provider/data_add_provider.dart';
 import 'package:hy_tutorial/src/data/view/data_add_view.dart';
 import 'package:hy_tutorial/src/division/provider/division_provider.dart';

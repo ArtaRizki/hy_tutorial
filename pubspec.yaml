@@ -35,7 +35,6 @@ dependencies:
   device_info_plus: ^10.1.0
   dotted_border: ^2.0.0+3
   dotted_line: ^3.2.2
-  drop_down_search_field: ^1.0.4
   dropdown_search: ^5.0.6
   equatable: ^2.0.5
   firebase_analytics: ^11.0.1
@@ -66,6 +65,7 @@ dependencies:
   path_provider: ^2.0.1
   pattern_formatter: ^4.0.0
   permission_handler: ^11.3.1
+  pointer_interceptor: ^0.10.1+2
   powers: ^1.0.0+2
   provider: ^6.1.1
   shared_preferences: ^2.0.5

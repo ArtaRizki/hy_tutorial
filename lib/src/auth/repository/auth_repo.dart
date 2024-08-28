@@ -15,21 +15,21 @@ class AuthRepo extends BaseController {
   TextEditingController usernameC = TextEditingController();
   TextEditingController passC = TextEditingController();
 
-  Future login() async {
+  Future login(String username, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      log("USERNAME : ${usernameC.text}");
-      log("PASS : ${passC.text}");
+      log("USERNAME : ${username}");
+      log("PASS : ${[password]}");
       // validate
-      if (usernameC.text.isEmpty) throw 'Harap isi username';
-      if (passC.text.isEmpty) throw 'Harap isi password';
+      // if (usernameC.text.isEmpty) throw 'Harap isi username';
+      // if (passC.text.isEmpty) throw 'Harap isi password';
 
       loading(true);
 
       FocusManager.instance.primaryFocus?.unfocus();
       Map<String, String> param = {
-        'Username': usernameC.text,
-        'Password': passC.text,
+        'Username': username,
+        'Password': password,
       };
       final response =
           await post(Constant.BASE_API_FULL + '/auth/login', body: param);
@@ -50,7 +50,6 @@ class AuthRepo extends BaseController {
             roles == 'admin' || roles == 'main' ? true : false);
         await prefs.setBool(
             Constant.kSetPrefIsSuperAdmin, roles == 'main' ? true : false);
-        return model;
         if (roles == 'admin' || roles == 'main') {
           // CusNav.nPushAndRemoveUntil(context, MainHome(), arguments: true);
         } else {
@@ -58,13 +57,14 @@ class AuthRepo extends BaseController {
         }
         usernameC.text = '';
         passC.text = '';
+        return model;
       } else {
         loading(false);
 
         final message = jsonDecode(response.body)["Message"];
         await Utils.showFailed(msg: message ?? "Error");
         Future.delayed(Duration(seconds: 2), () {});
-        throw ''
+        throw message;
       }
     } catch (e) {
       loading(false);

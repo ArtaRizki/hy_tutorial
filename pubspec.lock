@@ -209,14 +209,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.2"
-  drop_down_search_field:
-    dependency: "direct main"
-    description:
-      name: drop_down_search_field
-      sha256: eee189b41adb52a81b54ad826b3c9ee24c5db3f45194130633721fdbd358b393
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
   dropdown_search:
     dependency: "direct main"
     description:
@@ -830,7 +822,7 @@ packages:
     source: hosted
     version: "2.1.8"
   pointer_interceptor:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pointer_interceptor
       sha256: "57210410680379aea8b1b7ed6ae0c3ad349bfd56fe845b8ea934a53344b9d523"
