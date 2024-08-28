@@ -1,14 +1,25 @@
-# 2024 BIMOPS Mobile
+# Hytutorial
+Aplikasi Simulasi Turbin untuk Pembangkit Listrik Tenaga Air dengan roles
+1. User
+2. Admin
+3. Super Admin
 
-
+## Fitur
+1. CRUD Turbine
+2. CRUD PLTA
+3. Manage User
+4. Edit Profile
 
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+1. Flutter SDK 3.22.2
+2. Windows 10/11
+3. VS Code/Android Studio
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Built With 🛠
+1. 
 
-## Add your files
+## 
 
 - [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
 - [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
