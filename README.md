@@ -1,13 +1,10 @@
 # Hytutorial
-
 Aplikasi Simulasi Turbin untuk Pembangkit Listrik Tenaga Air dengan roles
-
 1. User
 2. Admin
 3. Super Admin
 
 ## Fitur
-
 1. CRUD Turbine
 2. CRUD PLTA
 3. Manage User
@@ -20,8 +17,9 @@ Aplikasi Simulasi Turbin untuk Pembangkit Listrik Tenaga Air dengan roles
 3. VS Code/Android Studio
 
 Built With 🛠
+1. 
 
-1.
+## 
 
 ##
 
