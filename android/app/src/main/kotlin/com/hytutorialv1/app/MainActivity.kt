@@ -1,4 +1,4 @@
-package com.hy.tutorial.app
+package com.hytutorialv1.app
 
 import io.flutter.embedding.android.FlutterActivity
 
