@@ -11,10 +11,8 @@ class Constant {
   /// Please be carefully to change this keys because might affect with all entire project .
   ///
   static const String MAPS_KEY = "AIzaSyDDPvYz8jGLntwWp-Nii2F7bvGADm504Ts";
-  static const String DOMAIN = "103.59.94.19";
-  static const String DOMAIN2 = "103.59.94.19";
-  // static const String DOMAIN = "hydroturbinealignment.id";
-  // static const String DOMAIN2 = "hydroturbinealignment.id";
+  static const String DOMAIN = "hydroturbinealignment.id";
+  static const String DOMAIN2 = "hydroturbinealignment.id";
   static const String BASE_API_FULL = "http://${DOMAIN}/v1";
   static const String BASE_API_FULL2 = "http://${DOMAIN2}/v1";
   static const String BASE_API_FULL3 = "http://${DOMAIN}";

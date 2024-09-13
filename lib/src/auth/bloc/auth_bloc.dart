@@ -35,11 +35,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> _loggingIn(AuthEvent event, Emitter<AuthState> emit) async {
     if (event is AuthLoginPressed) {
       emit(AuthLoading());
-      await _authRepo
-          .login(event.username, event.password)
-          .onError((error, stackTrace) => emit(AuthLoggedOutError()))
-          .then((value) {
+      await _authRepo.login(event.username, event.password).then((value) {
         emit(AuthLoggedIn());
+      }).onError((e, s) {
+        emit(AuthLoggedInError());
       });
     }
   }

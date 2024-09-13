@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hy_tutorial/common/base/base_state.dart';
 import 'package:hy_tutorial/common/component/custom_button.dart';
@@ -41,6 +43,7 @@ class LoginView2State extends BaseState<LoginView2> {
           listener: (context, state) async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             final roles = prefs.getBool(Constant.kSetPrefIsSuperAdmin);
+            log("STATE : $state");
             if (state is AuthLoggedIn) {
               if (roles == 'admin' || roles == 'main') {
                 CusNav.nPushAndRemoveUntil(context, MainHome(),
@@ -50,6 +53,7 @@ class LoginView2State extends BaseState<LoginView2> {
               }
             }
           },
+          listenWhen: (previous, current) => current is AuthLoggedIn,
           builder: (context, state) {
             return SingleChildScrollView(
               child: Padding(
@@ -130,9 +134,6 @@ class LoginView2State extends BaseState<LoginView2> {
                               context
                                   .read<AuthBloc>()
                                   .add(AuthPasswordChanged(v));
-                              context
-                                  .read<AuthBloc>()
-                                  .add(AuthPasswordChanged(v));
                               setState(() {});
                             },
                             labelFontSize: 20,
@@ -142,10 +143,9 @@ class LoginView2State extends BaseState<LoginView2> {
                             obscureText: authP.obscurePass,
                             onEditingComplete: () async {
                               setState(() {});
-                              if (authP.validateLogin())
-                                await context
-                                    .read<AuthProvider>()
-                                    .login(context);
+                              await context.read<AuthBloc>()
+                                ..add(AuthLoginPressed(_authRepo.usernameC.text,
+                                    _authRepo.passC.text));
                               setState(() {});
                             },
                             suffixIcon: InkWell(
@@ -164,7 +164,8 @@ class LoginView2State extends BaseState<LoginView2> {
                             () async {
                               setState(() {});
                               await context.read<AuthBloc>()
-                                ..add(AuthLoginPressed());
+                                ..add(AuthLoginPressed(_authRepo.usernameC.text,
+                                    _authRepo.passC.text));
                               // if (authP.validateLogin())
                               //   await context.read<AuthProvider>().login(context);
                               setState(() {});

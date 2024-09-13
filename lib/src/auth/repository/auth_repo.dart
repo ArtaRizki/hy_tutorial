@@ -15,14 +15,16 @@ class AuthRepo extends BaseController {
   TextEditingController usernameC = TextEditingController();
   TextEditingController passC = TextEditingController();
 
-  Future login(String username, String password) async {
+  Future<void> login(String username, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       log("USERNAME : ${username}");
-      log("PASS : ${[password]}");
+      log("PASS : ${password}");
       // validate
-      // if (usernameC.text.isEmpty) throw 'Harap isi username';
-      // if (passC.text.isEmpty) throw 'Harap isi password';
+      // bool validate = validateLogin();
+      // if (!validate) throw 'Harap Lengkapi Form';
+      if (username == '') throw 'Harap isi username';
+      if (password == '') throw 'Harap isi password';
 
       loading(true);
 
@@ -57,7 +59,7 @@ class AuthRepo extends BaseController {
         }
         usernameC.text = '';
         passC.text = '';
-        return model;
+        // return model;
       } else {
         loading(false);
 
@@ -76,5 +78,12 @@ class AuthRepo extends BaseController {
               : "$e");
       throw Exception(e);
     }
+  }
+
+  bool validateLogin() {
+    if (usernameC.text.isEmpty) return false;
+    if (passC.text.isEmpty) return false;
+    // if (!usernameC.text.isEmail()) return false;
+    return true;
   }
 }
