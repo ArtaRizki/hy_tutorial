@@ -234,7 +234,7 @@
 
 //       List<http.MultipartFile> files = [];
 //       if (pasPhotoPic != null) {
-        files.add(await getMultipart('photo', File(pasPhotoPic!.path)));
+//         files.add(await getMultipart('photo', File(pasPhotoPic!.path)));
 //       } else {
 //         // throw 'Harap Isi Pas Foto';
 //       }

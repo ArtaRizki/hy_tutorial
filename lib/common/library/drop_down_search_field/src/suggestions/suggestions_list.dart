@@ -241,8 +241,8 @@ class _SuggestionsListState<T> extends State<SuggestionsList<T>>
           this._suggestions = suggestions;
           _focusNodes = List.generate(
             _suggestions?.length ?? 0,
-            (index) => FocusNode(onKeyEvent: (_, event) {
-              return widget.onKeyEvent(_, event);
+            (index) => FocusNode(onKeyEvent: (node, event) {
+              return widget.onKeyEvent(node, event);
             }),
           );
         });
