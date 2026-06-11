@@ -7,18 +7,17 @@ class Skeleton<Data> extends StatelessWidget {
   final Widget child;
   final Data? value;
   final bool silver;
-  double? width;
-  double? height;
-  bool isCircle;
-  Skeleton(
-      {Key? key,
+  final double? width;
+  final double? height;
+  final bool isCircle;
+  const Skeleton(
+      {super.key,
       required this.child,
       this.value,
       this.silver = false,
       this.width,
       this.height,
-      this.isCircle = false})
-      : super(key: key);
+      this.isCircle = false});
 
   @override
   Widget build(BuildContext context) {

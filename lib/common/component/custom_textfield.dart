@@ -219,7 +219,7 @@ class CustomTextField {
             obscureText: obscureText ?? false,
             controller: controller,
             keyboardType: textInputType ?? TextInputType.text,
-            enabled: enabled ?? true,
+            enabled: enabled,
             enableInteractiveSelection: enableInteractiveSelection ?? true,
             // will disable paste operation
             focusNode: focusNode ?? null,
@@ -335,7 +335,7 @@ class CustomTextField {
               suffixText: suffixText ?? null,
               filled: true,
               fillColor: fillColor ??
-                  ((enabled ?? false) ? Colors.white : Constant.textHintColor),
+                  (enabled ? Colors.white : Constant.textHintColor),
               hoverColor: Constant.primaryColor,
               focusColor: Constant.primaryColor,
               errorStyle: TextStyle(color: validatorTextColor ?? Colors.red),
@@ -374,7 +374,7 @@ class CustomTextField {
             obscureText: obscureText ?? false,
             controller: controller,
             keyboardType: textInputType ?? TextInputType.text,
-            enabled: enabled ?? true,
+            enabled: enabled,
             enableInteractiveSelection: enableInteractiveSelection ?? true,
             // will disable paste operation
             focusNode: focusNode ?? null,
@@ -586,7 +586,7 @@ class CustomTextField {
             ),
           Container(
             decoration: BoxDecoration(
-              color: (enabled ?? false) ? Colors.white : Constant.textHintColor,
+              color: enabled ? Colors.white : Constant.textHintColor,
               border: Border.all(
                 color: Constant.borderSearchColor,
                 width: borderWidth ?? 0.5,
@@ -604,20 +604,20 @@ class CustomTextField {
               autofocus: false,
               obscureText: obscureText ?? false,
               keyboardType: textInputType ?? TextInputType.text,
-              enabled: enabled ?? true,
+              enabled: enabled,
               enableInteractiveSelection: enableInteractiveSelection ?? true,
               decoration: InputDecoration.collapsed(
                 hintText: hintText ?? null,
                 focusColor: Colors.grey,
                 filled: true,
                 fillColor: fillColor ??
-                    ((enabled ?? false)
+                    (enabled
                         ? Colors.white
                         : Constant.textHintColor),
                 hoverColor: Constant.primaryColor,
                 hintStyle:
                     TextStyle(color: hintColor ?? Constant.textHintColor2),
-                enabled: enabled ?? true,
+                enabled: enabled,
               ),
               inputFormatters: [
                 if (isDecimalFormatter ?? false)
