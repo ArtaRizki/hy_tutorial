@@ -62,7 +62,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                         builder: (_) => const SessionFormScreen()));
               } else if (val == 'finish') {
                 await context.read<SessionProvider>().finishSession();
-                if (mounted) Navigator.pop(context);
+                if (context.mounted) Navigator.pop(context);
               } else if (val == 'export') {
                 if (context.mounted) _showExportDialog(context);
               }

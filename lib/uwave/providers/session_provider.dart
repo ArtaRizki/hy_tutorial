@@ -11,7 +11,7 @@ class SessionProvider extends ChangeNotifier {
   Session? _activeSession;
   List<Session> _sessions = [];
   List<Measurement> _measurements = [];
-  SessionStats _stats = SessionStats(
+  SessionStats _stats = const SessionStats(
     totalCount: 0,
     okCount: 0,
     ngCount: 0,

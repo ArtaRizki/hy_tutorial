@@ -27,6 +27,7 @@ class BleProvider extends ChangeNotifier {
   BleState get bleState => _bleState;
   List<ScanResult> get scanResults => _scanResults;
   BluetoothDevice? get connectedDevice => _connectedDevice;
+  BluetoothCharacteristic? get notifyChar => _notifyChar;
   double? get currentValue => _currentValue;
   String get currentUnit => _currentUnit;
   String? get errorMessage => _errorMessage;
@@ -43,7 +44,7 @@ class BleProvider extends ChangeNotifier {
 
     try {
       await FlutterBluePlus.startScan(
-        timeout: Duration(seconds: BleConstants.scanTimeoutSeconds),
+        timeout: const Duration(seconds: BleConstants.scanTimeoutSeconds),
         withKeywords: [BleConstants.deviceName],
       );
 
@@ -53,7 +54,7 @@ class BleProvider extends ChangeNotifier {
       });
 
       await Future.delayed(
-          Duration(seconds: BleConstants.scanTimeoutSeconds + 1));
+          const Duration(seconds: BleConstants.scanTimeoutSeconds + 1));
       _setState(BleState.idle);
     } catch (e) {
       log('[BLE] scan error: $e');
@@ -79,7 +80,7 @@ class BleProvider extends ChangeNotifier {
 
     try {
       await device.connect(
-        timeout: Duration(seconds: BleConstants.connectTimeoutSeconds),
+        timeout: const Duration(seconds: BleConstants.connectTimeoutSeconds),
         autoConnect: false,
       );
       _listenConnectionState(device);
@@ -155,7 +156,7 @@ class BleProvider extends ChangeNotifier {
   void _scheduleReconnect(BluetoothDevice device) {
     _reconnectTimer?.cancel();
     _reconnectTimer =
-        Timer(Duration(seconds: BleConstants.reconnectDelaySeconds), () {
+        Timer(const Duration(seconds: BleConstants.reconnectDelaySeconds), () {
       log('[BLE] attempting auto-reconnect...');
       connectTo(device);
     });

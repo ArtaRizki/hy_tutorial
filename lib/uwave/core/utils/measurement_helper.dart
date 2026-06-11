@@ -14,7 +14,7 @@ class MeasurementHelper {
   /// Hitung statistik dari list nilai pengukuran.
   static SessionStats calcStats(List<double> values, List<String> statuses) {
     if (values.isEmpty) {
-      return SessionStats(
+      return const SessionStats(
         totalCount: 0,
         okCount: 0,
         ngCount: 0,
