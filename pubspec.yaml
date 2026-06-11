@@ -70,6 +70,13 @@ dependencies:
   sizer: ^2.0.15
   syncfusion_flutter_datepicker: ^28.1.38
 
+  # U-WAVE QC Inspector — BLE & QC Features
+  flutter_blue_plus: ^1.35.3
+  sqflite: ^2.3.3+1
+  csv: ^6.0.0
+  syncfusion_flutter_xlsio: ^28.1.38
+  share_plus: ^10.0.0
+
 # dependency_overrides:
 #   firebase_messaging_platform_interface: 3.1.6
 #   firebase_core_platform_interface: 4.5.1
