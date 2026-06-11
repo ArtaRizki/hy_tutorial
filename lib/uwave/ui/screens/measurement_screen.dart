@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/ble_provider.dart';
 import '../../providers/session_provider.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/utils/export_helper.dart';
 import '../widgets/measurement_value_display.dart';
 import '../widgets/measurement_table.dart';
 import '../widgets/session_stats_card.dart';
@@ -142,6 +143,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                     );
                   }
                 },
+                onManualInput: () => _showManualInputDialog(context),
                 onUndo: () => session.deleteLastMeasurement(),
                 onNewSession: () => Navigator.push(
                     context,
@@ -162,6 +164,68 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  void _showManualInputDialog(BuildContext context) {
+    final session = context.read<SessionProvider>();
+    if (session.activeSession == null) return;
+
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1E293B),
+        title: const Text('Input Nilai Manual', style: TextStyle(color: Colors.white)),
+        content: TextField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            labelText: 'Nilai Pengukuran (${session.activeSession!.unit})',
+            labelStyle: const TextStyle(color: Color(0xFF94A3B8)),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF475569)),
+            ),
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF6366F1)),
+            ),
+          ),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Batal', style: TextStyle(color: Color(0xFF94A3B8))),
+          ),
+          TextButton(
+            onPressed: () {
+              final val = double.tryParse(controller.text);
+              if (val != null) {
+                session.addMeasurement(val);
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('✓ Tersimpan Manual: ${val.toStringAsFixed(3)} ${session.activeSession!.unit}'),
+                    backgroundColor: AppConstants.colorOk,
+                    duration: const Duration(seconds: 1),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Nilai tidak valid!'),
+                    backgroundColor: AppConstants.colorNg,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            },
+            child: const Text('Simpan', style: TextStyle(color: Color(0xFF6366F1))),
+          ),
+        ],
       ),
     );
   }
@@ -198,7 +262,6 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
               child: FilledButton.icon(
                 onPressed: () async {
                   Navigator.pop(context);
-                  // ignore: avoid_dynamic_calls
                   await _doExport(context, 'csv');
                 },
                 icon: const Icon(Icons.table_chart_outlined),
@@ -241,14 +304,18 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
     if (session.activeSession == null) return;
     try {
       if (format == 'csv') {
-        // Import di sini untuk menghindari circular import
-        // Panggil ExportHelper.exportCsv
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('Menyiapkan CSV...'),
             behavior: SnackBarBehavior.floating));
+        await ExportHelper.exportCsv(session.activeSession!, session.measurements);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Menyiapkan Excel...'),
+            behavior: SnackBarBehavior.floating));
+        await ExportHelper.exportExcel(session.activeSession!, session.measurements);
       }
     } catch (e) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Export gagal: $e'),
           backgroundColor: AppConstants.colorNg,
@@ -265,6 +332,7 @@ class _ControlButtons extends StatelessWidget {
   final bool hasSession;
   final double? currentValue;
   final VoidCallback onSave;
+  final VoidCallback onManualInput;
   final VoidCallback onUndo;
   final VoidCallback onNewSession;
   final ValueChanged<bool> onAutoSaveToggle;
@@ -275,6 +343,7 @@ class _ControlButtons extends StatelessWidget {
     required this.hasSession,
     required this.currentValue,
     required this.onSave,
+    required this.onManualInput,
     required this.onUndo,
     required this.onNewSession,
     required this.onAutoSaveToggle,
@@ -291,15 +360,15 @@ class _ControlButtons extends StatelessWidget {
             children: [
               // Save Button
               Expanded(
-                flex: 3,
+                flex: 2,
                 child: FilledButton.icon(
                   onPressed: (isConnected && hasSession && currentValue != null)
                       ? onSave
                       : null,
-                  icon: const Icon(Icons.save_alt_rounded, size: 22),
+                  icon: const Icon(Icons.save_alt_rounded, size: 20),
                   label: const Text('SIMPAN',
                       style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold)),
+                          fontSize: 14, fontWeight: FontWeight.bold)),
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFF6366F1),
                     disabledBackgroundColor: Colors.white12,
@@ -309,7 +378,22 @@ class _ControlButtons extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
+              // Manual Input Button
+              FilledButton(
+                onPressed: hasSession ? onManualInput : null,
+                style: FilledButton.styleFrom(
+                  backgroundColor: const Color(0xFF10B981),
+                  disabledBackgroundColor: Colors.white12,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14)),
+                ),
+                child: const Icon(Icons.keyboard_rounded,
+                    color: Colors.white, size: 24),
+              ),
+              const SizedBox(width: 8),
               // Undo Button
               FilledButton(
                 onPressed: hasSession ? onUndo : null,
@@ -317,21 +401,21 @@ class _ControlButtons extends StatelessWidget {
                   backgroundColor: const Color(0xFF334155),
                   disabledBackgroundColor: Colors.white12,
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 18, vertical: 16),
+                      horizontal: 14, vertical: 16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
                 ),
                 child: const Icon(Icons.undo_rounded,
                     color: Colors.white70, size: 24),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
               // New Session
               FilledButton(
                 onPressed: onNewSession,
                 style: FilledButton.styleFrom(
                   backgroundColor: const Color(0xFF334155),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 18, vertical: 16),
+                      horizontal: 14, vertical: 16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
                 ),
