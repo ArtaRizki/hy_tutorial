@@ -69,7 +69,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 20),
                   decoration: BoxDecoration(
-                    color: AppConstants.colorNg.withOpacity(0.2),
+                    color: AppConstants.colorNg.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: const Icon(Icons.delete_rounded,
@@ -94,7 +94,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       border: Border.all(
                         color: isActive
                             ? const Color(0xFF6366F1)
-                            : Colors.white.withOpacity(0.05),
+                            : Colors.white.withValues(alpha: 0.05),
                       ),
                     ),
                     child: Row(
@@ -103,7 +103,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withOpacity(0.15),
+                            color: const Color(0xFF6366F1).withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Icon(Icons.analytics_rounded,
@@ -143,7 +143,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     horizontal: 10, vertical: 4),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFF6366F1)
-                                      .withOpacity(0.2),
+                                      .withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Text('Aktif',
@@ -158,7 +158,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     horizontal: 10, vertical: 4),
                                 decoration: BoxDecoration(
                                   color:
-                                      AppConstants.colorOk.withOpacity(0.15),
+                                      AppConstants.colorOk.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Text('Selesai',

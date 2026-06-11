@@ -65,14 +65,14 @@ class MeasurementTableWidget extends StatelessWidget {
               final isNg = m.status == 'NG';
               return Container(
                 color: isNg
-                    ? const Color(0xFFEF4444).withOpacity(0.05)
+                    ? const Color(0xFFEF4444).withValues(alpha: 0.05)
                     : Colors.transparent,
                 padding: const EdgeInsets.symmetric(
                     horizontal: 16, vertical: 11),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                        color: Colors.white.withOpacity(0.03), width: 1),
+                        color: Colors.white.withValues(alpha: 0.03), width: 1),
                   ),
                 ),
                 child: Row(

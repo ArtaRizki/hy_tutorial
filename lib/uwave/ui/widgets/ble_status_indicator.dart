@@ -45,7 +45,7 @@ class BleStatusIndicator extends StatelessWidget {
             duration: const Duration(milliseconds: 300),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: ble.bleState == BleState.scanning

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import '../../providers/ble_provider.dart';
 import '../../core/constants/app_constants.dart';
@@ -45,9 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        actions: [
-          const BleStatusIndicator(),
-          const SizedBox(width: 12),
+        actions: const [
+          BleStatusIndicator(),
+          SizedBox(width: 12),
         ],
       ),
       body: Consumer<BleProvider>(
@@ -88,7 +87,7 @@ class _ConnectedView extends StatelessWidget {
             height: 120,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppConstants.colorOk.withOpacity(0.15),
+              color: AppConstants.colorOk.withValues(alpha: 0.15),
               border: Border.all(color: AppConstants.colorOk, width: 3),
             ),
             child: const Icon(Icons.bluetooth_connected,
@@ -203,7 +202,7 @@ class _ScanView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.bluetooth_searching,
-                      size: 80, color: Colors.white.withOpacity(0.15)),
+                      size: 80, color: Colors.white.withValues(alpha: 0.15)),
                   const SizedBox(height: 16),
                   const Text('Tidak ada device ditemukan',
                       style: TextStyle(color: Colors.white54, fontSize: 15)),
@@ -261,8 +260,8 @@ class _DeviceTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isUwave
-              ? const Color(0xFF6366F1).withOpacity(0.5)
-              : Colors.white.withOpacity(0.05),
+              ? const Color(0xFF6366F1).withValues(alpha: 0.5)
+              : Colors.white.withValues(alpha: 0.05),
         ),
       ),
       child: ListTile(
@@ -273,8 +272,8 @@ class _DeviceTile extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             color: isUwave
-                ? const Color(0xFF6366F1).withOpacity(0.2)
-                : Colors.white.withOpacity(0.05),
+                ? const Color(0xFF6366F1).withValues(alpha: 0.2)
+                : Colors.white.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(Icons.bluetooth,
@@ -344,7 +343,7 @@ class _StatusBanner extends StatelessWidget {
     }
     if (ble.bleState == BleState.error && ble.errorMessage != null) {
       return Container(
-        color: AppConstants.colorNg.withOpacity(0.15),
+        color: AppConstants.colorNg.withValues(alpha: 0.15),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Row(
           children: [

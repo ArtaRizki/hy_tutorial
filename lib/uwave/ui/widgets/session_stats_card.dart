@@ -66,7 +66,7 @@ class SessionStatsCard extends StatelessWidget {
         height: 36,
         width: 1,
         margin: const EdgeInsets.symmetric(horizontal: 8),
-        color: Colors.white.withOpacity(0.06),
+        color: Colors.white.withValues(alpha: 0.06),
       );
 }
 
@@ -96,7 +96,7 @@ class _StatItem extends StatelessWidget {
           if (sub != null)
             Text(sub!,
                 style: TextStyle(
-                    color: color.withOpacity(0.7),
+                    color: color.withValues(alpha: 0.7),
                     fontSize: 11)),
           Text(label,
               style: const TextStyle(

@@ -4,7 +4,6 @@ import '../../providers/ble_provider.dart';
 import '../../providers/session_provider.dart';
 import '../../core/constants/app_constants.dart';
 import '../widgets/measurement_value_display.dart';
-import '../widgets/status_badge.dart';
 import '../widgets/measurement_table.dart';
 import '../widgets/session_stats_card.dart';
 import '../widgets/ble_status_indicator.dart';
@@ -56,6 +55,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
             color: const Color(0xFF1E293B),
             onSelected: (val) async {
               if (val == 'new_session') {
+                if (!context.mounted) return;
                 await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -64,7 +64,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                 await context.read<SessionProvider>().finishSession();
                 if (mounted) Navigator.pop(context);
               } else if (val == 'export') {
-                _showExportDialog(context);
+                if (context.mounted) _showExportDialog(context);
               }
             },
             itemBuilder: (_) => [
@@ -352,7 +352,7 @@ class _ControlButtons extends StatelessWidget {
               Switch(
                 value: autoSave,
                 onChanged: onAutoSaveToggle,
-                activeColor: const Color(0xFF6366F1),
+                activeThumbColor: const Color(0xFF6366F1),
                 trackColor: WidgetStateProperty.all(const Color(0xFF334155)),
               ),
             ],

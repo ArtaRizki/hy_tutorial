@@ -32,13 +32,13 @@ class MeasurementValueDisplay extends StatelessWidget {
         color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: status != null ? color.withOpacity(0.4) : Colors.white12,
+          color: status != null ? color.withValues(alpha: 0.4) : Colors.white12,
           width: 2,
         ),
         boxShadow: status != null
             ? [
                 BoxShadow(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   blurRadius: 30,
                   spreadRadius: 2,
                 )
@@ -76,7 +76,7 @@ class MeasurementValueDisplay extends StatelessWidget {
           Text(
             unit,
             style: TextStyle(
-              color: color.withOpacity(0.7),
+              color: color.withValues(alpha: 0.7),
               fontSize: 22,
               fontWeight: FontWeight.w600,
             ),
@@ -144,10 +144,10 @@ class _ToleranceBar extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('${min.toStringAsFixed(3)}',
+            Text(min.toStringAsFixed(3),
                 style: const TextStyle(
                     color: Color(0xFF64748B), fontSize: 11)),
-            Text('${max.toStringAsFixed(3)}',
+            Text(max.toStringAsFixed(3),
                 style: const TextStyle(
                     color: Color(0xFF64748B), fontSize: 11)),
           ],
@@ -176,7 +176,7 @@ class _ToleranceBar extends StatelessWidget {
                   child: Container(
                     height: 8,
                     decoration: BoxDecoration(
-                      color: AppConstants.colorOk.withOpacity(0.3),
+                      color: AppConstants.colorOk.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -193,7 +193,7 @@ class _ToleranceBar extends StatelessWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                            color: statusColor.withOpacity(0.5),
+                            color: statusColor.withValues(alpha: 0.5),
                             blurRadius: 6)
                       ],
                     ),
@@ -222,9 +222,9 @@ class _StatusPill extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: color.withOpacity(0.5)),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Text(
         status,

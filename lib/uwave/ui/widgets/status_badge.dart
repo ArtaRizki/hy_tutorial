@@ -13,8 +13,8 @@ class StatusBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: isOk
-            ? AppConstants.colorOk.withOpacity(0.15)
-            : AppConstants.colorNg.withOpacity(0.15),
+            ? AppConstants.colorOk.withValues(alpha: 0.15)
+            : AppConstants.colorNg.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
