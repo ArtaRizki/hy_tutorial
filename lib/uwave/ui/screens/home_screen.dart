@@ -29,6 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: const Color(0xFF0F172A),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1E293B),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+        ),
         title: Row(
           children: [
             Image.asset('assets/images/icon-apps.png', height: 28,

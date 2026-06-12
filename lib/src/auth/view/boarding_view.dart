@@ -5,6 +5,7 @@ import 'package:hy_tutorial/common/helper/constant.dart';
 import 'package:hy_tutorial/generated/assets.dart';
 import 'package:hy_tutorial/src/auth/view/login_view.dart';
 import 'package:hy_tutorial/src/auth/view/register_view.dart';
+import 'package:hy_tutorial/uwave/uwave_app.dart';
 
 class BoardingView extends StatefulWidget {
   const BoardingView({super.key});
@@ -82,6 +83,17 @@ class _BoardingViewState extends State<BoardingView> {
                   borderRadius: BorderRadius.circular(10), () async {
                 CusNav.nPush(context, RegisterView());
               }),
+              SizedBox(height: 15),
+              CustomButton.secondaryButton(
+                "Testing Alat Bluetooth",
+                contentPadding: EdgeInsets.all(10),
+                borderColor: const Color(0xFF6366F1),
+                textColor: const Color(0xFF6366F1),
+                borderRadius: BorderRadius.circular(10),
+                () async {
+                  CusNav.nPush(context, const UWaveApp());
+                },
+              ),
               Constant.xSizedBox32,
             ],
           ),
