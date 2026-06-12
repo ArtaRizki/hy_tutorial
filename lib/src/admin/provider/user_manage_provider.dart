@@ -1,3 +1,4 @@
+// ignore_for_file: unnecessary_getters_setters
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -30,66 +31,66 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       PagingController(firstPageKey: 1);
 
   PagingController<int, UserListModelData> get pagingController =>
-      this._pagingController;
+      _pagingController;
 
   set pagingController(PagingController<int, UserListModelData> value) {
-    this._pagingController = value;
+    _pagingController = value;
   }
 
   PagingController<int, UserListModelData> _pagingController2 =
       PagingController(firstPageKey: 1);
 
   PagingController<int, UserListModelData> get pagingController2 =>
-      this._pagingController2;
+      _pagingController2;
 
   set pagingController2(PagingController<int, UserListModelData> value) {
-    this._pagingController2 = value;
+    _pagingController2 = value;
   }
 
   PagingController<int, UserListModelData> _pagingController3 =
       PagingController(firstPageKey: 1);
 
   PagingController<int, UserListModelData> get pagingController3 =>
-      this._pagingController3;
+      _pagingController3;
 
   set pagingController3(PagingController<int, UserListModelData> value) {
-    this._pagingController3 = value;
+    _pagingController3 = value;
   }
 
   PagingController<int, UserListModelData> _pagingController4 =
       PagingController(firstPageKey: 1);
 
   PagingController<int, UserListModelData> get pagingController4 =>
-      this._pagingController4;
+      _pagingController4;
 
   set pagingController4(PagingController<int, UserListModelData> value) {
-    this._pagingController4 = value;
+    _pagingController4 = value;
   }
 
   PagingController<int, UserListModelData> _pagingControllerAdmin =
       PagingController(firstPageKey: 1);
 
   PagingController<int, UserListModelData> get pagingControllerAdmin =>
-      this._pagingControllerAdmin;
+      _pagingControllerAdmin;
 
   set pagingControllerAdmin(PagingController<int, UserListModelData> value) {
-    this._pagingControllerAdmin = value;
+    _pagingControllerAdmin = value;
   }
 
   Duration duration = const Duration(seconds: 2);
   Timer? _searchOnStoppedTyping;
-  Timer? get searchOnStoppedTyping => this._searchOnStoppedTyping;
+  Timer? get searchOnStoppedTyping => _searchOnStoppedTyping;
 
   set searchOnStoppedTyping(Timer? value) {
-    this._searchOnStoppedTyping = value;
+    _searchOnStoppedTyping = value;
     notifyListeners();
   }
 
   bool _isFetching = false;
-  bool get isFetching => this._isFetching;
+  bool get isFetching => _isFetching;
 
   set isFetching(bool value) {
-    this._isFetching = value;
+    _isFetching = value;
   }
 
   TextEditingController userSearchC = TextEditingController();
@@ -97,18 +98,18 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   Duration duration2 = const Duration(seconds: 2);
   Timer? _searchOnStoppedTyping2;
-  Timer? get searchOnStoppedTyping2 => this._searchOnStoppedTyping2;
+  Timer? get searchOnStoppedTyping2 => _searchOnStoppedTyping2;
 
   set searchOnStoppedTyping2(Timer? value) {
-    this._searchOnStoppedTyping2 = value;
+    _searchOnStoppedTyping2 = value;
     notifyListeners();
   }
 
   bool _isFetching2 = false;
-  bool get isFetching2 => this._isFetching2;
+  bool get isFetching2 => _isFetching2;
 
   set isFetching2(bool value) {
-    this._isFetching2 = value;
+    _isFetching2 = value;
   }
 
   TextEditingController userSearchC2 = TextEditingController();
@@ -116,18 +117,18 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   Duration duration3 = const Duration(seconds: 2);
   Timer? _searchOnStoppedTyping3;
-  Timer? get searchOnStoppedTyping3 => this._searchOnStoppedTyping3;
+  Timer? get searchOnStoppedTyping3 => _searchOnStoppedTyping3;
 
   set searchOnStoppedTyping3(Timer? value) {
-    this._searchOnStoppedTyping3 = value;
+    _searchOnStoppedTyping3 = value;
     notifyListeners();
   }
 
   bool _isFetching3 = false;
-  bool get isFetching3 => this._isFetching3;
+  bool get isFetching3 => _isFetching3;
 
   set isFetching3(bool value) {
-    this._isFetching3 = value;
+    _isFetching3 = value;
   }
 
   TextEditingController userSearchC3 = TextEditingController();
@@ -135,18 +136,18 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   Duration duration4 = const Duration(seconds: 2);
   Timer? _searchOnStoppedTyping4;
-  Timer? get searchOnStoppedTyping4 => this._searchOnStoppedTyping4;
+  Timer? get searchOnStoppedTyping4 => _searchOnStoppedTyping4;
 
   set searchOnStoppedTyping4(Timer? value) {
-    this._searchOnStoppedTyping4 = value;
+    _searchOnStoppedTyping4 = value;
     notifyListeners();
   }
 
   bool _isFetching4 = false;
-  bool get isFetching4 => this._isFetching4;
+  bool get isFetching4 => _isFetching4;
 
   set isFetching4(bool value) {
-    this._isFetching4 = value;
+    _isFetching4 = value;
   }
 
   TextEditingController userSearchC4 = TextEditingController();
@@ -154,40 +155,40 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   Duration durationAdmin = const Duration(seconds: 2);
   Timer? _searchOnStoppedTypingAdmin;
-  Timer? get searchOnStoppedTypingAdmin => this._searchOnStoppedTypingAdmin;
+  Timer? get searchOnStoppedTypingAdmin => _searchOnStoppedTypingAdmin;
 
   set searchOnStoppedTypingAdmin(Timer? value) {
-    this._searchOnStoppedTypingAdmin = value;
+    _searchOnStoppedTypingAdmin = value;
     notifyListeners();
   }
 
   bool _isFetchingAdmin = false;
-  bool get isFetchingAdmin => this._isFetchingAdmin;
+  bool get isFetchingAdmin => _isFetchingAdmin;
 
   set isFetchingAdmin(bool value) {
-    this._isFetchingAdmin = value;
+    _isFetchingAdmin = value;
   }
 
   TextEditingController userSearchCAdmin = TextEditingController();
   FocusNode userNAdmin = FocusNode();
 
   bool _ascending = false;
-  bool get ascending => this._ascending;
-  set ascending(bool value) => this._ascending = value;
+  bool get ascending => _ascending;
+  set ascending(bool value) => _ascending = value;
   bool _descending = false;
-  bool get descending => this._descending;
-  set descending(bool value) => this._descending = value;
+  bool get descending => _descending;
+  set descending(bool value) => _descending = value;
 
   bool _createdAt = false;
-  bool get createdAt => this._createdAt;
-  set createdAt(bool value) => this._createdAt = value;
+  bool get createdAt => _createdAt;
+  set createdAt(bool value) => _createdAt = value;
   bool _username = false;
-  bool get username => this._username;
-  set username(bool value) => this._username = value;
+  bool get username => _username;
+  set username(bool value) => _username = value;
 
   int pageSize = 0;
 
-  get getPageSize => this.pageSize;
+  get getPageSize => pageSize;
 
   set setPageSize(pageSize) {
     this.pageSize = pageSize;
@@ -195,94 +196,94 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   }
 
   bool _ascending2 = false;
-  bool get ascending2 => this._ascending2;
-  set ascending2(bool value) => this._ascending2 = value;
+  bool get ascending2 => _ascending2;
+  set ascending2(bool value) => _ascending2 = value;
   bool _descending2 = false;
-  bool get descending2 => this._descending2;
-  set descending2(bool value) => this._descending2 = value;
+  bool get descending2 => _descending2;
+  set descending2(bool value) => _descending2 = value;
 
   bool _createdAt2 = false;
-  bool get createdAt2 => this._createdAt2;
-  set createdAt2(bool value) => this._createdAt2 = value;
+  bool get createdAt2 => _createdAt2;
+  set createdAt2(bool value) => _createdAt2 = value;
   bool _username2 = false;
-  bool get username2 => this._username2;
-  set username2(bool value) => this._username2 = value;
+  bool get username2 => _username2;
+  set username2(bool value) => _username2 = value;
 
   int pageSize2 = 0;
 
-  get getPageSize2 => this.pageSize2;
+  get getPageSize2 => pageSize2;
 
   set setPageSize2(pageSize) {
-    this.pageSize2 = pageSize;
+    pageSize2 = pageSize;
     notifyListeners();
   }
 
   bool _ascending3 = false;
-  bool get ascending3 => this._ascending3;
-  set ascending3(bool value) => this._ascending3 = value;
+  bool get ascending3 => _ascending3;
+  set ascending3(bool value) => _ascending3 = value;
   bool _descending3 = false;
-  bool get descending3 => this._descending3;
-  set descending3(bool value) => this._descending3 = value;
+  bool get descending3 => _descending3;
+  set descending3(bool value) => _descending3 = value;
 
   bool _createdAt3 = false;
-  bool get createdAt3 => this._createdAt3;
-  set createdAt3(bool value) => this._createdAt3 = value;
+  bool get createdAt3 => _createdAt3;
+  set createdAt3(bool value) => _createdAt3 = value;
   bool _username3 = false;
-  bool get username3 => this._username3;
-  set username3(bool value) => this._username3 = value;
+  bool get username3 => _username3;
+  set username3(bool value) => _username3 = value;
 
   int pageSize3 = 0;
 
-  get getPageSize3 => this.pageSize3;
+  get getPageSize3 => pageSize3;
 
   set setPageSize3(pageSize) {
-    this.pageSize3 = pageSize;
+    pageSize3 = pageSize;
     notifyListeners();
   }
 
   bool _ascending4 = false;
-  bool get ascending4 => this._ascending4;
-  set ascending4(bool value) => this._ascending4 = value;
+  bool get ascending4 => _ascending4;
+  set ascending4(bool value) => _ascending4 = value;
   bool _descending4 = false;
-  bool get descending4 => this._descending4;
-  set descending4(bool value) => this._descending4 = value;
+  bool get descending4 => _descending4;
+  set descending4(bool value) => _descending4 = value;
 
   bool _createdAt4 = false;
-  bool get createdAt4 => this._createdAt4;
-  set createdAt4(bool value) => this._createdAt4 = value;
+  bool get createdAt4 => _createdAt4;
+  set createdAt4(bool value) => _createdAt4 = value;
   bool _username4 = false;
-  bool get username4 => this._username4;
-  set username4(bool value) => this._username4 = value;
+  bool get username4 => _username4;
+  set username4(bool value) => _username4 = value;
 
   int pageSize4 = 0;
 
-  get getPageSize4 => this.pageSize4;
+  get getPageSize4 => pageSize4;
 
   set setPageSize4(pageSize) {
-    this.pageSize4 = pageSize;
+    pageSize4 = pageSize;
     notifyListeners();
   }
 
   bool _ascendingAdmin = false;
-  bool get ascendingAdmin => this._ascendingAdmin;
-  set ascendingAdmin(bool value) => this._ascendingAdmin = value;
+  bool get ascendingAdmin => _ascendingAdmin;
+  set ascendingAdmin(bool value) => _ascendingAdmin = value;
   bool _descendingAdmin = false;
-  bool get descendingAdmin => this._descendingAdmin;
-  set descendingAdmin(bool value) => this._descendingAdmin = value;
+  bool get descendingAdmin => _descendingAdmin;
+  set descendingAdmin(bool value) => _descendingAdmin = value;
 
   bool _createdAtAdmin = false;
-  bool get createdAtAdmin => this._createdAtAdmin;
-  set createdAtAdmin(bool value) => this._createdAtAdmin = value;
+  bool get createdAtAdmin => _createdAtAdmin;
+  set createdAtAdmin(bool value) => _createdAtAdmin = value;
   bool _usernameAdmin = false;
-  bool get usernameAdmin => this._usernameAdmin;
-  set usernameAdmin(bool value) => this._usernameAdmin = value;
+  bool get usernameAdmin => _usernameAdmin;
+  set usernameAdmin(bool value) => _usernameAdmin = value;
 
   int pageSizeAdmin = 0;
 
-  get getPageSizeAdmin => this.pageSizeAdmin;
+  get getPageSizeAdmin => pageSizeAdmin;
 
   set setPageSizeAdmin(pageSize) {
-    this.pageSizeAdmin = pageSize;
+    pageSizeAdmin = pageSize;
     notifyListeners();
   }
 
@@ -305,9 +306,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           } else {
             BuildContext? context =
                 NavigationService.navigatorKey.currentContext;
-            if (context != null)
+            if (context != null && context.mounted) {
               CustomAlert.showSnackBar(
                   context, 'Gagal Mendapatkan Data User', true);
+            }
           }
         });
       });
@@ -326,9 +328,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           } else {
             BuildContext? context =
                 NavigationService.navigatorKey.currentContext;
-            if (context != null)
+            if (context != null && context.mounted) {
               CustomAlert.showSnackBar(
                   context, 'Gagal Mendapatkan Data User', true);
+            }
           }
         });
       });
@@ -347,9 +350,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           } else {
             BuildContext? context =
                 NavigationService.navigatorKey.currentContext;
-            if (context != null)
+            if (context != null && context.mounted) {
               CustomAlert.showSnackBar(
                   context, 'Gagal Mendapatkan Data User', true);
+            }
           }
         });
       });
@@ -368,9 +372,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           } else {
             BuildContext? context =
                 NavigationService.navigatorKey.currentContext;
-            if (context != null)
+            if (context != null && context.mounted) {
               CustomAlert.showSnackBar(
                   context, 'Gagal Mendapatkan Data User', true);
+            }
           }
         });
       });
@@ -389,9 +394,10 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           } else {
             BuildContext? context =
                 NavigationService.navigatorKey.currentContext;
-            if (context != null)
+            if (context != null && context.mounted) {
               CustomAlert.showSnackBar(
                   context, 'Gagal Mendapatkan Data User', true);
+            }
           }
         });
       });
@@ -405,19 +411,24 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     try {
       if (!isFetching) {
         isFetching = true;
-        if (withLoading) loading(true);
-        String url = Constant.BASE_API_FULL + '/admin/users';
+        if (withLoading) {
+          loading(true);
+        }
+        String url = '${Constant.BASE_API_FULL}/admin/users';
         Map<String, String> param = {
           'Filter': 'Status',
           'FilterValue': '1',
         };
 
-        if (userSearchC.text.isNotEmpty)
+        if (userSearchC.text.isNotEmpty) {
           param.addAll({'Search': userSearchC.text});
+        }
 
-        if (next != null && next != '') param.addAll({'Next': next ?? ''});
-        if (_pagingController.itemList?.length != 0) {
-          await Future.delayed(Duration(seconds: 1));
+        if (next != null && next != '') {
+          param.addAll({'Next': next ?? ''});
+        }
+        if (pagingController.itemList?.isNotEmpty == true) {
+          await Future.delayed(const Duration(seconds: 1));
         }
         final response = await get(url, body: param);
 
@@ -436,14 +447,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
                 .appendLastPage(newItems as List<UserListModelData>);
           } else {
             final nextPageKey = page += 1;
-            if (model.Meta?.Next != null && model.Meta?.Next != '')
+            if (model.Meta?.Next != null && model.Meta?.Next != '') {
               next = model.Meta?.Next ?? '';
+            }
             pagingController.appendPage(
                 newItems as List<UserListModelData>, nextPageKey);
           }
 
           notifyListeners();
-          if (withLoading) loading(false);
+          if (withLoading) {
+            loading(false);
+          }
           isFetching = false;
         } else {
           log("MASUK ELSE");
@@ -469,14 +483,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     try {
       if (!isFetching2) {
         isFetching2 = true;
-        if (withLoading) loading(true);
-        String url = Constant.BASE_API_FULL + '/admin/users';
+        if (withLoading) {
+          loading(true);
+        }
+        String url = '${Constant.BASE_API_FULL}/admin/users';
         Map<String, String> param = {
           'Filter': 'Status',
           'FilterValue': '0',
         };
-        if (userSearchC2.text.isNotEmpty)
+        if (userSearchC2.text.isNotEmpty) {
           param.addAll({'Search': userSearchC2.text});
+        }
         if (ascending2) {
           param.remove('SortOrder');
           param.addAll({'SortOrder': 'ASC'});
@@ -493,9 +510,11 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           param.remove('SortBy');
           param.addAll({'SortBy': 'CreatedAt'});
         }
-        if (next2 != null && next2 != '') param.addAll({'Next': next2 ?? ''});
-        if (_pagingController2.itemList?.length != 0) {
-          await Future.delayed(Duration(seconds: 1));
+        if (next2 != null && next2 != '') {
+          param.addAll({'Next': next2 ?? ''});
+        }
+        if (pagingController2.itemList?.isNotEmpty == true) {
+          await Future.delayed(const Duration(seconds: 1));
         }
         final response = await get(url, body: param);
 
@@ -514,14 +533,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
                 .appendLastPage(newItems as List<UserListModelData>);
           } else {
             final nextPageKey = page += 1;
-            if (model.Meta?.Next != null && model.Meta?.Next != '')
+            if (model.Meta?.Next != null && model.Meta?.Next != '') {
               next2 = model.Meta?.Next ?? '';
+            }
             pagingController2.appendPage(
                 newItems as List<UserListModelData>, nextPageKey);
           }
 
           notifyListeners();
-          if (withLoading) loading(false);
+          if (withLoading) {
+            loading(false);
+          }
           isFetching2 = false;
         } else {
           log("MASUK ELSE");
@@ -547,18 +569,23 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     try {
       if (!isFetching3) {
         isFetching3 = true;
-        if (withLoading) loading(true);
-        String url = Constant.BASE_API_FULL + '/super/users';
+        if (withLoading) {
+          loading(true);
+        }
+        String url = '${Constant.BASE_API_FULL}/super/users';
         Map<String, String> param = {
           'Filter': 'Status',
           'FilterValue': '0',
         };
-        if (userSearchC3.text.isNotEmpty)
+        if (userSearchC3.text.isNotEmpty) {
           param.addAll({'Search': userSearchC3.text});
+        }
 
-        if (next3 != null && next3 != '') param.addAll({'Next': next3 ?? ''});
-        if (_pagingController3.itemList?.length != 0) {
-          await Future.delayed(Duration(seconds: 1));
+        if (next3 != null && next3 != '') {
+          param.addAll({'Next': next3 ?? ''});
+        }
+        if (pagingController3.itemList?.isNotEmpty == true) {
+          await Future.delayed(const Duration(seconds: 1));
         }
         final response = await get(url, body: param);
 
@@ -577,14 +604,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
                 .appendLastPage(newItems as List<UserListModelData>);
           } else {
             final nextPageKey = page += 1;
-            if (model.Meta?.Next != null && model.Meta?.Next != '')
+            if (model.Meta?.Next != null && model.Meta?.Next != '') {
               next3 = model.Meta?.Next ?? '';
+            }
             pagingController3.appendPage(
                 newItems as List<UserListModelData>, nextPageKey);
           }
 
           notifyListeners();
-          if (withLoading) loading(false);
+          if (withLoading) {
+            loading(false);
+          }
           isFetching3 = false;
         } else {
           log("MASUK ELSE");
@@ -610,18 +640,23 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     try {
       if (!isFetching4) {
         isFetching4 = true;
-        if (withLoading) loading(true);
-        String url = Constant.BASE_API_FULL + '/super/users';
+        if (withLoading) {
+          loading(true);
+        }
+        String url = '${Constant.BASE_API_FULL}/super/users';
         Map<String, String> param = {
           'Filter': 'Role',
           'FilterValue': '3',
         };
-        if (userSearchC4.text.isNotEmpty)
+        if (userSearchC4.text.isNotEmpty) {
           param.addAll({'Search': userSearchC4.text});
+        }
 
-        if (next4 != null && next4 != '') param.addAll({'Next': next4 ?? ''});
-        if (_pagingController4.itemList?.length != 0) {
-          await Future.delayed(Duration(seconds: 1));
+        if (next4 != null && next4 != '') {
+          param.addAll({'Next': next4 ?? ''});
+        }
+        if (pagingController4.itemList?.isNotEmpty == true) {
+          await Future.delayed(const Duration(seconds: 1));
         }
         final response = await get(url, body: param);
 
@@ -640,14 +675,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
                 .appendLastPage(newItems as List<UserListModelData>);
           } else {
             final nextPageKey = page += 1;
-            if (model.Meta?.Next != null && model.Meta?.Next != '')
+            if (model.Meta?.Next != null && model.Meta?.Next != '') {
               next4 = model.Meta?.Next ?? '';
+            }
             pagingController4.appendPage(
                 newItems as List<UserListModelData>, nextPageKey);
           }
 
           notifyListeners();
-          if (withLoading) loading(false);
+          if (withLoading) {
+            loading(false);
+          }
           isFetching4 = false;
         } else {
           log("MASUK ELSE");
@@ -673,14 +711,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     try {
       if (!isFetchingAdmin) {
         isFetchingAdmin = true;
-        if (withLoading) loading(true);
-        String url = Constant.BASE_API_FULL + '/super/users';
+        if (withLoading) {
+          loading(true);
+        }
+        String url = '${Constant.BASE_API_FULL}/super/users';
         Map<String, String> param = {
           'Filter': 'Role',
           'FilterValue': '2',
         };
-        if (userSearchCAdmin.text.isNotEmpty)
+        if (userSearchCAdmin.text.isNotEmpty) {
           param.addAll({'Search': userSearchCAdmin.text});
+        }
         if (ascendingAdmin) {
           param.remove('SortOrder');
           param.addAll({'SortOrder': 'ASC'});
@@ -697,10 +738,11 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           param.remove('SortBy');
           param.addAll({'SortBy': 'CreatedAt'});
         }
-        if (nextAdmin != null && nextAdmin != '')
+        if (nextAdmin != null && nextAdmin != '') {
           param.addAll({'Next': nextAdmin ?? ''});
-        if (_pagingControllerAdmin.itemList?.length != 0) {
-          await Future.delayed(Duration(seconds: 1));
+        }
+        if (pagingControllerAdmin.itemList?.isNotEmpty == true) {
+          await Future.delayed(const Duration(seconds: 1));
         }
         final response = await get(url, body: param);
 
@@ -719,14 +761,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
                 .appendLastPage(newItems as List<UserListModelData>);
           } else {
             final nextPageKey = page += 1;
-            if (model.Meta?.Next != null && model.Meta?.Next != '')
+            if (model.Meta?.Next != null && model.Meta?.Next != '') {
               nextAdmin = model.Meta?.Next ?? '';
+            }
             pagingControllerAdmin.appendPage(
                 newItems as List<UserListModelData>, nextPageKey);
           }
 
           notifyListeners();
-          if (withLoading) loading(false);
+          if (withLoading) {
+            loading(false);
+          }
           isFetchingAdmin = false;
         } else {
           log("MASUK ELSE");
@@ -761,6 +806,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       final data = userDetailModel;
       nameC.text = data.Data?.Name ?? '';
       nipC.text = '';
+      if (!context.mounted) return;
       final p = context.read<DivisionProvider>();
       await p.fetchDivision(withLoading: true);
       final division = p.divisionModel.Data;
@@ -771,20 +817,24 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       emailC.text = data.Data?.Email ?? '';
       phoneNumberC.text = (data.Data?.Phone ?? '').replaceFirst('+', '');
       passwordC.text = '';
-      if (data.Data?.Role == "admin")
+      if (data.Data?.Role == "admin") {
         selectedRole = "2";
-      else
+      } else {
         selectedRole = "3";
-      if (data.Data?.Status == "inactive")
+      }
+      if (data.Data?.Status == "inactive") {
         selectedStatus = "0";
-      else if (data.Data?.Status == "active")
+      } else if (data.Data?.Status == "active") {
         selectedStatus = "1";
-      else
+      } else {
         selectedStatus = "2";
+      }
     } else {
       updateV = false;
-      final p = context.read<DivisionProvider>();
-      await p.fetchDivision(withLoading: true);
+      if (context.mounted) {
+        final p = context.read<DivisionProvider>();
+        await p.fetchDivision(withLoading: true);
+      }
     }
     notifyListeners();
   }
@@ -805,53 +855,53 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
   bool _obscurePass = true;
 
-  bool get obscurePass => this._obscurePass;
+  bool get obscurePass => _obscurePass;
 
   toggleObscurePass() {
-    this._obscurePass = !obscurePass;
+    _obscurePass = !obscurePass;
     notifyListeners();
   }
 
   String? _selectedDivision;
-  String? get selectedDivision => this._selectedDivision;
+  String? get selectedDivision => _selectedDivision;
 
   set selectedDivision(String? value) {
-    this._selectedDivision = value;
+    _selectedDivision = value;
     // notifyListeners();
   }
 
   String? _selectedRole;
-  String? get selectedRole => this._selectedRole;
+  String? get selectedRole => _selectedRole;
 
   set selectedRole(String? value) {
-    this._selectedRole = value;
+    _selectedRole = value;
     // notifyListeners();
   }
 
   String? _selectedStatus;
-  String? get selectedStatus => this._selectedStatus;
+  String? get selectedStatus => _selectedStatus;
 
   set selectedStatus(String? value) {
-    this._selectedStatus = value;
+    _selectedStatus = value;
     // notifyListeners();
   }
 
   bool _updateV = false;
-  bool get updateV => this._updateV;
+  bool get updateV => _updateV;
   set updateV(value) {
-    this._updateV = value;
+    _updateV = value;
     // notifyListeners();
   }
 
   UserDetailModel _userDetailModel = UserDetailModel();
-  UserDetailModel get userDetailModel => this._userDetailModel;
-  set userDetailModel(UserDetailModel value) => this._userDetailModel = value;
+  UserDetailModel get userDetailModel => _userDetailModel;
+  set userDetailModel(UserDetailModel value) => _userDetailModel = value;
 
   TextEditingController radiusStatusC = TextEditingController();
   bool _radiusStatus = true;
   bool get radiusStatus => _radiusStatus;
   set radiusStatus(bool value) {
-    this._radiusStatus = value;
+    _radiusStatus = value;
     // notifyListeners();
   }
 
@@ -863,8 +913,8 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     loading(true);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
-    final response = await get(Constant.BASE_API_FULL +
-        '/${isSuperAdmin ? 'super' : 'admin'}/users/$id');
+    final response = await get(
+        '${Constant.BASE_API_FULL}/${isSuperAdmin ? 'super' : 'admin'}/users/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = UserDetailModel.fromJson(jsonDecode(response.body));
@@ -882,7 +932,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
   }
 
   List<Widget> userForm(
-      List<DivisionModelData?>? Data, VoidCallback setState, bool isEdit) {
+      List<DivisionModelData?>? data, VoidCallback setState, bool isEdit) {
     return [
       Text("Input Data User", style: Constant.blackBold20),
       Constant.xSizedBox8,
@@ -906,17 +956,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       CustomDropdown.normalDropdown(
         //controller: roleC,
         iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-        contentPadding: EdgeInsets.all(2),
+        contentPadding: const EdgeInsets.all(2),
         borderColor: Constant.primaryColor,
         labelText: "Divisi",
         //selectedItem: selectedRole,
         selectedItem: selectedDivision,
         hintText: "Divisi",
         list: List.generate(
-          Data?.length ?? 0,
+          data?.length ?? 0,
           (index) => DropdownMenuItem(
-              child: Text(Data?[index]?.Name ?? ""),
-              value: Data?[index]?.Id ?? ""),
+              value: data?[index]?.Id ?? "",
+              child: Text(data?[index]?.Name ?? "")),
         ),
         onChanged: (val) {
           selectedDivision = val;
@@ -949,22 +999,22 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         visible: updateV,
         child: CustomDropdown.normalDropdown(
           //controller: roleC,
-          padding: EdgeInsets.only(top: 16),
+          padding: const EdgeInsets.only(top: 16),
           iconPadding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-          contentPadding: EdgeInsets.all(2),
+          contentPadding: const EdgeInsets.all(2),
           borderColor: Constant.primaryColor,
           labelText: "Role",
           selectedItem: selectedRole,
           //selectedItem: selectedDivision,
           hintText: "Role",
-          list: [
+          list: const [
             DropdownMenuItem(
-              child: Text("Admin"),
               value: "2",
+              child: Text("Admin"),
             ),
             DropdownMenuItem(
-              child: Text("User"),
               value: "3",
+              child: Text("User"),
             ),
           ],
           onChanged: (val) {
@@ -977,26 +1027,26 @@ class UserManageProvider extends BaseController with ChangeNotifier {
         visible: updateV,
         child: CustomDropdown.normalDropdown(
           //controller: roleC,
-          padding: EdgeInsets.only(top: 16),
+          padding: const EdgeInsets.only(top: 16),
           iconPadding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-          contentPadding: EdgeInsets.all(2),
+          contentPadding: const EdgeInsets.all(2),
           borderColor: Constant.primaryColor,
           labelText: "Status",
           selectedItem: selectedStatus,
           //selectedItem: selectedDivision,
           hintText: "Status",
-          list: [
+          list: const [
             DropdownMenuItem(
-              child: Text("Inactive"),
               value: "0",
+              child: Text("Inactive"),
             ),
             DropdownMenuItem(
-              child: Text("Active"),
               value: "1",
+              child: Text("Active"),
             ),
             DropdownMenuItem(
-              child: Text("Blocked By Admin"),
               value: "2",
+              child: Text("Blocked By Admin"),
             ),
           ],
           onChanged: (val) {
@@ -1031,7 +1081,7 @@ class UserManageProvider extends BaseController with ChangeNotifier {
           ),
         ),
       ),
-      SizedBox(height: 64),
+      const SizedBox(height: 64),
     ];
   }
 
@@ -1067,32 +1117,35 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       'DivisionId': selectedDivision ?? '',
       'RadiusStatus': '$radiusStatus',
     };
-    if (isSuperAdmin && selectedRole != null)
+    if (isSuperAdmin && selectedRole != null) {
       param.addAll({'Role': selectedRole ?? ''});
+    }
 
     final response = await post(
-        Constant.BASE_API_FULL + '/${isSuperAdmin ? 'super' : 'admin'}/users',
+        '${Constant.BASE_API_FULL}/${isSuperAdmin ? 'super' : 'admin'}/users',
         body: param);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
 
       loading(false);
-      await Utils.showSuccess(msg: model.message ?? "Sukses");
-      await Future.delayed(Duration(seconds: 2));
-      final isAdmin = await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+      await Utils.showSuccess(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
+      final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
 
       // CusNav.nPop(context);
-      CusNav.nPushAndRemoveUntil(context, MainHome(index: 1),
-          arguments: isAdmin);
+      if (context.mounted) {
+        CusNav.nPushAndRemoveUntil(context, const MainHome(index: 1),
+            arguments: isAdmin);
+      }
       clearForm();
     } else {
       final model = BaseResponse.from(response);
 
       final message = model.message;
       loading(false);
-      await Utils.showFailed(msg: model.message ?? "Gagal");
-      await Future.delayed(Duration(seconds: 2));
+      await Utils.showFailed(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
       throw Exception(message);
     }
   }
@@ -1103,36 +1156,43 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     FocusManager.instance.primaryFocus?.unfocus();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final isSuperAdmin =
-        await prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
+        prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
     Map<String, String> param = {'RadiusStatus': '$radiusStatus'};
     // if (selectedRole != null) param.addAll({'Role': selectedRole ?? ''});
 
-    if (isSuperAdmin && selectedRole != null)
+    if (isSuperAdmin && selectedRole != null) {
       param.addAll({'Role': selectedRole ?? ''});
-    if (selectedDivision != null)
+    }
+    if (selectedDivision != null) {
       param.addAll({'DivisionId': selectedDivision ?? ''});
-    if (selectedStatus != null) param.addAll({'Status': selectedStatus ?? ''});
+    }
+    if (selectedStatus != null) {
+      param.addAll({'Status': selectedStatus ?? ''});
+    }
 
     final response = await put(
-        Constant.BASE_API_FULL +
-            '/${isSuperAdmin ? 'super' : 'admin'}/users/$id',
+        '${Constant.BASE_API_FULL}/${isSuperAdmin ? 'super' : 'admin'}/users/$id',
         body: param);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
 
       loading(false);
-      await Utils.showSuccess(msg: model.message ?? "Sukses");
-      await Future.delayed(Duration(seconds: 2));
+      await Utils.showSuccess(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
       if (!fromHome) {
-        CusNav.nPop(context);
-        CusNav.nPop(context);
+        if (context.mounted) {
+          CusNav.nPop(context);
+          CusNav.nPop(context);
+        }
         next = null;
         next2 = null;
         notifyListeners();
-        final isAdmin = await prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
-        CusNav.nPushAndRemoveUntil(context, MainHome(index: 1),
-            arguments: isAdmin);
+        final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+        if (context.mounted) {
+          CusNav.nPushAndRemoveUntil(context, const MainHome(index: 1),
+              arguments: isAdmin);
+        }
       }
 
       clearForm();
@@ -1141,24 +1201,24 @@ class UserManageProvider extends BaseController with ChangeNotifier {
 
       final message = model.message;
       loading(false);
-      await Utils.showFailed(msg: model.message ?? "Gagal");
-      await Future.delayed(Duration(seconds: 2));
+      await Utils.showFailed(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
       throw Exception(message);
     }
   }
 
   GeneratePasswordModel _generatePasswordModel = GeneratePasswordModel();
   GeneratePasswordModel get generatePasswordModel =>
-      this._generatePasswordModel;
+      _generatePasswordModel;
   set generatePasswordModel(GeneratePasswordModel value) =>
-      this._generatePasswordModel = value;
+      _generatePasswordModel = value;
 
   Future<void> generatePass(BuildContext context, {required String id}) async {
     loading(true);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
-    final response = await post(Constant.BASE_API_FULL +
-        '/${isSuperAdmin ? 'super' : 'admin'}/users/generate-password/$id');
+    final response = await post(
+        '${Constant.BASE_API_FULL}/${isSuperAdmin ? 'super' : 'admin'}/users/generate-password/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       generatePasswordModel =
@@ -1167,18 +1227,20 @@ class UserManageProvider extends BaseController with ChangeNotifier {
       notifyListeners();
       loading(false);
       await Utils.showSuccess(msg: generatePasswordModel.Message ?? "Sukses");
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       await Clipboard.setData(
           ClipboardData(text: generatePasswordModel.Data?.Password ?? ''));
-      CustomAlert.showSnackBar(context, 'Password berhasil disalin', false);
+      if (context.mounted) {
+        CustomAlert.showSnackBar(context, 'Password berhasil disalin', false);
+      }
       // CusNav.nPop(context);
     } else {
       final model = BaseResponse.from(response);
 
       final message = model.message;
       loading(false);
-      await Utils.showFailed(msg: model.message ?? "Gagal");
-      await Future.delayed(Duration(seconds: 2));
+      await Utils.showFailed(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
       throw Exception(message);
     }
   }
@@ -1187,15 +1249,17 @@ class UserManageProvider extends BaseController with ChangeNotifier {
     loading(true);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final isSuperAdmin = prefs.getBool(Constant.kSetPrefIsSuperAdmin) ?? false;
-    final response = await delete(Constant.BASE_API_FULL +
-        '/${isSuperAdmin ? 'super' : 'admin'}/users/$id');
+    final response = await delete(
+        '${Constant.BASE_API_FULL}/${isSuperAdmin ? 'super' : 'admin'}/users/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
       loading(false);
-      await Utils.showSuccess(msg: model.message ?? "Sukses");
-      await Future.delayed(Duration(seconds: 2));
-      CusNav.nPop(context);
+      await Utils.showSuccess(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
+      if (context.mounted) {
+        CusNav.nPop(context);
+      }
     } else {
       final message = jsonDecode(response.body)["Message"];
       loading(false);

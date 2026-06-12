@@ -53,8 +53,8 @@ import 'dart:io';
 import 'constant.dart';
 
 enum XenoLogType {
-  Database,
-  Discord,
+  database,
+  discord,
   // Email // belum bisa, dicoba dengan SMTP masih fail
 }
 
@@ -62,14 +62,14 @@ class XenoLog {
   String projectName = ""; // bedakan untuk tiap project
   String version = "";
   String id = "0"; // id, nama user / device
-  XenoLogType logType = XenoLogType.Database;
+  XenoLogType logType = XenoLogType.database;
   String setDatabaseURL = "";
   String getDatabaseURL = "";
   String webHookURL = "";
   String emailAddress = "";
 
   String projectNameDef = "Hytutorial";
-  XenoLogType logTypeDef = XenoLogType.Database;
+  XenoLogType logTypeDef = XenoLogType.database;
   // Endpoint Dev
   String setDatabaseURLDef = 'http://47.74.214.215:82/mg-log/log/ceklog?';
   // Contoh param : kode=KDE2 & log=tes2 & versi=3 & device=laptop & tgl_log=2022-05-15 & note=gapapa
@@ -82,50 +82,37 @@ class XenoLog {
   // belum ada
 
   String keySharedPreferences = 'MgeLog';
-  String _keyAlwaysLog = 'MgeAlwaysLog';
-  int _connectTimeOut = 30000; // timeout connect ke server
-  int _sendTimeout = 30000; // timeout send data ke server
-  int _receiveTimeOut = 30000; // timeout receive data dari server
+  final String _keyAlwaysLog = 'MgeAlwaysLog';
 
   // Dio dio;
   // FormData formData;
-  XenoLog(String id,
-      {String projectName = "",
-      String version = "",
-      XenoLogType logType = XenoLogType.Database,
-      String webHookURL = "",
-      String emailAddress = ""}) {
-    this.projectName = (projectName ?? "") != "" ? projectName : projectNameDef;
-    this.version = version;
-    this.id = id;
-    this.logType = logType;
-    this.setDatabaseURL = setDatabaseURL;
-    this.getDatabaseURL = getDatabaseURL;
-    this.webHookURL = webHookURL;
-    this.emailAddress = emailAddress;
-
-    // dio = Dio(BaseOptions(
-    //     connectTimeout: _connectTimeOut,
-    //     sendTimeout: _sendTimeout,
-    //     receiveTimeout: _receiveTimeOut));
+  XenoLog(this.id,
+      {this.projectName = "",
+      this.version = "",
+      this.logType = XenoLogType.database,
+      this.webHookURL = "",
+      this.emailAddress = ""}) {
+    projectName = projectName != "" ? projectName : projectNameDef;
+    setDatabaseURL = setDatabaseURLDef; // Fallback to default
+    getDatabaseURL = getDatabaseURLDef; // Fallback to default
   }
 
   // kirim log langsung (unsendLog + log)
   // jika gagal, log + error tersimpan di local
   // jika berhasil, clear local
   void sendLog(String log) async {
-    if (this.logType == XenoLogType.Database) {
-      String unsendLog = await _getUnsendLog();
-      String formattedLog = _formatLog(id.toString(), log);
-      Map<String, dynamic> param = {
-        "kode": projectName.toString().toUpperCase(),
-        "device": id.toString(),
-        "versi": version,
-        "tgl_log": DateFormat("yyyy-MM-dd").format(DateTime.now()),
-        "log": "tes123"
-      }; // unsendLog + formattedLog};
+    if (logType == XenoLogType.database) {
+      // String unsendLog = await _getUnsendLog();
+      // String formattedLog = _formatLog(id.toString(), log);
+      // Map<String, dynamic> param = {
+      //   "kode": projectName.toString().toUpperCase(),
+      //   "device": id.toString(),
+      //   "versi": version,
+      //   "tgl_log": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      //   "log": "tes123"
+      // }; // unsendLog + formattedLog};
 
-      bool result = false;
+      // bool result = false;
       // _dioPost(setDatabaseURL, param).then((response) {
       //   if (response != null) {
       //     Map<String, dynamic> json = jsonDecode(response.toString());
@@ -141,15 +128,14 @@ class XenoLog {
       //     _clearLog();
       //   }
       // });
-    } else if (this.logType == XenoLogType.Discord) {
-      String unsendLog = await _getUnsendLog();
-      String title = "PROJECT LOG: " +
-          projectName.toString().toUpperCase() +
-          " < " +
-          version +
-          " >" +
-          "\r\n";
-      String formattedLog = _formatLog(id.toString(), log);
+    } else if (logType == XenoLogType.discord) {
+      // String unsendLog = await _getUnsendLog();
+      // String title = "PROJECT LOG: " +
+      //     projectName.toString().toUpperCase() +
+      //     " < " +
+      //     version +
+      //     " >\r\n";
+      // String formattedLog = _formatLog(id.toString(), log);
       // _dioPost(webHookURL, {"content": title + unsendLog + formattedLog})
       //     .then((response) {
       //   if (response != "") {
@@ -179,32 +165,32 @@ class XenoLog {
     }
 
     if (doLog) {
-      //   if (this.logType == XenoLogType.Database) {
+      //   if (logType == XenoLogType.database) {
       String formattedLog = _formatLog(id.toString(), log);
       _saveUnsendLog(formattedLog, date: DateTime.now());
-      //   } else if (this.logType == XenoLogType.Discord) {
+      //   } else if (logType == XenoLogType.discord) {
       //     String formattedLog = _formatLog(id.toString(), log);
       //     _saveUnsendLog(formattedLog, date: DateTime.now());
-      //     // } else if (this.logType == XenoLogType.Email) {
+      //     // } else if (logType == XenoLogType.Email) {
       //   }
     }
   }
 
   Future<bool> sendAll() async {
-    if (this.logType == XenoLogType.Database) {
-      String unsendLog = await _getUnsendLog();
-      if ((unsendLog ?? "") == "") {
-        unsendLog = _formatLog(id.toString(), 'No Data');
-      }
-      Map<String, dynamic> param = {
-        "kode": projectName.toString().toUpperCase(),
-        "device": id.toString(),
-        "versi": version,
-        "tgl_log": DateFormat("yyyy-MM-dd").format(DateTime.now()),
-        "log": unsendLog
-      };
+    if (logType == XenoLogType.database) {
+      // String unsendLog = await _getUnsendLog();
+      // if (unsendLog == "") {
+      //   unsendLog = _formatLog(id.toString(), 'No Data');
+      // }
+      // Map<String, dynamic> param = {
+      //   "kode": projectName.toString().toUpperCase(),
+      //   "device": id.toString(),
+      //   "versi": version,
+      //   "tgl_log": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      //   "log": unsendLog
+      // };
 
-      bool result = false;
+      // bool result = false;
       // _dioPost(setDatabaseURL, param).then((response) {
       //   if (response != null) {
       //     Map<String, dynamic> json = jsonDecode(response.toString());
@@ -219,17 +205,16 @@ class XenoLog {
       //     _clearLog();
       //   }
       // });
-    } else if (this.logType == XenoLogType.Discord) {
-      String unsendLog = await _getUnsendLog();
-      String title = "PROJECT LOG: " +
-          projectName.toString().toUpperCase() +
-          " < " +
-          version +
-          " >" +
-          "\r\n";
-      if ((unsendLog ?? "") == "") {
-        unsendLog = 'No Data';
-      }
+    } else if (logType == XenoLogType.discord) {
+      // String unsendLog = await _getUnsendLog();
+      // String title = "PROJECT LOG: " +
+      //     projectName.toString().toUpperCase() +
+      //     " < " +
+      //     version +
+      //     " >\r\n";
+      // if (unsendLog == "") {
+      //   unsendLog = 'No Data';
+      // }
 
       // _dioPost(webHookURL, {"content": title + unsendLog}).then((response) {
       //   // print('Debug: ' + 'response = ' + response.toString());
@@ -248,15 +233,11 @@ class XenoLog {
 
   Future<bool> shareAll() async {
     String unsendLog = await _getUnsendLog(days: 2);
-    String title = "< " +
-        "PROJECT LOG: " +
-        projectName.toString().toUpperCase() +
-        " >" +
-        "\r\n";
-    if ((unsendLog ?? "") == "") {
+    String title = "< PROJECT LOG: ${projectName.toString().toUpperCase()} >\r\n";
+    if (unsendLog == "") {
       unsendLog = 'No Data';
     }
-    String fileName = await _writeToFile(title + "\r\n" + unsendLog);
+    String fileName = await _writeToFile("$title\r\n$unsendLog");
 
     if (fileName != '') {
       // await Share.shareXFiles([XFile(fileName)]);
@@ -268,12 +249,12 @@ class XenoLog {
   }
 
   void clearAll() async {
-    if (this.logType == XenoLogType.Database) {
+    if (logType == XenoLogType.database) {
       _clearLog();
-    } else if (this.logType == XenoLogType.Discord) {
+    } else if (logType == XenoLogType.discord) {
       _clearLog();
 
-      // } else if (this.logType == XenoLogType.Email) {
+      // } else if (logType == XenoLogType.Email) {
     }
   }
 
@@ -298,45 +279,45 @@ class XenoLog {
     return '${directory.path}/logfile.txt';
   }
 
-  void _sendEmail(String emailAddress, String subject, String body) async {
-    // String username = 'username@gmail.com';
-    // String password = 'password';
+  // void _sendEmail(String emailAddress, String subject, String body) async {
+  //   // String username = 'username@gmail.com';
+  //   // String password = 'password';
 
-    // final smtpServer = gmail(username, password);
+  //   // final smtpServer = gmail(username, password);
 
-    // final message = Message()
-    // ..from = Address(username, 'Your Name')
-    // ..recipients.add('destination@example.com')
-    // ..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
-    // ..bccRecipients.add(Address('bccAddress@example.com'))
-    // ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}'
-    // ..text = 'This is the plain text.\nThis is line 2 of the text part.'
-    // ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
+  //   // final message = Message()
+  //   // ..from = Address(username, 'Your Name')
+  //   // ..recipients.add('destination@example.com')
+  //   // ..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
+  //   // ..bccRecipients.add(Address('bccAddress@example.com'))
+  //   // ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}'
+  //   // ..text = 'This is the plain text.\nThis is line 2 of the text part.'
+  //   // ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
 
-    // try {
-    //   final sendReport = await send(message, smtpServer);
-    //   print('Message sent: ' + sendReport.toString());
-    // } on MailerException catch (e) {
-    //   print('Message not sent.');
-    //   for (var p in e.problems) {
-    //     print('Problem: ${p.code}: ${p.msg}');
-    //   }
-    // }
-  }
+  //   // try {
+  //   //   final sendReport = await send(message, smtpServer);
+  //   //   print('Message sent: ' + sendReport.toString());
+  //   // } on MailerException catch (e) {
+  //   //   print('Message not sent.');
+  //   //   for (var p in e.problems) {
+  //   //     print('Problem: ${p.code}: ${p.msg}');
+  //   //   }
+  //   // }
+  // }
 
   // save log ke local + clear log lama
   void _saveUnsendLog(String logg, {required DateTime date}) async {
     SharedPreferences prefs =
         await SharedPreferences.getInstance(); // .subtract(Duration(days: 2))
-    String dateKey = DateFormat("yyyy-MM-dd").format(date ?? DateTime.now());
-    var data = prefs.getString(keySharedPreferences + "_" + dateKey) ?? "";
+    String dateKey = DateFormat("yyyy-MM-dd").format(date);
+    var data = prefs.getString("${keySharedPreferences}_$dateKey") ?? "";
     if (data != "") {
-      data = "\r\n" + data;
+      data = "\r\n$data";
     }
     data = logg + data;
-    prefs.setString(keySharedPreferences + "_" + dateKey, data);
-    String currData =
-        prefs.getString(keySharedPreferences + "_" + dateKey) ?? "";
+    prefs.setString("${keySharedPreferences}_$dateKey", data);
+    // String currData =
+    //     prefs.getString(keySharedPreferences + "_" + dateKey) ?? "";
     // log("SAVE LOG : $currData");
 
     // _clearOldLog();
@@ -346,16 +327,16 @@ class XenoLog {
   Future<String> _getUnsendLog({int days = 1}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String dateKey = DateFormat("yyyy-MM-dd").format(DateTime.now());
-    String data = prefs.getString(keySharedPreferences + "_" + dateKey) ?? "";
+    String data = prefs.getString("${keySharedPreferences}_$dateKey") ?? "";
 
     for (int i = 2; i <= days; i++) {
       dateKey = DateFormat("yyyy-MM-dd")
           .format(DateTime.now().subtract(Duration(days: i - 1)));
       String currData =
-          prefs.getString(keySharedPreferences + "_" + dateKey) ?? "";
+          prefs.getString("${keySharedPreferences}_$dateKey") ?? "";
       // log("CURR DATA : $currData");
       if (data != "" && currData != "") {
-        data = data + "\r\n";
+        data = "$data\r\n";
       }
       data = data + currData;
     }
@@ -368,63 +349,53 @@ class XenoLog {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Set<String> list = prefs.getKeys();
-    list.forEach((element) {
+    for (var element in list) {
       if (element.toString().substring(0, keySharedPreferences.length) ==
           keySharedPreferences) {
         prefs.remove(element);
       }
-    });
+    }
   }
 
   // hapus semua log , kecuali 'days' hari terakhir
-  void _clearOldLog({int days = 2}) async {
-    List<String> listDate = [];
-    String dateKey;
+  // void _clearOldLog({int days = 2}) async {
+  //   List<String> listDate = [];
+  //   String dateKey;
 
-    for (int i = 1; i <= days; i++) {
-      dateKey = DateFormat("yyyy-MM-dd")
-          .format(DateTime.now().subtract(Duration(days: i - 1)));
-      listDate.add(keySharedPreferences + "_" + dateKey);
-      // print('Debug: ' + 'listDate = ' + keySharedPreferences + "_" + dateKey);
-    }
+  //   for (int i = 1; i <= days; i++) {
+  //     dateKey = DateFormat("yyyy-MM-dd")
+  //         .format(DateTime.now().subtract(Duration(days: i - 1)));
+  //     listDate.add(keySharedPreferences + "_" + dateKey);
+  //     // print('Debug: ' + 'listDate = ' + keySharedPreferences + "_" + dateKey);
+  //   }
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Set<String> list = prefs.getKeys();
-    list.forEach((element) {
-      // log("ELEMENT LENGTH : ${element.length}");
-      // log("KEYSHARED LENGTH : ${keySharedPreferences.length}");
-      if (element.length >= keySharedPreferences.length &&
-          element.toString().substring(0, keySharedPreferences.length) ==
-              keySharedPreferences) {
-        if (!listDate.contains(element.toString())) {
-          prefs.remove(element);
-          // print('Debug: ' + element.toString() + ' hapus');
-        } else {
-          // print('Debug: ' + element.toString() + ' tidak hapus');
-        }
-      }
-    });
-  }
+  //   Set<String> list = prefs.getKeys();
+  //   list.forEach((element) {
+  //     // log("ELEMENT LENGTH : ${element.length}");
+  //     // log("KEYSHARED LENGTH : ${keySharedPreferences.length}");
+  //     if (element.length >= keySharedPreferences.length &&
+  //         element.toString().substring(0, keySharedPreferences.length) ==
+  //             keySharedPreferences) {
+  //       if (!listDate.contains(element.toString())) {
+  //         prefs.remove(element);
+  //         // print('Debug: ' + element.toString() + ' hapus');
+  //       } else {
+  //         // print('Debug: ' + element.toString() + ' tidak hapus');
+  //       }
+  //     }
+  //   });
+  // }
 
   // format message sesuai format log
   String _formatLog(String id, String message) {
-    if (this.logType == XenoLogType.Database) {
-      return "Id: " +
-          id.toString() +
-          ' ' +
-          DateFormat("[yyyy-MM-dd HH:mm:ss]").format(DateTime.now()) +
-          ' ' +
-          message;
-    } else if (this.logType == XenoLogType.Discord) {
-      return "Id: " +
-          id.toString() +
-          ' ' +
-          DateFormat("[yyyy-MM-dd HH:mm:ss]").format(DateTime.now()) +
-          "\r\n" +
-          message;
+    if (logType == XenoLogType.database) {
+      return "Id: $id ${DateFormat("[yyyy-MM-dd HH:mm:ss]").format(DateTime.now())} $message";
+    } else if (logType == XenoLogType.discord) {
+      return "Id: $id ${DateFormat("[yyyy-MM-dd HH:mm:ss]").format(DateTime.now())}\r\n$message";
 
-      // } else if (this.logType == XenoLogType.Email) {
+      // } else if (logType == XenoLogType.Email) {
     } else {
       return '';
     }
@@ -441,9 +412,11 @@ class XenoLog {
   }
 
   // menampilkan log dialog
-  Future<dynamic> showLogDialog({@required context}) async {
+  Future<dynamic> showLogDialog({required BuildContext context}) async {
     bool alwaysLog = await _getAlwaysLog();
     // print('Debug: ' + 'alwaysLog = ' + alwaysLog.toString());
+
+    if (!context.mounted) return;
 
     return showDialog(
       context: context,
@@ -451,8 +424,8 @@ class XenoLog {
         scrollable: true,
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        contentPadding: EdgeInsets.all(24),
-        insetPadding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+        contentPadding: const EdgeInsets.all(24),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
         content: Container(
           width: MediaQuery.of(context).size.width * 0.6,
           alignment: Alignment.center,
@@ -460,9 +433,9 @@ class XenoLog {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text("Log File",
+              const Text("Log File",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               buttonDialog(
                   context, "CLEAR", Colors.red, Colors.white, Colors.red, () {
                 clearAll();
@@ -516,27 +489,29 @@ class XenoLog {
                 borderRadius: BorderRadius.circular(16))),
         elevation: WidgetStateProperty.all<double>(0),
       ),
-      child: Text(caption, style: TextStyle(color: textColor, fontSize: 16)),
       onPressed: onClick,
+      child: Text(caption, style: TextStyle(color: textColor, fontSize: 16)),
     );
   }
 
   // menampilkan + share isi log
-  Future<dynamic> showLogContentDialog({@required context}) async {
+  Future<dynamic> showLogContentDialog({required BuildContext context}) async {
     String unsendLog = await _getUnsendLog(days: 1);
-    String title = "PROJECT LOG: " + projectName.toString().toUpperCase();
-    if ((unsendLog ?? "") == "") {
+    String title = "PROJECT LOG: ${projectName.toString().toUpperCase()}";
+    if (unsendLog == "") {
       unsendLog = 'No Data';
     }
+
+    if (!context.mounted) return;
 
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        contentPadding: EdgeInsets.all(12),
-        insetPadding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
-        title: Stack(children: [
+        contentPadding: const EdgeInsets.all(12),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+        title: const Stack(children: [
           Align(
               alignment: Alignment.center,
               child: Text("Log File",
@@ -550,12 +525,12 @@ class XenoLog {
           //         child: Icon(Icons.share))),
         ]),
         content: Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Text(title), SizedBox(height: 8), Text(unsendLog)],
+              children: [Text(title), const SizedBox(height: 8), Text(unsendLog)],
             ),
           ),
         ),

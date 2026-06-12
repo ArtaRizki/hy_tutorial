@@ -4,7 +4,7 @@ import 'package:hy_tutorial/common/component/custom_alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:open_file_plus/open_file_plus.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,12 +88,12 @@ downloadFile(
               onDidReceiveNotificationResponse: (payload) {});
           await flutterLocalNotificationsPlugin.show(0, filename,
               "Download berhasil disimpan di ${f.path}", notificationDetails);
-          await OpenFile.open(f.path);
+          await OpenFilex.open(f.path);
         } else {
           await flutterLocalNotificationsPlugin
               .initialize(initializationSettings,
                   onDidReceiveNotificationResponse: (payload) {
-            if (payload.payload != null) OpenFile.open(f.path);
+            if (payload.payload != null) OpenFilex.open(f.path);
           });
           await flutterLocalNotificationsPlugin.show(0, filename,
               "Download berhasil, Ketuk untuk buka file", notificationDetails);
@@ -114,12 +114,12 @@ downloadFile(
               onDidReceiveNotificationResponse: (payload) {});
           await flutterLocalNotificationsPlugin.show(
               0, filename, "Download berhasil", notificationDetails);
-          await OpenFile.open(f.path);
+          await OpenFilex.open(f.path);
         } else {
           await flutterLocalNotificationsPlugin
               .initialize(initializationSettings,
                   onDidReceiveNotificationResponse: (payload) {
-            if (payload.payload != null) OpenFile.open(f.path);
+            if (payload.payload != null) OpenFilex.open(f.path);
           });
           await flutterLocalNotificationsPlugin.show(0, filename,
               "Download berhasil, Ketuk untuk buka file", notificationDetails);

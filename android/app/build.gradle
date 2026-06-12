@@ -27,8 +27,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "com.hytutorialv1.app"
-    compileSdk = 34
-    ndkVersion = "26.1.10909125"
+    compileSdk = 36
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -71,20 +71,20 @@ android {
         }
     }
 
-    // flavorDimensions "app"
+    flavorDimensions "app"
 
-    // productFlavors {
-    //     development {
-    //         dimension "app"
-    //         resValue "string", "app_name", "Hytutorial DEV"
-    //         // applicationIdSuffix ".dev"
-    //         versionNameSuffix "-dev"
-    //     }
-    //     production {
-    //         dimension "app"
-    //         resValue "string", "app_name", "Hytutorial"
-    //     }
-    // }
+    productFlavors {
+        development {
+            dimension "app"
+            resValue "string", "app_name", "Hytutorial DEV"
+            // applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+        }
+        production {
+            dimension "app"
+            resValue "string", "app_name", "Hytutorial"
+        }
+    }
 }
 
 flutter {

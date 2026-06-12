@@ -21,15 +21,13 @@ import 'package:flutter_regex/flutter_regex.dart';
 import 'package:http/http.dart' as http;
 
 class PltaProvider extends BaseController with ChangeNotifier {
-  PltaModel _pltaModel = PltaModel();
-  PltaModel get pltaModel => this._pltaModel;
-  set pltaModel(PltaModel value) => this._pltaModel = value;
+  PltaModel pltaModel = PltaModel();
 
   List<PltaModelData?>? _pltaList = [];
-  List<PltaModelData?>? get pltaList => this._pltaList;
+  List<PltaModelData?>? get pltaList => _pltaList;
 
   set pltaList(List<PltaModelData?>? value) {
-    this._pltaList = value;
+    _pltaList = value;
     notifyListeners();
   }
 
@@ -38,19 +36,14 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
   Duration duration = const Duration(seconds: 2);
   Timer? _searchOnStoppedTyping;
-  Timer? get searchOnStoppedTyping => this._searchOnStoppedTyping;
+  Timer? get searchOnStoppedTyping => _searchOnStoppedTyping;
 
   set searchOnStoppedTyping(Timer? value) {
-    this._searchOnStoppedTyping = value;
+    _searchOnStoppedTyping = value;
     notifyListeners();
   }
 
-  bool _isFetching = false;
-  bool get isFetching => this._isFetching;
-
-  set isFetching(bool value) {
-    this._isFetching = value;
-  }
+  bool isFetching = false;
 
   int pageSize = 0;
 
@@ -83,7 +76,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
     try {
       loading(true);
       pltaModel = PltaModel();
-      final response = await get(Constant.BASE_API_FULL + '/plta/master');
+      final response = await get('${Constant.BASE_API_FULL}/plta/master');
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         final model = PltaModel.fromJson(jsonDecode(response.body));
@@ -104,19 +97,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
     }
   }
 
-  PagingController<int, PltaListModelData> _pagingController =
+  PagingController<int, PltaListModelData> pagingController =
       PagingController(firstPageKey: 1);
 
-  PagingController<int, PltaListModelData> get pagingController =>
-      this._pagingController;
-
-  set pagingController(PagingController<int, PltaListModelData> value) {
-    this._pagingController = value;
-  }
-
-  PltaListModel _pltaListModel = PltaListModel();
-  PltaListModel get pltaListModel => this._pltaListModel;
-  set pltaListModel(PltaListModel value) => this._pltaListModel = value;
+  PltaListModel pltaListModel = PltaListModel();
 
   Future<void> getPltaList() async {
     pagingController = PagingController(firstPageKey: 1)
@@ -131,9 +115,10 @@ class PltaProvider extends BaseController with ChangeNotifier {
           } else {
             BuildContext? context =
                 NavigationService.navigatorKey.currentContext;
-            if (context != null)
+            if (context != null && context.mounted) {
               CustomAlert.showSnackBar(
                   context, 'Gagal Mendapatkan Data Plta', true);
+            }
           }
         });
       });
@@ -148,7 +133,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       if (!isFetching) {
         isFetching = true;
         if (withLoading) loading(true);
-        String url = Constant.BASE_API_FULL + '/plta';
+        String url = '${Constant.BASE_API_FULL}/plta';
         Map<String, String> param = {
           'Filter': 'Status',
           'FilterValue': '1',
@@ -156,8 +141,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
         if (searchC.text.isNotEmpty) param.addAll({'Search': searchC.text});
 
         if (next != null && next != '') param.addAll({'Next': next ?? ''});
-        if (_pagingController.itemList?.length != 0) {
-          await Future.delayed(Duration(seconds: 1));
+        if (pagingController.itemList?.isNotEmpty == true) {
+          await Future.delayed(const Duration(seconds: 1));
         }
         final response = await get(url, body: param);
 
@@ -173,13 +158,14 @@ class PltaProvider extends BaseController with ChangeNotifier {
           if (isLastPage || (model.Meta?.Next ?? '') == '') {
             next = null;
             pagingController
-                .appendLastPage(newItems as List<PltaListModelData>);
+                .appendLastPage(newItems.whereType<PltaListModelData>().toList());
           } else {
-            final nextPageKey = page += 1;
-            if (model.Meta?.Next != null && model.Meta?.Next != '')
+            final nextPageKey = page + 1;
+            if (model.Meta?.Next != null && model.Meta?.Next != '') {
               next = model.Meta?.Next ?? '';
+            }
             pagingController.appendPage(
-                newItems as List<PltaListModelData>, nextPageKey);
+                newItems.whereType<PltaListModelData>().toList(), nextPageKey);
           }
 
           notifyListeners();
@@ -202,25 +188,17 @@ class PltaProvider extends BaseController with ChangeNotifier {
   }
 
   PltaDetailModel _pltaDetailModel = PltaDetailModel();
-  PltaDetailModel get pltaDetailModel => this._pltaDetailModel;
+  PltaDetailModel get pltaDetailModel => _pltaDetailModel;
   set pltaDetailModel(PltaDetailModel value) {
-    this._pltaDetailModel = value;
+    _pltaDetailModel = value;
     notifyListeners();
   }
 
-  List<bool> _statusActive = [];
-  List<bool> get statusActive => this._statusActive;
-  set statusActive(List<bool> value) => this._statusActive = value;
+  List<bool> statusActive = [];
 
-  List<PltaDetailModelDataUnits?> _pltaUnitList = [];
-  List<PltaDetailModelDataUnits?> get pltaUnitList => this._pltaUnitList;
-  set pltaUnitList(List<PltaDetailModelDataUnits?> value) =>
-      this._pltaUnitList = value;
+  List<PltaDetailModelDataUnits?> pltaUnitList = [];
 
-  List<TextEditingController> _pltaUnitListName = [];
-  List<TextEditingController> get pltaUnitListName => this._pltaUnitListName;
-  set pltaUnitListName(List<TextEditingController> value) =>
-      this._pltaUnitListName = value;
+  List<TextEditingController> pltaUnitListName = [];
 
   setData(BuildContext context, String? id) async {
     clearForm();
@@ -238,8 +216,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
         isActive = data.Status ?? false;
         log("DATA LAT : ${data.Lat}");
         log("DATA ONG : ${data.Long}");
-        if (data.Lat != null && data.Long != null)
+        if (data.Lat != null && data.Long != null) {
           coordinateC.text = '${data.Lat ?? 0}, ${data.Long ?? 0}';
+        }
         radiusC.text = '${data.Radius ?? 0}';
         radiusType = data.RadiusType ?? '';
         radiusTypeC.text = data.RadiusType == 'meter' ? 'M' : 'KM';
@@ -258,7 +237,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
     statusActive = [];
     pltaUnitList = [];
     pltaUnitListName = [];
-    final response = await get(Constant.BASE_API_FULL + '/plta/$id');
+    final response = await get('${Constant.BASE_API_FULL}/plta/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       // final model = PltaDetailModel.fromJson(dummyDetail);
@@ -320,7 +299,7 @@ class PltaProvider extends BaseController with ChangeNotifier {
       final item = pltaDetailModelData.Units?[i];
       final itemC = pltaUnitListName[i].text;
       final bodyItem = {
-        'Name': item?.Name ?? '',
+        'Name': itemC,
         'Status': item?.Status ?? '',
       };
       if (item?.Id != null) bodyItem.addAll({'Id': item?.Id ?? ''});
@@ -329,28 +308,29 @@ class PltaProvider extends BaseController with ChangeNotifier {
     notifyListeners();
     Map<String, dynamic> body = {"Units": jsonEncode(b)};
     http.Response response;
-    if (isEdit)
+    if (isEdit) {
       response = await put(
-          Constant.BASE_API_FULL +
-              '/plta-unit/${pltaDetailModel.Data?.Id ?? ''}',
+          '${Constant.BASE_API_FULL}/plta-unit/${pltaDetailModel.Data?.Id ?? ''}',
           body: body);
-    else
+    } else {
       response = await put(
-          Constant.BASE_API_FULL +
-              '/plta-unit/${pltaDetailModel.Data?.Id ?? ''}',
+          '${Constant.BASE_API_FULL}/plta-unit/${pltaDetailModel.Data?.Id ?? ''}',
           body: body);
+    }
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
       if (withLoading) loading(false);
       if (isPopup) {
         await Utils.showSuccess(msg: model.message);
-        await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 2));
       }
       next = null;
       if (!isEdit || back) {
         final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
-        CusNav.nPushAndRemoveUntil(context, MainHome(index: 3),
-            arguments: isAdmin);
+        if (context.mounted) {
+          CusNav.nPushAndRemoveUntil(context, const MainHome(index: 3),
+              arguments: isAdmin);
+        }
         clearForm();
       }
     } else {
@@ -358,8 +338,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
       final message = model.message;
       if (withLoading) loading(false);
-      await Utils.showFailed(msg: model.message ?? "Gagal");
-      await Future.delayed(Duration(seconds: 2));
+      await Utils.showFailed(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
       throw Exception(message);
     }
   }
@@ -367,26 +347,19 @@ class PltaProvider extends BaseController with ChangeNotifier {
   TextEditingController nameC = TextEditingController();
   TextEditingController totalUnitC = TextEditingController();
   String? active;
-  String? get getActive => this.active;
+  String? get getActive => active;
   set setActive(String? active) => this.active = active;
 
-  bool _isActive = false;
-  bool get isActive => this._isActive;
-  set isActive(bool value) => this._isActive = value;
+  bool isActive = false;
 
   TextEditingController radiusStatusC = TextEditingController();
-  bool _radiusStatus = false;
-  bool get radiusStatus => _radiusStatus;
-  set radiusStatus(bool value) {
-    this._radiusStatus = value;
-    // notifyListeners();
-  }
+  bool radiusStatus = false;
 
   TextEditingController coordinateC = TextEditingController();
   TextEditingController radiusC = TextEditingController();
   TextEditingController radiusTypeC = TextEditingController();
   String? radiusType = 'kilometer';
-  String? get getRadiusType => this.radiusType;
+  String? get getRadiusType => radiusType;
   set setRadiusType(String? radiusType) => this.radiusType = radiusType;
 
   bool validatePltaForm({bool isEdit = false}) {
@@ -399,7 +372,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
     if (isEdit && pltaUnitListName.isEmpty) return false;
     if (isEdit &&
         pltaUnitListName.isNotEmpty &&
-        pltaUnitListName.any((c) => c.text.isEmpty)) return false;
+        pltaUnitListName.any((c) => c.text.isEmpty)) {
+      return false;
+    }
     if (isEdit && pltaUnitList.isEmpty) return false;
     if (isEdit && statusActive.isEmpty) return false;
     return true;
@@ -445,19 +420,19 @@ class PltaProvider extends BaseController with ChangeNotifier {
       CustomDropdown.normalDropdown(
         //controller: roleC,
         iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-        contentPadding: EdgeInsets.all(2),
+        contentPadding: const EdgeInsets.all(2),
         borderColor: Constant.primaryColor,
         labelText: "Status",
         selectedItem: active,
         hintText: "Pilih status PLTA",
-        list: [
+        list: const [
           DropdownMenuItem(
-            child: Text("Aktif"),
             value: "aktif",
+            child: Text("Aktif"),
           ),
           DropdownMenuItem(
-            child: Text("Non Aktif"),
             value: "non_aktif",
+            child: Text("Non Aktif"),
           ),
         ],
         onChanged: (val) {
@@ -473,8 +448,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
         hintText: "Koordinat",
         textInputType: TextInputType.number,
         validator: (val) {
-          if (val != null && !val.isLatLongCoordinatesDecimal())
+          if (val != null && !val.isLatLongCoordinatesDecimal()) {
             return 'Koordinat Tidak Valid';
+          }
           return null;
         },
       ),
@@ -489,19 +465,19 @@ class PltaProvider extends BaseController with ChangeNotifier {
       CustomDropdown.normalDropdown(
         //controller: roleC,
         iconPadding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-        contentPadding: EdgeInsets.all(2),
+        contentPadding: const EdgeInsets.all(2),
         borderColor: Constant.primaryColor,
         labelText: "Tipe Radius",
         selectedItem: radiusType,
         hintText: "Pilih tipe Radius",
-        list: [
+        list: const [
           DropdownMenuItem(
-            child: Text("KM"),
             value: "kilometer",
+            child: Text("KM"),
           ),
           DropdownMenuItem(
-            child: Text("M"),
             value: "meter",
+            child: Text("M"),
           ),
         ],
         onChanged: (val) {
@@ -531,8 +507,9 @@ class PltaProvider extends BaseController with ChangeNotifier {
       if (nameC.text.isEmpty) throw 'Nama harap diisi';
       if (active == null && !isEdit) throw 'Status harap dipilih';
       if (coordinateC.text.isEmpty) throw 'Koordinat harap diisi';
-      if (!coordinateC.text.isLatLongCoordinatesDecimal())
+      if (!coordinateC.text.isLatLongCoordinatesDecimal()) {
         throw 'Koordinat Tidak Valid';
+      }
       if (radiusC.text.isEmpty) throw 'Radius harap diisi';
       if (radiusType == null) throw 'Tipe radius harap dipilih';
       var split = coordinateC.text.split(',');
@@ -551,11 +528,12 @@ class PltaProvider extends BaseController with ChangeNotifier {
         body.addAll({'TotalUnits': totalUnitC.text});
       }
       http.Response response;
-      if (isEdit)
+      if (isEdit) {
         response =
-            await put(Constant.BASE_API_FULL + '/plta/$pltaId', body: body);
-      else
-        response = await post(Constant.BASE_API_FULL + '/plta', body: body);
+            await put('${Constant.BASE_API_FULL}/plta/$pltaId', body: body);
+      } else {
+        response = await post('${Constant.BASE_API_FULL}/plta', body: body);
+      }
       if (response.statusCode == 201 || response.statusCode == 200) {
         final model = BaseResponse.from(response);
         if (!isEdit) {
@@ -565,15 +543,17 @@ class PltaProvider extends BaseController with ChangeNotifier {
         }
         if (isPopup) {
           await Utils.showSuccess(msg: model.message);
-          await Future.delayed(Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 2));
         }
         next = null;
         if (withLoading) loading(false);
         if (back) {
           // CusNav.nPop(context);
           final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
-          CusNav.nPushAndRemoveUntil(context, MainHome(index: 3),
-              arguments: isAdmin);
+          if (context.mounted) {
+            CusNav.nPushAndRemoveUntil(context, const MainHome(index: 3),
+                arguments: isAdmin);
+          }
           clearForm();
         }
       } else {
@@ -581,8 +561,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
         final message = model.message;
         if (withLoading) loading(false);
-        await Utils.showFailed(msg: model.message ?? "Gagal");
-        await Future.delayed(Duration(seconds: 2));
+        await Utils.showFailed(msg: model.message);
+        await Future.delayed(const Duration(seconds: 2));
         throw Exception(message);
       }
     } catch (e) {
@@ -596,24 +576,25 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
   Future<void> deletePlta(BuildContext context, {required String id}) async {
     loading(true);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final response = await delete(Constant.BASE_API_FULL + '/plta/$id');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await delete('${Constant.BASE_API_FULL}/plta/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
       loading(false);
-      await Utils.showSuccess(msg: model.message ?? "Sukses");
-      await Future.delayed(Duration(seconds: 2));
-      final isAdmin = prefs.getBool(Constant.kSetPrefIsAdmin) ?? false;
+      await Utils.showSuccess(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
       next = null;
-      CusNav.nPop(context);
+      if (context.mounted) {
+        CusNav.nPop(context);
+      }
     } else {
       final model = BaseResponse.from(response);
 
       final message = model.message;
       loading(false);
-      await Utils.showFailed(msg: model.message ?? "Gagal");
-      await Future.delayed(Duration(seconds: 2));
+      await Utils.showFailed(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
       throw Exception(message);
     }
   }
@@ -621,16 +602,18 @@ class PltaProvider extends BaseController with ChangeNotifier {
   Future<void> deletePltaUnit(BuildContext context,
       {required String id, required String pltaId}) async {
     loading(true);
-    final response = await delete(Constant.BASE_API_FULL + '/plta-unit/$id');
+    final response = await delete('${Constant.BASE_API_FULL}/plta-unit/$id');
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       final model = BaseResponse.from(response);
       loading(false);
       next = null;
-      await Utils.showSuccess(msg: model.message ?? "Sukses");
-      await Future.delayed(Duration(seconds: 2));
-      CusNav.nPop(context);
-      CusNav.nPop(context);
+      await Utils.showSuccess(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
+      if (context.mounted) {
+        CusNav.nPop(context);
+        CusNav.nPop(context);
+      }
       // Navigator.pushReplacement(context,
       //     MaterialPageRoute(builder: ((context) => PLTAAddView(id: pltaId))));
     } else {
@@ -638,8 +621,8 @@ class PltaProvider extends BaseController with ChangeNotifier {
 
       final message = model.message;
       loading(false);
-      await Utils.showFailed(msg: model.message ?? "Gagal");
-      await Future.delayed(Duration(seconds: 2));
+      await Utils.showFailed(msg: model.message);
+      await Future.delayed(const Duration(seconds: 2));
       throw Exception(message);
     }
   }

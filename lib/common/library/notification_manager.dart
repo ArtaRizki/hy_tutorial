@@ -23,7 +23,7 @@ class NotificationManager {
   IOSFlutterLocalNotificationsPlugin? iosFlutterLocalNotificationPlugin;
   Function(Map)? listener;
 
-  NotificationDetails notifDetail = NotificationDetails(
+  NotificationDetails notifDetail = const NotificationDetails(
     android: AndroidNotificationDetails("Hytutorial", "Hytutorial",
         priority: Priority.max,
         playSound: true,
@@ -45,7 +45,7 @@ class NotificationManager {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/notif_icon');
 
-    DarwinInitializationSettings initializationSettingsDarwin =
+    const DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
       defaultPresentAlert: true,
       defaultPresentBadge: true,
@@ -53,7 +53,7 @@ class NotificationManager {
     );
 
     flutterLocalNotificationsPlugin.initialize(
-      InitializationSettings(
+      const InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsDarwin,
       ),
@@ -108,7 +108,7 @@ class NotificationManager {
 
     stream = FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       Map message = event.data;
-      print("payload =>" + jsonEncode(message));
+      log("payload =>${jsonEncode(message)}");
       try {
         flutterLocalNotificationsPlugin.show(
           0,
@@ -118,14 +118,14 @@ class NotificationManager {
           payload: jsonEncode(message),
         );
       } catch (e) {
-        print(e);
+        log(e.toString());
       }
     });
 
     stream = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
       Map message = event.data;
-      log("MESSAGE FIREBASE" + message.toString());
-      print("payload =>" + jsonEncode(message));
+      log("MESSAGE FIREBASE${message.toString()}");
+      log("payload =>${jsonEncode(message)}");
       setRoute(jsonEncode(message));
     });
   }
@@ -208,7 +208,7 @@ class NotificationManager {
     // 1 : Monday - Friday
     // 2 : Monday - Saturday
 
-    final oneDaysOff = workingDays == 2; // Sunday Off
+    // final oneDaysOff = workingDays == 2; // Sunday Off
     final twoDaysOff = workingDays == 1; // Saturday & Sunday Off
 
     /// if propose reminder checkout
@@ -218,17 +218,17 @@ class NotificationManager {
     // }
 
     if (alarmDate.isBefore(DateTime.now())) {
-      alarmDate = alarmDate.add(Duration(days: 1));
+      alarmDate = alarmDate.add(const Duration(days: 1));
     }
 
     if (day.contains("sabtu")) {
       if (twoDaysOff) {
-        alarmDate = alarmDate.add(Duration(days: 1));
+        alarmDate = alarmDate.add(const Duration(days: 1));
       }
     }
 
     if (day.contains("minggu")) {
-      alarmDate = alarmDate.add(Duration(days: 1));
+      alarmDate = alarmDate.add(const Duration(days: 1));
     }
 
     final payload = {"id": id.toString(), "type": "absent"};
@@ -253,7 +253,6 @@ class NotificationManager {
           presentSound: true,
         ),
       ),
-      androidAllowWhileIdle: true,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
@@ -276,17 +275,17 @@ class NotificationManager {
       /// payload example
       /// {id: 33, type: warningletter}
 
-      log("payload =>" + payload);
+      log("payload =>$payload");
 
       setRoute(payload);
     }
   }
 
   void setRoute(String payload) async {
-    final json = jsonDecode(payload);
+    // final json = jsonDecode(payload);
 
-    final id = int.parse(json["id"]);
-    final type = json["type"];
+    // final id = int.parse(json["id"]);
+    // final type = json["type"];
     final context = NavigationService.navigatorKey.currentContext;
 
     if (context != null) {
