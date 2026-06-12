@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/ble_provider.dart';
 import '../../core/constants/app_constants.dart';
 import 'measurement_screen.dart';
+import 'ble_diagnostic_screen.dart';
 import '../widgets/ble_status_indicator.dart';
 
 /// Layar utama: scan BLE dan pilih device U-WAVE-T.
@@ -44,9 +45,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        actions: const [
-          BleStatusIndicator(),
-          SizedBox(width: 12),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.troubleshoot_rounded, color: Colors.white70),
+            tooltip: 'BLE Diagnostics / Sniffer',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const BleDiagnosticScreen()),
+            ),
+          ),
+          const BleStatusIndicator(),
+          const SizedBox(width: 12),
         ],
       ),
       body: Consumer<BleProvider>(

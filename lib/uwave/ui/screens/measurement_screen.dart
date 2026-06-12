@@ -9,6 +9,7 @@ import '../widgets/measurement_table.dart';
 import '../widgets/session_stats_card.dart';
 import '../widgets/ble_status_indicator.dart';
 import 'session_form_screen.dart';
+import 'ble_diagnostic_screen.dart';
 
 /// Layar pengukuran real-time — inti dari aplikasi U-WAVE QC Inspector.
 class MeasurementScreen extends StatefulWidget {
@@ -66,6 +67,12 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                 if (context.mounted) Navigator.pop(context);
               } else if (val == 'export') {
                 if (context.mounted) _showExportDialog(context);
+              } else if (val == 'diagnostics') {
+                if (!context.mounted) return;
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const BleDiagnosticScreen()));
               }
             },
             itemBuilder: (_) => [
@@ -83,6 +90,15 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                   Icon(Icons.share_rounded, color: Color(0xFF34D399)),
                   SizedBox(width: 12),
                   Text('Export & Share',
+                      style: TextStyle(color: Colors.white)),
+                ]),
+              ),
+              const PopupMenuItem(
+                value: 'diagnostics',
+                child: Row(children: [
+                  Icon(Icons.troubleshoot_rounded, color: Color(0xFF38BDF8)),
+                  SizedBox(width: 12),
+                  Text('BLE Diagnostics',
                       style: TextStyle(color: Colors.white)),
                 ]),
               ),
