@@ -4,6 +4,7 @@ import '../../providers/ble_provider.dart';
 import '../../core/constants/app_constants.dart';
 import 'measurement_screen.dart';
 import '../widgets/ble_status_indicator.dart';
+import '../../../common/helper/hylog.dart';
 
 /// Layar utama: scan BLE dan pilih device U-WAVE-T.
 class HomeScreen extends StatefulWidget {
@@ -50,9 +51,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        actions: const [
-          BleStatusIndicator(),
-          SizedBox(width: 12),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bug_report, color: Colors.white),
+            tooltip: 'Log File',
+            onPressed: () {
+              HYLog("uwave_tester").showLogDialog(context: context);
+            },
+          ),
+          const BleStatusIndicator(),
+          const SizedBox(width: 12),
         ],
       ),
       body: Consumer<BleProvider>(

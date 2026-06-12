@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:provider/provider.dart';
 import '../../utils/utils.dart';
-import '../helper/xenolog.dart';
+import '../helper/hylog.dart';
 import 'base_state.dart';
 
 class BaseController<S extends BaseState> {
@@ -110,7 +110,7 @@ class BaseController<S extends BaseState> {
         "===================="
             '\r\n';
     // if (kDebugMode) {
-    XenoLog("GET").save(log2, alwaysLog: true);
+    HYLog("GET").save(log2, alwaysLog: true);
     // }
     Utils.dismissLoading();
     if (response.body.contains("Timeout")) {
@@ -212,7 +212,7 @@ class BaseController<S extends BaseState> {
           "===================="
               '\r\n';
       // if (kDebugMode) {
-      XenoLog("POST").save(log2, alwaysLog: true);
+      HYLog("POST").save(log2, alwaysLog: true);
       // }
       Utils.dismissLoading();
       if (response.body.contains("Timeout")) {
@@ -302,7 +302,7 @@ class BaseController<S extends BaseState> {
           "===================="
               '\r\n';
       // if (kDebugMode) {
-      XenoLog("POST").save(log2, alwaysLog: true);
+      HYLog("POST").save(log2, alwaysLog: true);
       // }
       Utils.dismissLoading();
       if (response.body.contains("Timeout")) {
@@ -401,7 +401,7 @@ class BaseController<S extends BaseState> {
           "===================="
               '\r\n';
       // if (kDebugMode) {
-      XenoLog("PUT").save(log2, alwaysLog: true);
+      HYLog("PUT").save(log2, alwaysLog: true);
       // }
       Utils.dismissLoading();
       if (response.body.contains("Timeout")) {
@@ -489,7 +489,7 @@ class BaseController<S extends BaseState> {
           "===================="
               '\r\n';
       // if (kDebugMode) {
-      XenoLog("PUT").save(log2, alwaysLog: true);
+      HYLog("PUT").save(log2, alwaysLog: true);
       // }
       Utils.dismissLoading();
       if (response.body.contains("Timeout")) {
@@ -584,7 +584,7 @@ class BaseController<S extends BaseState> {
         "===================="
             '\r\n';
     // if (kDebugMode) {
-    XenoLog("DELETE").save(log2, alwaysLog: true);
+    HYLog("DELETE").save(log2, alwaysLog: true);
     // }
     Utils.dismissLoading();
     if (response.body.contains("Timeout")) {

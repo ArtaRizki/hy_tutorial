@@ -4,12 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '../core/constants/ble_constants.dart';
 import '../core/utils/ble_decoder.dart';
+import '../../common/helper/hylog.dart';
 
 enum BleState { idle, scanning, connecting, connected, disconnected, error }
 
 /// Provider yang mengelola seluruh lifecycle BLE:
 /// scan → connect → subscribe NOTIFY → stream nilai → auto-reconnect
 class BleProvider extends ChangeNotifier {
+  final HYLog _hylog = HYLog("uwave_tester");
   BleState _bleState = BleState.idle;
   List<ScanResult> _scanResults = [];
   BluetoothDevice? _connectedDevice;
@@ -41,6 +43,7 @@ class BleProvider extends ChangeNotifier {
     _scanResults = [];
     _setState(BleState.scanning);
     _errorMessage = null;
+    _hylog.save('[BLE] startScan: Scanning started');
 
     try {
       await FlutterBluePlus.startScan(
@@ -50,6 +53,7 @@ class BleProvider extends ChangeNotifier {
 
       _scanSub = FlutterBluePlus.scanResults.listen((results) {
         _scanResults = results;
+        _hylog.save('[BLE] scanResults found: ${results.map((r) => "${r.device.platformName} (${r.device.remoteId})").toList()}');
         notifyListeners();
       });
 
@@ -58,6 +62,7 @@ class BleProvider extends ChangeNotifier {
       _setState(BleState.idle);
     } catch (e) {
       log('[BLE] scan error: $e');
+      _hylog.save('[BLE] scan error: $e');
       _errorMessage = e.toString();
       _setState(BleState.error);
     }
@@ -77,6 +82,7 @@ class BleProvider extends ChangeNotifier {
     _setState(BleState.connecting);
     _errorMessage = null;
     _connectedDevice = device;
+    _hylog.save('[BLE] connectTo: Attempting to connect to ${device.platformName} (${device.remoteId})');
 
     try {
       await device.connect(
@@ -85,8 +91,10 @@ class BleProvider extends ChangeNotifier {
       );
       _listenConnectionState(device);
       await _discoverAndSubscribe(device);
+      _hylog.save('[BLE] connectTo: Connection and subscription successful for ${device.platformName}');
     } catch (e) {
       log('[BLE] connect error: $e');
+      _hylog.save('[BLE] connect error for ${device.platformName}: $e');
       _errorMessage = e.toString();
       _setState(BleState.error);
       _scheduleReconnect(device);
@@ -97,6 +105,7 @@ class BleProvider extends ChangeNotifier {
     _connStateSub?.cancel();
     _connStateSub = device.connectionState.listen((state) {
       log('[BLE] connection state: $state');
+      _hylog.save('[BLE] connection state for ${device.platformName}: $state');
       if (state == BluetoothConnectionState.disconnected) {
         _setState(BleState.disconnected);
         _notifySub?.cancel();
@@ -131,6 +140,7 @@ class BleProvider extends ChangeNotifier {
     final value = BleDecoder.decode(bytes);
     final unit = BleDecoder.extractUnit(bytes);
     log('[BLE] notify → bytes=$bytes value=$value unit=$unit');
+    _hylog.save('[BLE] notify → bytes=$bytes value=$value unit=$unit');
     if (value != null) {
       _currentValue = value;
       _currentUnit = unit;
@@ -141,6 +151,7 @@ class BleProvider extends ChangeNotifier {
   // ── Disconnect ─────────────────────────────────────────────────
 
   Future<void> disconnect() async {
+    _hylog.save('[BLE] disconnect: User requested disconnect from ${_connectedDevice?.platformName}');
     _reconnectTimer?.cancel();
     await _notifySub?.cancel();
     await _connStateSub?.cancel();
