@@ -11,6 +11,7 @@ import '../../../common/component/custom_navigator.dart';
 import '../../../utils/utils.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../provider/profile_provider.dart';
+import 'package:hy_tutorial/uwave/uwave_app.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -265,6 +266,71 @@ class _ProfileViewState extends BaseState<ProfileView> {
                                 ],
                               ),
                               SizedBox(height: 8),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Constant.xSizedBox12,
+                      InkWell(
+                        onTap: () async {
+                          await CusNav.nPush(context, const UWaveApp());
+                          context.read<ProfileProvider>().getData(context);
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 18),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: const Color(0XFFE5E5E5),
+                              width: 1,
+                            ),
+                          ),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Constant.xSizedBox4,
+                              Row(
+                                children: [
+                                  const SizedBox(width: 5),
+                                  const Icon(Icons.bluetooth_searching, color: Colors.blue, size: 24),
+                                  const SizedBox(width: 10),
+                                  const Expanded(
+                                    flex: 6,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "UWave Tester",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        SizedBox(height: 4),
+                                        Text(
+                                          "Hubungkan & Uji perangkat U-WAVE",
+                                          style: TextStyle(
+                                              color: Color(0xff525252),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w300),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.grey,
+                                    size: 15,
+                                  ),
+                                  Constant.xSizedBox4,
+                                ],
+                              ),
+                              const SizedBox(height: 8),
                             ],
                           ),
                         ),

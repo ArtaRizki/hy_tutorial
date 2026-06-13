@@ -17,6 +17,7 @@ import 'package:hy_tutorial/src/profile/view/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:hy_tutorial/uwave/uwave_app.dart';
 
 import '../../../common/helper/constant.dart';
 import '../../turbine/provider/turbine_provider.dart';
@@ -159,6 +160,47 @@ class _MainHomeState extends State<MainHome> {
                       ),
                     ),
                     Icon(
+                      Icons.keyboard_arrow_right,
+                      color: Color(0xff737373),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Constant.xSizedBox16,
+            InkWell(
+              onTap: () async {
+                CusNav.nPop(context);
+                setState(() => currentIndex = 0);
+                await CusNav.nPush(context, const UWaveApp());
+                setState(() => currentIndex = 0);
+              },
+              child: CustomContainer.mainCard(
+                child: Row(
+                  children: [
+                    const Icon(Icons.bluetooth_searching, color: Colors.blue, size: 28),
+                    Constant.xSizedBox12,
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'UWave Tester',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            'Hubungkan ke perangkat U-WAVE via Bluetooth',
+                            style: TextStyle(
+                              color: Color(0xff525252),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Icon(
                       Icons.keyboard_arrow_right,
                       color: Color(0xff737373),
                     ),
