@@ -15,21 +15,21 @@ class BleProvider extends ChangeNotifier {
   BleState _bleState = BleState.idle;
   List<ScanResult> _scanResults = [];
   BluetoothDevice? _connectedDevice;
-  BluetoothCharacteristic? _notifyChar;
+  final List<BluetoothCharacteristic> _subscribedCharacteristics = [];
   double? _currentValue;
   String _currentUnit = 'mm';
   String? _errorMessage;
 
   StreamSubscription<List<ScanResult>>? _scanSub;
   StreamSubscription<BluetoothConnectionState>? _connStateSub;
-  StreamSubscription<List<int>>? _notifySub;
+  final List<StreamSubscription<List<int>>> _notifySubs = [];
   Timer? _reconnectTimer;
 
   // ── Getters ────────────────────────────────────────────────────
   BleState get bleState => _bleState;
   List<ScanResult> get scanResults => _scanResults;
   BluetoothDevice? get connectedDevice => _connectedDevice;
-  BluetoothCharacteristic? get notifyChar => _notifyChar;
+  BluetoothCharacteristic? get notifyChar => _subscribedCharacteristics.isNotEmpty ? _subscribedCharacteristics.first : null;
   double? get currentValue => _currentValue;
   String get currentUnit => _currentUnit;
   String? get errorMessage => _errorMessage;
@@ -108,7 +108,11 @@ class BleProvider extends ChangeNotifier {
       _hylog.save('[BLE] connection state for ${device.platformName}: $state');
       if (state == BluetoothConnectionState.disconnected) {
         _setState(BleState.disconnected);
-        _notifySub?.cancel();
+        for (final sub in _notifySubs) {
+          sub.cancel();
+        }
+        _notifySubs.clear();
+        _subscribedCharacteristics.clear();
         _scheduleReconnect(device);
       }
     });
@@ -116,31 +120,101 @@ class BleProvider extends ChangeNotifier {
 
   Future<void> _discoverAndSubscribe(BluetoothDevice device) async {
     final services = await device.discoverServices();
+    
+    // Bersihkan subscription sebelumnya jika ada
+    for (final sub in _notifySubs) {
+      await sub.cancel();
+    }
+    _notifySubs.clear();
+    _subscribedCharacteristics.clear();
+
+    bool subscribedAny = false;
+
     for (final svc in services) {
-      for (final char in svc.characteristics) {
-        final charUuid = char.characteristicUuid.toString().toLowerCase();
-        if (charUuid.contains(BleConstants.characteristicUuid.toLowerCase()) ||
-            char.properties.notify) {
-          _notifyChar = char;
-          await char.setNotifyValue(true);
-          _notifySub = char.lastValueStream.listen(_onNotify);
-          log('[BLE] subscribed to char ${char.characteristicUuid}');
-          _setState(BleState.connected);
-          return;
+      final svcUuid = svc.serviceUuid.toString().toLowerCase();
+      if (svcUuid == BleConstants.serviceUuid.toLowerCase()) {
+        for (final char in svc.characteristics) {
+          final charUuid = char.characteristicUuid.toString().toLowerCase();
+          if (BleConstants.notifyUuids.any((uuid) => charUuid == uuid.toLowerCase())) {
+            try {
+              await char.setNotifyValue(true);
+              final sub = char.lastValueStream.listen((bytes) => _onNotify(charUuid, bytes));
+              _notifySubs.add(sub);
+              _subscribedCharacteristics.add(char);
+              subscribedAny = true;
+              log('[BLE] subscribed to U-WAVE char $charUuid');
+              _hylog.save('[BLE] subscribed to U-WAVE char $charUuid');
+            } catch (e) {
+              log('[BLE] failed to subscribe to $charUuid: $e');
+              _hylog.save('[BLE] failed to subscribe to $charUuid: $e');
+            }
+          }
         }
       }
     }
-    // Fallback: jika UUID tidak cocok, coba characteristic NOTIFY pertama
-    log('[BLE] WARN: characteristic UUID tidak ditemukan, coba fallback');
-    _setState(BleState.connected);
+
+    if (subscribedAny) {
+      _setState(BleState.connected);
+    } else {
+      // Fallback: jika service U-WAVE tidak ditemukan, cari characteristic notify pertama yang tersedia
+      log('[BLE] WARN: U-WAVE service/characteristics tidak ditemukan, coba fallback ke any notify');
+      _hylog.save('[BLE] WARN: U-WAVE service/characteristics tidak ditemukan, coba fallback');
+      for (final svc in services) {
+        for (final char in svc.characteristics) {
+          if (char.properties.notify) {
+            final charUuid = char.characteristicUuid.toString().toLowerCase();
+            try {
+              await char.setNotifyValue(true);
+              final sub = char.lastValueStream.listen((bytes) => _onNotify(charUuid, bytes));
+              _notifySubs.add(sub);
+              _subscribedCharacteristics.add(char);
+              subscribedAny = true;
+              log('[BLE] subscribed to fallback notify char $charUuid');
+              _hylog.save('[BLE] subscribed to fallback notify char $charUuid');
+              _setState(BleState.connected);
+              return;
+            } catch (e) {
+              log('[BLE] failed to subscribe to fallback char $charUuid: $e');
+            }
+          }
+        }
+      }
+      _setState(BleState.connected);
+    }
   }
 
-  void _onNotify(List<int> bytes) {
+  void _onNotify(String charUuid, List<int> bytes) {
     if (bytes.isEmpty) return;
+
+    // Format byte ke HEX
+    final hexString = bytes.map((b) => b.toRadixString(16).padLeft(2, '0').toUpperCase()).join(' ');
+
+    // Format byte ke ASCII printable representation
+    final asciiString = bytes.map((b) {
+      if (b >= 32 && b <= 126) {
+        return String.fromCharCode(b);
+      } else if (b == 10) {
+        return r'\n';
+      } else if (b == 13) {
+        return r'\r';
+      } else if (b == 9) {
+        return r'\t';
+      } else {
+        return '\\x${b.toRadixString(16).padLeft(2, '0')}';
+      }
+    }).join('');
+
+    final timestamp = DateTime.now().toIso8601String();
+
+    // Log detail format: Timestamp | Characteristic UUID | Raw Bytes | HEX | ASCII
+    final logMessage = '[BLE_DATA] Timestamp: $timestamp | UUID: $charUuid | Raw: $bytes | HEX: $hexString | ASCII: $asciiString';
+    log(logMessage);
+    _hylog.save(logMessage);
+
     final value = BleDecoder.decode(bytes);
     final unit = BleDecoder.extractUnit(bytes);
-    log('[BLE] notify → bytes=$bytes value=$value unit=$unit');
-    _hylog.save('[BLE] notify → bytes=$bytes value=$value unit=$unit');
+    log('[BLE] parsed value: $value $unit');
+
     if (value != null) {
       _currentValue = value;
       _currentUnit = unit;
@@ -153,11 +227,14 @@ class BleProvider extends ChangeNotifier {
   Future<void> disconnect() async {
     _hylog.save('[BLE] disconnect: User requested disconnect from ${_connectedDevice?.platformName}');
     _reconnectTimer?.cancel();
-    await _notifySub?.cancel();
+    for (final sub in _notifySubs) {
+      await sub.cancel();
+    }
+    _notifySubs.clear();
+    _subscribedCharacteristics.clear();
     await _connStateSub?.cancel();
     await _connectedDevice?.disconnect();
     _connectedDevice = null;
-    _notifyChar = null;
     _currentValue = null;
     _setState(BleState.idle);
   }
@@ -185,7 +262,11 @@ class BleProvider extends ChangeNotifier {
     _reconnectTimer?.cancel();
     _scanSub?.cancel();
     _connStateSub?.cancel();
-    _notifySub?.cancel();
+    for (final sub in _notifySubs) {
+      sub.cancel();
+    }
+    _notifySubs.clear();
+    _subscribedCharacteristics.clear();
     super.dispose();
   }
 }

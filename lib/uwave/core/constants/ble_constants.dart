@@ -12,6 +12,13 @@ class BleConstants {
   static const String characteristicUuid =
       '7eafd361-f151-4785-b307-47d34ed52c3c';
 
+  /// List of U-WAVE notify characteristics UUIDs to log and listen to
+  static const List<String> notifyUuids = [
+    '7eafd361-f151-4785-b307-47d34ed52c3c',
+    '7eafd361-f152-4785-b307-47d34ed52c3c',
+    '7eafd361-f153-4785-b307-47d34ed52c3c',
+  ];
+
   /// Timeout scan BLE dalam detik
   static const int scanTimeoutSeconds = 10;
 

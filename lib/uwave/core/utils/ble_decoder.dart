@@ -21,11 +21,17 @@ class BleDecoder {
       final raw = String.fromCharCodes(filtered).trim();
       log('[BleDecoder] raw string: "$raw"');
 
-      // Ambil hanya karakter numerik, titik, plus, minus
-      final numStr = raw.replaceAll(RegExp(r'[^\d.\-+]'), '').trim();
+      // Cek apakah ada tanda negatif '-' di dalam string
+      final bool isNegative = raw.contains('-');
+
+      // Ambil hanya karakter numerik dan titik desimal
+      final numStr = raw.replaceAll(RegExp(r'[^\d.]'), '').trim();
       if (numStr.isEmpty) return null;
 
-      return double.tryParse(numStr);
+      final parsed = double.tryParse(numStr);
+      if (parsed == null) return null;
+
+      return isNegative ? -parsed : parsed;
     } catch (e) {
       log('[BleDecoder] error: $e');
       return null;
