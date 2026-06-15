@@ -20,6 +20,8 @@ class BleProvider extends ChangeNotifier {
   String _currentUnit = 'mm';
   String? _errorMessage;
 
+  List<Map<String, double>> _calibrationTable = [];
+
   StreamSubscription<List<ScanResult>>? _scanSub;
   StreamSubscription<BluetoothConnectionState>? _connStateSub;
   final List<StreamSubscription<List<int>>> _notifySubs = [];
@@ -31,10 +33,20 @@ class BleProvider extends ChangeNotifier {
   BluetoothDevice? get connectedDevice => _connectedDevice;
   BluetoothCharacteristic? get notifyChar => _subscribedCharacteristics.isNotEmpty ? _subscribedCharacteristics.first : null;
   double? get currentValue => _currentValue;
+  // Expose the raw ADC value for calibration purpose
+  double? get currentRawValue => _currentRawValue;
+  double? _currentRawValue;
+
   String get currentUnit => _currentUnit;
   String? get errorMessage => _errorMessage;
   bool get isConnected => _bleState == BleState.connected;
   bool get isScanning => _bleState == BleState.scanning;
+
+  void updateCalibrationTable(List<Map<String, double>> table) {
+    _calibrationTable = table;
+    // We could recalculate current value here if needed, but the next notification will fix it.
+  }
+
 
   // ── Scan ───────────────────────────────────────────────────────
 
@@ -211,12 +223,14 @@ class BleProvider extends ChangeNotifier {
     log(logMessage);
     _hylog.save(logMessage);
 
-    final value = BleDecoder.decode(bytes);
+    final value = BleDecoder.decode(bytes, calibrationTable: _calibrationTable);
+    final rawValue = BleDecoder.extractRawValue(bytes);
     final unit = BleDecoder.extractUnit(bytes);
-    log('[BLE] parsed value: $value $unit');
+    log('[BLE] parsed value: $value $unit (Raw: $rawValue)');
 
     if (value != null) {
       _currentValue = value;
+      _currentRawValue = rawValue;
       _currentUnit = unit;
       notifyListeners();
     }

@@ -5,9 +5,31 @@ import 'dart:math' as math;
 class BleDecoder {
   BleDecoder._();
 
+  /// Interpolasi linear (Lerp) untuk mengonversi raw ADC ke nilai ukur (mm)
+  static double _interpolate(double rawValue, List<Map<String, double>> calibrationTable) {
+    if (calibrationTable.isEmpty) return rawValue;
+
+    // Cari segmen garis yang sesuai (extrapolate jika di luar rentang)
+    int index = 0;
+    while (index < calibrationTable.length - 2 && rawValue > calibrationTable[index + 1]['raw']!) {
+      index++;
+    }
+
+    final p1 = calibrationTable[index];
+    final p2 = calibrationTable[index + 1];
+
+    final double x1 = p1['raw']!;
+    final double y1 = p1['mm']!;
+    final double x2 = p2['raw']!;
+    final double y2 = p2['mm']!;
+
+    // Rumus interpolasi linear: y = y1 + (x - x1) * (y2 - y1) / (x2 - x1)
+    return y1 + (rawValue - x1) * (y2 - y1) / (x2 - x1);
+  }
+
   /// Decode bytes BLE notification menjadi nilai double (mm atau inch).
   /// Mendukung Custom Binary Protocol & Fallback ASCII.
-  static double? decode(List<int> bytes) {
+  static double? decode(List<int> bytes, {List<Map<String, double>> calibrationTable = const []}) {
     if (bytes.isEmpty) return null;
 
     // 1. Cek Custom Binary Protocol Mitutoyo
@@ -20,12 +42,11 @@ class BleDecoder {
           rawValue -= 65536;
         }
 
-        // Byte 2 (Status): 4 bit terbawah biasanya menunjukkan jumlah angka desimal
-        int decimalPlaces = bytes[2] & 0x0F;
-        double divisor = math.pow(10, decimalPlaces).toDouble();
+        // --- MAPPING ADC CALIBRATION ---
+        // Gunakan tabel kalibrasi (Lerp) karena nilai datang dari analog sensor / ESP32.
+        double value = _interpolate(rawValue.toDouble(), calibrationTable);
 
-        double value = rawValue / divisor;
-        log('[BleDecoder] binary parsed: raw=$rawValue, dec=$decimalPlaces -> $value');
+        log('[BleDecoder] binary parsed ADC: raw=$rawValue -> $value mm');
         return value;
       } catch (e) {
         log('[BleDecoder] binary parse error: $e');
@@ -54,6 +75,18 @@ class BleDecoder {
       log('[BleDecoder] ascii error: $e');
       return null;
     }
+  }
+
+  /// Ekstrak nilai raw ADC (sebelum kalibrasi)
+  static double? extractRawValue(List<int> bytes) {
+    if (bytes.length >= 5 && bytes[0] == 0x10) {
+      int rawValue = (bytes[4] << 8) | bytes[3];
+      if (rawValue > 32767) {
+        rawValue -= 65536;
+      }
+      return rawValue.toDouble();
+    }
+    return null;
   }
 
   /// Ekstrak satuan dari bytes: 'mm' atau 'inch'

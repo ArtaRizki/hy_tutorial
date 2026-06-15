@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/ble_provider.dart';
 import 'providers/session_provider.dart';
+import 'providers/calibration_provider.dart';
 import 'ui/screens/home_screen.dart';
 
 /// Entry point untuk fitur U-WAVE QC Inspector.
@@ -13,7 +14,11 @@ class UWaveApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => BleProvider()),
+        ChangeNotifierProvider(create: (_) => CalibrationProvider()),
+        ChangeNotifierProxyProvider<CalibrationProvider, BleProvider>(
+          create: (_) => BleProvider(),
+          update: (_, calibration, ble) => ble!..updateCalibrationTable(calibration.calibrationTable),
+        ),
         ChangeNotifierProvider(create: (_) => SessionProvider()),
       ],
       child: MaterialApp(

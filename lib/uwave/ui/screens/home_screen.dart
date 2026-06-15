@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/ble_provider.dart';
 import '../../core/constants/app_constants.dart';
 import 'measurement_screen.dart';
+import 'calibration_screen.dart';
 import '../widgets/ble_status_indicator.dart';
 import '../../../common/helper/hylog.dart';
 
@@ -52,6 +53,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.tune, color: Colors.white),
+            tooltip: 'Calibration Settings',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CalibrationScreen()),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.bug_report, color: Colors.white),
             tooltip: 'Log File',
