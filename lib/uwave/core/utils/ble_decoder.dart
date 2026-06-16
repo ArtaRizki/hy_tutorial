@@ -33,21 +33,29 @@ class BleDecoder {
     if (bytes.isEmpty) return null;
 
     // 1. Cek Custom Binary Protocol Mitutoyo
-    // Format: [16, Seq, Status/Decimal, LSB, MSB, Reserved, Reserved]
+    // Format: [0x10, Seq, DecimalPlaces, LSB, MSB, Reserved, Reserved]
     if (bytes.length >= 5 && bytes[0] == 0x10) {
       try {
-        int rawValue = (bytes[4] << 8) | bytes[3];
+        int rawInt = (bytes[4] << 8) | bytes[3];
         // Konversi ke signed 16-bit integer (Two's complement)
-        if (rawValue > 32767) {
-          rawValue -= 65536;
+        if (rawInt > 32767) {
+          rawInt -= 65536;
         }
 
-        // --- MAPPING ADC CALIBRATION ---
-        // Gunakan tabel kalibrasi (Lerp) karena nilai datang dari analog sensor / ESP32.
-        double value = _interpolate(rawValue.toDouble(), calibrationTable);
-
-        log('[BleDecoder] binary parsed ADC: raw=$rawValue -> $value mm');
-        return value;
+        if (calibrationTable.isNotEmpty) {
+          // Gunakan tabel kalibrasi jika tersedia (ADC sensor eksternal)
+          double value = _interpolate(rawInt.toDouble(), calibrationTable);
+          log('[BleDecoder] calibrated: raw=$rawInt -> $value mm');
+          return value;
+        } else {
+          // Gunakan Byte[2] sebagai jumlah angka desimal (standar Mitutoyo protocol)
+          // Contoh: Byte[2]=2, rawInt=346 -> 346/100 = 3.46 mm
+          int decimalPlaces = bytes[2];
+          double divisor = math.pow(10, decimalPlaces).toDouble();
+          double value = rawInt / divisor;
+          log('[BleDecoder] binary parsed: rawInt=$rawInt, decPlaces=$decimalPlaces, divisor=$divisor -> $value mm');
+          return value;
+        }
       } catch (e) {
         log('[BleDecoder] binary parse error: $e');
       }
@@ -76,6 +84,7 @@ class BleDecoder {
       return null;
     }
   }
+
 
   /// Ekstrak nilai raw ADC (sebelum kalibrasi)
   static double? extractRawValue(List<int> bytes) {
