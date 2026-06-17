@@ -7,13 +7,7 @@ class CalibrationProvider extends ChangeNotifier {
   static const String _prefKey = 'uwave_calibration_table';
   
   // Default fallback points if none are set.
-  List<Map<String, double>> _calibrationTable = [
-    {'raw': 105.0, 'mm': 0.0},
-    {'raw': 404.0, 'mm': 10.0},
-    {'raw': 685.0, 'mm': 20.0},
-    {'raw': 1103.0, 'mm': 30.0},
-    {'raw': 1358.0, 'mm': 40.0},
-  ];
+  List<Map<String, double>> _calibrationTable = [];
 
   bool _isLoaded = false;
 
@@ -88,13 +82,7 @@ class CalibrationProvider extends ChangeNotifier {
   }
 
   void resetToDefault() {
-    _calibrationTable = [
-      {'raw': 105.0, 'mm': 0.0},
-      {'raw': 404.0, 'mm': 10.0},
-      {'raw': 685.0, 'mm': 20.0},
-      {'raw': 1103.0, 'mm': 30.0},
-      {'raw': 1358.0, 'mm': 40.0},
-    ];
+    _calibrationTable = [];
     notifyListeners();
     _saveToPrefs();
   }

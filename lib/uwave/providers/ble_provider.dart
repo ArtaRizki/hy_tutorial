@@ -150,7 +150,7 @@ class BleProvider extends ChangeNotifier {
           if (BleConstants.notifyUuids.any((uuid) => charUuid == uuid.toLowerCase())) {
             try {
               await char.setNotifyValue(true);
-              final sub = char.lastValueStream.listen((bytes) => _onNotify(charUuid, bytes));
+              final sub = char.onValueReceived.listen((bytes) => _onNotify(charUuid, bytes));
               _notifySubs.add(sub);
               _subscribedCharacteristics.add(char);
               subscribedAny = true;
@@ -177,7 +177,7 @@ class BleProvider extends ChangeNotifier {
             final charUuid = char.characteristicUuid.toString().toLowerCase();
             try {
               await char.setNotifyValue(true);
-              final sub = char.lastValueStream.listen((bytes) => _onNotify(charUuid, bytes));
+              final sub = char.onValueReceived.listen((bytes) => _onNotify(charUuid, bytes));
               _notifySubs.add(sub);
               _subscribedCharacteristics.add(char);
               subscribedAny = true;
@@ -226,7 +226,9 @@ class BleProvider extends ChangeNotifier {
     final value = BleDecoder.decode(bytes, calibrationTable: _calibrationTable);
     final rawValue = BleDecoder.extractRawValue(bytes);
     final unit = BleDecoder.extractUnit(bytes);
-    log('[BLE] parsed value: $value $unit (Raw: $rawValue)');
+    final parsedLog = '[BLE_PARSED] value: $value $unit | rawValue: $rawValue';
+    log(parsedLog);
+    _hylog.save(parsedLog);
 
     if (value != null) {
       _currentValue = value;
