@@ -42,6 +42,13 @@ class BleProvider extends ChangeNotifier {
   bool get isConnected => _bleState == BleState.connected;
   bool get isScanning => _bleState == BleState.scanning;
 
+  // Kapan notify terakhir diterima dari device. Berguna untuk membedakan
+  // "app freeze/bug" vs "device U-WAVE-T memang belum mengirim data baru"
+  // -- device ini terbukti dari log hanya mengirim notify sesekali
+  // (jeda beberapa detik hingga puluhan detik), bukan kontinu.
+  DateTime? get lastValueReceivedAt => _lastValueReceivedAt;
+  DateTime? _lastValueReceivedAt;
+
   void updateCalibrationTable(List<Map<String, double>> table) {
     _calibrationTable = table;
     // We could recalculate current value here if needed, but the next notification will fix it.
@@ -231,9 +238,30 @@ class BleProvider extends ChangeNotifier {
     _hylog.save(parsedLog);
 
     if (value != null) {
+      // Deteksi lonjakan nilai tak wajar antar notify berurutan.
+      // Caliper/micrometer manual tidak mungkin berpindah lebih dari
+      // beberapa puluh mm dalam satu notifikasi BLE (jeda antar notify
+      // di device ini biasanya beberapa detik). Lonjakan besar lebih
+      // mengindikasikan decimalPlaces salah baca, byte corrupt, atau
+      // origin/zero point device drift -- bukan otomatis bug parsing.
+      if (_currentValue != null) {
+        final double delta = (value - _currentValue!).abs();
+        const double maxPlausibleJumpMm = 50.0;
+        if (delta > maxPlausibleJumpMm) {
+          final jumpWarning = '[BLE_JUMP_WARNING] Lonjakan nilai tidak wajar: '
+              '${_currentValue!.toStringAsFixed(3)} -> ${value.toStringAsFixed(3)} '
+              '(delta=${delta.toStringAsFixed(3)} mm). Cek apakah Mitutoyo perlu '
+              'di-ORIGIN ulang, atau bandingkan raw bytes berikut dengan sesi '
+              'kalibrasi yang sudah terverifikasi. Raw: $bytes';
+          log(jumpWarning);
+          _hylog.save(jumpWarning);
+        }
+      }
+
       _currentValue = value;
       _currentRawValue = rawValue;
       _currentUnit = unit;
+      _lastValueReceivedAt = DateTime.now();
       notifyListeners();
     }
   }
@@ -252,6 +280,7 @@ class BleProvider extends ChangeNotifier {
     await _connectedDevice?.disconnect();
     _connectedDevice = null;
     _currentValue = null;
+    _lastValueReceivedAt = null;
     _setState(BleState.idle);
   }
 

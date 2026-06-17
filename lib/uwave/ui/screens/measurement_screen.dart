@@ -121,6 +121,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                 value: ble.currentValue,
                 unit: ble.currentUnit,
                 session: session.activeSession,
+                lastReceivedAt: ble.lastValueReceivedAt,
               ),
 
               // ── Control Buttons ──────────────────────────────

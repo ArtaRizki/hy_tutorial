@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import '../../data/models/session_model.dart';
@@ -8,11 +9,19 @@ class MeasurementValueDisplay extends StatelessWidget {
   final String unit;
   final Session? session;
 
+  /// Kapan notify BLE terakhir diterima dari device.
+  /// Opsional -- jika null, indikator "data terakhir" tidak ditampilkan.
+  /// Tujuannya membedakan "app freeze/bug" vs "device U-WAVE-T memang
+  /// belum mengirim data baru" (device ini hanya mengirim notify sesekali,
+  /// bukan kontinu -- terverifikasi dari log raw BLE).
+  final DateTime? lastReceivedAt;
+
   const MeasurementValueDisplay({
     super.key,
     required this.value,
     required this.unit,
     required this.session,
+    this.lastReceivedAt,
   });
 
   @override
@@ -81,6 +90,10 @@ class MeasurementValueDisplay extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
+          if (lastReceivedAt != null) ...[
+            const SizedBox(height: 6),
+            _LastReceivedLabel(lastReceivedAt: lastReceivedAt!),
+          ],
           if (session != null && value != null) ...[
             const SizedBox(height: 16),
             // Toleransi bar
@@ -234,6 +247,64 @@ class _StatusPill extends StatelessWidget {
           fontWeight: FontWeight.w900,
           letterSpacing: 4,
         ),
+      ),
+    );
+  }
+}
+
+// ── Last Received Label ──────────────────────────────────────────
+//
+// Menampilkan "Data terakhir: X detik/menit lalu", ter-update tiap detik.
+// Tujuan: membedakan secara visual antara "app tidak responsif" dan
+// "device U-WAVE-T memang belum mengirim notify baru" -- device ini
+// terbukti dari log raw BLE hanya mengirim data sesekali (jeda beberapa
+// detik hingga puluhan detik antar notify), bukan secara kontinu.
+class _LastReceivedLabel extends StatefulWidget {
+  final DateTime lastReceivedAt;
+
+  const _LastReceivedLabel({required this.lastReceivedAt});
+
+  @override
+  State<_LastReceivedLabel> createState() => _LastReceivedLabelState();
+}
+
+class _LastReceivedLabelState extends State<_LastReceivedLabel> {
+  Timer? _ticker;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _ticker?.cancel();
+    super.dispose();
+  }
+
+  String _formatElapsed(Duration elapsed) {
+    if (elapsed.inSeconds < 1) return 'baru saja';
+    if (elapsed.inSeconds < 60) return '${elapsed.inSeconds} detik lalu';
+    if (elapsed.inMinutes < 60) return '${elapsed.inMinutes} menit lalu';
+    return '${elapsed.inHours} jam lalu';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final elapsed = DateTime.now().difference(widget.lastReceivedAt);
+    // Beri sedikit penekanan warna kalau sudah cukup lama tanpa data baru,
+    // supaya jelas terlihat tanpa harus dianggap "error".
+    final bool isStale = elapsed.inSeconds > 30;
+
+    return Text(
+      'Data terakhir: ${_formatElapsed(elapsed)}',
+      style: TextStyle(
+        color: isStale ? const Color(0xFFFBBF24) : const Color(0xFF64748B),
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
       ),
     );
   }

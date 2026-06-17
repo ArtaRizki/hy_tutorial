@@ -5,6 +5,25 @@ import 'dart:math' as math;
 class BleDecoder {
   BleDecoder._();
 
+  /// Jumlah desimal yang valid untuk caliper/micrometer Mitutoyo.
+  /// Diverifikasi dari log device asli (lihat catatan kalibrasi):
+  /// byte[2] selalu bernilai 2 pada sesi yang sudah dicocokkan manual
+  /// (gerak caliper ke 1.00/2.00/3.00/4.00/5.00 mm, hasil akurat).
+  /// Resolusi 0.001mm (decimalPlaces=3) juga valid untuk sebagian model,
+  /// tapi di luar rentang 0-4 nyaris pasti byte rusak/salah-deteksi protokol.
+  static const int _minValidDecimalPlaces = 0;
+  static const int _maxValidDecimalPlaces = 4;
+
+  /// Fallback aman kalau byte[2] di luar rentang wajar.
+  /// 2 dipilih karena ini nilai yang sudah terbukti akurat dari log device.
+  static const int _fallbackDecimalPlaces = 2;
+
+  /// Rentang fisik wajar untuk caliper/micrometer umum (mm).
+  /// Dipakai hanya untuk WARNING di log, tidak untuk menolak data,
+  /// supaya Arta tetap bisa melihat data mentah saat debugging.
+  static const double _plausibleMinMm = -300.0;
+  static const double _plausibleMaxMm = 300.0;
+
   /// Interpolasi linear (Lerp) untuk mengonversi raw ADC ke nilai ukur (mm)
   static double _interpolate(double rawValue, List<Map<String, double>> calibrationTable) {
     if (calibrationTable.isEmpty) return rawValue;
@@ -51,8 +70,31 @@ class BleDecoder {
           // Gunakan Byte[2] sebagai jumlah angka desimal (standar Mitutoyo protocol)
           // Contoh: Byte[2]=2, rawInt=346 -> 346/100 = 3.46 mm
           int decimalPlaces = bytes[2];
+
+          // SANITY CHECK: decimalPlaces harus dalam rentang wajar (0-4).
+          // Tanpa ini, byte[2] yang corrupt/salah-tafsir bisa membuat
+          // divisor melompat 10x lipat per kenaikan 1 unit byte, sehingga
+          // value hasil decode melonjak liar walau rawInt-nya valid.
+          if (decimalPlaces < _minValidDecimalPlaces ||
+              decimalPlaces > _maxValidDecimalPlaces) {
+            log('[BleDecoder] WARNING: decimalPlaces=$decimalPlaces di luar '
+                'rentang wajar ($_minValidDecimalPlaces-$_maxValidDecimalPlaces). '
+                'Kemungkinan byte[2] rusak atau salah deteksi protokol. '
+                'Fallback ke decimalPlaces=$_fallbackDecimalPlaces. '
+                'Raw bytes: $bytes');
+            decimalPlaces = _fallbackDecimalPlaces;
+          }
+
           double divisor = math.pow(10, decimalPlaces).toDouble();
           double value = rawInt / divisor;
+
+          if (value < _plausibleMinMm || value > _plausibleMaxMm) {
+            log('[BleDecoder] WARNING: value=$value mm di luar rentang fisik '
+                'wajar caliper/micrometer ($_plausibleMinMm..$_plausibleMaxMm). '
+                'Kemungkinan decimalPlaces salah, origin device drift, atau '
+                'data corrupt. Cek raw bytes: $bytes');
+          }
+
           log('[BleDecoder] binary parsed: rawInt=$rawInt, decPlaces=$decimalPlaces, divisor=$divisor -> $value mm');
           return value;
         }
