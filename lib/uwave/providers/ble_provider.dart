@@ -230,10 +230,14 @@ class BleProvider extends ChangeNotifier {
     log(logMessage);
     _hylog.save(logMessage);
 
-    final value = BleDecoder.decode(bytes, calibrationTable: _calibrationTable);
-    final rawValue = BleDecoder.extractRawValue(bytes);
-    final unit = BleDecoder.extractUnit(bytes);
-    final parsedLog = '[BLE_PARSED] value: $value $unit | rawValue: $rawValue';
+    final decoded = BleDecoder.decodeDetailed(bytes, calibrationTable: _calibrationTable);
+    final value = decoded.value;
+    // BLE_PARSED sekarang mencantumkan SEMUA variabel kunci yang dipakai
+    // untuk menghasilkan value (protocol, rawInt, decimalPlaces raw vs
+    // yang dipakai, status fallback, status out-of-range) dalam satu
+    // baris -- supaya saat nilai aneh dilaporkan, tidak perlu lagi
+    // membongkar ulang BLE_DATA dan menghitung manual dari raw bytes.
+    final parsedLog = '[BLE_PARSED] $decoded';
     log(parsedLog);
     _hylog.save(parsedLog);
 
@@ -259,8 +263,8 @@ class BleProvider extends ChangeNotifier {
       }
 
       _currentValue = value;
-      _currentRawValue = rawValue;
-      _currentUnit = unit;
+      _currentRawValue = decoded.rawInt?.toDouble();
+      _currentUnit = BleDecoder.extractUnit(bytes);
       _lastValueReceivedAt = DateTime.now();
       notifyListeners();
     }
@@ -291,6 +295,8 @@ class BleProvider extends ChangeNotifier {
     _reconnectTimer =
         Timer(const Duration(seconds: BleConstants.reconnectDelaySeconds), () {
       log('[BLE] attempting auto-reconnect...');
+      _hylog.save('[BLE] auto-reconnect: attempting reconnect to '
+          '${device.platformName} (${device.remoteId})');
       connectTo(device);
     });
   }

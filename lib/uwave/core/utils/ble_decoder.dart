@@ -1,6 +1,59 @@
 import 'dart:developer';
 import 'dart:math' as math;
 
+/// Hasil decode yang lengkap, termasuk detail internal yang dipakai
+/// untuk menghasilkan [value] -- dibuat khusus supaya proses logging
+/// di [BleProvider] bisa mencatat SEMUA variabel penting dalam satu
+/// baris (decimalPlaces yang dipakai, apakah itu hasil fallback,
+/// protokol yang terdeteksi, dst), tanpa harus memanggil ulang/menebak
+/// ulang logic decode secara terpisah.
+class DecodedMeasurement {
+  /// Nilai akhir hasil decode (mm/inch), null jika gagal di-parse.
+  final double? value;
+
+  /// Nilai integer mentah sebelum dibagi divisor (hanya untuk binary protocol).
+  final int? rawInt;
+
+  /// decimalPlaces yang BENAR-BENAR dipakai untuk menghasilkan [value].
+  /// Bisa berbeda dari bytes[2] asli jika [decimalPlacesWasFallback] true.
+  final int? decimalPlacesUsed;
+
+  /// Nilai asli bytes[2] sebelum divalidasi (untuk audit, walau di luar rentang wajar).
+  final int? decimalPlacesRaw;
+
+  /// True jika decimalPlacesRaw di luar rentang wajar (0-4) sehingga
+  /// sistem memakai nilai fallback alih-alih bytes[2] asli.
+  final bool decimalPlacesWasFallback;
+
+  /// Protokol yang terdeteksi: 'binary', 'ascii', atau 'unknown'.
+  final String protocol;
+
+  /// True jika [value] di luar rentang fisik wajar caliper/micrometer.
+  final bool valueOutOfPlausibleRange;
+
+  const DecodedMeasurement({
+    required this.value,
+    required this.rawInt,
+    required this.decimalPlacesUsed,
+    required this.decimalPlacesRaw,
+    required this.decimalPlacesWasFallback,
+    required this.protocol,
+    required this.valueOutOfPlausibleRange,
+  });
+
+  /// Representasi satu baris yang ringkas untuk keperluan log diagnostik.
+  /// Sengaja mencantumkan SEMUA variabel kunci yang relevan untuk
+  /// diagnosis "kenapa value tidak akurat", supaya tidak perlu lagi
+  /// hitung manual dari raw bytes setiap kali analisis.
+  @override
+  String toString() {
+    return 'protocol=$protocol, rawInt=$rawInt, '
+        'decimalPlaces(raw=$decimalPlacesRaw, used=$decimalPlacesUsed, '
+        'fallback=$decimalPlacesWasFallback), '
+        'value=$value, outOfRange=$valueOutOfPlausibleRange';
+  }
+}
+
 /// Decoder untuk raw bytes dari Mitutoyo U-WAVE-T BLE notification.
 class BleDecoder {
   BleDecoder._();
@@ -48,8 +101,36 @@ class BleDecoder {
 
   /// Decode bytes BLE notification menjadi nilai double (mm atau inch).
   /// Mendukung Custom Binary Protocol & Fallback ASCII.
+  ///
+  /// Method ini sekarang adalah wrapper tipis di atas [decodeDetailed] --
+  /// dipertahankan agar caller lama (mis. kode UI yang hanya butuh angka)
+  /// tidak perlu berubah.
   static double? decode(List<int> bytes, {List<Map<String, double>> calibrationTable = const []}) {
-    if (bytes.isEmpty) return null;
+    return decodeDetailed(bytes, calibrationTable: calibrationTable).value;
+  }
+
+  /// Sama seperti [decode], tapi mengembalikan SEMUA detail internal
+  /// yang dipakai untuk menghasilkan nilai akhirnya -- decimalPlaces yang
+  /// terpakai, apakah itu hasil fallback, protokol yang terdeteksi, dst.
+  ///
+  /// Dibuat khusus untuk keperluan diagnostik: supaya satu baris log bisa
+  /// menjawab langsung "kenapa value ini muncul", tanpa harus membongkar
+  /// ulang raw bytes secara manual setiap kali ada laporan nilai aneh.
+  static DecodedMeasurement decodeDetailed(
+    List<int> bytes, {
+    List<Map<String, double>> calibrationTable = const [],
+  }) {
+    if (bytes.isEmpty) {
+      return const DecodedMeasurement(
+        value: null,
+        rawInt: null,
+        decimalPlacesUsed: null,
+        decimalPlacesRaw: null,
+        decimalPlacesWasFallback: false,
+        protocol: 'unknown',
+        valueOutOfPlausibleRange: false,
+      );
+    }
 
     // 1. Cek Custom Binary Protocol Mitutoyo
     // Format: [0x10, Seq, DecimalPlaces, LSB, MSB, Reserved, Reserved]
@@ -65,11 +146,22 @@ class BleDecoder {
           // Gunakan tabel kalibrasi jika tersedia (ADC sensor eksternal)
           double value = _interpolate(rawInt.toDouble(), calibrationTable);
           log('[BleDecoder] calibrated: raw=$rawInt -> $value mm');
-          return value;
+          return DecodedMeasurement(
+            value: value,
+            rawInt: rawInt,
+            decimalPlacesUsed: null,
+            decimalPlacesRaw: bytes[2],
+            decimalPlacesWasFallback: false,
+            protocol: 'binary_calibrated',
+            valueOutOfPlausibleRange:
+                value < _plausibleMinMm || value > _plausibleMaxMm,
+          );
         } else {
           // Gunakan Byte[2] sebagai jumlah angka desimal (standar Mitutoyo protocol)
           // Contoh: Byte[2]=2, rawInt=346 -> 346/100 = 3.46 mm
-          int decimalPlaces = bytes[2];
+          final int decimalPlacesRaw = bytes[2];
+          int decimalPlaces = decimalPlacesRaw;
+          bool wasFallback = false;
 
           // SANITY CHECK: decimalPlaces harus dalam rentang wajar (0-4).
           // Tanpa ini, byte[2] yang corrupt/salah-tafsir bisa membuat
@@ -83,20 +175,32 @@ class BleDecoder {
                 'Fallback ke decimalPlaces=$_fallbackDecimalPlaces. '
                 'Raw bytes: $bytes');
             decimalPlaces = _fallbackDecimalPlaces;
+            wasFallback = true;
           }
 
           double divisor = math.pow(10, decimalPlaces).toDouble();
           double value = rawInt / divisor;
+          final bool outOfRange = value < _plausibleMinMm || value > _plausibleMaxMm;
 
-          if (value < _plausibleMinMm || value > _plausibleMaxMm) {
+          if (outOfRange) {
             log('[BleDecoder] WARNING: value=$value mm di luar rentang fisik '
                 'wajar caliper/micrometer ($_plausibleMinMm..$_plausibleMaxMm). '
                 'Kemungkinan decimalPlaces salah, origin device drift, atau '
                 'data corrupt. Cek raw bytes: $bytes');
           }
 
-          log('[BleDecoder] binary parsed: rawInt=$rawInt, decPlaces=$decimalPlaces, divisor=$divisor -> $value mm');
-          return value;
+          log('[BleDecoder] binary parsed: rawInt=$rawInt, decPlacesRaw=$decimalPlacesRaw, '
+              'decPlacesUsed=$decimalPlaces, fallback=$wasFallback, divisor=$divisor -> $value mm');
+
+          return DecodedMeasurement(
+            value: value,
+            rawInt: rawInt,
+            decimalPlacesUsed: decimalPlaces,
+            decimalPlacesRaw: decimalPlacesRaw,
+            decimalPlacesWasFallback: wasFallback,
+            protocol: 'binary',
+            valueOutOfPlausibleRange: outOfRange,
+          );
         }
       } catch (e) {
         log('[BleDecoder] binary parse error: $e');
@@ -115,15 +219,42 @@ class BleDecoder {
 
       // Ambil hanya karakter numerik dan titik desimal
       final numStr = raw.replaceAll(RegExp(r'[^\d.]'), '').trim();
-      if (numStr.isEmpty) return null;
+      if (numStr.isEmpty) {
+        return DecodedMeasurement(
+          value: null,
+          rawInt: null,
+          decimalPlacesUsed: null,
+          decimalPlacesRaw: null,
+          decimalPlacesWasFallback: false,
+          protocol: 'ascii',
+          valueOutOfPlausibleRange: false,
+        );
+      }
 
       final parsed = double.tryParse(numStr);
-      if (parsed == null) return null;
+      final double? finalValue = parsed == null ? null : (isNegative ? -parsed : parsed);
 
-      return isNegative ? -parsed : parsed;
+      return DecodedMeasurement(
+        value: finalValue,
+        rawInt: null,
+        decimalPlacesUsed: null,
+        decimalPlacesRaw: null,
+        decimalPlacesWasFallback: false,
+        protocol: 'ascii',
+        valueOutOfPlausibleRange: finalValue != null &&
+            (finalValue < _plausibleMinMm || finalValue > _plausibleMaxMm),
+      );
     } catch (e) {
       log('[BleDecoder] ascii error: $e');
-      return null;
+      return const DecodedMeasurement(
+        value: null,
+        rawInt: null,
+        decimalPlacesUsed: null,
+        decimalPlacesRaw: null,
+        decimalPlacesWasFallback: false,
+        protocol: 'ascii',
+        valueOutOfPlausibleRange: false,
+      );
     }
   }
 
